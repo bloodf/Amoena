@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "noImplicitAny": false,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": false,
+    "types": ["bun", "node"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["packages/ui/src/*"],
+      "@lunaria/i18n": ["packages/i18n/src/index.ts"],
+      "@lunaria/i18n/*": ["packages/i18n/src/*"],
+      "@lunaria/runtime-client": ["packages/runtime-client/src/index.ts"],
+      "@lunaria/tokens": ["packages/tokens/src/index.ts"],
+      "@lunaria/ui": ["packages/ui/src/index.ts"]
+    }
+  },
+  "include": [
+    "apps/**/*.ts",
+    "apps/**/*.tsx",
+    "docs/**/*.ts",
+    "packages/**/*.ts",
+    "packages/**/*.tsx",
+    "scripts/**/*.ts",
+    "tests/**/*.ts"
+  ]
+}
