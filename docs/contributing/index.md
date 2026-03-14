@@ -1,0 +1,95 @@
+# Contributing to Lunaria
+
+Thank you for your interest in contributing to Lunaria! This guide will help you get started.
+
+## Prerequisites
+
+| Tool | Version | Install |
+|------|---------|---------|
+| **Rust** | 1.75+ | [rustup.rs](https://rustup.rs) |
+| **Node.js** | 20+ | [nodejs.org](https://nodejs.org) |
+| **Bun** | 1.1+ | [bun.sh](https://bun.sh) |
+| **Tauri CLI** | 2.x | `cargo install tauri-cli` |
+
+Platform-specific dependencies: see [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/).
+
+## Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/LunariaAi/lunaria.git
+cd lunaria
+
+# Install JavaScript dependencies
+bun install
+
+# Build the UI package
+cd packages/ui && bun run build && cd ../..
+
+# Run the desktop app in development
+cd apps/desktop && cargo tauri dev
+```
+
+See [Development](/contributing/development) for a full breakdown of the dev workflow, test commands, and debugging.
+
+## Pull Request Process
+
+1. Fork the repository and create a feature branch from `main`
+2. Write tests for new functionality (see [testing guidelines](/contributing/development#testing))
+3. Ensure all tests pass and there are zero compile warnings
+4. Update documentation if needed
+5. Submit a PR with a clear description referencing any related issues
+
+### PR Checklist
+
+- [ ] Tests added/updated for new behaviour
+- [ ] No compile warnings (Rust + TypeScript)
+- [ ] i18n keys added for any new UI strings (no hardcoded English)
+- [ ] Documentation updated if applicable
+- [ ] `cargo fmt` and `cargo clippy` clean
+- [ ] `bun run type-check` passes
+
+## Commit Message Format
+
+Lunaria uses [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+<type>(<scope>): <description>
+
+<optional body>
+```
+
+Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `style`, `perf`, `ci`, `build`, `revert`
+
+Examples:
+```
+feat(sessions): add parent session linking
+fix(memory): correct embedding batch size for large contexts
+docs(api): document SSE event payload shapes
+```
+
+## Extension Development
+
+Extensions use the `.luna` single-file binary format. See [Extensions](/extensions/) for the full guide.
+
+Quick start:
+1. Create an extension manifest (`manifest.json`)
+2. Add your UI panels, commands, hooks, tools, or providers
+3. Bundle as a `.luna` file
+4. Drop into the Extensions panel or install via `lunaria://extension/install?...`
+
+## Reporting Issues
+
+- Use [GitHub Issues](https://github.com/LunariaAi/lunaria/issues) with the provided templates
+- Include reproduction steps
+- Attach relevant logs from `~/.lunaria/logs/`
+
+## Code of Conduct
+
+Please read our [Code of Conduct](https://github.com/LunariaAi/lunaria/blob/main/CODE_OF_CONDUCT.md) before contributing.
+
+## Further Reading
+
+- [Development Setup](/contributing/development) — running tests, debugging, workspace setup
+- [Code Style](/contributing/code-style) — Rust, TypeScript, i18n, immutability rules
+- [Releasing](/contributing/releasing) — release process and Tauri build pipeline
