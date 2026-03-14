@@ -1,0 +1,10 @@
+export { SetupWizardWelcomeStep } from "./WelcomeStep";
+export { SetupWizardProviderStep } from "./ProviderStep";
+export { SetupWizardModelStep } from "./ModelStep";
+export { SetupWizardBackendStep } from "./BackendStep";
+export { SetupWizardMemoryStep } from "./MemoryStep";
+export { SetupWizardProfileStep } from "./ProfileStep";
+export { SetupWizardCompatStep } from "./CompatStep";
+export { SetupWizardModelStep as SetupWizardWorkspaceStep } from "./ModelStep";
+export { SetupWizardProfileStep as SetupWizardPreferencesStep } from "./ProfileStep";
+export { SetupWizardCompatStep as SetupWizardReadyStep } from "./CompatStep";
