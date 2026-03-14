@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Lunaria Mobile",
+    "slug": "lunaria-mobile",
+    "scheme": "lunaria-mobile",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "plugins": ["expo-router", "expo-secure-store"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
