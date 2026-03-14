@@ -1,0 +1,39 @@
+{
+  "$schema": "../../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Lunaria",
+  "version": "0.1.0",
+  "identifier": "com.lunaria.desktop",
+  "build": {
+    "beforeBuildCommand": "bun run build:web",
+    "beforeDevCommand": "bun run dev:web --host 127.0.0.1 --port 1420",
+    "devUrl": "http://127.0.0.1:1420",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self' http://127.0.0.1:* ws://127.0.0.1:*;"
+    },
+    "windows": [
+      {
+        "label": "main",
+        "title": "Lunaria",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "center": true,
+        "decorations": false,
+        "transparent": true
+      }
+    ],
+    "trayIcon": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true
+    }
+  },
+  "bundle": {
+    "active": false
+  }
+}
