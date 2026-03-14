@@ -1,0 +1,52 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./textarea.stories";
+
+<Meta of={Stories} />
+
+# Textarea
+
+A multi-line text input for longer-form content. Extends the native `<textarea>` element with consistent styling and focus management.
+
+## Import
+
+```tsx
+import { Textarea } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### With Value
+
+<Canvas of={Stories.WithValue} />
+
+### Disabled
+
+<Canvas of={Stories.Disabled} />
+
+### Custom Rows
+
+<Canvas of={Stories.WithRows} />
+
+### All States
+
+<Canvas of={Stories.AllStates} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Renders a native `<textarea>` element with full keyboard and screen reader support
+- Focus ring visible on keyboard navigation via `focus-visible` styles
+- Disabled and read-only states are natively supported
+- Pair with `<Label htmlFor>` to associate a visible label for screen readers
+
+## Related
+
+- [Input](?path=/docs/atoms-input--docs)
+- [Label](?path=/docs/atoms-label--docs)

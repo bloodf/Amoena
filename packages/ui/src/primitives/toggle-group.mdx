@@ -1,0 +1,62 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./toggle-group.stories";
+
+<Meta of={Stories} />
+
+# ToggleGroup
+
+A group of toggle buttons where one or multiple items can be active. Built on Radix UI's ToggleGroup primitive, inheriting variant and size via context.
+
+## Import
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Multiple Selection
+
+<Canvas of={Stories.Multiple} />
+
+### Outline Variant
+
+<Canvas of={Stories.Outline} />
+
+### Sizes
+
+<Canvas of={Stories.AllVariants} />
+
+### Disabled
+
+<Canvas of={Stories.Disabled} />
+
+## Props
+
+<Controls />
+
+## Variants
+
+| Prop      | Values                  |
+| --------- | ----------------------- |
+| `variant` | `default`, `outline`    |
+| `size`    | `default`, `sm`, `lg`   |
+| `type`    | `single`, `multiple`    |
+
+## Accessibility
+
+- Built on `@radix-ui/react-toggle-group` which provides `role="group"` semantics
+- Arrow keys navigate between items; `Space` or `Enter` toggles the focused item
+- `ToggleGroupItem` inherits `variant` and `size` from the parent via React context
+- Focus ring visible on keyboard navigation
+- Supports both single and multiple selection modes
+
+## Related
+
+- [Toggle](?path=/docs/atoms-toggle--docs)
+- [RadioGroup](?path=/docs/atoms-radio-group--docs)
+- [Button](?path=/docs/atoms-button--docs)

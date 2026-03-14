@@ -1,0 +1,48 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./collapsible.stories";
+
+<Meta of={Stories} />
+
+# Collapsible
+
+An interactive section that can be expanded or collapsed to reveal hidden content. Built on Radix UI Collapsible primitive.
+
+## Import
+
+```tsx
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Default Open
+
+<Canvas of={Stories.DefaultOpen} />
+
+### Closed
+
+<Canvas of={Stories.Closed} />
+
+### Disabled
+
+<Canvas of={Stories.Disabled} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Trigger toggles content visibility via `aria-expanded`
+- Supports `Enter` and `Space` keys on the trigger to toggle
+- Content is removed from the accessibility tree when collapsed
+- Use `disabled` prop to prevent interaction
+
+## Related
+
+- [Accordion](?path=/docs/atoms-accordion--docs)
+- [Card](?path=/docs/atoms-card--docs)

@@ -1,0 +1,47 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./aspect-ratio.stories";
+
+<Meta of={Stories} />
+
+# AspectRatio
+
+A container that enforces a fixed width-to-height ratio for its content. Built on Radix UI's AspectRatio primitive — useful for images, videos, and embedded media.
+
+## Import
+
+```tsx
+import { AspectRatio } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Square (1:1)
+
+<Canvas of={Stories.Square} />
+
+### Portrait (3:4)
+
+<Canvas of={Stories.Portrait} />
+
+### All Ratios
+
+<Canvas of={Stories.AllRatios} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- The component is a layout wrapper with no semantic role — it does not affect screen reader output
+- Ensure child content (images, videos) has appropriate `alt` text or `aria-label` attributes
+- The aspect ratio is maintained via CSS `padding-bottom` trick, so content reflows correctly at all viewport sizes
+
+## Related
+
+- [Avatar](?path=/docs/atoms-avatar--docs)
+- [ScrollArea](?path=/docs/atoms-scroll-area--docs)

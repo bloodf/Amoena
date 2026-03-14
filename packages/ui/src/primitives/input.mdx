@@ -1,0 +1,34 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./input.stories";
+
+<Meta of={Stories} />
+
+# Input
+
+A styled text input field. Extends the native `<input>` element with consistent styling, focus rings, and file-input support.
+
+## Import
+
+```tsx
+import { Input } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Renders a native `<input>` element preserving full keyboard and screen reader support
+- Focus ring visible on keyboard navigation via `focus-visible` styles
+- Disabled state shows `not-allowed` cursor and reduced opacity
+- Pair with `<Label htmlFor>` to associate a visible label for screen readers
+
+## Related
+
+- [Label](?path=/docs/atoms-label--docs)
+- [Textarea](?path=/docs/atoms-textarea--docs)

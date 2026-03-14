@@ -1,0 +1,134 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Getting Started" />
+
+# @lunaria/ui
+
+**Lunaria** is a design system for AI-native developer tools. It provides a complete component library built on **Radix UI** primitives, **Tailwind CSS**, and **React 19**, with a dark-first HSL color system and design tokens managed via `@lunaria/tokens`.
+
+---
+
+## Installation
+
+The package is a workspace dependency within the Lunaria monorepo:
+
+```json
+{
+  "dependencies": {
+    "@lunaria/ui": "workspace:*",
+    "@lunaria/tokens": "workspace:*"
+  }
+}
+```
+
+## Importing
+
+```tsx
+// Import globals.css for base styles and CSS custom properties
+import "@lunaria/ui/styles";
+
+// Import primitives (shadcn primitives)
+import { Button, Input, Card } from "@lunaria/ui/primitives";
+
+// Import individual primitives
+import { Badge } from "@lunaria/ui/primitives/badge";
+
+// Import composite components
+import { SessionComposer } from "@lunaria/ui/composites/SessionComposer";
+
+// Import layout patterns
+import { Screen } from "@lunaria/ui/patterns";
+
+// Import hooks
+import { useToast } from "@lunaria/ui/hooks/use-toast";
+
+// Import utilities
+import { cn } from "@lunaria/ui/lib/utils";
+```
+
+---
+
+## Directory Structure
+
+```
+packages/ui/src/
+├── primitives/              Shadcn/Radix primitives (50+ components)
+│   ├── button.tsx
+│   ├── input.tsx
+│   ├── dialog.tsx
+│   ├── tooltip.tsx
+│   └── ...
+├── composites/         Feature-level components
+│   ├── AppShell.tsx
+│   ├── SessionComposer.tsx
+│   ├── CommandPalette.tsx
+│   ├── StatusBar.tsx
+│   ├── SidebarRail.tsx
+│   ├── agents/         Agent management panels
+│   ├── composer/       Message composition
+│   ├── session/        Session management
+│   ├── marketplace/    Marketplace browsing
+│   ├── home/           Dashboard components
+│   └── ...
+├── patterns/           Layout utilities
+│   ├── screen.tsx      Full-screen layout wrapper
+│   ├── control-bar.tsx Toolbar/action bar
+│   └── settings-controls.tsx Settings UI helpers
+├── hooks/              Shared React hooks
+├── lib/                Utility functions (cn, etc.)
+├── globals.css         CSS custom properties + Tailwind base
+└── stories/            Storybook documentation
+    └── foundation/     Visual token stories
+```
+
+### Atoms
+
+All **shadcn/ui** primitives live here — buttons, inputs, dialogs, tooltips, tabs, forms, select, accordion, and more. These are the building blocks used by every composite component.
+
+### Composites
+
+Feature-level components that combine primitives for specific application screens: session management, agent teams, command palette, marketplace, memory browser, terminal panels, and more.
+
+### Patterns
+
+Layout utilities that wrap content in standardized structures — full-screen shells, control bars, and settings layouts.
+
+---
+
+## Key Technologies
+
+| Dependency | Purpose |
+|---|---|
+| **Radix UI** | Accessible, unstyled UI primitives |
+| **Tailwind CSS** | Utility-first styling |
+| **class-variance-authority** | Component variant management |
+| **Framer Motion** | Animations and transitions |
+| **Lucide React** | Icon system |
+| **React Hook Form + Zod** | Form handling and validation |
+| **Recharts** | Data visualization |
+| **cmdk** | Command palette |
+| **Vaul** | Drawer component |
+| **Sonner** | Toast notifications |
+
+---
+
+## Theming
+
+Lunaria defaults to dark mode. Apply the `.light` class to switch themes:
+
+```tsx
+<div className="light">
+  {/* Light mode content */}
+</div>
+```
+
+All colors are HSL-based CSS custom properties. See **Foundation/Colors** for the full token reference.
+
+---
+
+## Foundation Docs
+
+- **[Foundation/Colors](?path=/docs/foundation-colors--docs)** — HSL color tokens, theming, semantic color maps
+- **[Foundation/Typography](?path=/docs/foundation-typography--docs)** — Font families, type scale, weights
+- **[Foundation/Spacing](?path=/docs/foundation-spacing--docs)** — Spacing scale, radius, layout patterns
+- **[Foundation/Icons](?path=/docs/foundation-icons--docs)** — Lucide icon system and usage patterns

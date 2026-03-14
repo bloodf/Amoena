@@ -1,0 +1,61 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./chart.stories";
+
+<Meta of={Stories} />
+
+# Chart
+
+A themed chart container wrapping [Recharts](https://recharts.org/). Provides a `ChartContainer` that applies design-system colors via CSS custom properties, plus tooltip and legend components. Also re-exports common Recharts primitives for convenient use.
+
+## Import
+
+```tsx
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+  type ChartConfig,
+  // Re-exported Recharts primitives
+  Bar, BarChart, Line, LineChart, Area, AreaChart,
+  Pie, PieChart, RadialBar, RadialBarChart,
+  CartesianGrid, XAxis, YAxis, Cell,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+Define a `ChartConfig` to map data keys to labels and colors, then wrap any Recharts chart in `ChartContainer`.
+
+<Canvas of={Stories.RateLimitUsage} />
+
+## Chart Config
+
+```tsx
+const config: ChartConfig = {
+  used: { label: "Used", color: "hsl(300 100% 36%)" },
+  // Or use theme-aware colors:
+  // quota: { label: "Quota", theme: { light: "#000", dark: "#fff" } },
+};
+```
+
+## Re-exported Recharts Components
+
+`Area`, `AreaChart`, `Bar`, `BarChart`, `CartesianGrid`, `Cell`, `Line`, `LineChart`, `Pie`, `PieChart`, `RadialBar`, `RadialBarChart`, `XAxis`, `YAxis`, `ResponsiveContainer`
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Use `accessibilityLayer` on Recharts chart components to enable keyboard navigation
+- `ChartTooltipContent` renders structured data with labels and formatted values
+- Colors are applied via CSS custom properties (`--color-{key}`) for consistent theming across light/dark modes
+- Chart containers use a `data-chart` attribute for scoped CSS injection
+
+## Related
+
+- [Card](?path=/docs/atoms-card--docs)
+- [Table](?path=/docs/atoms-table--docs)

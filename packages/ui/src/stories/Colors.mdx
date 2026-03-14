@@ -1,0 +1,156 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Foundation/Colors" />
+
+# Color System
+
+Lunaria uses an **HSL-based CSS custom property** system for all colors. Each token is defined as raw HSL values (without the `hsl()` wrapper), which allows easy opacity manipulation via Tailwind's slash syntax.
+
+## How It Works
+
+CSS variables are defined as space-separated HSL values:
+
+```css
+:root {
+  --primary: 300 100% 36%;
+}
+```
+
+Consumed through Tailwind config as:
+
+```css
+color: hsl(var(--primary));
+/* With opacity */
+background: hsl(var(--primary) / 0.5);
+```
+
+In Tailwind classes: `bg-primary`, `text-primary-foreground`, `border-border`, etc.
+
+---
+
+## Theming
+
+The design system defaults to **dark mode** (`:root`). Light mode activates via the `.light` class on a parent element.
+
+```html
+<!-- Dark (default) -->
+<div>...</div>
+
+<!-- Light -->
+<div class="light">...</div>
+```
+
+---
+
+## Core Semantic Tokens
+
+These tokens define the foundational surface and text colors.
+
+| Token | Dark HSL | Light HSL | Purpose |
+|---|---|---|---|
+| `--background` | `270 7% 7%` | `0 0% 98%` | Page background |
+| `--foreground` | `0 0% 88%` | `240 10% 10%` | Default text color |
+| `--card` | `270 5% 10%` | `0 0% 100%` | Card surfaces |
+| `--card-foreground` | `0 0% 88%` | `240 10% 10%` | Card text |
+| `--popover` | `270 5% 10%` | `0 0% 100%` | Popover/dropdown surfaces |
+| `--popover-foreground` | `0 0% 88%` | `240 10% 10%` | Popover text |
+
+## Interactive Tokens
+
+| Token | Dark HSL | Light HSL | Purpose |
+|---|---|---|---|
+| `--primary` | `300 100% 36%` | `300 80% 40%` | Primary actions, brand magenta |
+| `--primary-foreground` | `0 0% 100%` | `0 0% 100%` | Text on primary |
+| `--secondary` | `270 5% 14%` | `240 5% 93%` | Secondary actions, subtle backgrounds |
+| `--secondary-foreground` | `0 0% 88%` | `240 10% 10%` | Text on secondary |
+| `--accent` | `270 5% 14%` | `240 5% 93%` | Accent highlights, hover states |
+| `--accent-foreground` | `0 0% 88%` | `240 10% 10%` | Text on accent |
+| `--destructive` | `0 84% 60%` | `0 84% 60%` | Destructive/error actions |
+| `--destructive-foreground` | `0 0% 100%` | `0 0% 100%` | Text on destructive |
+
+## Muted & Border Tokens
+
+| Token | Dark HSL | Light HSL | Purpose |
+|---|---|---|---|
+| `--muted` | `270 5% 14%` | `240 5% 93%` | Muted backgrounds |
+| `--muted-foreground` | `262 4% 54%` | `240 4% 46%` | Secondary/placeholder text |
+| `--border` | `260 5% 18%` | `240 6% 87%` | Default border color |
+| `--input` | `260 5% 18%` | `240 6% 87%` | Input field borders |
+| `--ring` | `300 100% 36%` | `300 80% 40%` | Focus ring color |
+| `--radius` | `0.25rem` | `0.25rem` | Default border radius |
+
+## Surface Elevation Scale
+
+A four-level surface system for layered UI depth.
+
+| Token | Dark HSL | Light HSL | Purpose |
+|---|---|---|---|
+| `--surface-0` | `270 7% 7%` | `0 0% 98%` | Base layer (page) |
+| `--surface-1` | `270 5% 10%` | `0 0% 100%` | Raised layer (cards) |
+| `--surface-2` | `260 5% 14%` | `240 5% 95%` | Higher layer (nested panels) |
+| `--surface-3` | `260 4% 20%` | `240 5% 90%` | Highest layer (active sections) |
+
+Usage: `bg-surface-0`, `bg-surface-1`, `bg-surface-2`, `bg-surface-3`
+
+## Status Colors
+
+| Token | Dark HSL | Light HSL | Purpose |
+|---|---|---|---|
+| `--warning` | `38 92% 50%` | `38 92% 50%` | Warning states (amber) |
+| `--warning-foreground` | `0 0% 100%` | `0 0% 100%` | Text on warning |
+| `--success` | `150 100% 21%` | `150 60% 35%` | Success states (green) |
+| `--success-foreground` | `0 0% 100%` | `0 0% 100%` | Text on success |
+
+## Brand & Accent Palette
+
+Extended palette used for decorative and identity purposes.
+
+| Token | Dark HSL | Light HSL | Purpose |
+|---|---|---|---|
+| `--magenta` | `300 100% 36%` | `300 80% 40%` | Brand magenta |
+| `--purple` | `279 74% 51%` | `279 70% 50%` | Purple accent |
+| `--deep-purple` | `260 51% 43%` | `260 50% 45%` | Deep purple accent |
+| `--pink` | `318 100% 36%` | `318 80% 40%` | Pink accent |
+| `--rose` | `327 100% 40%` | `327 80% 45%` | Rose accent |
+| `--green` | `150 100% 21%` | `150 60% 35%` | Green accent |
+
+## TUI Provider Identity Colors
+
+Colors assigned to AI coding tool integrations.
+
+| Token | Dark HSL | Light HSL | Mapped to |
+|---|---|---|---|
+| `--tui-claude` | `300 100% 36%` | `300 80% 40%` | Claude (Anthropic) |
+| `--tui-opencode` | `279 74% 51%` | `279 70% 50%` | OpenCode |
+| `--tui-codex` | `260 51% 43%` | `260 50% 45%` | Codex (OpenAI) |
+| `--tui-gemini` | `318 100% 36%` | `318 80% 40%` | Gemini (Google) |
+
+Usage: `text-tui-claude`, `bg-tui-codex`, etc.
+
+## Sidebar Tokens
+
+Dedicated tokens for the sidebar component.
+
+| Token | Dark HSL | Light HSL | Purpose |
+|---|---|---|---|
+| `--sidebar-background` | `270 7% 7%` | `0 0% 98%` | Sidebar background |
+| `--sidebar-foreground` | `262 4% 54%` | `240 4% 46%` | Sidebar text |
+| `--sidebar-primary` | `300 100% 36%` | `300 80% 40%` | Sidebar active item |
+| `--sidebar-primary-foreground` | `0 0% 100%` | `0 0% 100%` | Sidebar active text |
+| `--sidebar-accent` | `270 5% 14%` | `240 5% 93%` | Sidebar hover/accent |
+| `--sidebar-accent-foreground` | `0 0% 88%` | `240 10% 10%` | Sidebar accent text |
+| `--sidebar-border` | `260 5% 18%` | `240 6% 87%` | Sidebar borders |
+| `--sidebar-ring` | `300 100% 36%` | `300 80% 40%` | Sidebar focus ring |
+
+---
+
+## Semantic Token Maps (from @lunaria/tokens)
+
+The `@lunaria/tokens` package also exports higher-level semantic color maps for specific UI contexts:
+
+- **`providerIdentityTokens`** — Maps AI providers (claude, opencode, codex, gemini, anthropic, openai, google, ollama) to brand colors.
+- **`stateTokens`** — Maps agent states (streaming, thinking, reasoning, active, idle, blocked, etc.) to status colors.
+- **`rateLimitPressureTokens`** — Maps rate limit levels (safe, caution, warning, exhausted) to urgency colors.
+- **`permissionStateTokens`** — Maps permission states (ask, acceptEdits, fullAccess, denied, pending) to indicator colors.
+
+These are consumed by composite components directly via `@lunaria/tokens`.

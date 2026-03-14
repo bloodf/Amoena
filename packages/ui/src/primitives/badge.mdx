@@ -1,0 +1,45 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./badge.stories";
+
+<Meta of={Stories} />
+
+# Badge
+
+A small status indicator label. Renders as a styled `<div>` with rounded-pill styling and variant-based colors.
+
+## Import
+
+```tsx
+import { Badge } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Secondary
+
+<Canvas of={Stories.Secondary} />
+
+## Props
+
+<Controls />
+
+## Variants
+
+| Prop      | Values                                          |
+| --------- | ----------------------------------------------- |
+| `variant` | `default`, `secondary`, `destructive`, `outline` |
+
+## Accessibility
+
+- Renders as a `<div>` — add `role="status"` or wrap in an appropriate landmark if the badge conveys live status information
+- Focus ring styles are included for use when the badge is interactive (e.g. as a link child)
+- Use sufficient color contrast between variant background and foreground for WCAG compliance
+
+## Related
+
+- [Avatar](?path=/docs/atoms-avatar--docs)
+- [Button](?path=/docs/atoms-button--docs)

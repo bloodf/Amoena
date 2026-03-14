@@ -1,0 +1,40 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./alert.stories";
+
+<Meta of={Stories} />
+
+# Alert
+
+A static, prominent message block for displaying important information or feedback. Supports `default` and `destructive` variants.
+
+## Import
+
+```tsx
+import { Alert, AlertTitle, AlertDescription } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Destructive
+
+<Canvas of={Stories.Destructive} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Uses `role="alert"` to announce content to screen readers immediately
+- Icons are positioned absolutely and sibling text is offset with padding
+- Use `AlertTitle` for a concise heading and `AlertDescription` for details
+- The `destructive` variant applies semantic color cues for error states
+
+## Related
+
+- [Sonner](?path=/docs/atoms-sonner--docs)
+- [AlertDialog](?path=/docs/atoms-alertdialog--docs)

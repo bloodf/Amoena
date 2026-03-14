@@ -1,0 +1,71 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./dialog.stories";
+
+<Meta of={Stories} />
+
+# Dialog
+
+A modal window that overlays the main content, used to capture user attention for confirmations, forms, or important information. Built on Radix UI Dialog primitives.
+
+## Import
+
+```tsx
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+  DialogOverlay,
+  DialogPortal,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<Dialog>
+  <DialogTrigger />
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle />
+      <DialogDescription />
+    </DialogHeader>
+    {/* Body content */}
+    <DialogFooter>
+      <DialogClose />
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+## Examples
+
+### Default Open
+
+<Canvas of={Stories.Open} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Focus is automatically trapped inside the dialog when open
+- Pressing `Escape` closes the dialog
+- A close button with `sr-only` label is rendered in the top-right corner
+- `DialogTitle` maps to `aria-labelledby` and `DialogDescription` to `aria-describedby` on the content
+- Focus returns to the trigger element when the dialog is closed
+- The overlay prevents interaction with background content
+
+## Related
+
+- [Sheet](?path=/docs/atoms-sheet--docs)
+- [Drawer](?path=/docs/atoms-drawer--docs)

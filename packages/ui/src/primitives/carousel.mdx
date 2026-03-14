@@ -1,0 +1,42 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./carousel.stories";
+
+<Meta of={Stories} />
+
+# Carousel
+
+A slideshow component for cycling through content. Built on [Embla Carousel](https://www.embla-carousel.com/) with support for horizontal/vertical orientation, plugins, and navigation controls.
+
+## Import
+
+```tsx
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Root element uses `role="region"` with `aria-roledescription="carousel"`
+- Each slide has `role="group"` with `aria-roledescription="slide"`
+- Arrow keys (`←` / `→`) navigate between slides
+- Previous/Next buttons include `sr-only` labels ("Previous slide" / "Next slide")
+- Buttons are automatically disabled when no further scrolling is possible
+- Supports `setApi` callback for external control of the carousel instance
+
+## Related
+
+- [Card](?path=/docs/atoms-card--docs)
+- [ScrollArea](?path=/docs/atoms-scrollarea--docs)

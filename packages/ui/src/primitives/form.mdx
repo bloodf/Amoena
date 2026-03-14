@@ -1,0 +1,86 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./form.stories";
+
+<Meta of={Stories} />
+
+# Form
+
+A form building layer that wraps [react-hook-form](https://react-hook-form.com/) with accessible, composable field components. Provides automatic `aria-describedby`, `aria-invalid`, and label association for every form field.
+
+## Import
+
+```tsx
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  useFormField,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<Form {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)}>
+    <FormField
+      control={form.control}
+      name="fieldName"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel />
+          <FormControl>
+            {/* Your input component */}
+          </FormControl>
+          <FormDescription />
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  </form>
+</Form>
+```
+
+### Component Roles
+
+| Component | Role |
+|-----------|------|
+| `Form` | Re-exports `FormProvider` from react-hook-form — provides form context |
+| `FormField` | Wraps `Controller` — connects a field to the form state |
+| `FormItem` | Container that generates a unique ID and provides `FormItemContext` |
+| `FormLabel` | Label linked to the control via `htmlFor`; turns red on validation error |
+| `FormControl` | Slot that applies `id`, `aria-describedby`, and `aria-invalid` to the child input |
+| `FormDescription` | Helper text linked to the control via `aria-describedby` |
+| `FormMessage` | Displays the validation error message (auto-reads from field state) |
+
+## Examples
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- `FormControl` automatically sets `aria-invalid` when the field has an error
+- `aria-describedby` links the control to both `FormDescription` and `FormMessage`
+- `FormLabel` is associated with its control via matching `htmlFor` / `id`
+- Error messages are announced to screen readers because they share the `aria-describedby` reference
+- The `useFormField` hook exposes all generated IDs for custom integrations
+
+## Related
+
+- [Input](?path=/docs/atoms-input--docs)
+- [Label](?path=/docs/atoms-label--docs)
+- [Select](?path=/docs/atoms-select--docs)

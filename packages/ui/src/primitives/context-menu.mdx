@@ -1,0 +1,52 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./context-menu.stories";
+
+<Meta of={Stories} />
+
+# ContextMenu
+
+A menu triggered by right-clicking (or long-pressing on touch) a target area. Built on Radix UI ContextMenu with support for items, checkbox items, radio items, sub-menus, labels, separators, and keyboard shortcuts.
+
+## Import
+
+```tsx
+import {
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuCheckboxItem,
+  ContextMenuRadioItem,
+  ContextMenuRadioGroup,
+  ContextMenuLabel,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubTrigger,
+  ContextMenuSubContent,
+  ContextMenuGroup,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Opens on right-click (context menu event) following native OS patterns
+- Full keyboard navigation — `↑` / `↓` to move, `Enter` / `Space` to select, `→` to open sub-menus, `←` or `Escape` to close
+- `ContextMenuCheckboxItem` and `ContextMenuRadioItem` include `Check` / `Circle` indicators for selected state
+- Items support `data-disabled` for visually and functionally disabling options
+- Separators and labels are properly excluded from the tab order
+- Sub-menus open directionally with `ChevronRight` indicator
+
+## Related
+
+- [DropdownMenu](?path=/docs/atoms-dropdownmenu--docs)
+- [Menubar](?path=/docs/atoms-menubar--docs)
+- [Command](?path=/docs/atoms-command--docs)

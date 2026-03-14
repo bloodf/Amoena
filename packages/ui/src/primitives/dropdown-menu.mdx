@@ -1,0 +1,91 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./dropdown-menu.stories";
+
+<Meta of={Stories} />
+
+# DropdownMenu
+
+A contextual menu triggered by a button that displays a list of actions or options. Built on Radix UI DropdownMenu primitives with support for checkbox items, radio groups, sub-menus, and keyboard shortcuts.
+
+## Import
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuPortal,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger />
+  <DropdownMenuContent>
+    <DropdownMenuLabel />
+    <DropdownMenuItem>
+      <DropdownMenuShortcut />
+    </DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuCheckboxItem />
+    <DropdownMenuSeparator />
+    <DropdownMenuRadioGroup>
+      <DropdownMenuRadioItem />
+    </DropdownMenuRadioGroup>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger />
+      <DropdownMenuSubContent>
+        <DropdownMenuItem />
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+## Examples
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+### Item Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `inset` | `boolean` | Adds left padding to align with items that have icons |
+| `disabled` | `boolean` | Prevents interaction and dims the item |
+
+## Accessibility
+
+- Full keyboard navigation: `Arrow Up/Down` to move between items, `Enter` or `Space` to select
+- `Arrow Right` opens a sub-menu, `Arrow Left` closes it
+- Type-ahead support — typing characters focuses matching items
+- `Escape` closes the menu and returns focus to the trigger
+- Checkbox and radio items announce their state to screen readers via `aria-checked`
+- Menu items use `role="menuitem"`, `role="menuitemcheckbox"`, or `role="menuitemradio"` as appropriate
+
+## Related
+
+- [Menubar](?path=/docs/atoms-menubar--docs)
+- [Select](?path=/docs/atoms-select--docs)

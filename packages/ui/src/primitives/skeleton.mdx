@@ -1,0 +1,43 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./skeleton.stories";
+
+<Meta of={Stories} />
+
+# Skeleton
+
+A placeholder loading indicator that mimics the shape of content before it loads. Uses a pulsing animation over a muted background.
+
+## Import
+
+```tsx
+import { Skeleton } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Common Shapes
+
+<Canvas of={Stories.AllVariants} />
+
+### Card Placeholder
+
+<Canvas of={Stories.CardPlaceholder} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Rendered as a `<div>` with `animate-pulse` — purely visual with no semantic meaning
+- Screen readers ignore skeleton elements by default; ensure the loading state is communicated via an `aria-busy` attribute or a visually hidden "Loading…" label on the parent container
+- Replace skeletons with actual content as soon as data is available
+
+## Related
+
+- [Progress](?path=/docs/atoms-progress--docs)
+- [Avatar](?path=/docs/atoms-avatar--docs)

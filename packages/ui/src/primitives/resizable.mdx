@@ -1,0 +1,79 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./resizable.stories";
+
+<Meta of={Stories} />
+
+# Resizable
+
+Draggable panel groups that allow users to resize adjacent sections. Wraps [react-resizable-panels](https://github.com/bvaughn/react-resizable-panels) with styled handles and an optional grip icon.
+
+## Import
+
+```tsx
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<ResizablePanelGroup direction="horizontal">
+  <ResizablePanel defaultSize={50}>
+    {/* Left / top content */}
+  </ResizablePanel>
+  <ResizableHandle withHandle />
+  <ResizablePanel defaultSize={50}>
+    {/* Right / bottom content */}
+  </ResizablePanel>
+</ResizablePanelGroup>
+```
+
+## Examples
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+### ResizablePanelGroup Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `direction` | `"horizontal" \| "vertical"` | Layout direction for the panel group |
+
+### ResizablePanel Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `defaultSize` | `number` | Initial size as a percentage (0–100) |
+| `minSize` | `number` | Minimum allowed size as a percentage |
+| `maxSize` | `number` | Maximum allowed size as a percentage |
+| `collapsible` | `boolean` | Whether the panel can be fully collapsed |
+
+### ResizableHandle Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `withHandle` | `boolean` | `false` | Shows a visible grip icon on the handle |
+
+## Accessibility
+
+- Handles are keyboard-focusable with a visible `focus-visible` ring
+- `Arrow Left/Right` (horizontal) or `Arrow Up/Down` (vertical) resizes panels when the handle is focused
+- `Home` / `End` collapses or expands a panel to its min/max size
+- Vertical layout automatically rotates the grip icon 90°
+- The resize handle expands its hit area with a `::after` pseudo-element for easier pointer interaction
+
+## Related
+
+- [Sidebar](?path=/docs/atoms-sidebar--docs)

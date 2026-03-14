@@ -1,0 +1,111 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Foundation/Typography" />
+
+# Typography
+
+Lunaria's type system is built on two font families loaded via Google Fonts, with a comprehensive size/weight scale defined in `@lunaria/tokens`.
+
+## Font Families
+
+| Family | Token | Stack | Usage |
+|---|---|---|---|
+| **Inter** | `font-sans` | `"Inter", sans-serif` | All UI text — headings, body, labels, buttons |
+| **JetBrains Mono** | `font-mono` | `"JetBrains Mono", monospace` | Code blocks, terminal output, technical values |
+
+Fonts are loaded in `globals.css` with these weights:
+
+- **Inter**: 300 (light), 400 (regular), 500 (medium), 600 (semibold), 700 (bold)
+- **JetBrains Mono**: 400 (regular), 500 (medium), 600 (semibold)
+
+```css
+/* Applied globally via globals.css */
+body {
+  font-family: 'Inter', sans-serif;
+}
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+```
+
+---
+
+## Type Scale
+
+All sizes are defined in `@lunaria/tokens` as `lunariaTypographyTokens.fontSize`. Each entry includes `size`, `lineHeight`, and `letterSpacing`.
+
+| Token | Size | Line Height | Letter Spacing | Tailwind Class |
+|---|---|---|---|---|
+| `xs` | 0.75rem (12px) | 1rem (16px) | 0.01em | `text-xs` |
+| `sm` | 0.875rem (14px) | 1.25rem (20px) | 0 | `text-sm` |
+| `base` | 1rem (16px) | 1.5rem (24px) | 0 | `text-base` |
+| `lg` | 1.125rem (18px) | 1.75rem (28px) | −0.01em | `text-lg` |
+| `xl` | 1.25rem (20px) | 1.75rem (28px) | −0.01em | `text-xl` |
+| `2xl` | 1.5rem (24px) | 2rem (32px) | −0.02em | `text-2xl` |
+| `3xl` | 1.875rem (30px) | 2.25rem (36px) | −0.02em | `text-3xl` |
+| `4xl` | 2.25rem (36px) | 2.5rem (40px) | −0.03em | `text-4xl` |
+
+> **Note:** Larger sizes use tighter letter spacing for better visual balance at display sizes.
+
+---
+
+## Font Weights
+
+| Token | Value | Tailwind Class | Usage |
+|---|---|---|---|
+| `light` | 300 | `font-light` | De-emphasized text, subtitles |
+| `regular` | 400 | `font-normal` | Body text, descriptions |
+| `medium` | 500 | `font-medium` | Labels, navigation items |
+| `semibold` | 600 | `font-semibold` | Headings, buttons, emphasis |
+| `bold` | 700 | `font-bold` | Strong emphasis, key metrics |
+
+---
+
+## Recommended Pairings
+
+| Context | Size | Weight | Example Class |
+|---|---|---|---|
+| Page title | `3xl` – `4xl` | semibold / bold | `text-3xl font-semibold` |
+| Section heading | `xl` – `2xl` | semibold | `text-xl font-semibold` |
+| Card title | `lg` | medium / semibold | `text-lg font-medium` |
+| Body text | `sm` – `base` | regular | `text-sm` |
+| Caption / helper | `xs` | regular | `text-xs text-muted-foreground` |
+| Button label | `sm` | medium | `text-sm font-medium` |
+| Code / mono | `sm` | regular | `text-sm font-mono` |
+
+---
+
+## Text Color Tokens
+
+These semantic tokens from `@lunaria/tokens` control text hierarchy:
+
+| Token | Dark HSL | Light HSL | Purpose |
+|---|---|---|---|
+| `--foreground` | `0 0% 88%` | `240 10% 10%` | Primary text (`text-foreground`) |
+| `--muted-foreground` | `262 4% 54%` | `240 4% 46%` | Secondary text (`text-muted-foreground`) |
+
+Additional text tokens in the tokens package:
+
+| Token | Dark HSL | Light HSL | Purpose |
+|---|---|---|---|
+| `text-primary` | `0 0% 88%` | `240 10% 10%` | Primary text |
+| `text-secondary` | `262 4% 54%` | `240 4% 46%` | Secondary text |
+| `text-tertiary` | `260 3% 33%` | `240 3% 66%` | Tertiary / disabled text |
+
+---
+
+## Usage Examples
+
+```tsx
+{/* Page heading */}
+<h1 className="text-3xl font-semibold tracking-tight">Dashboard</h1>
+
+{/* Section heading */}
+<h2 className="text-xl font-semibold">Active Sessions</h2>
+
+{/* Body text */}
+<p className="text-sm text-muted-foreground">No sessions running.</p>
+
+{/* Code block */}
+<code className="font-mono text-sm">npm install @lunaria/ui</code>
+```

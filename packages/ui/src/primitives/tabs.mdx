@@ -1,0 +1,72 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./tabs.stories";
+
+<Meta of={Stories} />
+
+# Tabs
+
+A tabbed interface for switching between different views or sections of content. Built on Radix UI Tabs primitives with a styled tab list, triggers, and content panels.
+
+## Import
+
+```tsx
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<Tabs defaultValue="tab1">
+  <TabsList>
+    <TabsTrigger value="tab1" />
+    <TabsTrigger value="tab2" />
+  </TabsList>
+  <TabsContent value="tab1">
+    {/* Panel 1 */}
+  </TabsContent>
+  <TabsContent value="tab2">
+    {/* Panel 2 */}
+  </TabsContent>
+</Tabs>
+```
+
+## Examples
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+### Tabs Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `defaultValue` | `string` | The initial active tab value (uncontrolled) |
+| `value` | `string` | The active tab value (controlled) |
+| `onValueChange` | `(value: string) => void` | Callback when the active tab changes |
+
+## Accessibility
+
+- `TabsList` uses `role="tablist"` and `TabsTrigger` uses `role="tab"`
+- `TabsContent` uses `role="tabpanel"` with `aria-labelledby` pointing to its trigger
+- `Arrow Left/Right` moves focus between tab triggers
+- `Home` / `End` moves focus to the first / last tab
+- Active tab trigger has `data-[state=active]` for visual distinction and `aria-selected="true"`
+- Focus-visible ring is applied on keyboard navigation
+- Disabled tabs are skipped during keyboard navigation
+
+## Related
+
+- [NavigationMenu](?path=/docs/atoms-navigationmenu--docs)

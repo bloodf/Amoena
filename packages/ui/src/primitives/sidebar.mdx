@@ -1,0 +1,142 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./sidebar.stories";
+
+<Meta of={Stories} />
+
+# Sidebar
+
+A full-featured application sidebar with collapsible state, responsive mobile support, keyboard shortcuts, and a rich set of sub-components for building navigation hierarchies. Uses `SidebarProvider` context and renders a Sheet on mobile viewports.
+
+## Import
+
+```tsx
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarTrigger,
+  SidebarRail,
+  SidebarInset,
+  SidebarHeader,
+  SidebarFooter,
+  SidebarContent,
+  SidebarSeparator,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuAction,
+  SidebarMenuBadge,
+  SidebarMenuSkeleton,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
+  SidebarInput,
+  useSidebar,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Expanded} />
+
+## Anatomy
+
+```tsx
+<SidebarProvider>
+  <Sidebar>
+    <SidebarHeader>
+      <SidebarTrigger />
+    </SidebarHeader>
+    <SidebarContent>
+      <SidebarGroup>
+        <SidebarGroupLabel />
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton />
+              <SidebarMenuBadge />
+              <SidebarMenuAction />
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuSub>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton />
+                </SidebarMenuSubItem>
+              </SidebarMenuSub>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+      <SidebarSeparator />
+    </SidebarContent>
+    <SidebarFooter />
+    <SidebarRail />
+  </Sidebar>
+  <SidebarInset>
+    {/* Main page content */}
+  </SidebarInset>
+</SidebarProvider>
+```
+
+### Component Roles
+
+| Component | Role |
+|-----------|------|
+| `SidebarProvider` | Context provider managing open/closed state, mobile detection, and cookie persistence |
+| `Sidebar` | Main container — supports `variant` (`sidebar`, `floating`, `inset`) and `collapsible` (`offcanvas`, `icon`, `none`) props |
+| `SidebarTrigger` | Toggle button that opens/closes the sidebar |
+| `SidebarRail` | Thin edge handle for desktop mouse resize/toggle |
+| `SidebarInset` | Main content area wrapper styled alongside the sidebar |
+| `SidebarGroup` | Groups related navigation items with an optional label and action button |
+| `SidebarMenu` | List container for menu items |
+| `SidebarMenuButton` | Clickable nav item with `default` and `outline` variants; shows tooltip when collapsed |
+| `SidebarMenuSub` | Nested sub-menu for hierarchical navigation |
+| `SidebarInput` | Styled search/filter input scoped to the sidebar |
+
+## Examples
+
+### Expanded
+
+<Canvas of={Stories.Expanded} />
+
+### Collapsed
+
+<Canvas of={Stories.Collapsed} />
+
+## Props
+
+<Controls />
+
+### useSidebar Hook
+
+```tsx
+const { state, open, setOpen, toggleSidebar, isMobile, openMobile, setOpenMobile } = useSidebar();
+```
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `state` | `"expanded" \| "collapsed"` | Current sidebar state |
+| `open` | `boolean` | Whether the sidebar is open |
+| `setOpen` | `(open: boolean) => void` | Set sidebar open state |
+| `toggleSidebar` | `() => void` | Toggle open/closed |
+| `isMobile` | `boolean` | Whether the viewport is mobile-sized |
+| `openMobile` | `boolean` | Mobile sheet open state |
+| `setOpenMobile` | `(open: boolean) => void` | Set mobile sheet state |
+
+## Accessibility
+
+- `Ctrl+B` (or `Cmd+B` on macOS) toggles the sidebar via keyboard shortcut
+- On mobile, the sidebar renders as a Sheet with focus trapping and overlay
+- `SidebarMenuButton` supports tooltip integration for the collapsed (icon-only) state
+- Navigation items use semantic list markup (`ul`/`li`) for screen readers
+- `SidebarTrigger` includes a screen-reader-only label ("Toggle Sidebar")
+- Focus management handles the transition between expanded and collapsed states
+
+## Related
+
+- [Sheet](?path=/docs/atoms-sheet--docs)
+- [NavigationMenu](?path=/docs/atoms-navigationmenu--docs)
+- [Resizable](?path=/docs/atoms-resizable--docs)

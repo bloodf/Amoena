@@ -1,0 +1,48 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./command.stories";
+
+<Meta of={Stories} />
+
+# Command
+
+A command palette / autocomplete search component built on [cmdk](https://cmdk.paco.me/). Supports filtering, grouping, keyboard navigation, and can optionally render inside a dialog.
+
+## Import
+
+```tsx
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+  CommandShortcut,
+  CommandDialog,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Built-in keyboard navigation — `↑` / `↓` to move between items, `Enter` to select
+- `CommandInput` auto-focuses and filters the list as you type
+- `CommandEmpty` provides feedback when no results match
+- `CommandGroup` headings organize items with visual labels
+- `CommandShortcut` displays keyboard shortcuts inline (decorative)
+- `CommandDialog` wraps the command in a Radix Dialog with focus trapping and `Escape` to dismiss
+- Items use `data-selected` and `data-disabled` attributes for visual and assistive state
+
+## Related
+
+- [Dialog](?path=/docs/atoms-dialog--docs)
+- [SearchField](?path=/docs/atoms-searchfield--docs)
+- [DropdownMenu](?path=/docs/atoms-dropdownmenu--docs)

@@ -1,0 +1,54 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./checkbox.stories";
+
+<Meta of={Stories} />
+
+# Checkbox
+
+A control that allows the user to toggle between checked and unchecked states. Built on Radix UI's Checkbox primitive with a Lucide check icon indicator.
+
+## Import
+
+```tsx
+import { Checkbox } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Checked
+
+<Canvas of={Stories.Checked} />
+
+### With Label
+
+<Canvas of={Stories.WithLabel} />
+
+### Disabled
+
+<Canvas of={Stories.Disabled} />
+
+### Disabled Checked
+
+<Canvas of={Stories.DisabledChecked} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Built on `@radix-ui/react-checkbox` which provides `role="checkbox"` and manages `aria-checked` state
+- Supports keyboard toggle via `Space` key
+- Focus ring visible on keyboard navigation
+- Disabled state prevents interaction and reduces opacity
+- Pair with `<Label>` for a visible accessible label
+
+## Related
+
+- [Label](?path=/docs/atoms-label--docs)
+- [Switch](?path=/docs/atoms-switch--docs)
+- [RadioGroup](?path=/docs/atoms-radio-group--docs)

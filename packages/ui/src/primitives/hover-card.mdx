@@ -1,0 +1,64 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./hover-card.stories";
+
+<Meta of={Stories} />
+
+# HoverCard
+
+A non-modal popup that appears when the user hovers over a trigger element. Ideal for showing preview information such as user profiles, link previews, or supplementary details without requiring a click.
+
+## Import
+
+```tsx
+import {
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<HoverCard>
+  <HoverCardTrigger />
+  <HoverCardContent>
+    {/* Preview content */}
+  </HoverCardContent>
+</HoverCard>
+```
+
+## Examples
+
+### Default Open
+
+<Canvas of={Stories.Open} />
+
+## Props
+
+<Controls />
+
+### HoverCardContent Props
+
+| Prop | Default | Description |
+|------|---------|-------------|
+| `align` | `"center"` | Horizontal alignment relative to the trigger |
+| `sideOffset` | `4` | Distance in pixels from the trigger |
+| `side` | `"bottom"` | Which side of the trigger to position the card |
+
+## Accessibility
+
+- The hover card is non-modal — it does not trap focus or block interaction with the rest of the page
+- Opens on `mouseenter` and closes on `mouseleave` with a configurable delay
+- Content is rendered in a portal to avoid clipping
+- Not intended for essential content — use a Dialog or Popover for interactive or critical information
+- Touch devices can trigger the card via long-press (Radix default behavior)
+
+## Related
+
+- [Popover](?path=/docs/atoms-popover--docs)
+- [Tooltip](?path=/docs/atoms-tooltip--docs)

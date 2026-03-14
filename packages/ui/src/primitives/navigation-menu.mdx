@@ -1,0 +1,78 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./navigation-menu.stories";
+
+<Meta of={Stories} />
+
+# NavigationMenu
+
+A top-level site navigation component that supports dropdown panels with animated viewport transitions. Built on Radix UI NavigationMenu primitives with a shared viewport container for smooth content switching.
+
+## Import
+
+```tsx
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
+  NavigationMenuLink,
+  NavigationMenuIndicator,
+  NavigationMenuViewport,
+  navigationMenuTriggerStyle,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<NavigationMenu>
+  <NavigationMenuList>
+    <NavigationMenuItem>
+      <NavigationMenuTrigger />
+      <NavigationMenuContent>
+        {/* Dropdown panel content */}
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+    <NavigationMenuItem>
+      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+        {/* Direct link */}
+      </NavigationMenuLink>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+  {/* NavigationMenuViewport is rendered automatically by NavigationMenu */}
+</NavigationMenu>
+```
+
+### `navigationMenuTriggerStyle`
+
+A `cva` utility that returns the standard trigger button styles. Use it on `NavigationMenuLink` elements that act as direct links (without dropdown content) to keep their appearance consistent with trigger buttons.
+
+## Examples
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Uses `role="navigation"` for the root element
+- `Arrow Left/Right` moves focus between top-level items
+- `Arrow Down` opens the content panel for the focused trigger
+- `Escape` closes the open panel and returns focus to the trigger
+- `NavigationMenuTrigger` renders a chevron icon with `aria-hidden="true"`
+- Content panels animate in/out using `data-motion` attributes for directional transitions
+- `NavigationMenuIndicator` provides a visual cue for the active item
+
+## Related
+
+- [Menubar](?path=/docs/atoms-menubar--docs)
+- [Tabs](?path=/docs/primitives-tabs--docs)

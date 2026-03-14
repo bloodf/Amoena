@@ -1,0 +1,44 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./label.stories";
+
+<Meta of={Stories} />
+
+# Label
+
+An accessible label for form controls. Built on Radix UI's Label primitive, it automatically adjusts styling when its associated input is disabled.
+
+## Import
+
+```tsx
+import { Label } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### With htmlFor
+
+<Canvas of={Stories.WithHtmlFor} />
+
+### Peer-Disabled Style
+
+<Canvas of={Stories.PeerDisabledStyle} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Built on `@radix-ui/react-label` which renders a native `<label>` element
+- Use `htmlFor` to associate the label with a form control for screen readers and click-to-focus behavior
+- Automatically shows disabled styling (`opacity-70`, `cursor-not-allowed`) when the peer input is disabled
+
+## Related
+
+- [Input](?path=/docs/atoms-input--docs)
+- [Checkbox](?path=/docs/atoms-checkbox--docs)
+- [Switch](?path=/docs/atoms-switch--docs)

@@ -1,0 +1,50 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./radio-group.stories";
+
+<Meta of={Stories} />
+
+# RadioGroup
+
+A set of mutually exclusive options where only one can be selected at a time. Built on Radix UI's RadioGroup primitive.
+
+## Import
+
+```tsx
+import { RadioGroup, RadioGroupItem } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Horizontal
+
+<Canvas of={Stories.Horizontal} />
+
+### Disabled
+
+<Canvas of={Stories.Disabled} />
+
+### With Many Options
+
+<Canvas of={Stories.WithManyOptions} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Built on `@radix-ui/react-radio-group` which provides `role="radiogroup"` and `role="radio"` semantics
+- Arrow keys navigate between options; `Space` selects the focused option
+- Focus ring visible on keyboard navigation
+- Disabled state prevents interaction and reduces opacity
+- Pair each `RadioGroupItem` with a `<Label>` for screen reader support
+
+## Related
+
+- [Checkbox](?path=/docs/atoms-checkbox--docs)
+- [Label](?path=/docs/atoms-label--docs)
+- [Toggle](?path=/docs/atoms-toggle--docs)

@@ -1,0 +1,44 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./search-field.stories";
+
+<Meta of={Stories} />
+
+# SearchField
+
+A search input with a leading search icon and a clear button that appears when the field has a value. Wraps the base `Input` component.
+
+## Import
+
+```tsx
+import { SearchField } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### With Value
+
+<Canvas of={Stories.WithValue} />
+
+### Custom Placeholder
+
+<Canvas of={Stories.CustomPlaceholder} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- The clear button includes `aria-label="Clear search"` for screen readers
+- Search icon is decorative (`pointer-events-none`) and does not receive focus
+- Standard `<input>` keyboard behavior — type to search, clear button is focusable via `Tab`
+- Provide an `onClear` callback for custom clear behavior, or the default resets the value to empty
+
+## Related
+
+- [Input](?path=/docs/atoms-input--docs)
+- [Command](?path=/docs/atoms-command--docs)

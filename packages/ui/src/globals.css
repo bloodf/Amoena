@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 270 7% 7%;
+    --foreground: 0 0% 88%;
+    --card: 270 5% 10%;
+    --card-foreground: 0 0% 88%;
+    --popover: 270 5% 10%;
+    --popover-foreground: 0 0% 88%;
+    --primary: 300 100% 36%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 270 5% 14%;
+    --secondary-foreground: 0 0% 88%;
+    --muted: 270 5% 14%;
+    --muted-foreground: 262 4% 54%;
+    --accent: 270 5% 14%;
+    --accent-foreground: 0 0% 88%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 260 5% 18%;
+    --input: 260 5% 18%;
+    --ring: 300 100% 36%;
+    --radius: 0.25rem;
+    --surface-0: 270 7% 7%;
+    --surface-1: 270 5% 10%;
+    --surface-2: 260 5% 14%;
+    --surface-3: 260 4% 20%;
+    --magenta: 300 100% 36%;
+    --purple: 279 74% 51%;
+    --deep-purple: 260 51% 43%;
+    --pink: 318 100% 36%;
+    --rose: 327 100% 40%;
+    --green: 150 100% 21%;
+    --tui-claude: 300 100% 36%;
+    --tui-opencode: 279 74% 51%;
+    --tui-codex: 260 51% 43%;
+    --tui-gemini: 318 100% 36%;
+    --sidebar-background: 270 7% 7%;
+    --sidebar-foreground: 262 4% 54%;
+    --sidebar-primary: 300 100% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 270 5% 14%;
+    --sidebar-accent-foreground: 0 0% 88%;
+    --sidebar-border: 260 5% 18%;
+    --sidebar-ring: 300 100% 36%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --success: 150 100% 21%;
+    --success-foreground: 0 0% 100%;
+  }
+
+  .light {
+    --background: 0 0% 98%;
+    --foreground: 240 10% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 10%;
+    --primary: 300 80% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 93%;
+    --secondary-foreground: 240 10% 10%;
+    --muted: 240 5% 93%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 240 5% 93%;
+    --accent-foreground: 240 10% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 87%;
+    --input: 240 6% 87%;
+    --ring: 300 80% 40%;
+    --surface-0: 0 0% 98%;
+    --surface-1: 0 0% 100%;
+    --surface-2: 240 5% 95%;
+    --surface-3: 240 5% 90%;
+    --magenta: 300 80% 40%;
+    --purple: 279 70% 50%;
+    --deep-purple: 260 50% 45%;
+    --pink: 318 80% 40%;
+    --rose: 327 80% 45%;
+    --green: 150 60% 35%;
+    --tui-claude: 300 80% 40%;
+    --tui-opencode: 279 70% 50%;
+    --tui-codex: 260 50% 45%;
+    --tui-gemini: 318 80% 40%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 4% 46%;
+    --sidebar-primary: 300 80% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5% 93%;
+    --sidebar-accent-foreground: 240 10% 10%;
+    --sidebar-border: 240 6% 87%;
+    --sidebar-ring: 300 80% 40%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --success: 150 60% 35%;
+    --success-foreground: 0 0% 100%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}

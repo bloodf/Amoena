@@ -1,0 +1,82 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./select.stories";
+
+<Meta of={Stories} />
+
+# Select
+
+A native-feeling dropdown for selecting a single value from a list. Built on Radix UI Select primitives with scroll buttons, grouped options, and a check indicator for the selected item.
+
+## Import
+
+```tsx
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+  SelectGroup,
+  SelectLabel,
+  SelectSeparator,
+  SelectScrollUpButton,
+  SelectScrollDownButton,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<Select>
+  <SelectTrigger>
+    <SelectValue placeholder="Pick an option" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel />
+      <SelectItem value="a" />
+      <SelectItem value="b" />
+    </SelectGroup>
+    <SelectSeparator />
+    <SelectGroup>
+      <SelectLabel />
+      <SelectItem value="c" />
+    </SelectGroup>
+  </SelectContent>
+</Select>
+```
+
+## Examples
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+### SelectContent Props
+
+| Prop | Default | Description |
+|------|---------|-------------|
+| `position` | `"popper"` | Positioning strategy — `"popper"` floats near the trigger, `"item-aligned"` aligns with the selected item |
+
+## Accessibility
+
+- `SelectTrigger` uses `role="combobox"` with `aria-expanded` and `aria-haspopup="listbox"`
+- `Arrow Up/Down` navigates items; `Enter` or `Space` selects the focused item
+- Type-ahead support — typing characters focuses matching items
+- A check icon indicates the currently selected item
+- `Escape` closes the dropdown and returns focus to the trigger
+- `SelectScrollUpButton` and `SelectScrollDownButton` appear when the list overflows, providing scroll affordances
+- Items with `disabled` are skipped during keyboard navigation and shown at reduced opacity
+
+## Related
+
+- [DropdownMenu](?path=/docs/atoms-dropdownmenu--docs)
+- [Form](?path=/docs/atoms-form--docs)

@@ -1,0 +1,79 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./drawer.stories";
+
+<Meta of={Stories} />
+
+# Drawer
+
+A mobile-friendly panel that slides up from the bottom of the screen. Wraps the [vaul](https://github.com/emilkowalski/vaul) library with consistent styling and a visible drag handle.
+
+## Import
+
+```tsx
+import {
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerClose,
+  DrawerOverlay,
+  DrawerPortal,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<Drawer>
+  <DrawerTrigger />
+  <DrawerContent>
+    {/* Drag handle rendered automatically */}
+    <DrawerHeader>
+      <DrawerTitle />
+      <DrawerDescription />
+    </DrawerHeader>
+    {/* Body content */}
+    <DrawerFooter>
+      <DrawerClose />
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+```
+
+## Examples
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+The `Drawer` root component accepts all `vaul` props including:
+
+| Prop | Default | Description |
+|------|---------|-------------|
+| `shouldScaleBackground` | `true` | Scales the background when the drawer is open |
+| `open` | — | Controlled open state |
+| `onOpenChange` | — | Callback when the open state changes |
+
+## Accessibility
+
+- Swipe-to-dismiss gesture support on touch devices
+- Pressing `Escape` closes the drawer
+- Focus is trapped within the drawer content when open
+- Background content is inert while the drawer is open
+- The drag handle provides a visible affordance for touch interaction
+
+## Related
+
+- [Dialog](?path=/docs/atoms-dialog--docs)
+- [Sheet](?path=/docs/atoms-sheet--docs)

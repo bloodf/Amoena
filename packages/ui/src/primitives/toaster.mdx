@@ -1,0 +1,107 @@
+import { Meta, Source } from "@storybook/addon-docs/blocks";
+
+<Meta title="Primitives/Toaster" />
+
+# Toaster
+
+A drop-in component that renders active toast notifications. Place it once at the root of your application and use the `useToast` hook to trigger notifications from anywhere.
+
+## Import
+
+```tsx
+import { Toaster } from "@lunaria/ui/primitives/toaster";
+import { useToast } from "@lunaria/ui/hooks/use-toast";
+```
+
+## Setup
+
+Add `<Toaster />` to your root layout:
+
+```tsx
+import { Toaster } from "@lunaria/ui/primitives/toaster";
+
+export default function RootLayout({ children }) {
+  return (
+    <>
+      {children}
+      <Toaster />
+    </>
+  );
+}
+```
+
+## Usage
+
+```tsx
+import { useToast } from "@lunaria/ui/hooks/use-toast";
+
+function SaveButton() {
+  const { toast } = useToast();
+
+  return (
+    <button
+      onClick={() =>
+        toast({
+          title: "Changes saved",
+          description: "Your profile has been updated.",
+        })
+      }
+    >
+      Save
+    </button>
+  );
+}
+```
+
+## Anatomy
+
+The `Toaster` component internally renders:
+
+```tsx
+<ToastProvider>
+  {toasts.map(({ id, title, description, action, ...props }) => (
+    <Toast key={id} {...props}>
+      <div className="grid gap-1">
+        {title && <ToastTitle>{title}</ToastTitle>}
+        {description && <ToastDescription>{description}</ToastDescription>}
+      </div>
+      {action}
+      <ToastClose />
+    </Toast>
+  ))}
+  <ToastViewport />
+</ToastProvider>
+```
+
+## `useToast` API
+
+```tsx
+const { toast, dismiss, toasts } = useToast();
+```
+
+| Method | Description |
+|--------|-------------|
+| `toast({ title?, description?, variant?, action? })` | Show a new toast notification |
+| `dismiss(toastId?)` | Dismiss a specific toast, or all toasts if no ID is provided |
+| `toasts` | Array of currently active toast objects |
+
+### Toast Options
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `title` | `ReactNode` | Bold heading for the toast |
+| `description` | `ReactNode` | Body text for the toast |
+| `variant` | `"default" \| "destructive"` | Visual style variant |
+| `action` | `ToastActionElement` | An action button element (e.g. "Undo") |
+
+## Accessibility
+
+- Toasts appear in an `aria-live` region and are announced by screen readers
+- Each toast includes a close button for keyboard and pointer dismissal
+- Swipe-to-dismiss is supported on touch devices
+- Only one toast is shown at a time by default (`TOAST_LIMIT = 1`)
+- Destructive toasts use distinct styling to convey urgency visually
+
+## Related
+
+- [Toast](?path=/docs/primitives-toast--docs)

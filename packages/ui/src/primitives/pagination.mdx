@@ -1,0 +1,43 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./pagination.stories";
+
+<Meta of={Stories} />
+
+# Pagination
+
+A navigation component for paging through content. Includes page links, previous/next buttons, and an ellipsis indicator for truncated page ranges.
+
+## Import
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Wraps a `<nav>` with `role="navigation"` and `aria-label="pagination"`
+- Active page link uses `aria-current="page"`
+- Previous/Next buttons include descriptive `aria-label` text
+- Ellipsis is hidden from screen readers with `aria-hidden` and includes a `sr-only` "More pages" label
+- Uses button styling variants (`ghost` for inactive, `outline` for active) for clear visual state
+
+## Related
+
+- [Breadcrumb](?path=/docs/atoms-breadcrumb--docs)
+- [Button](?path=/docs/atoms-button--docs)

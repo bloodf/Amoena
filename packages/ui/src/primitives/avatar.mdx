@@ -1,0 +1,44 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./avatar.stories";
+
+<Meta of={Stories} />
+
+# Avatar
+
+A circular image element for representing users or entities. Built on Radix UI's Avatar primitive with image and fallback support.
+
+## Import
+
+```tsx
+import { Avatar, AvatarImage, AvatarFallback } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### With Fallback
+
+<Canvas of={Stories.WithFallback} />
+
+### All Variants
+
+<Canvas of={Stories.AllVariants} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Built on `@radix-ui/react-avatar` which renders an `<img>` with proper `alt` text support
+- `AvatarFallback` automatically displays when the image fails to load, ensuring content is never blank
+- The fallback shows initials or an icon, maintaining visual context for screen reader users
+- Use a descriptive `alt` on `AvatarImage` for screen reader accessibility
+
+## Related
+
+- [Badge](?path=/docs/atoms-badge--docs)
+- [Skeleton](?path=/docs/atoms-skeleton--docs)

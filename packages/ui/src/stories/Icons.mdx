@@ -1,0 +1,154 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Foundation/Icons" />
+
+# Icons
+
+Lunaria uses **Lucide React** (`lucide-react@^0.462.0`) as its icon system. Lucide provides a comprehensive set of clean, consistent SVG icons designed for UI work.
+
+## Import Pattern
+
+```tsx
+import { Search, Plus, X, Check } from "lucide-react";
+```
+
+Icons render as inline SVGs and accept standard SVG props:
+
+```tsx
+<Search className="h-4 w-4" />
+<Plus className="h-5 w-5 text-primary" />
+<X className="h-4 w-4 text-muted-foreground" />
+```
+
+---
+
+## Sizing Convention
+
+Icons in Lunaria typically use these Tailwind size classes:
+
+| Size | Class | Pixels | Usage |
+|---|---|---|---|
+| Small | `h-3 w-3` | 12×12 | Inline indicators, badges |
+| Default | `h-4 w-4` | 16×16 | Buttons, inputs, menu items |
+| Medium | `h-5 w-5` | 20×20 | Standalone actions, nav items |
+| Large | `h-6 w-6` | 24×24 | Feature icons, empty states |
+| XL | `h-8 w-8` | 32×32 | Hero sections, onboarding |
+
+---
+
+## Commonly Used Icons
+
+### Navigation & Chrome
+
+| Icon | Import | Usage |
+|---|---|---|
+| `ChevronRight` | `ChevronRight` | Breadcrumbs, tree expand |
+| `ChevronDown` | `ChevronDown` | Dropdowns, collapsibles |
+| `ChevronLeft` | `ChevronLeft` | Back navigation |
+| `ChevronUp` | `ChevronUp` | Collapse, sort ascending |
+| `ArrowRight` | `ArrowRight` | Navigation links |
+| `ArrowLeft` | `ArrowLeft` | Back actions |
+| `X` | `X` | Close buttons, dismiss |
+| `Menu` | `Menu` | Mobile menu toggle |
+| `Search` | `Search` | Search fields |
+| `MoreHorizontal` | `MoreHorizontal` | Overflow menus |
+| `ExternalLink` | `ExternalLink` | External links |
+
+### Actions
+
+| Icon | Import | Usage |
+|---|---|---|
+| `Plus` | `Plus` | Create/add actions |
+| `Check` | `Check` | Confirmation, selected state |
+| `Copy` | `Copy` | Copy to clipboard |
+| `Trash2` | `Trash2` | Delete actions |
+| `Edit` | `Edit` | Edit mode |
+| `Settings` | `Settings` | Settings/config |
+| `RefreshCw` | `RefreshCw` | Refresh/retry |
+| `Download` | `Download` | Download action |
+| `Upload` | `Upload` | Upload action |
+| `Play` | `Play` | Start/run action |
+| `Pause` | `Pause` | Pause action |
+| `Send` | `Send` | Send message |
+
+### Status & Feedback
+
+| Icon | Import | Usage |
+|---|---|---|
+| `Circle` | `Circle` | Status indicators |
+| `AlertTriangle` | `AlertTriangle` | Warnings |
+| `AlertCircle` | `AlertCircle` | Errors |
+| `Info` | `Info` | Information |
+| `CheckCircle` | `CheckCircle` | Success state |
+| `Loader2` | `Loader2` | Loading spinner (animate-spin) |
+| `Zap` | `Zap` | Quick actions, power features |
+| `Shield` | `Shield` | Security/permissions |
+
+### AI & Development
+
+| Icon | Import | Usage |
+|---|---|---|
+| `Bot` | `Bot` | AI agent identity |
+| `Brain` | `Brain` | Intelligence/reasoning |
+| `Sparkles` | `Sparkles` | AI-generated content |
+| `GitBranch` | `GitBranch` | Version control branches |
+| `GitCommit` | `GitCommit` | Commits |
+| `GitPullRequest` | `GitPullRequest` | Pull requests |
+| `Terminal` | `Terminal` | Terminal/CLI |
+| `Code` | `Code` | Code blocks |
+| `FileText` | `FileText` | Files/documents |
+| `FolderOpen` | `FolderOpen` | Directories |
+| `Monitor` | `Monitor` | Screens/displays |
+
+### Layout & Content
+
+| Icon | Import | Usage |
+|---|---|---|
+| `Eye` | `Eye` | Visibility toggle |
+| `EyeOff` | `EyeOff` | Hidden state |
+| `Clock` | `Clock` | Time/history |
+| `Calendar` | `Calendar` | Date picker |
+| `User` | `User` | User profile |
+| `Users` | `Users` | Teams/groups |
+| `MessageSquare` | `MessageSquare` | Chat/messages |
+| `Bell` | `Bell` | Notifications |
+
+---
+
+## Usage with Components
+
+Icons are commonly paired with buttons, inputs, and badges:
+
+```tsx
+import { Button } from "@lunaria/ui/primitives";
+import { Plus, Search, Loader2 } from "lucide-react";
+
+{/* Icon button */}
+<Button size="icon" variant="ghost">
+  <Plus className="h-4 w-4" />
+</Button>
+
+{/* Button with icon + label */}
+<Button>
+  <Plus className="h-4 w-4 mr-2" />
+  New Session
+</Button>
+
+{/* Loading state */}
+<Button disabled>
+  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+  Loading...
+</Button>
+```
+
+---
+
+## Icon Aliases
+
+Some components alias icons to avoid naming collisions:
+
+```tsx
+import { Monitor as MonitorIcon } from "lucide-react";
+```
+
+This pattern is used when a component name might clash with the icon name.

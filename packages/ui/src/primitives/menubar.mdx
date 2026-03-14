@@ -1,0 +1,86 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./menubar.stories";
+
+<Meta of={Stories} />
+
+# Menubar
+
+A horizontal menu bar similar to native desktop application menus. Built on Radix UI Menubar primitives with support for keyboard shortcuts, checkbox items, radio groups, sub-menus, and separators.
+
+## Import
+
+```tsx
+import {
+  Menubar,
+  MenubarMenu,
+  MenubarTrigger,
+  MenubarContent,
+  MenubarItem,
+  MenubarSeparator,
+  MenubarLabel,
+  MenubarCheckboxItem,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarShortcut,
+  MenubarSub,
+  MenubarSubTrigger,
+  MenubarSubContent,
+  MenubarGroup,
+  MenubarPortal,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger />
+    <MenubarContent>
+      <MenubarLabel />
+      <MenubarItem>
+        <MenubarShortcut />
+      </MenubarItem>
+      <MenubarSeparator />
+      <MenubarCheckboxItem />
+      <MenubarRadioGroup>
+        <MenubarRadioItem />
+      </MenubarRadioGroup>
+      <MenubarSub>
+        <MenubarSubTrigger />
+        <MenubarSubContent>
+          <MenubarItem />
+        </MenubarSubContent>
+      </MenubarSub>
+    </MenubarContent>
+  </MenubarMenu>
+</Menubar>
+```
+
+## Examples
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Full keyboard navigation: `Arrow Left/Right` to move between menus, `Arrow Up/Down` within a menu
+- `Enter` or `Space` activates the focused item
+- `Escape` closes the current menu and returns focus to the trigger
+- Type-ahead support for quickly jumping to items by typing characters
+- Each trigger uses `role="menuitem"` within a `role="menubar"` container
+- Checkbox and radio items announce their state via `aria-checked`
+
+## Related
+
+- [DropdownMenu](?path=/docs/atoms-dropdownmenu--docs)
+- [NavigationMenu](?path=/docs/atoms-navigationmenu--docs)

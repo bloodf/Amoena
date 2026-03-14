@@ -1,0 +1,51 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./progress.stories";
+
+<Meta of={Stories} />
+
+# Progress
+
+A visual indicator showing the completion progress of a task. Built on Radix UI's Progress primitive with an animated fill bar.
+
+## Import
+
+```tsx
+import { Progress } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Empty
+
+<Canvas of={Stories.Empty} />
+
+### Half
+
+<Canvas of={Stories.Half} />
+
+### Complete
+
+<Canvas of={Stories.Complete} />
+
+### All Variants
+
+<Canvas of={Stories.AllVariants} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Built on `@radix-ui/react-progress` which provides `role="progressbar"` with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax`
+- Screen readers announce the current progress percentage
+- The indicator uses a CSS `translateX` transform for smooth animated transitions
+
+## Related
+
+- [Slider](?path=/docs/atoms-slider--docs)
+- [Skeleton](?path=/docs/atoms-skeleton--docs)

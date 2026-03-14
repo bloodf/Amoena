@@ -1,0 +1,42 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./input-otp.stories";
+
+<Meta of={Stories} />
+
+# InputOTP
+
+A one-time password input with individual character slots. Built on [input-otp](https://input-otp.rodz.dev/) with grouped slots and optional separators.
+
+## Import
+
+```tsx
+import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Four Digits
+
+<Canvas of={Stories.FourDigits} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Renders a single hidden `<input>` with individual slot visuals for better UX
+- Supports keyboard input — type to fill slots, `Backspace` to delete
+- Active slot receives a visible focus ring (`ring-2 ring-ring`)
+- Displays an animated caret in the active slot
+- `InputOTPSeparator` uses `role="separator"` for assistive tech
+- Disabled state applies `opacity-50` and `cursor-not-allowed`
+
+## Related
+
+- [Input](?path=/docs/atoms-input--docs)
+- [Form](?path=/docs/atoms-form--docs)

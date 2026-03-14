@@ -1,0 +1,49 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./breadcrumb.stories";
+
+<Meta of={Stories} />
+
+# Breadcrumb
+
+A navigation aid that shows the user's current location within a hierarchy. Supports links, separators, ellipsis for collapsed paths, and a current page indicator.
+
+## Import
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### With Ellipsis
+
+<Canvas of={Stories.WithEllipsis} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Renders as a `<nav>` with `aria-label="breadcrumb"`
+- `BreadcrumbPage` sets `aria-current="page"` and `aria-disabled="true"`
+- Separators use `aria-hidden="true"` and `role="presentation"` to be invisible to assistive tech
+- `BreadcrumbEllipsis` is hidden from screen readers with a `sr-only` "More" label
+- `BreadcrumbLink` supports `asChild` for custom link components (e.g., Next.js `Link`)
+
+## Related
+
+- [NavigationMenu](?path=/docs/atoms-navigationmenu--docs)
+- [Pagination](?path=/docs/atoms-pagination--docs)

@@ -1,0 +1,76 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./sheet.stories";
+
+<Meta of={Stories} />
+
+# Sheet
+
+A panel that slides in from any edge of the screen, built on Radix UI Dialog primitives. Supports four directions — `top`, `right`, `bottom`, and `left` — and is commonly used for navigation drawers, settings panels, or detail views.
+
+## Import
+
+```tsx
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+  SheetClose,
+  SheetOverlay,
+  SheetPortal,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<Sheet>
+  <SheetTrigger />
+  <SheetContent side="right">
+    <SheetHeader>
+      <SheetTitle />
+      <SheetDescription />
+    </SheetHeader>
+    {/* Body content */}
+    <SheetFooter />
+  </SheetContent>
+</Sheet>
+```
+
+## Examples
+
+### Left Side
+
+<Canvas of={Stories.Left} />
+
+## Props
+
+<Controls />
+
+### SheetContent Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"right"` | Which edge of the viewport the sheet slides in from |
+
+## Accessibility
+
+- Focus is trapped inside the sheet when open
+- Pressing `Escape` closes the sheet
+- A close button with a screen-reader-only label is rendered in the top-right corner
+- `SheetTitle` maps to `aria-labelledby` and `SheetDescription` to `aria-describedby`
+- Focus returns to the trigger when the sheet is closed
+- The overlay blocks interaction with background content
+
+## Related
+
+- [Dialog](?path=/docs/atoms-dialog--docs)
+- [Drawer](?path=/docs/atoms-drawer--docs)
+- [Sidebar](?path=/docs/atoms-sidebar--docs)

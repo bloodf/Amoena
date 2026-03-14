@@ -1,0 +1,65 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./popover.stories";
+
+<Meta of={Stories} />
+
+# Popover
+
+A floating panel that appears next to a trigger element, used for displaying interactive content such as forms, filters, or settings. Built on Radix UI Popover primitives.
+
+## Import
+
+```tsx
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<Popover>
+  <PopoverTrigger />
+  <PopoverContent>
+    {/* Interactive content */}
+  </PopoverContent>
+</Popover>
+```
+
+## Examples
+
+### Default Open
+
+<Canvas of={Stories.Open} />
+
+## Props
+
+<Controls />
+
+### PopoverContent Props
+
+| Prop | Default | Description |
+|------|---------|-------------|
+| `align` | `"center"` | Horizontal alignment relative to the trigger |
+| `sideOffset` | `4` | Distance in pixels from the trigger |
+| `side` | `"bottom"` | Which side of the trigger to position the popover |
+
+## Accessibility
+
+- Focus is moved into the popover when it opens
+- Pressing `Escape` closes the popover and returns focus to the trigger
+- Clicking outside the popover closes it
+- Content is rendered in a portal to avoid clipping by parent overflow
+- Unlike HoverCard, Popover is opened by click and supports interactive content (forms, buttons)
+
+## Related
+
+- [HoverCard](?path=/docs/atoms-hovercard--docs)
+- [Dialog](?path=/docs/atoms-dialog--docs)
+- [DropdownMenu](?path=/docs/atoms-dropdownmenu--docs)

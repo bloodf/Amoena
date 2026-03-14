@@ -1,0 +1,44 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./scroll-area.stories";
+
+<Meta of={Stories} />
+
+# ScrollArea
+
+A custom-styled scrollable container that replaces the browser's native scrollbar. Built on Radix UI's ScrollArea primitive with vertical and horizontal scrollbar support.
+
+## Import
+
+```tsx
+import { ScrollArea, ScrollBar } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Horizontal
+
+<Canvas of={Stories.Horizontal} />
+
+### Both Axes
+
+<Canvas of={Stories.BothAxes} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Built on `@radix-ui/react-scroll-area` which preserves native scrolling behavior and keyboard navigation
+- Content remains accessible via keyboard (`Tab`, arrow keys, `Page Up`/`Page Down`)
+- Custom scrollbars are decorative overlays — native scroll semantics are maintained underneath
+- Touch-friendly with `touch-none` on scrollbar handles to avoid conflicts
+
+## Related
+
+- [Separator](?path=/docs/atoms-separator--docs)
+- [AspectRatio](?path=/docs/atoms-aspect-ratio--docs)

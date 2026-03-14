@@ -1,0 +1,75 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./table.stories";
+
+<Meta of={Stories} />
+
+# Table
+
+A styled HTML table with semantic sub-components for headers, body, footer, rows, cells, and captions. Automatically wraps in a scrollable container for responsive layouts.
+
+## Import
+
+```tsx
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableCaption,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Anatomy
+
+```tsx
+<Table>
+  <TableCaption />
+  <TableHeader>
+    <TableRow>
+      <TableHead />
+      <TableHead />
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell />
+      <TableCell />
+    </TableRow>
+  </TableBody>
+  <TableFooter>
+    <TableRow>
+      <TableCell />
+    </TableRow>
+  </TableFooter>
+</Table>
+```
+
+## Examples
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Uses native HTML `<table>`, `<thead>`, `<tbody>`, `<tfoot>`, `<tr>`, `<th>`, `<td>`, and `<caption>` elements for full semantic structure
+- Screen readers can navigate cells using table-specific commands
+- `TableHead` uses `<th>` with left-aligned text and muted foreground for visual distinction
+- Selected rows are highlighted via the `data-[state=selected]` attribute
+- `TableCaption` renders a `<caption>` element placed at the bottom of the table
+- The wrapping `div` has `overflow-auto` for horizontal scrolling on narrow viewports
+
+## Related
+
+- [Form](?path=/docs/atoms-form--docs)

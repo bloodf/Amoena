@@ -1,0 +1,87 @@
+import { Meta, Source } from "@storybook/addon-docs/blocks";
+
+<Meta title="Primitives/Toast" />
+
+# Toast
+
+Low-level Radix UI Toast primitives for building notification messages. Provides the building blocks — `ToastProvider`, `ToastViewport`, `Toast`, `ToastTitle`, `ToastDescription`, `ToastAction`, and `ToastClose` — with two variants: `default` and `destructive`.
+
+> **Tip:** For a ready-to-use notification system, see the [Toaster](?path=/docs/primitives-toaster--docs) component and the `useToast` hook.
+
+## Import
+
+```tsx
+import {
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  ToastAction,
+  type ToastProps,
+  type ToastActionElement,
+} from "@lunaria/ui/primitives/toast";
+```
+
+## Anatomy
+
+```tsx
+<ToastProvider>
+  <Toast variant="default">
+    <ToastTitle />
+    <ToastDescription />
+    <ToastAction altText="Action description" />
+    <ToastClose />
+  </Toast>
+  <ToastViewport />
+</ToastProvider>
+```
+
+### Component Roles
+
+| Component | Role |
+|-----------|------|
+| `ToastProvider` | Wraps the app or region, manages toast state and timing |
+| `ToastViewport` | Fixed container where toasts are rendered (bottom-right on desktop, top on mobile) |
+| `Toast` | Individual notification — supports `default` and `destructive` variants |
+| `ToastTitle` | Bold heading text |
+| `ToastDescription` | Body message text |
+| `ToastAction` | Action button inside the toast (e.g. "Undo") |
+| `ToastClose` | Close button — hidden by default, visible on hover |
+
+### Variants
+
+| Variant | Description |
+|---------|-------------|
+| `default` | Standard notification with background and border |
+| `destructive` | Red-tinted notification for error or danger messages |
+
+## Usage with `useToast`
+
+```tsx
+import { useToast } from "@lunaria/ui/hooks/use-toast";
+
+function MyComponent() {
+  const { toast } = useToast();
+
+  return (
+    <button onClick={() => toast({ title: "Saved", description: "Your changes have been saved." })}>
+      Save
+    </button>
+  );
+}
+```
+
+## Accessibility
+
+- Toasts are rendered in an `aria-live` region so screen readers announce new notifications
+- Swipe-to-dismiss gesture support on touch devices via `data-swipe` attributes
+- `ToastClose` is hidden visually until hover/focus for a clean UI, but remains accessible
+- `ToastAction` requires an `altText` prop that describes the action for screen readers
+- Destructive toasts use distinct focus ring colors for keyboard users
+- Viewport is positioned at `z-[100]` to appear above all other content
+
+## Related
+
+- [Toaster](?path=/docs/primitives-toaster--docs)

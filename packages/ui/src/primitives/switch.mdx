@@ -1,0 +1,54 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./switch.stories";
+
+<Meta of={Stories} />
+
+# Switch
+
+A toggle control for switching between on and off states. Built on Radix UI's Switch primitive with a sliding thumb indicator.
+
+## Import
+
+```tsx
+import { Switch } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Checked
+
+<Canvas of={Stories.Checked} />
+
+### With Label
+
+<Canvas of={Stories.WithLabel} />
+
+### Disabled
+
+<Canvas of={Stories.Disabled} />
+
+### Disabled Checked
+
+<Canvas of={Stories.DisabledChecked} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Built on `@radix-ui/react-switch` which provides `role="switch"` and manages `aria-checked` state
+- Toggled via `Space` or `Enter` keys
+- Focus ring visible on keyboard navigation
+- Disabled state reduces opacity and prevents interaction
+- Pair with `<Label>` for a visible accessible label
+
+## Related
+
+- [Checkbox](?path=/docs/atoms-checkbox--docs)
+- [Toggle](?path=/docs/atoms-toggle--docs)
+- [Label](?path=/docs/atoms-label--docs)

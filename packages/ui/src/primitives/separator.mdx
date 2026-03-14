@@ -1,0 +1,42 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./separator.stories";
+
+<Meta of={Stories} />
+
+# Separator
+
+A visual divider between content sections. Built on Radix UI's Separator primitive, supporting both horizontal and vertical orientations.
+
+## Import
+
+```tsx
+import { Separator } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Horizontal
+
+<Canvas of={Stories.Horizontal} />
+
+### Vertical
+
+<Canvas of={Stories.Vertical} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Built on `@radix-ui/react-separator` which renders with `role="separator"` (or `role="none"` when `decorative` is `true`)
+- `decorative` defaults to `true`, hiding the separator from screen readers when it is purely visual
+- Set `decorative={false}` when the separator conveys meaningful structure
+
+## Related
+
+- [ScrollArea](?path=/docs/atoms-scroll-area--docs)

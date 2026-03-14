@@ -1,0 +1,47 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./button.stories";
+
+<Meta of={Stories} />
+
+# Button
+
+A clickable element that triggers an action. Supports multiple visual variants and sizes, with optional polymorphism via `asChild`.
+
+## Import
+
+```tsx
+import { Button } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Destructive
+
+<Canvas of={Stories.Destructive} />
+
+## Props
+
+<Controls />
+
+## Variants
+
+| Prop      | Values                                                         |
+| --------- | -------------------------------------------------------------- |
+| `variant` | `default`, `destructive`, `outline`, `secondary`, `ghost`, `link` |
+| `size`    | `default`, `sm`, `lg`, `icon`                                  |
+
+## Accessibility
+
+- Renders a native `<button>` element by default, ensuring correct keyboard and screen reader behavior
+- Focus ring visible on keyboard navigation via `focus-visible` styles
+- Disabled state removes pointer events and reduces opacity
+- Use `asChild` to render as a different element (e.g. `<a>`) while preserving button semantics
+
+## Related
+
+- [Input](?path=/docs/atoms-input--docs)
+- [Toggle](?path=/docs/atoms-toggle--docs)

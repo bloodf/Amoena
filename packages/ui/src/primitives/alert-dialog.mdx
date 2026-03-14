@@ -1,0 +1,52 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./alert-dialog.stories";
+
+<Meta of={Stories} />
+
+# AlertDialog
+
+A modal dialog that interrupts the user with important content and expects a response. Built on Radix UI AlertDialog with overlay, focus trapping, and animated transitions.
+
+## Import
+
+```tsx
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Open by Default
+
+<Canvas of={Stories.Open} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Implements WAI-ARIA AlertDialog pattern — focus is trapped within the dialog when open
+- `AlertDialogTitle` and `AlertDialogDescription` are linked via `aria-labelledby` / `aria-describedby`
+- Pressing `Escape` triggers the cancel action (not just close)
+- Action and Cancel buttons use proper Radix roles — Cancel also closes the dialog
+- Overlay prevents interaction with content behind the dialog
+- Focus returns to the trigger when the dialog is dismissed
+
+## Related
+
+- [Dialog](?path=/docs/atoms-dialog--docs)
+- [Alert](?path=/docs/atoms-alert--docs)

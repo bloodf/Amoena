@@ -1,0 +1,34 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./card.stories";
+
+<Meta of={Stories} />
+
+# Card
+
+A container component for grouping related content with a bordered, rounded surface. Composed of `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, and `CardFooter` sub-components.
+
+## Import
+
+```tsx
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Renders semantic HTML (`<div>`, `<h3>`, `<p>`) — use heading sub-components for proper document outline
+- No interactive behavior by default; wrap in links or buttons for clickable cards
+- Uses `bg-card` and `text-card-foreground` tokens for consistent theming
+- All sub-components accept `className` for custom styling
+
+## Related
+
+- [Alert](?path=/docs/atoms-alert--docs)
+- [Dialog](?path=/docs/atoms-dialog--docs)

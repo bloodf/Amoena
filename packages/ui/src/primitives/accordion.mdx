@@ -1,0 +1,41 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./accordion.stories";
+
+<Meta of={Stories} />
+
+# Accordion
+
+A vertically stacked set of collapsible sections. Built on Radix UI Accordion, supports `single` (one open at a time) and `multiple` (any number open) modes.
+
+## Import
+
+```tsx
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Multiple
+
+<Canvas of={Stories.Multiple} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Implements WAI-ARIA Accordion pattern with proper `role`, `aria-expanded`, and `aria-controls`
+- Triggers are keyboard navigable with `Enter` / `Space` to toggle, arrow keys to move between items
+- Chevron icon rotates 180° when expanded for a clear visual indicator
+- Content animate open/closed with `accordion-up` and `accordion-down` keyframes
+- Set `type="single" collapsible` to allow all items to be closed
+
+## Related
+
+- [Collapsible](?path=/docs/atoms-collapsible--docs)
+- [Tabs](?path=/docs/atoms-tabs--docs)

@@ -1,0 +1,57 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./tooltip.stories";
+
+<Meta of={Stories} />
+
+# Tooltip
+
+A popup that displays informational text when hovering or focusing on an element. Built on Radix UI Tooltip primitive.
+
+## Import
+
+```tsx
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Top
+
+<Canvas of={Stories.Top} />
+
+### Right
+
+<Canvas of={Stories.Right} />
+
+### Bottom
+
+<Canvas of={Stories.Bottom} />
+
+### Left
+
+<Canvas of={Stories.Left} />
+
+### All Sides
+
+<Canvas of={Stories.AllSides} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Wraps Radix UI Tooltip which implements WAI-ARIA tooltip pattern
+- Appears on hover and focus, dismissed with `Escape`
+- Content uses `role="tooltip"` and is linked via `aria-describedby`
+- `TooltipProvider` controls the global `delayDuration` and `skipDelayDuration`
+- Supports `sideOffset` for consistent spacing from the trigger
+
+## Related
+
+- [HoverCard](?path=/docs/atoms-hovercard--docs)
+- [Button](?path=/docs/atoms-button--docs)

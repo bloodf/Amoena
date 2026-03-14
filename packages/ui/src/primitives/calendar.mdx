@@ -1,0 +1,45 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./calendar.stories";
+
+<Meta of={Stories} />
+
+# Calendar
+
+A date picker calendar built on [react-day-picker](https://react-day-picker.js.org/). Supports single date selection and date range selection with styled navigation and outside-day display.
+
+## Import
+
+```tsx
+import { Calendar } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Selected Date
+
+<Canvas of={Stories.SelectedDate} />
+
+### Date Range Selection
+
+<Canvas of={Stories.DateRangeSelection} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Fully keyboard navigable — arrow keys move between days, months navigated via previous/next buttons
+- Selected days use `aria-selected` for screen reader announcements
+- Outside days are visually muted and have reduced opacity
+- Disabled days are marked with `aria-disabled`
+- Navigation buttons include accessible icon components with clear visual indicators
+
+## Related
+
+- [Input](?path=/docs/atoms-input--docs)
+- [Button](?path=/docs/atoms-button--docs)

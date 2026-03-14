@@ -1,0 +1,72 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./toggle.stories";
+
+<Meta of={Stories} />
+
+# Toggle
+
+A two-state button that can be toggled on or off. Built on Radix UI's Toggle primitive with support for variant and size props.
+
+## Import
+
+```tsx
+import { Toggle } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Outline
+
+<Canvas of={Stories.Outline} />
+
+### Small
+
+<Canvas of={Stories.Small} />
+
+### Large
+
+<Canvas of={Stories.Large} />
+
+### Pressed
+
+<Canvas of={Stories.Pressed} />
+
+### With Icon
+
+<Canvas of={Stories.WithIcon} />
+
+### All Variants
+
+<Canvas of={Stories.AllVariants} />
+
+### Disabled
+
+<Canvas of={Stories.Disabled} />
+
+## Props
+
+<Controls />
+
+## Variants
+
+| Prop      | Values                  |
+| --------- | ----------------------- |
+| `variant` | `default`, `outline`    |
+| `size`    | `default`, `sm`, `lg`   |
+
+## Accessibility
+
+- Built on `@radix-ui/react-toggle` which provides `aria-pressed` state management
+- Toggled via `Space` or `Enter` keys
+- Focus ring visible on keyboard navigation
+- Disabled state prevents interaction and reduces opacity
+
+## Related
+
+- [Button](?path=/docs/atoms-button--docs)
+- [ToggleGroup](?path=/docs/atoms-toggle-group--docs)
+- [Switch](?path=/docs/atoms-switch--docs)

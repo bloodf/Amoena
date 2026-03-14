@@ -1,0 +1,49 @@
+import { Meta, Story, Canvas, Controls, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./slider.stories";
+
+<Meta of={Stories} />
+
+# Slider
+
+A draggable range input for selecting a numeric value within a range. Built on Radix UI's Slider primitive with track, range, and thumb sub-components.
+
+## Import
+
+```tsx
+import { Slider } from "@lunaria/ui/atoms";
+```
+
+## Usage
+
+<Canvas of={Stories.Default} />
+
+## Examples
+
+### Custom Range
+
+<Canvas of={Stories.CustomRange} />
+
+### Small Step
+
+<Canvas of={Stories.SmallStep} />
+
+### Disabled
+
+<Canvas of={Stories.Disabled} />
+
+## Props
+
+<Controls />
+
+## Accessibility
+
+- Built on `@radix-ui/react-slider` which provides `role="slider"` with `aria-valuemin`, `aria-valuemax`, and `aria-valuenow`
+- Arrow keys adjust the value by `step`; `Home`/`End` jump to min/max
+- Touch-friendly with `touch-none` to prevent scroll interference
+- Focus ring visible on keyboard navigation
+- Disabled state prevents interaction and reduces opacity
+
+## Related
+
+- [Progress](?path=/docs/atoms-progress--docs)
+- [Input](?path=/docs/atoms-input--docs)
