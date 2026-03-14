@@ -1,0 +1,55 @@
+export const ptBR = {
+  app: {
+    runtimeEyebrow: "Runtime Desktop",
+    title: "Lunaria",
+    connecting:
+      "Estabelecendo o runtime localhost confiavel e hidratando a shell desktop.",
+    bootstrapFailed: "Falha na Inicializacao",
+    unknownStatus: "desconhecido",
+    sessionsLabel: "sessoes",
+    providersLabel: "provedores",
+  },
+  permission: {
+    title: "Permission Required",
+    description: "The AI wants to use",
+    deny: "Deny",
+    approve: "Approve",
+  },
+  queue: {
+    title: "Message Queue",
+    pending: "pending",
+    sendNext: "Send Next",
+    empty: "No queued messages",
+    save: "Save",
+    cancel: "Cancel",
+    edit: "Edit",
+    remove: "Remove",
+    cliDisabled: "CLI queue: reordering is disabled",
+  },
+  sessionTree: {
+    title: "Session Hierarchy",
+    empty: "No session hierarchy",
+  },
+  todo: {
+    title: "Tasks",
+    done: "done",
+    empty: "No tasks yet",
+  },
+  extensions: {
+    title: "Extensions",
+    install: "Install .luna",
+    empty: "No extensions installed. Drop a .luna file or click Install.",
+    enabled: "Enabled",
+    disabled: "Disabled",
+    uninstall: "Uninstall",
+  },
+  hooks: {
+    title: "Registered Hooks",
+    empty: "No hooks registered",
+    disabled: "(disabled)",
+    promptInjection: "Prompt injection",
+    test: "Test",
+    delete: "Delete",
+    availableEvents: "Available Events",
+  },
+} as const;

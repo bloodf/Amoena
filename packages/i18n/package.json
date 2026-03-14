@@ -1,0 +1,28 @@
+{
+  "name": "@lunaria/i18n",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lunaria internationalization — 5 languages",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LunariaAi/lunaria.git",
+    "directory": "packages/i18n"
+  },
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./react": "./src/react.tsx",
+    "./native": "./src/native.ts"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "dependencies": {
+    "expo-localization": "~17.0.7",
+    "i18next": "^25.6.0",
+    "react-i18next": "^16.0.1"
+  }
+}
