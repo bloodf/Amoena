@@ -1,0 +1,18 @@
+{
+  "name": "@lunaria/runtime-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TypeScript HTTP client for the Lunaria runtime API",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LunariaAi/lunaria.git",
+    "directory": "packages/runtime-client"
+  },
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "bun test"
+  }
+}
