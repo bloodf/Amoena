@@ -1,23 +1,35 @@
-import { useState } from "react";
-import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-import { ScreenMain, ScreenRoot, ScreenSidebarLayout } from "@/components/screen";
-import { initialWorkspaceRecords } from "@/composites/workspace-manager/data";
-import { WorkspaceDetailPanel } from "@/composites/workspace-manager/WorkspaceDetailPanel";
-import { WorkspaceListPane } from "@/composites/workspace-manager/WorkspaceListPane";
-import type { WorkspaceHealth, WorkspaceRecord } from "@/composites/workspace-manager/types";
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import { ScreenMain, ScreenRoot, ScreenSidebarLayout } from '@/components/screen';
+import { initialWorkspaceRecords } from '@/composites/workspace-manager/data';
+import { WorkspaceDetailPanel } from '@/composites/workspace-manager/WorkspaceDetailPanel';
+import { WorkspaceListPane } from '@/composites/workspace-manager/WorkspaceListPane';
+import type { WorkspaceHealth, WorkspaceRecord } from '@/composites/workspace-manager/types';
 
-export function WorkspaceManagerScreen() {
-  const [workspaces, setWorkspaces] = useState<WorkspaceRecord[]>(initialWorkspaceRecords);
+type WorkspaceManagerScreenProps = {
+  workspaces?: WorkspaceRecord[];
+  onDelete?: (name: string) => void;
+  onArchive?: (name: string) => void;
+  onReview?: (name: string) => void;
+};
+
+export function WorkspaceManagerScreen(props: WorkspaceManagerScreenProps = {}) {
+  const [workspaces, setWorkspaces] = useState<WorkspaceRecord[]>(
+    props.workspaces ?? initialWorkspaceRecords,
+  );
   const [selected, setSelected] = useState(workspaces[0].name);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const ws = workspaces.find(w => w.name === selected);
+  const ws = workspaces.find((w) => w.name === selected);
   if (!ws) return null;
 
   const handleDelete = (name: string) => {
-    const next = workspaces.filter(w => w.name !== name);
+    if (props.onDelete) {
+      props.onDelete(name);
+    }
+    const next = workspaces.filter((w) => w.name !== name);
     setWorkspaces(next);
     if (selected === name && next.length > 0) setSelected(next[0].name);
     setConfirmDelete(null);
@@ -25,17 +37,21 @@ export function WorkspaceManagerScreen() {
   };
 
   const handleRecover = (name: string) => {
-    setWorkspaces(prev => prev.map(w => w.name === name ? { ...w, health: "healthy" as WorkspaceHealth } : w));
+    setWorkspaces((prev) =>
+      prev.map((w) => (w.name === name ? { ...w, health: 'healthy' as WorkspaceHealth } : w)),
+    );
     toast.success(`${name} recovered`);
   };
 
   const handleApplyBack = (name: string) => {
-    setWorkspaces(prev => prev.map(w => w.name === name ? { ...w, pending: false, files: [] } : w));
-    toast.success("Changes applied successfully");
+    setWorkspaces((prev) =>
+      prev.map((w) => (w.name === name ? { ...w, pending: false, files: [] } : w)),
+    );
+    toast.success('Changes applied successfully');
   };
 
   const handleReviewConflicts = () => {
-    toast("Opening conflict resolution view...");
+    toast('Opening conflict resolution view...');
   };
 
   return (
@@ -45,7 +61,7 @@ export function WorkspaceManagerScreen() {
           workspaces={workspaces}
           selected={selected}
           onSelect={setSelected}
-          onCreate={() => toast("Create workspace from Settings → Workspace / Git")}
+          onCreate={() => toast('Create workspace from Settings → Workspace / Git')}
         />
         <ScreenMain className="overflow-y-auto p-6">
           <WorkspaceDetailPanel
@@ -55,7 +71,7 @@ export function WorkspaceManagerScreen() {
             onAskDelete={() => setConfirmDelete(ws.name)}
             onCancelDelete={() => setConfirmDelete(null)}
             onConfirmDelete={() => handleDelete(ws.name)}
-            onOpenSession={() => navigate("/session")}
+            onOpenSession={() => navigate('/session')}
             onReviewConflicts={handleReviewConflicts}
             onApplyBack={() => handleApplyBack(ws.name)}
           />

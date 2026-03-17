@@ -2,6 +2,8 @@ export type SessionSummary = {
   id: string;
   sessionMode: string;
   tuiType: string;
+  providerId?: string | null;
+  modelId?: string | null;
   workingDir: string;
   status: string;
   createdAt: string;
@@ -14,6 +16,9 @@ export type SessionMessage = {
   role: string;
   content: string;
   attachments: unknown[];
+  toolCalls: unknown[];
+  tokens: number;
+  cost: number;
   createdAt: string;
 };
 
@@ -21,19 +26,28 @@ export type SessionAgent = {
   id: string;
   parentAgentId?: string | null;
   agentType: string;
+  mode: string;
   model: string;
+  systemPrompt?: string | null;
+  toolAccess: string[];
   status: string;
+  stepsLimit?: number | null;
   division?: string | null;
   collaborationStyle?: string | null;
   communicationPreference?: string | null;
   decisionWeight?: number | null;
+  source?: string | null;
+  provider?: string | null;
+  lastActive?: string | null;
+  tools?: string[] | null;
+  permission?: string | null;
 };
 
 export type SessionMemoryEntry = {
   id: string;
   title: string;
   observationType: string;
-  category: "profile" | "preference" | "entity" | "pattern" | "tool_usage" | "skill";
+  category: 'profile' | 'preference' | 'entity' | 'pattern' | 'tool_usage' | 'skill';
   createdAt: string;
   l0Summary: string;
   l1Summary: string;
@@ -212,6 +226,146 @@ export type PluginHealth = {
 // Permission types
 export type PermissionDecisionRequest = {
   requestId: string;
-  decision: "approve" | "deny";
+  decision: 'approve' | 'deny';
   reason?: string;
 };
+
+export type UsageRecord = {
+  id: string;
+  sessionId: string | null;
+  provider: string;
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+  cost: number;
+  timestamp: string;
+  latencyMs: number | null;
+};
+
+export type UsageDailyAggregate = {
+  date: string;
+  provider: string;
+  totalInputTokens: number;
+  totalOutputTokens: number;
+  totalCost: number;
+  requestCount: number;
+};
+
+export type UsageProviderSummary = {
+  provider: string;
+  totalInputTokens: number;
+  totalOutputTokens: number;
+  totalCost: number;
+  requestCount: number;
+  avgLatencyMs: number | null;
+};
+
+export type UsageSessionAggregate = {
+  sessionId: string | null;
+  provider: string;
+  model: string;
+  totalInputTokens: number;
+  totalOutputTokens: number;
+  totalCost: number;
+  requestCount: number;
+};
+
+export type ProviderSummary = {
+  id: string;
+  name: string;
+  authStatus: string;
+  modelCount: number;
+  providerType: string;
+};
+
+export type ProviderModel = {
+  displayName: string;
+  modelId: string;
+  contextWindow?: number | null;
+  inputCostPerMillion?: number | null;
+  outputCostPerMillion?: number | null;
+  supportsVision: boolean;
+  supportsTools: boolean;
+  supportsReasoning: boolean;
+  reasoningModes: string[];
+  reasoningEffortSupported: boolean;
+  reasoningEffortValues: string[];
+  reasoningTokenBudgetSupported: boolean;
+};
+
+// Session creation types
+export type CreateSessionRequest = {
+  workingDir: string;
+  sessionMode: string;
+  tuiType: string;
+  providerId?: string;
+  modelId?: string;
+  metadata?: Record<string, unknown>;
+};
+
+export type SessionAutopilotStatus = {
+  enabled: boolean;
+  state?: string;
+  currentPhase?: string;
+  goal?: string;
+  activityLog?: { time: string; action: string; target: string; status: string }[];
+  storySteps?: { label: string; status: string; tokens: string }[];
+  runHistory?: {
+    id: string;
+    goal: string;
+    state: string;
+    steps: number;
+    tokens: string;
+    duration: string;
+    startedAt: string;
+  }[];
+  subAgents?: { id: string; name: string; role: string; status: string; tokensUsed: string }[];
+};
+
+// Agent spawn types
+export type SpawnAgentRequest = {
+  agentType: string;
+  model: string;
+  division?: string;
+  collaborationStyle?: string;
+};
+
+// Memory types
+export type MemorySearchResult = {
+  id: string;
+  title: string;
+  l0Summary: string;
+  score: number;
+};
+
+export type AddObservationRequest = {
+  title: string;
+  observationType: string;
+  category: string;
+  content: string;
+};
+
+// File types
+export type FileContentResponse = { path: string; content: string };
+export type FileSaveRequest = { path: string; content: string };
+export type FileTreeNode = {
+  name: string;
+  path: string;
+  isDir: boolean;
+  children?: FileTreeNode[];
+};
+
+// Plugin types (extended)
+export type PluginRecord = {
+  id: string;
+  name: string;
+  version: string;
+  enabled: boolean;
+  url?: string;
+};
+
+// Settings types
+export type SettingsPayload = Record<string, unknown>;
+
+// Health types
+export type HealthStatus = { status: string; version?: string; uptime?: number };

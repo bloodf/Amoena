@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-import type { AutopilotPipelinePhase } from "@/composites/autopilot/types";
-import type { ManagedAgent } from "@/composites/agents/types";
+import type { AutopilotPipelinePhase } from '@/composites/autopilot/types';
 
-import { toManagedAgents } from "./transforms";
+import { toManagedAgents } from './transforms';
 import type {
   AgentRecord,
   MessageRecord,
@@ -11,8 +10,8 @@ import type {
   SessionMemoryResponse,
   SessionWorkspaceStateSetters,
   TranscriptEvent,
-} from "./types";
-import type { SessionSummary } from "../runtime-context";
+} from './types';
+import type { SessionSummary } from '../runtime-context';
 
 type RuntimeRequest = <T>(path: string, init?: RequestInit) => Promise<T>;
 
@@ -36,36 +35,53 @@ export function useSessionHydration({
       return;
     }
 
-    const sessionId = activeSession.id;
-    const workingDir = activeSession.workingDir;
+    const { id: sessionId, workingDir } = activeSession;
     const autopilotEnabled = Boolean(activeSession.metadata?.autopilot);
     let cancelled = false;
 
     async function hydrate() {
-      const [nextMessages, nextAgents, nextTree, nextMemory, nextTranscript] =
-        await Promise.all([
-          request<MessageRecord[]>(`/api/v1/sessions/${sessionId}/messages`),
-          request<AgentRecord[]>(`/api/v1/sessions/${sessionId}/agents/list`),
-          request<RuntimeFileNode[]>(
-            `/api/v1/files/tree?root=${encodeURIComponent(workingDir)}`,
-          ),
-          request<SessionMemoryResponse>(`/api/v1/sessions/${sessionId}/memory`),
-          request<TranscriptEvent[]>(`/api/v1/sessions/${sessionId}/transcript`),
-        ]);
+      const VALID_PHASES: AutopilotPipelinePhase[] = [
+        'goal_analysis',
+        'story_decomposition',
+        'agent_assignment',
+        'execution',
+        'verification',
+        'report',
+      ];
+
+      const results = await Promise.allSettled([
+        request<MessageRecord[]>(`/api/v1/sessions/${sessionId}/messages`),
+        request<AgentRecord[]>(`/api/v1/sessions/${sessionId}/agents/list`),
+        request<RuntimeFileNode[]>(`/api/v1/files/tree?root=${encodeURIComponent(workingDir)}`),
+        request<SessionMemoryResponse>(`/api/v1/sessions/${sessionId}/memory`),
+        request<TranscriptEvent[]>(`/api/v1/sessions/${sessionId}/transcript`),
+        request<{ phase?: string; enabled?: boolean }>(`/api/v1/sessions/${sessionId}/autopilot`),
+      ]);
+
+      const nextMessages = results[0].status === 'fulfilled' ? results[0].value : [];
+      const nextAgents = results[1].status === 'fulfilled' ? results[1].value : [];
+      const nextTree = results[2].status === 'fulfilled' ? results[2].value : [];
+      const nextMemory = results[3].status === 'fulfilled' ? results[3].value : null;
+      const nextTranscript = results[4].status === 'fulfilled' ? results[4].value : [];
+      const autopilotData = results[5].status === 'fulfilled' ? results[5].value : null;
 
       if (!cancelled) {
         setMessages(nextMessages);
-        setStreamingMessage("");
+        setStreamingMessage('');
         setAgents(toManagedAgents(nextAgents));
         setFileTree(nextTree);
         setMemory(nextMemory);
         setTranscriptEvents(nextTranscript);
         setSelectedFile(null);
-        setAutopilotPhase(
-          autopilotEnabled
-            ? ("goal_analysis" as AutopilotPipelinePhase)
-            : null,
-        );
+        // Prefer live autopilot data from the dedicated endpoint; fall back to session metadata
+        const rawPhase =
+          autopilotData?.phase ?? (activeSession?.metadata?.currentPhase as string | undefined);
+        const isAutopilotActive = autopilotData?.enabled ?? autopilotEnabled;
+        const validatedPhase: AutopilotPipelinePhase =
+          rawPhase && VALID_PHASES.includes(rawPhase as AutopilotPipelinePhase)
+            ? (rawPhase as AutopilotPipelinePhase)
+            : 'goal_analysis';
+        setAutopilotPhase(isAutopilotActive ? validatedPhase : null);
       }
     }
 

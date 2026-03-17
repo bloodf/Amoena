@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface SessionSummary {
   id: string;
@@ -40,7 +40,7 @@ function TreeNode({
     <div>
       <div
         className={`flex items-center gap-1 px-2 py-1 rounded cursor-pointer text-sm hover:bg-muted transition-colors ${
-          isActive ? "bg-accent text-accent-foreground" : ""
+          isActive ? 'bg-accent text-accent-foreground' : ''
         }`}
         style={{ paddingLeft: `${depth * 16 + 8}px` }}
         onClick={() => onSelectSession(node.session.id)}
@@ -51,16 +51,18 @@ function TreeNode({
               e.stopPropagation();
               setExpanded(!expanded);
             }}
+            aria-label={expanded ? 'Collapse session' : 'Expand session'}
+            aria-expanded={expanded}
             className="text-xs w-4 h-4 flex items-center justify-center"
           >
-            {expanded ? "▾" : "▸"}
+            {expanded ? '▾' : '▸'}
           </button>
         )}
         {!hasChildren && <span className="w-4" />}
         <span className="font-mono text-xs truncate">{node.session.id.slice(0, 8)}</span>
         <span
           className={`text-xs ml-auto ${
-            node.session.status === "running" ? "text-green-500" : "text-muted-foreground"
+            node.session.status === 'running' ? 'text-green-500' : 'text-muted-foreground'
           }`}
         >
           {node.session.status}
@@ -83,12 +85,12 @@ function TreeNode({
 export function SessionTree({ tree, activeSessionId, onSelectSession }: SessionTreeProps) {
   const { t } = useTranslation();
   if (!tree) {
-    return <p className="text-sm text-muted-foreground p-4">{t("sessionTree.empty")}</p>;
+    return <p className="text-sm text-muted-foreground p-4">{t('sessionTree.empty')}</p>;
   }
 
   return (
     <div className="flex flex-col py-2">
-      <h3 className="text-sm font-semibold px-4 mb-2">{t("sessionTree.title")}</h3>
+      <h3 className="text-sm font-semibold px-4 mb-2">{t('sessionTree.title')}</h3>
       <TreeNode
         node={tree}
         depth={0}

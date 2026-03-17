@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   RemoteDevicesPanel,
@@ -12,9 +12,9 @@ import {
   ScreenStack,
   ScreenSubtitle,
   ScreenTitle,
-} from "@lunaria/ui";
+} from '@lunaria/ui';
 
-import { useRuntimeApi } from "./runtime-api";
+import { useRuntimeApi } from './runtime-api';
 
 type RemoteDevice = {
   deviceId: string;
@@ -44,18 +44,18 @@ export function RuntimeRemoteAccessPage() {
   const [showPin, setShowPin] = useState(true);
   const [confirmRevoke, setConfirmRevoke] = useState<string | null>(null);
 
-  async function hydrate() {
+  const hydrate = useCallback(async () => {
     const [nextDevices, nextLanStatus] = await Promise.all([
-      request<RemoteDevice[]>("/api/v1/remote/devices"),
-      request<LanStatus>("/api/v1/remote/lan"),
+      request<RemoteDevice[]>('/api/v1/remote/devices'),
+      request<LanStatus>('/api/v1/remote/lan'),
     ]);
     setDevices(nextDevices);
     setLanStatus(nextLanStatus);
-  }
+  }, [request]);
 
   useEffect(() => {
     void hydrate();
-  }, []);
+  }, [hydrate]);
 
   return (
     <ScreenRoot>
@@ -72,33 +72,33 @@ export function RuntimeRemoteAccessPage() {
               <button
                 className="rounded border border-border px-3 py-1.5 text-[12px]"
                 onClick={async () => {
-                  const next = await request<LanStatus>("/api/v1/remote/lan", {
-                    method: "POST",
+                  const next = await request<LanStatus>('/api/v1/remote/lan', {
+                    method: 'POST',
                     body: JSON.stringify({
                       enabled: !(lanStatus?.enabled ?? false),
-                      bindAddress: "127.0.0.1",
+                      bindAddress: '127.0.0.1',
                     }),
                   });
                   setLanStatus(next);
                 }}
               >
-                {lanStatus?.enabled ? "Disable LAN" : "Enable LAN"}
+                {lanStatus?.enabled ? 'Disable LAN' : 'Enable LAN'}
               </button>
             </ScreenActions>
           </ScreenHeader>
 
           <RemotePairingPanel
-            pin={pairingIntent?.pinCode ?? "— — —"}
+            pin={pairingIntent?.pinCode ?? '— — —'}
             expiryLabel={
               pairingIntent
                 ? `expires ${new Date(pairingIntent.expiresAtUnixMs).toLocaleTimeString()}`
-                : "Generate a fresh pairing code"
+                : 'Generate a fresh pairing code'
             }
             showPin={showPin}
             onTogglePin={() => setShowPin((previous) => !previous)}
             onRegenerate={async () => {
-              const next = await request<PairingIntent>("/api/v1/remote/pairing/intents", {
-                method: "POST",
+              const next = await request<PairingIntent>('/api/v1/remote/pairing/intents', {
+                method: 'POST',
                 body: JSON.stringify({}),
               });
               setPairingIntent(next);
@@ -108,11 +108,11 @@ export function RuntimeRemoteAccessPage() {
           <RemoteDevicesPanel
             devices={devices.map((device) => ({
               name: device.name,
-              ip: device.platform ?? "paired",
-              connectedSince: "paired",
-              trusted: device.status === "active",
+              ip: device.platform ?? 'paired',
+              connectedSince: 'paired',
+              trusted: device.status === 'active',
               lastSeen: device.lastSeen,
-              relay: "lan",
+              relay: 'lan',
               permissions: device.scopes,
             }))}
             confirmRevoke={confirmRevoke}
@@ -123,7 +123,7 @@ export function RuntimeRemoteAccessPage() {
               const target = devices.find((device) => device.name === name);
               if (!target) return;
               await request<void>(`/api/v1/remote/devices/${target.deviceId}/revoke`, {
-                method: "POST",
+                method: 'POST',
               });
               setConfirmRevoke(null);
               await hydrate();

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface QueueMessage {
   id: string;
   content: string;
-  queueType: "app" | "cli";
+  queueType: 'app' | 'cli';
   status: string;
   orderIndex: number;
 }
@@ -13,16 +13,21 @@ interface QueuePanelProps {
   messages: QueueMessage[];
   onEdit: (id: string, content: string) => void;
   onRemove: (id: string) => void;
-  onReorder: (orderedIds: string[]) => void;
   onFlush: () => void;
 }
 
-export function QueuePanel({ messages, onEdit, onRemove, onReorder, onFlush }: QueuePanelProps) {
+function getStatusClass(status: string): string {
+  if (status === 'pending') return 'text-yellow-500';
+  if (status === 'sent') return 'text-green-500';
+  return 'text-muted-foreground';
+}
+
+export function QueuePanel({ messages, onEdit, onRemove, onFlush }: QueuePanelProps) {
   const { t } = useTranslation();
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editContent, setEditContent] = useState("");
-  const isAppQueue = messages.some((m) => m.queueType === "app");
-  const pendingMessages = messages.filter((m) => m.status === "pending");
+  const [editContent, setEditContent] = useState('');
+  const isAppQueue = messages.some((m) => m.queueType === 'app');
+  const pendingMessages = messages.filter((m) => m.status === 'pending');
 
   const handleStartEdit = (msg: QueueMessage) => {
     setEditingId(msg.id);
@@ -39,22 +44,25 @@ export function QueuePanel({ messages, onEdit, onRemove, onReorder, onFlush }: Q
   return (
     <div className="flex flex-col gap-2 p-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold">{t("queue.title")}</h3>
+        <h3 className="text-sm font-semibold">{t('queue.title')}</h3>
         <div className="flex gap-2">
-          <span className="text-xs text-muted-foreground">{pendingMessages.length} {t("queue.pending")}</span>
+          <span className="text-xs text-muted-foreground">
+            {pendingMessages.length} {t('queue.pending')}
+          </span>
           {pendingMessages.length > 0 && (
             <button
               onClick={onFlush}
+              aria-label={t('queue.sendNext')}
               className="text-xs px-2 py-1 rounded bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              {t("queue.sendNext")}
+              {t('queue.sendNext')}
             </button>
           )}
         </div>
       </div>
 
       {messages.length === 0 && (
-        <p className="text-sm text-muted-foreground text-center py-4">{t("queue.empty")}</p>
+        <p className="text-sm text-muted-foreground text-center py-4">{t('queue.empty')}</p>
       )}
 
       <div className="flex flex-col gap-1">
@@ -73,13 +81,13 @@ export function QueuePanel({ messages, onEdit, onRemove, onReorder, onFlush }: Q
                     onClick={handleSaveEdit}
                     className="text-xs px-2 py-1 rounded bg-primary text-primary-foreground"
                   >
-                    {t("queue.save")}
+                    {t('queue.save')}
                   </button>
                   <button
                     onClick={() => setEditingId(null)}
                     className="text-xs px-2 py-1 rounded border"
                   >
-                    {t("queue.cancel")}
+                    {t('queue.cancel')}
                   </button>
                 </div>
               ) : (
@@ -87,31 +95,23 @@ export function QueuePanel({ messages, onEdit, onRemove, onReorder, onFlush }: Q
               )}
               <div className="flex gap-2 mt-1">
                 <span className="text-xs text-muted-foreground">{msg.queueType}</span>
-                <span
-                  className={`text-xs ${
-                    msg.status === "pending"
-                      ? "text-yellow-500"
-                      : msg.status === "sent"
-                        ? "text-green-500"
-                        : "text-muted-foreground"
-                  }`}
-                >
-                  {msg.status}
-                </span>
+                <span className={`text-xs ${getStatusClass(msg.status)}`}>{msg.status}</span>
               </div>
             </div>
             <div className="flex gap-1">
               <button
                 onClick={() => handleStartEdit(msg)}
+                aria-label={`${t('queue.edit')} message`}
                 className="text-xs px-1 hover:text-primary"
               >
-                {t("queue.edit")}
+                {t('queue.edit')}
               </button>
               <button
                 onClick={() => onRemove(msg.id)}
+                aria-label={`${t('queue.remove')} message`}
                 className="text-xs px-1 hover:text-destructive"
               >
-                {t("queue.remove")}
+                {t('queue.remove')}
               </button>
             </div>
           </div>
@@ -119,7 +119,7 @@ export function QueuePanel({ messages, onEdit, onRemove, onReorder, onFlush }: Q
       </div>
 
       {!isAppQueue && messages.length > 0 && (
-        <p className="text-xs text-muted-foreground mt-2">{t("queue.cliDisabled")}</p>
+        <p className="text-xs text-muted-foreground mt-2">{t('queue.cliDisabled')}</p>
       )}
     </div>
   );

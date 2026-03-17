@@ -1,14 +1,19 @@
-import { useState } from "react";
-import { ContextDropzone } from "@/composites/new-session/ContextDropzone";
-import { ModelPicker } from "@/composites/new-session/ModelPicker";
-import { NewSessionFieldLabel } from "@/composites/new-session/NewSessionFieldLabel";
-import { NewSessionModalFooter } from "@/composites/new-session/NewSessionModalFooter";
-import { NewSessionModalHeader } from "@/composites/new-session/NewSessionModalHeader";
-import { PermissionPresetPicker } from "@/composites/new-session/PermissionPresetPicker";
-import { ProviderPicker } from "@/composites/new-session/ProviderPicker";
-import { ReasoningControls } from "@/composites/new-session/ReasoningControls";
-import { SessionOptionGrid } from "@/composites/new-session/SessionOptionGrid";
-import { newSessionPermissionPresets, newSessionProviders, newSessionReasoningDepths, newSessionWorkTargets } from "@/composites/new-session/data";
+import { useState } from 'react';
+import { ContextDropzone } from '@/composites/new-session/ContextDropzone';
+import { ModelPicker } from '@/composites/new-session/ModelPicker';
+import { NewSessionFieldLabel } from '@/composites/new-session/NewSessionFieldLabel';
+import { NewSessionModalFooter } from '@/composites/new-session/NewSessionModalFooter';
+import { NewSessionModalHeader } from '@/composites/new-session/NewSessionModalHeader';
+import { PermissionPresetPicker } from '@/composites/new-session/PermissionPresetPicker';
+import { ProviderPicker } from '@/composites/new-session/ProviderPicker';
+import { ReasoningControls } from '@/composites/new-session/ReasoningControls';
+import { SessionOptionGrid } from '@/composites/new-session/SessionOptionGrid';
+import {
+  newSessionPermissionPresets,
+  newSessionProviders,
+  newSessionReasoningDepths,
+  newSessionWorkTargets,
+} from '@/composites/new-session/data';
 
 interface NewSessionModalProps {
   open: boolean;
@@ -18,7 +23,7 @@ interface NewSessionModalProps {
 
 interface SessionConfig {
   name: string;
-  workTarget: "local" | "worktree" | "cloud";
+  workTarget: 'local' | 'worktree' | 'cloud';
   model: string;
   provider: string;
   reasoningMode: string;
@@ -27,13 +32,13 @@ interface SessionConfig {
 }
 
 export function NewSessionModal({ open, onClose, onCreateSession }: NewSessionModalProps) {
-  const [name, setName] = useState("");
-  const [workTarget, setWorkTarget] = useState<"local" | "worktree" | "cloud">("local");
-  const [selectedProvider, setSelectedProvider] = useState("claude");
-  const [selectedModel, setSelectedModel] = useState("Claude 4 Sonnet");
-  const [reasoningMode, setReasoningMode] = useState("auto");
-  const [reasoningDepth, setReasoningDepth] = useState("high");
-  const [permission, setPermission] = useState("default");
+  const [name, setName] = useState('');
+  const [workTarget, setWorkTarget] = useState<'local' | 'worktree' | 'cloud'>('local');
+  const [selectedProvider, setSelectedProvider] = useState('claude');
+  const [selectedModel, setSelectedModel] = useState('Claude 4 Sonnet');
+  const [reasoningMode, setReasoningMode] = useState('auto');
+  const [reasoningDepth, setReasoningDepth] = useState('high');
+  const [permission, setPermission] = useState('default');
 
   if (!open) return null;
 
@@ -41,7 +46,7 @@ export function NewSessionModal({ open, onClose, onCreateSession }: NewSessionMo
 
   const handleCreate = () => {
     onCreateSession({
-      name: name || "New Session",
+      name: name || 'New Session',
       workTarget,
       model: selectedModel,
       provider: selectedProvider,
@@ -53,7 +58,12 @@ export function NewSessionModal({ open, onClose, onCreateSession }: NewSessionMo
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm"
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
+    >
       <div className="w-[560px] max-h-[85vh] bg-surface-1 border border-border rounded-lg shadow-2xl flex flex-col overflow-hidden">
         <NewSessionModalHeader onClose={onClose} />
 
@@ -63,7 +73,7 @@ export function NewSessionModal({ open, onClose, onCreateSession }: NewSessionMo
             <NewSessionFieldLabel>Session Name</NewSessionFieldLabel>
             <input
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Describe what you're working on..."
               className="w-full bg-surface-2 border border-border rounded px-3 py-2 text-[13px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             />
@@ -72,7 +82,11 @@ export function NewSessionModal({ open, onClose, onCreateSession }: NewSessionMo
           {/* Work target */}
           <div>
             <NewSessionFieldLabel>Workspace Target</NewSessionFieldLabel>
-            <SessionOptionGrid options={newSessionWorkTargets} selected={workTarget} onSelect={setWorkTarget} />
+            <SessionOptionGrid
+              options={newSessionWorkTargets}
+              selected={workTarget}
+              onSelect={setWorkTarget}
+            />
           </div>
 
           {/* TUI Provider Selection */}
@@ -83,7 +97,10 @@ export function NewSessionModal({ open, onClose, onCreateSession }: NewSessionMo
               selectedProvider={selectedProvider}
               onSelect={(providerId) => {
                 setSelectedProvider(providerId);
-                setSelectedModel(newSessionProviders.find((provider) => provider.id === providerId)?.models[0] || selectedModel);
+                setSelectedModel(
+                  newSessionProviders.find((provider) => provider.id === providerId)?.models[0] ||
+                    selectedModel,
+                );
               }}
             />
           </div>
@@ -91,7 +108,11 @@ export function NewSessionModal({ open, onClose, onCreateSession }: NewSessionMo
           {/* Model Selection */}
           <div>
             <NewSessionFieldLabel>Model / Runtime</NewSessionFieldLabel>
-            <ModelPicker models={provider.models} selectedModel={selectedModel} onSelect={setSelectedModel} />
+            <ModelPicker
+              models={provider.models}
+              selectedModel={selectedModel}
+              onSelect={setSelectedModel}
+            />
           </div>
 
           {/* Reasoning */}
@@ -116,7 +137,11 @@ export function NewSessionModal({ open, onClose, onCreateSession }: NewSessionMo
           {/* Permission */}
           <div>
             <NewSessionFieldLabel>Permission Preset</NewSessionFieldLabel>
-            <PermissionPresetPicker presets={newSessionPermissionPresets} selected={permission} onSelect={setPermission} />
+            <PermissionPresetPicker
+              presets={newSessionPermissionPresets}
+              selected={permission}
+              onSelect={setPermission}
+            />
           </div>
 
           {/* Attachments */}

@@ -71,15 +71,29 @@ export async function authenticateLaunchContext(
   launchContext: LaunchContext,
   fetchImpl: typeof fetch = fetch,
 ) {
-  const response = await fetchImpl(`${launchContext.apiBaseUrl}${launchContext.bootstrapPath}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      token: launchContext.bootstrapToken,
-    }),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10_000);
+
+  let response: Response;
+  try {
+    response = await fetchImpl(`${launchContext.apiBaseUrl}${launchContext.bootstrapPath}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token: launchContext.bootstrapToken,
+      }),
+      signal: controller.signal,
+    });
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      throw new Error('Backend not responding. The runtime took too long to reply.');
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
   if (!response.ok) {
     throw new Error(`Bootstrap auth failed with status ${response.status}`);
