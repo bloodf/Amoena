@@ -20,6 +20,14 @@ The fork from Phase 1 is a working Lunaria-branded Electron app with Superset's 
 - Kanban service owns tasks, exposes API for agent claim/update (atomic SQL: UPDATE WHERE claimed_by IS NULL)
 - Cross-daemon communication via WebSocket subscription
 
+## Execution Rules
+
+1. **Commit after every completed step** — never batch multiple steps into one commit
+2. **Use conventional commits**: `feat(lunaria): <step description>`
+3. **Run `bun run build` before each commit** — never commit broken code
+4. **If a step fails, fix it before moving on** — don't skip and come back later
+5. **Read files before editing them** — use the Read tool to understand existing code before making changes
+
 ## Step-by-Step Instructions
 
 ### 2.1 Add Lunaria Packages
@@ -135,6 +143,27 @@ Each renders the placeholder UI component.
 ### 2.7 Sidebar Navigation
 
 Extend DashboardSidebar to include Lunaria navigation section with links to all new routes.
+
+## Troubleshooting
+
+### Build Failures
+
+- Run `bunx tsc --noEmit` to find TypeScript errors
+- Check for imports from deleted/moved packages
+- Run `bun install` to refresh dependencies
+
+### Test Failures
+
+- Isolate: `bun test <specific-file>`
+- Read error output carefully — most failures are import/type mismatches
+- Fix implementation, not tests (unless tests are wrong)
+
+### Commit Safety
+
+- Commit after EVERY completed step (not at the end)
+- Use conventional commits: `feat(lunaria): <description>`
+- Run `bun run build` before committing to avoid broken commits
+- If build breaks, fix before committing — never commit broken code
 
 ## Acceptance Criteria
 

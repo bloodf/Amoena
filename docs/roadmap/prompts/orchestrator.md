@@ -98,7 +98,7 @@ Agent(
   isolation: "worktree",
   mode: "bypassPermissions",
   name: "phase-1-fork-rebrand",
-  prompt: "Read /path/to/docs/roadmap/prompts/phase-1-fork-rebrand.md and execute ALL instructions.
+  prompt: "Read docs/roadmap/prompts/phase-1-fork-rebrand.md and execute ALL instructions.
     You are in an isolated git worktree. Make all changes, commit each step.
     When done, ensure the app builds with `bun run build`."
 )
@@ -140,7 +140,7 @@ Agent(
   isolation: "worktree",
   mode: "bypassPermissions",
   name: "phase-2-monorepo",
-  prompt: "Read /path/to/docs/roadmap/prompts/phase-2-monorepo-restructure.md and execute ALL instructions.
+  prompt: "Read docs/roadmap/prompts/phase-2-monorepo-restructure.md and execute ALL instructions.
     Create DB migrations 0037-0043, scaffold lunaria-service, wire tRPC routers,
     add UI placeholders and route files. Commit after each major step."
 )
@@ -178,7 +178,7 @@ Agent(
   mode: "bypassPermissions",
   name: "phase-3a-memory-remote",
   run_in_background: true,
-  prompt: "Read /path/to/docs/roadmap/prompts/phase-3-core-services.md.
+  prompt: "Read docs/roadmap/prompts/phase-3-core-services.md.
     Focus ONLY on:
     1. Memory Service (store, hybrid search FTS5+cosine+RRF, tier management, dedup, cross-workspace)
     2. Remote Access Service (LAN discovery, PIN/QR, X25519 ECDH, XChaCha20-Poly1305, JWT rotation, WebSocket relay, heartbeat)
@@ -199,7 +199,7 @@ Agent(
   mode: "bypassPermissions",
   name: "phase-3b-orchestration",
   run_in_background: true,
-  prompt: "Read /path/to/docs/roadmap/prompts/phase-3-core-services.md.
+  prompt: "Read docs/roadmap/prompts/phase-3-core-services.md.
     Focus ONLY on:
     1. Orchestration Service (agent spawning, permission ceiling, tool intersection, consensus voting — handle zero-weight edge case)
     2. Extension System (.luna binary parser, lifecycle, sandbox)
@@ -220,7 +220,7 @@ Agent(
   mode: "bypassPermissions",
   name: "phase-3c-autopilot",
   run_in_background: true,
-  prompt: "Read /path/to/docs/roadmap/prompts/phase-3-core-services.md.
+  prompt: "Read docs/roadmap/prompts/phase-3-core-services.md.
     Focus ONLY on:
     1. Autopilot Engine (6-phase pipeline, timeout watchdog 10min, rollback, 6 workflow templates)
     2. CLI Integration (output parsers for Claude Code/Codex/Gemini, structured event extraction)
@@ -271,7 +271,7 @@ Agent(
   isolation: "worktree",
   mode: "bypassPermissions",
   name: "phase-4-ui",
-  prompt: "Read /path/to/docs/roadmap/prompts/phase-4-ui-integration.md and execute ALL instructions.
+  prompt: "Read docs/roadmap/prompts/phase-4-ui-integration.md and execute ALL instructions.
     Build all 11 screens with real tRPC data. Memory Graph Home must be the default landing.
     Implement all interaction states (loading/empty/error/success/partial).
     Use d3-force + Canvas for memory graph. Use @dnd-kit for kanban.
@@ -308,7 +308,7 @@ Agent(
   isolation: "worktree",
   mode: "bypassPermissions",
   name: "phase-5-release",
-  prompt: "Read /path/to/docs/roadmap/prompts/phase-5-polish-release.md and execute ALL instructions.
+  prompt: "Read docs/roadmap/prompts/phase-5-polish-release.md and execute ALL instructions.
     1. Update mobile app to connect to host-service via tRPC HTTP
     2. Full i18n: wrap ALL strings in t() calls, generate 5 language stubs
     3. Run and fix all tests (80%+ coverage target)

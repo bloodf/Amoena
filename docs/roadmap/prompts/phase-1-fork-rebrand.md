@@ -23,6 +23,40 @@ Lunaria is migrating from Tauri/Rust to Electron by forking Superset (superset-s
 
 ---
 
+## Repository Model
+
+This migration creates a NEW repository from a Superset fork. The relationship:
+
+```
+EXISTING (read-only source):
+  /Users/heitor/Developer/github.com/Lunaria/lunaria/
+  ├── apps/desktop/src-tauri/src/  ← Rust source (to be ported in Phase 3)
+  ├── packages/i18n/               ← Copy to new repo in Phase 2
+  ├── packages/tokens/             ← Copy to new repo in Phase 2
+  └── packages/ui/                 ← Reference for Lunaria components
+
+NEW (your working directory after clone):
+  lunaria-desktop/ (cloned from superset-sh/superset)
+  ├── apps/desktop/                ← Electron app (being rebranded)
+  ├── packages/                    ← Superset packages (being extended)
+  └── ...
+```
+
+After Phase 1 completes, ALL subsequent phases operate inside the NEW repo (lunaria-desktop/).
+The old Lunaria repo is only used as a read-only source for copying assets and reading Rust code.
+
+---
+
+## Execution Rules
+
+1. **Commit after every completed step** — never batch multiple steps into one commit
+2. **Use conventional commits**: `feat(lunaria): <step description>`
+3. **Run `bun run build` before each commit** — never commit broken code
+4. **If a step fails, fix it before moving on** — don't skip and come back later
+5. **Read files before editing them** — use the Read tool to understand existing code before making changes
+
+---
+
 ## Step-by-Step Instructions
 
 ### 1.1 Repository Setup
@@ -73,7 +107,7 @@ Perform global find-and-replace across the entire codebase. This is a comprehens
 - `apps/desktop/src/main/` — window titles, tray tooltips, about dialog
 - `apps/desktop/src/renderer/` — all UI references to "Superset"
 - `.desktop` file (Linux), installer GUID (Windows)
-- Icon assets: replace with Lunaria magenta moon icon (`.icns`, `.ico`, `.svg`, `.png`)
+- Icon assets: replace with Lunaria magenta moon icon (`.icns`, `.ico`, `.svg`, `.png`). For icon assets: generate a simple placeholder magenta moon SVG icon. Use a circle with a crescent cutout in magenta (#B800B8). Convert to .icns (macOS), .ico (Windows), and .png (various sizes: 16, 32, 64, 128, 256, 512, 1024) using the `png2icons` npm package or similar. The exact icon design will be refined later — the goal is a recognizable placeholder that is clearly NOT the Superset icon.
 - Favicon, splash screen, dock icon
 
 ### 1.3 Remove Cloud Dependencies
@@ -217,3 +251,30 @@ bun run build
 ## Files to Touch (Estimated)
 
 ~50-80 files across branding + cloud removal + theme. The largest effort is the Electric SQL → react-query migration in renderer components.
+
+## Troubleshooting
+
+### Build Failures
+
+- Run `bunx tsc --noEmit` to find TypeScript errors
+- Check for imports from deleted/moved packages
+- Run `bun install` to refresh dependencies
+
+### Test Failures
+
+- Isolate: `bun test <specific-file>`
+- Read error output carefully — most failures are import/type mismatches
+- Fix implementation, not tests (unless tests are wrong)
+
+### Commit Safety
+
+- Commit after EVERY completed step (not at the end)
+- Use conventional commits: `feat(lunaria): <description>`
+- Run `bun run build` before committing to avoid broken commits
+- If build breaks, fix before committing — never commit broken code
+
+### Cloud Removal Errors
+
+- If imports reference `@electric-sql/*`, `@tanstack/db`, `@tanstack/react-db`, `better-auth`, or `@sentry/*`: remove the import and replace with a stub or alternative
+- If a component depends on Electric SQL subscriptions: replace with `useQuery` from `@tanstack/react-query` calling the equivalent tRPC procedure
+- If `bun install` fails on resolution: check root package.json `resolutions` field and remove entries for deleted packages
