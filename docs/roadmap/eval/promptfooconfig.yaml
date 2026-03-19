@@ -1,0 +1,384 @@
+description: 'Lunaria Migration Prompts - Claude Code Agent Quality Evaluation'
+
+providers:
+  - id: 'anthropic:messages:claude-sonnet-4-20250514'
+    label: 'Claude Sonnet 4'
+    config:
+      max_tokens: 4096
+      temperature: 0
+
+# Single evaluation prompt — the phase prompt content is injected as a variable
+prompts:
+  - id: 'evaluate-prompt'
+    label: 'Prompt Quality Evaluator'
+    raw: |
+      You are a prompt engineering expert evaluating instruction documents written for autonomous AI coding agents (Claude Code).
+
+      Here is the instruction document to evaluate:
+
+      <document>
+      {{document_content}}
+      </document>
+
+      Evaluate this document for: {{evaluation_dimension}}
+
+      {{rubric}}
+
+      Respond with EXACTLY this format:
+      SCORE: [1-10]
+      PASS: [YES if score >= 7, NO if score < 7]
+      REASONING: [2-3 sentences explaining the score with specific examples from the document]
+
+tests:
+  # ===== ORCHESTRATOR =====
+  - vars:
+      document_content: 'file://../prompts/orchestrator.md'
+      evaluation_dimension: 'CLARITY'
+      rubric: |
+        Score 9-10: Every instruction is unambiguous. File paths are concrete. Commands are runnable.
+        Score 7-8: Mostly clear with 1-2 ambiguous spots.
+        Score 5-6: Several ambiguous instructions.
+        Score 1-4: Vague or contradictory.
+        Check: file paths, shell commands, conditional logic, order of operations.
+    assert:
+      - type: contains
+        value: 'PASS: YES'
+
+  - vars:
+      document_content: 'file://../prompts/orchestrator.md'
+      evaluation_dimension: 'CONTEXT COMPLETENESS'
+      rubric: |
+        Score 9-10: Fully self-contained. All tech stack details, decisions, library choices included.
+        Score 7-8: Nearly complete, 1-2 details need codebase exploration.
+        Score 5-6: Missing significant context.
+        Score 1-4: Assumes extensive prior knowledge.
+        Check: versions, architecture decisions, library choices, constraints.
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  - vars:
+      document_content: 'file://../prompts/orchestrator.md'
+      evaluation_dimension: 'AUTONOMY'
+      rubric: |
+        Score 9-10: Agent can proceed start-to-finish without asking questions.
+        Score 7-8: Might pause once to confirm.
+        Score 5-6: Would need 3+ clarifying questions.
+        Score 1-4: Cannot proceed without human guidance.
+        Check: decision points, edge cases, dependencies, failure handling.
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  - vars:
+      document_content: 'file://../prompts/orchestrator.md'
+      evaluation_dimension: 'ACCEPTANCE CRITERIA'
+      rubric: |
+        Score 9-10: Every deliverable has verifiable checks. Shell commands, grep patterns, build success.
+        Score 7-8: Most deliverables have checks, 1-2 subjective.
+        Score 5-6: Vague acceptance criteria.
+        Score 1-4: No acceptance criteria.
+        Check: bash verification commands, file existence checks, test coverage targets.
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  - vars:
+      document_content: 'file://../prompts/orchestrator.md'
+      evaluation_dimension: 'SCOPE BOUNDARIES'
+      rubric: |
+        Score 9-10: Explicit in/out of scope. Phase dependencies stated.
+        Score 7-8: Mostly clear scope.
+        Score 5-6: Ambiguous scope.
+        Score 1-4: No boundaries.
+        Check: NOT-in-scope items, phase dependencies, deliverable definition.
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  - vars:
+      document_content: 'file://../prompts/orchestrator.md'
+      evaluation_dimension: 'ERROR RECOVERY'
+      rubric: |
+        Score 9-10: Covers common failure modes with specific recovery steps.
+        Score 7-8: Some error handling.
+        Score 5-6: Assumes happy path.
+        Score 1-4: No error recovery.
+        Check: build failures, dependency issues, test failures, merge conflicts, commit safety.
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  - vars:
+      document_content: 'file://../prompts/orchestrator.md'
+      evaluation_dimension: 'CLAUDE CODE OPTIMIZATION'
+      rubric: |
+        Score 9-10: Leverages Claude Code tools (Read, Write, Edit, Bash, Grep, Agent). Commits frequently. Atomic steps.
+        Score 7-8: Mostly well-structured.
+        Score 5-6: Written for generic AI.
+        Score 1-4: Hard for Claude Code to execute.
+        Check: commit strategy, tool references, task breakdown, context window efficiency.
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  # ===== PHASE 1 =====
+  - vars:
+      document_content: 'file://../prompts/phase-1-fork-rebrand.md'
+      evaluation_dimension: 'CLARITY'
+      rubric: 'Score 9-10: Unambiguous. Score 7-8: Mostly clear. Score 5-6: Several ambiguous. Score 1-4: Vague. Check: file paths, commands, conditionals, order.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  - vars:
+      document_content: 'file://../prompts/phase-1-fork-rebrand.md'
+      evaluation_dimension: 'CONTEXT COMPLETENESS'
+      rubric: 'Score 9-10: Self-contained. Score 7-8: Nearly complete. Score 5-6: Missing context. Score 1-4: Assumes knowledge. Check: versions, decisions, libraries.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  - vars:
+      document_content: 'file://../prompts/phase-1-fork-rebrand.md'
+      evaluation_dimension: 'AUTONOMY'
+      rubric: 'Score 9-10: Zero questions needed. Score 7-8: One pause. Score 5-6: 3+ questions. Score 1-4: Needs guidance. Check: decisions, edges, dependencies, failures.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  - vars:
+      document_content: 'file://../prompts/phase-1-fork-rebrand.md'
+      evaluation_dimension: 'ACCEPTANCE CRITERIA'
+      rubric: 'Score 9-10: Verifiable checks. Score 7-8: Most checked. Score 5-6: Vague. Score 1-4: None. Check: bash commands, file checks, grep patterns.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  - vars:
+      document_content: 'file://../prompts/phase-1-fork-rebrand.md'
+      evaluation_dimension: 'SCOPE BOUNDARIES'
+      rubric: 'Score 9-10: Explicit in/out scope. Score 7-8: Mostly clear. Score 5-6: Ambiguous. Score 1-4: None. Check: phase deps, deliverables.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  - vars:
+      document_content: 'file://../prompts/phase-1-fork-rebrand.md'
+      evaluation_dimension: 'ERROR RECOVERY'
+      rubric: 'Score 9-10: Specific recovery steps. Score 7-8: Some handling. Score 5-6: Happy path. Score 1-4: None. Check: build, deps, tests, commits.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  - vars:
+      document_content: 'file://../prompts/phase-1-fork-rebrand.md'
+      evaluation_dimension: 'CLAUDE CODE OPTIMIZATION'
+      rubric: 'Score 9-10: Leverages CC tools, commits often, atomic steps. Score 7-8: Mostly good. Score 5-6: Generic AI. Score 1-4: Hard for CC. Check: tools, commits, tasks.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  # ===== PHASE 2 =====
+  - vars:
+      document_content: 'file://../prompts/phase-2-monorepo-restructure.md'
+      evaluation_dimension: 'CLARITY'
+      rubric: 'Score 9-10: Unambiguous. Score 7-8: Mostly clear. Score 5-6: Several ambiguous. Score 1-4: Vague. Check: file paths, commands, conditionals, order.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-2-monorepo-restructure.md'
+      evaluation_dimension: 'CONTEXT COMPLETENESS'
+      rubric: 'Score 9-10: Self-contained. Score 7-8: Nearly complete. Score 5-6: Missing context. Score 1-4: Assumes knowledge. Check: versions, decisions, libraries.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-2-monorepo-restructure.md'
+      evaluation_dimension: 'AUTONOMY'
+      rubric: 'Score 9-10: Zero questions. Score 7-8: One pause. Score 5-6: 3+ questions. Score 1-4: Needs guidance.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-2-monorepo-restructure.md'
+      evaluation_dimension: 'ACCEPTANCE CRITERIA'
+      rubric: 'Score 9-10: Verifiable. Score 7-8: Most checked. Score 5-6: Vague. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-2-monorepo-restructure.md'
+      evaluation_dimension: 'SCOPE BOUNDARIES'
+      rubric: 'Score 9-10: Explicit. Score 7-8: Mostly clear. Score 5-6: Ambiguous. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-2-monorepo-restructure.md'
+      evaluation_dimension: 'ERROR RECOVERY'
+      rubric: 'Score 9-10: Recovery steps. Score 7-8: Some. Score 5-6: Happy path. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-2-monorepo-restructure.md'
+      evaluation_dimension: 'CLAUDE CODE OPTIMIZATION'
+      rubric: 'Score 9-10: CC tools, commits, atomic. Score 7-8: Mostly good. Score 5-6: Generic. Score 1-4: Hard.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  # ===== PHASE 3 =====
+  - vars:
+      document_content: 'file://../prompts/phase-3-core-services.md'
+      evaluation_dimension: 'CLARITY'
+      rubric: 'Score 9-10: Unambiguous. Score 7-8: Mostly clear. Score 5-6: Ambiguous. Score 1-4: Vague.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-3-core-services.md'
+      evaluation_dimension: 'CONTEXT COMPLETENESS'
+      rubric: 'Score 9-10: Self-contained. Score 7-8: Nearly complete. Score 5-6: Missing. Score 1-4: Assumes.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-3-core-services.md'
+      evaluation_dimension: 'AUTONOMY'
+      rubric: 'Score 9-10: Zero questions. Score 7-8: One pause. Score 5-6: 3+. Score 1-4: Needs guidance.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-3-core-services.md'
+      evaluation_dimension: 'ACCEPTANCE CRITERIA'
+      rubric: 'Score 9-10: Verifiable. Score 7-8: Most. Score 5-6: Vague. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-3-core-services.md'
+      evaluation_dimension: 'SCOPE BOUNDARIES'
+      rubric: 'Score 9-10: Explicit. Score 7-8: Mostly. Score 5-6: Ambiguous. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-3-core-services.md'
+      evaluation_dimension: 'ERROR RECOVERY'
+      rubric: 'Score 9-10: Recovery steps. Score 7-8: Some. Score 5-6: Happy path. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-3-core-services.md'
+      evaluation_dimension: 'CLAUDE CODE OPTIMIZATION'
+      rubric: 'Score 9-10: CC tools, commits, atomic. Score 7-8: Good. Score 5-6: Generic. Score 1-4: Hard.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  # ===== PHASE 4 =====
+  - vars:
+      document_content: 'file://../prompts/phase-4-ui-integration.md'
+      evaluation_dimension: 'CLARITY'
+      rubric: 'Score 9-10: Unambiguous. Score 7-8: Mostly clear. Score 5-6: Ambiguous. Score 1-4: Vague.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-4-ui-integration.md'
+      evaluation_dimension: 'CONTEXT COMPLETENESS'
+      rubric: 'Score 9-10: Self-contained. Score 7-8: Nearly. Score 5-6: Missing. Score 1-4: Assumes.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-4-ui-integration.md'
+      evaluation_dimension: 'AUTONOMY'
+      rubric: 'Score 9-10: Zero questions. Score 7-8: One. Score 5-6: 3+. Score 1-4: Needs guidance.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-4-ui-integration.md'
+      evaluation_dimension: 'ACCEPTANCE CRITERIA'
+      rubric: 'Score 9-10: Verifiable. Score 7-8: Most. Score 5-6: Vague. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-4-ui-integration.md'
+      evaluation_dimension: 'SCOPE BOUNDARIES'
+      rubric: 'Score 9-10: Explicit. Score 7-8: Mostly. Score 5-6: Ambiguous. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-4-ui-integration.md'
+      evaluation_dimension: 'ERROR RECOVERY'
+      rubric: 'Score 9-10: Recovery. Score 7-8: Some. Score 5-6: Happy path. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-4-ui-integration.md'
+      evaluation_dimension: 'CLAUDE CODE OPTIMIZATION'
+      rubric: 'Score 9-10: CC tools, commits, atomic. Score 7-8: Good. Score 5-6: Generic. Score 1-4: Hard.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+
+  # ===== PHASE 5 =====
+  - vars:
+      document_content: 'file://../prompts/phase-5-polish-release.md'
+      evaluation_dimension: 'CLARITY'
+      rubric: 'Score 9-10: Unambiguous. Score 7-8: Mostly. Score 5-6: Ambiguous. Score 1-4: Vague.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-5-polish-release.md'
+      evaluation_dimension: 'CONTEXT COMPLETENESS'
+      rubric: 'Score 9-10: Self-contained. Score 7-8: Nearly. Score 5-6: Missing. Score 1-4: Assumes.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-5-polish-release.md'
+      evaluation_dimension: 'AUTONOMY'
+      rubric: 'Score 9-10: Zero questions. Score 7-8: One. Score 5-6: 3+. Score 1-4: Needs guidance.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-5-polish-release.md'
+      evaluation_dimension: 'ACCEPTANCE CRITERIA'
+      rubric: 'Score 9-10: Verifiable. Score 7-8: Most. Score 5-6: Vague. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-5-polish-release.md'
+      evaluation_dimension: 'SCOPE BOUNDARIES'
+      rubric: 'Score 9-10: Explicit. Score 7-8: Mostly. Score 5-6: Ambiguous. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-5-polish-release.md'
+      evaluation_dimension: 'ERROR RECOVERY'
+      rubric: 'Score 9-10: Recovery. Score 7-8: Some. Score 5-6: Happy path. Score 1-4: None.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
+  - vars:
+      document_content: 'file://../prompts/phase-5-polish-release.md'
+      evaluation_dimension: 'CLAUDE CODE OPTIMIZATION'
+      rubric: 'Score 9-10: CC tools, commits, atomic. Score 7-8: Good. Score 5-6: Generic. Score 1-4: Hard.'
+    assert:
+      - type: contains
+        value: 'SCORE:'
