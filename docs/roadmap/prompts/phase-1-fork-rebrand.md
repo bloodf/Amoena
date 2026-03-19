@@ -146,6 +146,36 @@ better-auth
 - `packages/host-service/src/providers/auth/` — simplify to local-only
 - `packages/host-service/src/providers/model-providers/` — keep local provider, remove cloud
 
+### Electric SQL → React Query Migration Pattern
+
+Every component using Electric SQL follows this pattern:
+
+BEFORE (Superset with Electric SQL):
+
+```tsx
+import { useElectricQuery } from '@electric-sql/react';
+const { data } = useElectricQuery(workspacesCollection.find());
+```
+
+AFTER (Lunaria with React Query):
+
+```tsx
+import { trpc } from '@/lib/trpc';
+const { data } = trpc.workspaces.list.useQuery();
+```
+
+Key files to migrate:
+
+- apps/desktop/src/renderer/routes/\_authenticated/\_dashboard/ — workspace listing
+- apps/desktop/src/renderer/components/ — any component importing @electric-sql/\*
+- apps/desktop/src/renderer/providers/ — remove Electric sync providers
+
+Steps:
+
+1. `grep -r "@electric-sql\|@tanstack/db\|@tanstack/react-db" apps/desktop/src/renderer/ --include="*.tsx" --include="*.ts" -l` to find all files
+2. For each file, replace the import and hook call with the equivalent tRPC query
+3. Remove Electric SQL provider wrappers from the root layout
+
 ### 1.4 Theme System Migration
 
 **Replace Superset's theme with Lunaria's magenta system:**
@@ -251,6 +281,19 @@ bun run build
 ## Files to Touch (Estimated)
 
 ~50-80 files across branding + cloud removal + theme. The largest effort is the Electric SQL → react-query migration in renderer components.
+
+## Decision Log — Pre-Made Choices
+
+When you encounter these decisions during execution, use these pre-decided answers:
+
+| Decision Point                              | Answer                                                                       |
+| ------------------------------------------- | ---------------------------------------------------------------------------- |
+| Keep or remove onboarding flow?             | Remove — Lunaria has its own setup wizard                                    |
+| Keep or remove auth guard routes?           | Simplify to local-only (no cloud auth, just check API key exists)            |
+| What about Stripe paywall components?       | Delete entirely — no billing in Lunaria                                      |
+| Keep Superset's theme system (next-themes)? | Replace with Lunaria theme (CSS variables only, no next-themes)              |
+| What font to use?                           | System font stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif |
+| Keep or remove the marketing/docs sites?    | Already removed in step 1.1                                                  |
 
 ## Troubleshooting
 

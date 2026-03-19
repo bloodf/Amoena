@@ -58,6 +58,50 @@ Memory Graph Home (default) → Workspaces / Lunaria Features / Settings
 - 44px touch targets
 - Focus: 2px magenta ring
 
+### Memory Graph Implementation Recipe
+
+```tsx
+// MemoryGraphView.tsx — d3-force + Canvas 2D
+import { useRef, useEffect } from 'react';
+import { forceSimulation, forceLink, forceManyBody, forceCenter } from 'd3-force';
+
+export function MemoryGraphView({ nodes, links }: GraphProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext('2d')!;
+    const sim = forceSimulation(nodes)
+      .force('charge', forceManyBody().strength(-30).theta(0.9))
+      .force('link', forceLink(links).distance(50))
+      .force('center', forceCenter(canvas.width / 2, canvas.height / 2))
+      .on('tick', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Draw links
+        links.forEach((l) => {
+          ctx.beginPath();
+          ctx.moveTo(l.source.x, l.source.y);
+          ctx.lineTo(l.target.x, l.target.y);
+          ctx.strokeStyle = 'hsla(300, 100%, 36%, 0.3)'; // magenta
+          ctx.stroke();
+        });
+        // Draw nodes
+        nodes.forEach((n) => {
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 5, 0, 2 * Math.PI);
+          ctx.fillStyle = n.isAgent ? 'hsl(300, 100%, 36%)' : 'hsl(270, 8%, 40%)';
+          ctx.fill();
+        });
+      });
+    return () => sim.stop();
+  }, [nodes, links]);
+
+  return <canvas ref={canvasRef} width={800} height={600} />;
+}
+```
+
+Install dependencies: `bun add d3-force @types/d3-force` in apps/desktop.
+
 ## Execution Rules
 
 1. **Commit after every completed step** — never batch multiple steps into one commit
@@ -112,7 +156,10 @@ Add "LUNARIA" section to DashboardSidebar with links to all 11 screens, magenta 
 ## Acceptance Criteria
 
 - [ ] Memory Graph Home is default landing page
-- [ ] Graph renders 500+ nodes at 60fps
+- [ ] Canvas element renders in Memory Graph Home with width/height > 0
+- [ ] d3-forceSimulation is initialized with forceLink, forceManyBody (theta: 0.9), forceCenter
+- [ ] Graph renders test data (create 50 mock nodes + 30 mock links) without console errors
+- [ ] Node click triggers detail panel via quadtree hit detection
 - [ ] All 11 screens render with real tRPC data
 - [ ] All interaction states implemented (loading/empty/error/success/partial)
 - [ ] Sidebar navigation works for all screens

@@ -83,6 +83,20 @@ Agent(name: "phase-3b", isolation: "worktree", ...)
 Agent(name: "phase-3c", isolation: "worktree", ...)
 ```
 
+### Important: Agent Tool Parameters
+
+When using the Agent tool in Claude Code, pass parameters as shown:
+
+- `description`: Short 3-5 word summary
+- `prompt`: The full task description (include phase prompt content or reference to file)
+- `subagent_type`: Use "oh-my-claudecode:executor" for implementation work
+- `isolation`: Set to "worktree" to give the agent its own copy of the repo
+- `mode`: Set to "bypassPermissions" for autonomous execution
+- `run_in_background`: Set to true for parallel agents (Phase 3)
+- `name`: Give each agent a unique name for SendMessage communication
+
+The agent will return its results when complete. Use SendMessage to communicate with running agents.
+
 ---
 
 ## Phase 1: Fork & Rebrand
@@ -400,6 +414,26 @@ Update each task to `completed` after verification passes. Also update `docs/roa
 1. They work in separate directories, so conflicts are unlikely
 2. If shared files (barrel exports, package.json) conflict, resolve manually after merge
 3. Run `bun test` after merge to verify
+
+### Phase-Specific Failures
+
+**Phase 1**: If branding grep still finds "Superset" after replacement, check:
+
+- Binary files (.icns, .ico) that contain text — these need manual replacement
+- Code comments and JSDoc that reference Superset
+- Git-ignored files or build cache
+
+**Phase 3**: If crypto test vectors fail between agents 3A/3B/3C:
+
+- Ensure all agents use the same libsodium version
+- XChaCha20 nonce must be exactly 24 bytes
+- ECDH shared secret derivation must use crypto_scalarmult, not crypto_box_beforenm
+
+**Phase 4**: If d3-force graph doesn't render:
+
+- Check Canvas context is 2d (not webgl)
+- Verify nodes have x/y properties after simulation ticks
+- Check requestAnimationFrame is running (not blocked by React strict mode double-render)
 
 ### If a build breaks between phases:
 

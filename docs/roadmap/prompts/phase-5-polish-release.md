@@ -10,7 +10,20 @@ Final polish: update mobile app, wire i18n across all screens, run full test sui
 
 ## Context
 
-All 15 features are functional. This phase is about polish, completeness, and release readiness.
+**What is Lunaria?** Lunaria is an Electron desktop application for AI agent orchestration — forked from superset-sh/superset (Electron v40.2.1) and rebranded with a magenta design system. It runs AI coding agents (Claude Code, Codex, Gemini) in managed terminals with unique features: tiered memory system, multi-agent orchestration with consensus voting, 6-phase autopilot pipeline, .luna extension marketplace, remote device access with E2E encryption, kanban task boards that agents can claim, session replay, and visual workflow editing.
+
+**System Architecture:** Two daemon processes run alongside the Electron main process:
+
+- **host-service** (from Superset) — terminals (node-pty), git operations, chat (Mastra), workspace filesystem
+- **lunaria-service** (new) — memory, orchestration, remote access, extensions, autopilot, kanban, opinions, CLI integration, replay, diagnostics
+
+Both use a **single SQLite database** (better-sqlite3 + Drizzle ORM) with 43 migrations. The renderer communicates with the main process via **trpc-electron** (direct IPC). Lunaria-specific routers are namespaced under `trpc.lunaria.*`.
+
+**Tech stack:** Bun 1.3.6, Turbo, Biome 2.4.2, React 19.2, TanStack Router v1, TanStack Query v5, Zustand v5, TailwindCSS v4, shadcn/ui, @xterm/xterm with WebGL.
+
+**What "Superset-derived screens" means:** The workspace dashboard, terminal tabs, git changes panel, settings page, and agent preset selector all came from the Superset fork. Lunaria added 11 new screens on top (Memory Graph Home, Memory Browser, Agent Management, Autopilot, Kanban, Marketplace, Remote Access, Visual Editor, Opinions, Session Replay, Diagnostics).
+
+All 15 features are functional after Phases 1-4. This phase is about polish, completeness, and release readiness.
 
 ### Architecture Decisions
 
@@ -29,6 +42,28 @@ All 15 features are functional. This phase is about polish, completeness, and re
 5. **Read files before editing them** — use the Read tool to understand existing code before making changes
 
 ## Tasks
+
+### Mobile tRPC HTTP Client Setup
+
+In apps/mobile/, create a tRPC client pointing to the desktop host-service:
+
+```typescript
+// apps/mobile/src/lib/trpc.ts
+import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
+import type { AppRouter } from '@lunaria/host-service';
+
+export const trpc = createTRPCProxyClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      url: `http://${hostIp}:${port}/trpc`, // discovered via mDNS or manual IP entry
+    }),
+  ],
+});
+```
+
+For QR code pairing, the QR encodes: `lunaria://pair?host=192.168.1.x&port=3847&pin=123456`
+The mobile app scans this with expo-camera, extracts host/port/pin, and calls
+`trpc.lunaria.remoteAccess.completePairing.mutate({ pin })`.
 
 ### 5.1 Mobile App Update
 
@@ -92,6 +127,19 @@ Update apps/docs/ (rebranded from Superset):
 - All Superset feature docs → keep, rebrand
 - New pages: Memory System, Agent Orchestration, Autopilot, Extensions, Remote Access, Session Replay
 - API Reference → tRPC router docs including lunaria.\* namespace
+
+## Priority Order (if time is constrained)
+
+Must ship (P0):
+
+1. Full i18n string extraction
+2. All tests passing at 80%+ coverage
+3. Visual audit — zero Superset references
+4. Desktop builds for macOS (DMG)
+
+Should ship (P1): 5. Mobile app tRPC migration 6. Windows and Linux builds 7. Documentation updates
+
+Nice to have (P2): 8. Mobile QR pairing flow 9. Translation stubs for 4 non-English languages
 
 ## Troubleshooting
 

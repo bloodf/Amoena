@@ -20,6 +20,19 @@ The fork from Phase 1 is a working Lunaria-branded Electron app with Superset's 
 - Kanban service owns tasks, exposes API for agent claim/update (atomic SQL: UPDATE WHERE claimed_by IS NULL)
 - Cross-daemon communication via WebSocket subscription
 
+### Existing Database Schema Reference
+
+The existing Superset local-db has these tables (your new migrations extend this schema):
+
+- `projects` — git repos opened in the app (mainRepoPath, color, defaultBranch)
+- `worktrees` — git worktrees within projects (path, branch, gitStatus JSON)
+- `workspaces` — active workspaces (type, portBase, sectionId, isUnread)
+- `workspace_sections` — organizational groups within a project
+- `settings` — singleton settings row (JSON fields for presets, hotkeys, etc.)
+
+Your new Lunaria migrations (0037-0043) add tables that reference `workspaces(id)` via foreign keys.
+The `workspace_id` column in memory_entries, kanban_boards, and autopilot_runs uses this FK.
+
 ## Execution Rules
 
 1. **Commit after every completed step** — never batch multiple steps into one commit
@@ -56,6 +69,26 @@ Add corresponding Drizzle schema types in `packages/local-db/src/schema/`:
 - Update relations.ts with foreign key relationships
 
 ### 2.3 Create lunaria-service Scaffold
+
+The lunaria-service runs as a Hono HTTP server on a dynamic port. The desktop main process
+spawns it as a child process (similar to how Superset spawns host-service).
+
+package.json for @lunaria/lunaria-service:
+
+```json
+{
+  "name": "@lunaria/lunaria-service",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "hono": "^4.0.0",
+    "@hono/node-server": "^1.14.0",
+    "better-sqlite3": "^12.0.0",
+    "drizzle-orm": "^0.40.0"
+  }
+}
+```
 
 Create `packages/lunaria-service/` as a new package:
 

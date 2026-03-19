@@ -32,6 +32,60 @@ Read the Rust source files BEFORE implementing the TypeScript port. The Rust cod
 - `extensions/format.rs` → `packages/lunaria-service/src/extensions/`
 - Autopilot (new, no Rust equivalent) → `packages/lunaria-service/src/autopilot/`
 
+### Key Algorithms to Implement
+
+**RRF (Reciprocal Rank Fusion) for hybrid search:**
+
+```typescript
+function rrf(ranks: number[][], k = 60): number[] {
+  const scores = new Array(ranks[0].length).fill(0);
+  for (const ranking of ranks) {
+    for (let i = 0; i < ranking.length; i++) {
+      scores[ranking[i]] += 1 / (k + i + 1);
+    }
+  }
+  return scores;
+}
+```
+
+**Cosine similarity for embeddings:**
+
+```typescript
+function cosineSimilarity(a: Float32Array, b: Float32Array): number {
+  let dot = 0,
+    normA = 0,
+    normB = 0;
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i];
+    normA += a[i] * a[i];
+    normB += b[i] * b[i];
+  }
+  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+```
+
+**Permission ceiling enforcement:**
+
+```typescript
+const PERMISSION_ORDER = ['ReadOnly', 'ReadWrite', 'ShellAccess', 'Admin'] as const;
+function enforceCeiling(parent: Permission, requested: Permission): Permission {
+  const parentIdx = PERMISSION_ORDER.indexOf(parent);
+  const requestedIdx = PERMISSION_ORDER.indexOf(requested);
+  return requestedIdx <= parentIdx ? requested : parent; // clamp to parent's level
+}
+```
+
+**Consensus voting (with zero-weight guard):**
+
+```typescript
+function computeConsensus(votes: Array<{ weight: number; approve: boolean }>): ConsensusResult {
+  const totalWeight = votes.reduce((sum, v) => sum + v.weight, 0);
+  if (totalWeight === 0) return { status: 'inconclusive', score: 0 };
+  const score = votes.reduce((sum, v) => sum + (v.approve ? v.weight : 0), 0) / totalWeight;
+  return { status: score >= 0.5 ? 'approved' : 'rejected', score };
+}
+```
+
 ### Architecture Decisions
 
 - lunaria-service runs as separate daemon process, communicates with host-service via WebSocket for terminal observation
@@ -45,6 +99,16 @@ Read the Rust source files BEFORE implementing the TypeScript port. The Rust cod
 - Consensus edge case: handle all-abstain (return Inconclusive, don't divide by zero)
 - Autopilot: add timeout watchdog (10min default per phase)
 - Remote relay: add heartbeat/ping, cleanup orphaned rooms
+
+### AI Worker Bridge Details
+
+The AI worker bridge spawns CLI agent processes (Claude Code, Codex, etc.) as child processes
+and communicates via stdin/stdout JSON-RPC. The existing Superset chat package already handles
+this via Mastra. Lunaria's orchestration service does NOT replace Mastra — it wraps around it
+to add permission ceilings, tool intersection, and consensus voting.
+
+Integration point: Orchestration service calls into the chat package's runtime creation
+to spawn agents, then monitors their output via the terminal observation WebSocket.
 
 ## Execution Rules
 
