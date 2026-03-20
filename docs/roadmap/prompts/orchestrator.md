@@ -1,471 +1,204 @@
-# Lunaria Migration Orchestrator — Master Agent Prompt
+# Lunaria Migration Orchestrator — Codex GUI Prompt
 
 ## Purpose
 
-This is the master orchestration prompt for the Lunaria Superset fork migration. It manages the 5-phase migration by spawning Claude Code agents using the native `Agent` tool with git worktree isolation, coordinating handoffs between phases, and tracking progress.
+This is the master orchestration prompt for the Lunaria Superset fork migration. Run it in the Codex GUI app. The Codex chat is the orchestrator/leader. It owns sequencing, verification, and progress tracking across all 5 phases.
 
-**Run this prompt in a Claude Code session to orchestrate the entire migration.**
+The orchestrator must not use tmux, OMX team mode, Cursor CLI, Claude task APIs, or git worktree isolation. When parallel help is useful, use Codex native subagents only for bounded, non-overlapping work.
 
 ---
 
-## Architecture
+## Operating Model
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                  ORCHESTRATOR (this Claude Code session)       │
-│                                                               │
-│  Uses: Agent tool, TeamCreate, SendMessage, TaskCreate        │
-│                                                               │
-│  Responsibilities:                                            │
-│  1. Spawn phase agents via Agent tool (worktree isolation)    │
-│  2. Monitor phase completion via TaskGet/TaskOutput            │
-│  3. Run verification between phases                           │
-│  4. Coordinate Phase 3 parallelism (3 parallel agents)        │
-│  5. Track progress via TaskCreate/TaskUpdate                   │
-│                                                               │
-│  ┌──────────┐ ┌──────────┐ ┌──────────────┐ ┌─────┐ ┌─────┐│
-│  │ Phase 1  │→│ Phase 2  │→│   Phase 3    │→│Phs 4│→│Phs 5││
-│  │ Agent    │ │ Agent    │ │ 3 Agents     │ │Agent│ │Agent││
-│  │(worktree)│ │(worktree)│ │ (parallel    │ │     │ │     ││
-│  │          │ │          │ │  worktrees)  │ │     │ │     ││
-│  └──────────┘ └──────────┘ └──────────────┘ └─────┘ └─────┘│
-│       │              │         │ │ │           │        │    │
-│       ▼              ▼         ▼ ▼ ▼           ▼        ▼    │
-│  [verify]       [verify]   [merge+verify] [verify]  [verify]│
-│  build+brand    build+DB   tests pass     screens   release  │
-└──────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│           ORCHESTRATOR (this Codex GUI chat)               │
+│                                                             │
+│  Responsibilities                                           │
+│  1. Read roadmap docs and choose the active phase           │
+│  2. Track status in docs/roadmap/PROGRESS.md                │
+│  3. Run phase work directly or delegate bounded slices      │
+│  4. Verify acceptance criteria before phase handoff         │
+│  5. Keep the migration target in ../lunaria-desktop         │
+│                                                             │
+│  Phase 1  →  Phase 2  →  Phase 3A/3B/3C  →  Phase 4 → 5    │
+│    │          │              │   │   │          │      │    │
+│    └─verify───┴────verify────┴──verify──merge────verify───┘ │
+└─────────────────────────────────────────────────────────────┘
 ```
+
+### Repository Roles
+
+- Source/reference repo: `/Users/heitor/Developer/github.com/Lunaria/lunaria`
+- Migration target repo: `../lunaria-desktop`
+
+The current repo stays the source of truth for roadmap docs, existing Lunaria code, assets, and Rust behavior references. Phase implementation happens in the sibling Superset-based workspace unless a phase prompt explicitly says otherwise.
 
 ---
 
 ## Prerequisites
 
-Before running this orchestrator:
+Before beginning any phase:
 
-1. **Superset repo** accessible at https://github.com/superset-sh/superset
-2. **Lunaria repo** at current working directory
-3. **Bun installed** (`bun --version` returns 1.3+)
-4. **Claude Code** running with Agent tool access
+1. Confirm the source repo is available at the current working directory.
+2. Confirm `git`, `bun`, and network access are available.
+3. Confirm `docs/roadmap/MIGRATION-PLAN.md`, `docs/roadmap/TODOS.md`, and `docs/roadmap/PROGRESS.md` are readable.
+4. Confirm the migration target path `../lunaria-desktop` is available or can be created.
+
+---
+
+## Core Rules
+
+1. Use the main Codex chat as the leader.
+2. Do not rely on tmux, `Agent(...)`, `TaskCreate`, `TaskGet`, `TaskOutput`, `SendMessage`, `TeamCreate`, or automatic worktree merging.
+3. Update `docs/roadmap/PROGRESS.md` when a phase starts, when it completes, and when a blocker changes status.
+4. Preserve the phase prompts as the implementation spec for each phase.
+5. Verify each phase before moving on.
+6. Use Codex subagents only when the write scopes are disjoint or the task is clearly parallelizable.
+7. If a phase is blocked, record the blocker in `PROGRESS.md` before switching context.
 
 ---
 
 ## Phase Execution Protocol
 
-For each phase, the orchestrator:
+For each phase, the orchestrator must:
 
-1. **Creates a task** via `TaskCreate` to track the phase
-2. **Spawns an Agent** with `isolation: "worktree"` for code isolation
-3. **Provides** the full phase prompt content to the agent
-4. **Monitors** via `TaskOutput` / `TaskGet` for completion
-5. **Verifies** acceptance criteria by reading agent output
-6. **Merges** worktree changes back (agent handles this automatically)
-7. **Updates** task status to `completed`
+1. Read the corresponding phase prompt and the relevant sections of `MIGRATION-PLAN.md` and `TODOS.md`.
+2. Mark the phase as `IN PROGRESS` in `docs/roadmap/PROGRESS.md`.
+3. Execute the phase directly or delegate bounded slices to Codex subagents.
+4. Run the verification commands or checks listed below and in the phase prompt.
+5. Record completion evidence in `docs/roadmap/PROGRESS.md`.
+6. Move to the next phase only after the current phase acceptance criteria are satisfied or an explicit blocker is recorded.
 
-### Agent Spawning Pattern
+### Delegation Policy
 
-For sequential phases (1, 2, 4, 5):
+Use Codex subagents for:
 
-```
-Agent(
-  subagent_type: "oh-my-claudecode:executor",
-  isolation: "worktree",
-  mode: "bypassPermissions",
-  prompt: "<full phase prompt content>"
-)
-```
+- Phase 3 parallel service slices:
+  - 3A: memory + remote access
+  - 3B: orchestration + extensions + kanban
+  - 3C: autopilot + CLI integration + replay + opinions + diagnostics
+- Focused read-heavy analysis where the result can be integrated without blocking the next local step
 
-For parallel Phase 3:
+Keep work local for:
 
-```
-// Launch all 3 simultaneously in one message with 3 Agent tool calls
-Agent(name: "phase-3a", isolation: "worktree", ...)
-Agent(name: "phase-3b", isolation: "worktree", ...)
-Agent(name: "phase-3c", isolation: "worktree", ...)
-```
-
-### Important: Agent Tool Parameters
-
-When using the Agent tool in Claude Code, pass parameters as shown:
-
-- `description`: Short 3-5 word summary
-- `prompt`: The full task description (include phase prompt content or reference to file)
-- `subagent_type`: Use "oh-my-claudecode:executor" for implementation work
-- `isolation`: Set to "worktree" to give the agent its own copy of the repo
-- `mode`: Set to "bypassPermissions" for autonomous execution
-- `run_in_background`: Set to true for parallel agents (Phase 3)
-- `name`: Give each agent a unique name for SendMessage communication
-
-The agent will return its results when complete. Use SendMessage to communicate with running agents.
+- Progress tracking
+- Cross-phase verification
+- Any change that touches the same files as another active task
+- Final integration and acceptance review
 
 ---
 
-## Phase 1: Fork & Rebrand
+## Phase Launch Notes
 
-### Launch
+### Phase 1: Fork & Rebrand
 
-Spawn a single agent with the Phase 1 prompt:
+Execution target: `../lunaria-desktop`
 
-```
-Agent(
-  description: "Phase 1: Fork and rebrand Superset",
-  subagent_type: "oh-my-claudecode:executor",
-  isolation: "worktree",
-  mode: "bypassPermissions",
-  name: "phase-1-fork-rebrand",
-  prompt: "Read docs/roadmap/prompts/phase-1-fork-rebrand.md and execute ALL instructions.
-    You are in an isolated git worktree. Make all changes, commit each step.
-    When done, ensure the app builds with `bun run build`."
-)
-```
+Launch sequence:
 
-### Verification (orchestrator runs after agent completes)
+1. Create or reuse `../lunaria-desktop`.
+2. Clone `https://github.com/superset-sh/superset.git` into that path if it does not exist.
+3. Execute `docs/roadmap/prompts/phase-1-fork-rebrand.md` against the sibling repo.
+4. Keep the current repo read-only except for roadmap progress updates.
+
+Verification:
 
 ```bash
-# Check branding
 grep -r "Superset" apps/desktop/src/ --include="*.ts" --include="*.tsx" | grep -v node_modules | wc -l
-# Must be 0
-
-# Check no cloud deps in package.json
 grep -E "@electric-sql|better-auth|@sentry|@outlit|stripe" apps/desktop/package.json | wc -l
-# Must be 0
-
-# Check theme
 grep "300 100% 36%" apps/desktop/src/renderer/styles/globals.css
-# Must find magenta
-
-# Build
 bun run build
 ```
 
-### On Success
+### Phase 2: Monorepo Restructure
 
-Update task status, proceed to Phase 2.
+Execution target: `../lunaria-desktop`
 
----
-
-## Phase 2: Monorepo Restructure
-
-### Launch
-
-```
-Agent(
-  description: "Phase 2: Monorepo restructure",
-  subagent_type: "oh-my-claudecode:executor",
-  isolation: "worktree",
-  mode: "bypassPermissions",
-  name: "phase-2-monorepo",
-  prompt: "Read docs/roadmap/prompts/phase-2-monorepo-restructure.md and execute ALL instructions.
-    Create DB migrations 0037-0043, scaffold lunaria-service, wire tRPC routers,
-    add UI placeholders and route files. Commit after each major step."
-)
-```
-
-### Verification
+Verification:
 
 ```bash
-# DB migrations exist
 ls packages/local-db/drizzle/0037*.sql packages/local-db/drizzle/0043*.sql
-
-# lunaria-service package exists
 test -d packages/lunaria-service/src
-
-# tRPC namespace wired
 grep -r "lunaria" apps/desktop/src/lib/trpc/routers/index.ts
-
-# Build passes
 bun run build
 ```
 
----
+### Phase 3: Core Services
 
-## Phase 3: Core Services (Parallel Execution)
+Execution target: `../lunaria-desktop`
 
-This is the largest phase. Split into 3 parallel agents, each in its own worktree. Launch ALL THREE simultaneously in a single message with 3 Agent tool calls.
+Recommended delegation:
 
-### Sub-Agent 3A: Memory + Remote Access
+- One Codex subagent per slice: 3A, 3B, 3C
+- The leader integrates and verifies after all three return
 
-```
-Agent(
-  description: "Phase 3A: Memory and Remote Access services",
-  subagent_type: "oh-my-claudecode:executor",
-  isolation: "worktree",
-  mode: "bypassPermissions",
-  name: "phase-3a-memory-remote",
-  run_in_background: true,
-  prompt: "Read docs/roadmap/prompts/phase-3-core-services.md.
-    Focus ONLY on:
-    1. Memory Service (store, hybrid search FTS5+cosine+RRF, tier management, dedup, cross-workspace)
-    2. Remote Access Service (LAN discovery, PIN/QR, X25519 ECDH, XChaCha20-Poly1305, JWT rotation, WebSocket relay, heartbeat)
+Verification:
 
-    Implement in packages/lunaria-service/src/memory/ and packages/lunaria-service/src/remote-access/.
-    Write unit tests for both. Use libsodium-wrappers-sumo for crypto, jose for JWT.
-    Commit each service separately."
-)
-```
+- Service-specific unit tests pass
+- Crypto test vectors pass
+- Health checks pass
+- `bun run build` passes
 
-### Sub-Agent 3B: Orchestration + Extensions + Kanban
+### Phase 4: UI Integration
 
-```
-Agent(
-  description: "Phase 3B: Orchestration, Extensions, Kanban",
-  subagent_type: "oh-my-claudecode:executor",
-  isolation: "worktree",
-  mode: "bypassPermissions",
-  name: "phase-3b-orchestration",
-  run_in_background: true,
-  prompt: "Read docs/roadmap/prompts/phase-3-core-services.md.
-    Focus ONLY on:
-    1. Orchestration Service (agent spawning, permission ceiling, tool intersection, consensus voting — handle zero-weight edge case)
-    2. Extension System (.luna binary parser, lifecycle, sandbox)
-    3. Kanban Service (board/task CRUD, atomic SQL agent claim: UPDATE WHERE claimed_by IS NULL)
+Execution target: `../lunaria-desktop`
 
-    Implement in packages/lunaria-service/src/orchestration/, extensions/, kanban/.
-    Write unit tests. Commit each service separately."
-)
-```
+Verification:
 
-### Sub-Agent 3C: Autopilot + CLI Integration + Replay + Opinions + Diagnostics
+- Routes exist and render
+- Memory Graph Home is the default landing page
+- UI states exist for loading/empty/error/success/partial
+- `bun run build` passes
 
-```
-Agent(
-  description: "Phase 3C: Autopilot, CLI, Replay, Opinions, Diagnostics",
-  subagent_type: "oh-my-claudecode:executor",
-  isolation: "worktree",
-  mode: "bypassPermissions",
-  name: "phase-3c-autopilot",
-  run_in_background: true,
-  prompt: "Read docs/roadmap/prompts/phase-3-core-services.md.
-    Focus ONLY on:
-    1. Autopilot Engine (6-phase pipeline, timeout watchdog 10min, rollback, 6 workflow templates)
-    2. CLI Integration (output parsers for Claude Code/Codex/Gemini, structured event extraction)
-    3. Session Replay (recording engine, gzip file storage, 100MB cap, metadata in SQLite)
-    4. Opinions Service (persona CRUD, system prompts, model/temperature)
-    5. Diagnostics (service health, structured JSON logging to ~/.lunaria/logs/)
+### Phase 5: Polish & Release
 
-    Implement in packages/lunaria-service/src/autopilot/, cli-integration/, replay/, opinions/, diagnostics/.
-    Write unit tests. Commit each service separately."
-)
-```
+Execution target: `../lunaria-desktop`
 
-### Merge Strategy
+Verification:
 
-The 3 agents work in isolated worktrees on non-overlapping directories:
-
-- 3A: `src/memory/` + `src/remote-access/`
-- 3B: `src/orchestration/` + `src/extensions/` + `src/kanban/`
-- 3C: `src/autopilot/` + `src/cli-integration/` + `src/replay/` + `src/opinions/` + `src/diagnostics/`
-
-**No merge conflicts expected.** Each agent's worktree changes are automatically available when the agent completes. The orchestrator merges them sequentially.
-
-### Verification (after all 3 complete)
-
-```bash
-# Check all service directories exist
-for dir in memory remote-access orchestration extensions autopilot kanban cli-integration replay opinions diagnostics; do
-  test -d packages/lunaria-service/src/$dir && echo "$dir: OK" || echo "$dir: MISSING"
-done
-
-# Run all tests
-cd packages/lunaria-service && bun test
-
-# Build
-bun run build
-```
-
----
-
-## Phase 4: UI Integration
-
-### Launch
-
-```
-Agent(
-  description: "Phase 4: Build all 11 Lunaria screens",
-  subagent_type: "oh-my-claudecode:executor",
-  isolation: "worktree",
-  mode: "bypassPermissions",
-  name: "phase-4-ui",
-  prompt: "Read docs/roadmap/prompts/phase-4-ui-integration.md and execute ALL instructions.
-    Build all 11 screens with real tRPC data. Memory Graph Home must be the default landing.
-    Implement all interaction states (loading/empty/error/success/partial).
-    Use d3-force + Canvas for memory graph. Use @dnd-kit for kanban.
-    Commit after each screen. Ensure the full app builds."
-)
-```
-
-### Verification
-
-```bash
-# All route files exist
-for route in memory agents autopilot marketplace kanban remote visual-editor opinions replay diagnostics; do
-  test -f apps/desktop/src/renderer/routes/_authenticated/$route/index.tsx && echo "$route: OK"
-done
-
-# No placeholder/stub components remain
-grep -r "placeholder\|STUB" packages/ui/src/components/lunaria/ | wc -l
-# Must be 0
-
-# Build
-bun run build
-```
-
----
-
-## Phase 5: Polish & Release
-
-### Launch
-
-```
-Agent(
-  description: "Phase 5: Polish, mobile, i18n, release",
-  subagent_type: "oh-my-claudecode:executor",
-  isolation: "worktree",
-  mode: "bypassPermissions",
-  name: "phase-5-release",
-  prompt: "Read docs/roadmap/prompts/phase-5-polish-release.md and execute ALL instructions.
-    1. Update mobile app to connect to host-service via tRPC HTTP
-    2. Full i18n: wrap ALL strings in t() calls, generate 5 language stubs
-    3. Run and fix all tests (80%+ coverage target)
-    4. Visual audit: no Superset references, magenta everywhere
-    5. Update documentation
-    6. Set version to 1.0.0
-    Commit after each major task."
-)
-```
-
-### Verification
-
-```bash
-# i18n
-test -f packages/i18n/locales/en.json
-
-# Tests pass
-bun test
-
-# Version
-grep '"version": "1.0.0"' apps/desktop/package.json
-
-# No Superset references
-grep -ri "superset" apps/desktop/src/ --include="*.ts" --include="*.tsx" | grep -v "// forked from" | wc -l
-# Must be 0
-
-# Build
-bun run build
-```
-
----
-
-## Alternative: Team-Based Orchestration
-
-For the entire migration as a coordinated team using Claude Code's native team feature:
-
-```
-TeamCreate(
-  team_name: "lunaria-migration",
-  prompt: "Coordinate the Lunaria Superset fork migration across 5 phases.
-    Read docs/roadmap/MIGRATION-PLAN.md for full context.
-    Execute phases sequentially (1→2→3→4→5), with Phase 3 parallelized across 3 agents.
-    Each phase has a prompt in docs/roadmap/prompts/.
-    Verify acceptance criteria between phases.
-    Update docs/roadmap/PROGRESS.md after each phase completes."
-)
-```
-
-Or use the OMC team skill for persistent execution:
-
-```
-/oh-my-claudecode:team 5:executor "Execute the Lunaria Superset fork migration.
-Read docs/roadmap/MIGRATION-PLAN.md for the master plan.
-Phase prompts are in docs/roadmap/prompts/phase-{1-5}-*.md.
-Execute sequentially: Phase 1 → 2 → 3 (parallel) → 4 → 5.
-Each agent reads its phase prompt and implements everything in it."
-```
+- Full i18n pass completed
+- Regression, integration, and E2E suites pass
+- Packaging succeeds for desktop targets
+- Docs build succeeds
 
 ---
 
 ## Progress Tracking
 
-The orchestrator tracks progress using Claude Code's task system:
+Use `docs/roadmap/PROGRESS.md` as the only phase tracker. Do not create a parallel task system.
 
-```
-TaskCreate("Phase 1: Fork & Rebrand", status: "in_progress")
-TaskCreate("Phase 2: Monorepo Restructure", status: "pending")
-TaskCreate("Phase 3A: Memory + Remote Access", status: "pending")
-TaskCreate("Phase 3B: Orchestration + Extensions + Kanban", status: "pending")
-TaskCreate("Phase 3C: Autopilot + CLI + Replay + Opinions", status: "pending")
-TaskCreate("Phase 4: UI Integration (11 screens)", status: "pending")
-TaskCreate("Phase 5: Polish & Release", status: "pending")
-```
+Minimum updates:
 
-Update each task to `completed` after verification passes. Also update `docs/roadmap/PROGRESS.md` with timestamps.
+- When a phase starts: set status to `IN PROGRESS`, add start date, note owner as `Codex orchestrator`
+- When a delegated slice starts: add a short note naming the slice
+- When a phase completes: set status to `COMPLETE`, add completion date, summarize verification evidence
+- When blocked: set status to `BLOCKED`, explain the blocker and next recovery step
 
 ---
 
-## Error Recovery
+## Failure Recovery
 
-### If an agent fails:
+If a phase fails:
 
-1. Read the agent's output via `TaskOutput` to understand the failure
-2. Fix the issue in the main worktree or re-spawn the agent with additional context via `SendMessage`
-3. Agents in worktrees are idempotent — re-running is safe
+1. Read the failing command or verification output carefully.
+2. Fix the issue in place in the active repo instead of restarting the entire phase.
+3. Re-run the failed verification before resuming broader work.
+4. If the blocker is external or not safely recoverable, record it in `PROGRESS.md` and stop phase advancement.
 
-### If Phase 3 agents produce conflicting changes:
+If a delegated slice fails:
 
-1. They work in separate directories, so conflicts are unlikely
-2. If shared files (barrel exports, package.json) conflict, resolve manually after merge
-3. Run `bun test` after merge to verify
-
-### Phase-Specific Failures
-
-**Phase 1**: If branding grep still finds "Superset" after replacement, check:
-
-- Binary files (.icns, .ico) that contain text — these need manual replacement
-- Code comments and JSDoc that reference Superset
-- Git-ignored files or build cache
-
-**Phase 3**: If crypto test vectors fail between agents 3A/3B/3C:
-
-- Ensure all agents use the same libsodium version
-- XChaCha20 nonce must be exactly 24 bytes
-- ECDH shared secret derivation must use crypto_scalarmult, not crypto_box_beforenm
-
-**Phase 4**: If d3-force graph doesn't render:
-
-- Check Canvas context is 2d (not webgl)
-- Verify nodes have x/y properties after simulation ticks
-- Check requestAnimationFrame is running (not blocked by React strict mode double-render)
-
-### If a build breaks between phases:
-
-1. `bun install` to refresh dependencies
-2. `bun run typecheck` to find TypeScript errors
-3. Check DB migrations in `packages/local-db/drizzle/meta/_journal.json`
+1. Review the returned evidence or diff.
+2. Repair locally or re-run a bounded delegation with tighter instructions.
+3. Do not advance the phase until the slice verification passes.
 
 ---
 
-## Decision Reference
+## Immediate Kickoff
 
-All 20 architectural and design decisions are in `docs/roadmap/MIGRATION-PLAN.md`:
+When asked to begin the project:
 
-| #   | Decision            | Choice                                                 |
-| --- | ------------------- | ------------------------------------------------------ |
-| 1   | License             | Elastic-2.0                                            |
-| 2   | Upstream tracking   | Selective sync at releases                             |
-| 3   | Data layer          | tRPC subscriptions + react-query                       |
-| 4   | Process model       | host-service + lunaria-service (separate daemons)      |
-| 5   | AI runtime          | Mastra for chat, Lunaria orchestration for multi-agent |
-| 6   | Crypto safety       | Cross-language test vectors                            |
-| 7   | Database            | Single SQLite, migrations 0037-0043                    |
-| 8   | Kanban              | Kanban owns tasks, agent API with atomic SQL claim     |
-| 9   | tRPC                | Namespaced `trpc.lunaria.*`                            |
-| 10  | i18n                | Full app — all screens                                 |
-| 11  | Task concurrency    | Atomic SQL `UPDATE WHERE claimed_by IS NULL`           |
-| 12  | Cloud removal       | Dedicated regression test suite                        |
-| 13  | Graph rendering     | d3-force + Canvas 2D (Barnes-Hut)                      |
-| 14  | Startup             | Eager load all services                                |
-| 15  | Cross-daemon stream | WebSocket subscription                                 |
-| 16  | CLI parser trust    | Full trust (no sandbox)                                |
-| 17  | Replay storage      | File-based, gzip compressed                            |
-| 18  | Observability       | Structured logging + Diagnostics page                  |
-| 19  | DESIGN.md           | Create in Phase 1                                      |
-| 20  | Replay UI           | Split-pane (terminal + event timeline)                 |
+1. Update `docs/roadmap/PROGRESS.md` to mark Phase 1 as `IN PROGRESS`.
+2. Prepare `../lunaria-desktop`.
+3. Begin Phase 1 only.
+4. Do not start Phase 2 until Phase 1 verification succeeds.

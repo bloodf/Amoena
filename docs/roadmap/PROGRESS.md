@@ -1,21 +1,21 @@
 # Lunaria Migration Progress
 
-## Status: NOT STARTED
+## Status: PHASE 1 IN PROGRESS
 
 **Plan reviewed:** 2026-03-19 (Eng Review: CLEAR, CEO Review: CLEAR, Design Review: CLEAR)
 **Total features:** 15 (10 original + 5 CEO expansions)
 **Total decisions locked:** 20
 **Estimated timeline:** 8 weeks
 
-| Phase                                   | Status      | Started | Completed | Agent | Notes    |
-| --------------------------------------- | ----------- | ------- | --------- | ----- | -------- |
-| 1: Fork & Rebrand                       | NOT STARTED | —       | —         | —     |          |
-| 2: Monorepo Restructure                 | NOT STARTED | —       | —         | —     |          |
-| 3A: Memory + Remote Access              | NOT STARTED | —       | —         | —     | Parallel |
-| 3B: Orchestration + Extensions + Kanban | NOT STARTED | —       | —         | —     | Parallel |
-| 3C: Autopilot + CLI + Replay + Opinions | NOT STARTED | —       | —         | —     | Parallel |
-| 4: UI Integration (11 screens)          | NOT STARTED | —       | —         | —     |          |
-| 5: Polish & Release                     | NOT STARTED | —       | —         | —     |          |
+| Phase                                   | Status      | Started    | Completed | Agent              | Notes                                                                                                                 |
+| --------------------------------------- | ----------- | ---------- | --------- | ------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| 1: Fork & Rebrand                       | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | Target repo `../lunaria-desktop`; branding sweep is clean, install/typecheck path is green, cloud refs reduced to 253 |
+| 2: Monorepo Restructure                 | NOT STARTED | —          | —         | —                  |                                                                                                                       |
+| 3A: Memory + Remote Access              | NOT STARTED | —          | —         | —                  | Parallel                                                                                                              |
+| 3B: Orchestration + Extensions + Kanban | NOT STARTED | —          | —         | —                  | Parallel                                                                                                              |
+| 3C: Autopilot + CLI + Replay + Opinions | NOT STARTED | —          | —         | —                  | Parallel                                                                                                              |
+| 4: UI Integration (11 screens)          | NOT STARTED | —          | —         | —                  |                                                                                                                       |
+| 5: Polish & Release                     | NOT STARTED | —          | —         | —                  |                                                                                                                       |
 
 ## Test Results
 

@@ -2,6 +2,8 @@
 
 This folder contains the complete plan, prompts, and tracking for migrating Lunaria from Tauri/Rust to an Electron-based architecture by forking [superset-sh/superset](https://github.com/superset-sh/superset).
 
+The roadmap is written for the Codex GUI app. The current `lunaria` repo is the source/reference repo. The Superset migration target lives in a sibling workspace, defaulting to `../lunaria-desktop`.
+
 ## Documents
 
 | File                                     | Purpose                                                                    |
@@ -12,11 +14,11 @@ This folder contains the complete plan, prompts, and tracking for migrating Luna
 
 ## Agent Prompts
 
-Self-contained prompts for Claude Code agents. Each has full context, step-by-step instructions, and acceptance criteria.
+Self-contained prompts for Codex GUI orchestration. Each has full context, step-by-step instructions, and acceptance criteria.
 
 | Prompt                                                                       | Phase | Duration | Description                                                                        |
 | ---------------------------------------------------------------------------- | ----- | -------- | ---------------------------------------------------------------------------------- |
-| [orchestrator.md](./prompts/orchestrator.md)                                 | All   | 8 weeks  | Master agent — spawns and coordinates all phase agents via tmux                    |
+| [orchestrator.md](./prompts/orchestrator.md)                                 | All   | 8 weeks  | Master prompt for the Codex GUI leader; coordinates phases and bounded subagents   |
 | [phase-1-fork-rebrand.md](./prompts/phase-1-fork-rebrand.md)                 | 1     | 1 week   | Fork Superset, strip branding, remove cloud deps, apply magenta theme              |
 | [phase-2-monorepo-restructure.md](./prompts/phase-2-monorepo-restructure.md) | 2     | 1 week   | DB migrations, tRPC routers, lunaria-service scaffold, UI placeholders             |
 | [phase-3-core-services.md](./prompts/phase-3-core-services.md)               | 3     | 3 weeks  | Port Memory, Remote Access, Orchestration, Extensions, Autopilot + 5 more services |
@@ -26,9 +28,9 @@ Self-contained prompts for Claude Code agents. Each has full context, step-by-st
 ## Quick Start
 
 ```bash
-# Start the orchestrator
-tmux new-session -s lunaria-migration -n orchestrator
-# In Claude Code: "Read docs/roadmap/prompts/orchestrator.md and begin Phase 1"
+# In the Codex GUI app:
+# "Read docs/roadmap/prompts/orchestrator.md and begin Phase 1."
+# The orchestrator will prepare ../lunaria-desktop as the Superset fork workspace.
 ```
 
 ## Review History

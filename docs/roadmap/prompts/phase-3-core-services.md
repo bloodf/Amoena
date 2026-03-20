@@ -116,7 +116,7 @@ to spawn agents, then monitors their output via the terminal observation WebSock
 2. **Use conventional commits**: `feat(lunaria): <step description>`
 3. **Run `bun run build` before each commit** — never commit broken code
 4. **If a step fails, fix it before moving on** — don't skip and come back later
-5. **Read files before editing them** — use the Read tool to understand existing code before making changes
+5. **Inspect files before editing them** — use Codex GUI tools and shell reads to understand existing code before changing it
 
 ### Libraries to Use
 
