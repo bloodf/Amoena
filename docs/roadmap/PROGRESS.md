@@ -1,6 +1,6 @@
 # Lunaria Migration Progress
 
-## Status: PHASE 1 IN PROGRESS
+## Status: PHASE 1-2 IN PROGRESS
 
 **Plan reviewed:** 2026-03-19 (Eng Review: CLEAR, CEO Review: CLEAR, Design Review: CLEAR)
 **Total features:** 15 (10 original + 5 CEO expansions)
@@ -9,8 +9,8 @@
 
 | Phase                                   | Status      | Started    | Completed | Agent              | Notes                                                                                                                 |
 | --------------------------------------- | ----------- | ---------- | --------- | ------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| 1: Fork & Rebrand                       | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | Target repo `../lunaria-desktop`; branding sweep is clean, install/typecheck path is green, cloud refs reduced to 253 |
-| 2: Monorepo Restructure                 | NOT STARTED | —          | —         | —                  |                                                                                                                       |
+| 1: Fork & Rebrand                       | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | Target repo `../lunaria-desktop`; branding sweep is clean, desktop build passes, cloud refs reduced to 226            |
+| 2: Monorepo Restructure                 | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | `i18n`, `tokens`, `lunaria-service`, local-db Lunaria schema, trpc namespace, UI placeholders, routes, nav scaffolded |
 | 3A: Memory + Remote Access              | NOT STARTED | —          | —         | —                  | Parallel                                                                                                              |
 | 3B: Orchestration + Extensions + Kanban | NOT STARTED | —          | —         | —                  | Parallel                                                                                                              |
 | 3C: Autopilot + CLI + Replay + Opinions | NOT STARTED | —          | —         | —                  | Parallel                                                                                                              |
