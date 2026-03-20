@@ -9,7 +9,7 @@
 
 | Phase                                   | Status      | Started    | Completed | Agent              | Notes                                                                                                                 |
 | --------------------------------------- | ----------- | ---------- | --------- | ------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| 1: Fork & Rebrand                       | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | Target repo `../lunaria-desktop`; branding sweep is clean, desktop build passes, cloud refs reduced to 226            |
+| 1: Fork & Rebrand                       | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | Target repo `../lunaria-desktop`; branding sweep is clean, desktop/docs typecheck pass, cloud refs reduced to 224     |
 | 2: Monorepo Restructure                 | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | `i18n`, `tokens`, `lunaria-service`, local-db Lunaria schema, trpc namespace, UI placeholders, routes, nav scaffolded |
 | 3A: Memory + Remote Access              | NOT STARTED | —          | —         | —                  | Parallel                                                                                                              |
 | 3B: Orchestration + Extensions + Kanban | NOT STARTED | —          | —         | —                  | Parallel                                                                                                              |
@@ -19,19 +19,19 @@
 
 ## Test Results
 
-| Suite                    | Status | Coverage | Last Run |
-| ------------------------ | ------ | -------- | -------- |
-| Unit (lunaria-service)   | —      | —        | —        |
-| Cloud removal regression | —      | —        | —        |
-| Integration (tRPC)       | —      | —        | —        |
-| E2E (Playwright)         | —      | —        | —        |
-| Crypto test vectors      | —      | —        | —        |
+| Suite                    | Status | Coverage | Last Run   |
+| ------------------------ | ------ | -------- | ---------- |
+| Unit (lunaria-service)   | —      | —        | —          |
+| Cloud removal regression | PASS   | —        | 2026-03-20 |
+| Integration (tRPC)       | —      | —        | —          |
+| E2E (Playwright)         | —      | —        | —          |
+| Crypto test vectors      | —      | —        | —          |
 
 ## Build Status
 
 | Platform         | Status | Last Build |
 | ---------------- | ------ | ---------- |
-| macOS (DMG)      | —      | —          |
+| macOS (DMG)      | PASS   | 2026-03-20 |
 | Windows (NSIS)   | —      | —          |
 | Linux (AppImage) | —      | —          |
 | Mobile (Expo)    | —      | —          |
