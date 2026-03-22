@@ -151,7 +151,7 @@ export function parseLunaFile(buffer: Buffer): LunaExtension {
 
   const parsed = LunaManifestSchema.safeParse(rawManifest);
   if (!parsed.success) {
-    const messages = parsed.error.errors.map((e) => `${e.path.join(".")}: ${e.message}`);
+    const messages = parsed.error.issues.map((e) => `${e.path.join(".")}: ${e.message}`);
     throw new Error(`Manifest validation failed:\n  ${messages.join("\n  ")}`);
   }
 
@@ -187,7 +187,7 @@ export function validateManifest(manifest: unknown): ValidationResult {
   if (result.success) {
     return { valid: true };
   }
-  const errors = result.error.errors.map(
+  const errors = result.error.issues.map(
     (e) => `${e.path.join(".") || "(root)"}: ${e.message}`,
   );
   return { valid: false, errors };
