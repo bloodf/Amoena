@@ -1,39 +1,80 @@
-# Lunaria Migration Progress
+# Lunaria Multi-Fork Integration Progress
 
-## Status: PHASE 1-4 IN PROGRESS
+## Status: PHASE 6 (POLISH) IN PROGRESS
 
-**Plan reviewed:** 2026-03-19 (Eng Review: CLEAR, CEO Review: CLEAR, Design Review: CLEAR)
-**Total features:** 15 (10 original + 5 CEO expansions)
-**Total decisions locked:** 20
-**Estimated timeline:** 8 weeks
+**Architecture:** Multi-fork integration of 3 open-source projects
+**Plan reviewed:** 2026-03-22 (CEO: CLEAR, Eng: CLEAR, Design: CLEAR)
+**Total features:** 33 (from Superset + Mission Control + claude-mem + Lunaria originals)
+**CEO plan:** `~/.gstack/projects/LunariaAi-lunaria/ceo-plans/2026-03-22-multi-fork-integration.md`
 
-| Phase                                   | Status      | Started    | Completed | Agent              | Notes                                                                                                                                                                                                   |
-| --------------------------------------- | ----------- | ---------- | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1: Fork & Rebrand                       | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | Target repo `../lunaria-desktop`; live runtime namespaces now use Lunaria naming, and remaining `superset` matches are limited to historical plans/docs, upstream fork URLs, and generated DB artifacts |
-| 2: Monorepo Restructure                 | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | `i18n`, `tokens`, local-db Lunaria schema, trpc namespace, UI routes/screens, and a real `lunaria-service` runtime are in place and serving local health endpoints                                      |
-| 3A: Memory + Remote Access              | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | Local memory CRUD/search/graph is wired through desktop tRPC and the Memory screen; remote device registry now works                                                                                    |
-| 3B: Orchestration + Extensions + Kanban | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | Desktop now consumes shared orchestration/extensions/kanban service logic; deeper consensus and extension metadata tests are in place                                                                   |
-| 3C: Autopilot + CLI + Replay + Opinions | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | Desktop now consumes shared autopilot/CLI/replay/opinions service logic; autopilot and remote-access service tests are in place                                                                         |
-| 4: UI Integration (11 screens)          | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | Diagnostics, replay, marketplace, visual editor, agents, autopilot, kanban, opinions, memory, and remote screens are live; renderer/main telemetry now use local no-op shims instead of cloud hooks     |
-| 5: Polish & Release                     | IN PROGRESS | 2026-03-20 | —         | Codex orchestrator | Repo-wide verification now passes in targeted runs; docs build passes; desktop compile, native-runtime validation, and DMG/zip packaging succeed again                                                  |
+### Source Projects
+
+| Project | Stars | What we took | Package |
+| --- | --- | --- | --- |
+| superset-sh/superset | 7.7K | Electron shell, terminal host, workspace-fs | @lunaria/desktop, @lunaria/terminal-host |
+| builderz-labs/mission-control | 3K | Next.js dashboard (40+ panels, 60+ API routes) | @lunaria/dashboard |
+| thedotmack/claude-mem | 39K | Memory engine (SQLite FTS5, vector search) | @lunaria/memory |
+
+### Phase Progress
+
+| Phase | Status | Completed | Commit | Notes |
+| --- | --- | --- | --- | --- |
+| 1: Fork & Foundation | COMPLETE | 2026-03-22 | 3b8af84 | 3 forks extracted, Electron + Next.js wired, bun install clean, dashboard boots in ~1s |
+| 2: Rebrand & UI Unification | COMPLETE | 2026-03-22 | 3b8af84 | Zero upstream branding, @lunaria/ui wired, Biome auto-fixes applied |
+| 3: Terminal Integration | COMPLETE | 2026-03-22 | 5511089 | Terminal-host service, xterm.js panel, spawn/list/kill API routes |
+| 4: Memory System | COMPLETE | 2026-03-22 | 71d2524 | Memory service on :37777, search/timeline/observations API routes |
+| 5a: Core Features | COMPLETE | 2026-03-22 | b2964cc | Orchestration, consensus, autopilot, extensions, opinions |
+| 5b: Feature Implementation | COMPLETE | 2026-03-22 | b2964cc | 6 recipes, cost advisor, eval/security panels verified |
+| 6: Polish & Release | IN PROGRESS | — | — | Tests, CI/CD, packaging, documentation |
+
+### Architecture
+
+```
+Electron Main → spawns 3 services in parallel:
+  ├── Dashboard    (Next.js :3456)  — 40+ panels, 60+ API routes
+  ├── Terminal Host (Hono :4879)    — PTY, git worktrees, WebSocket
+  └── Memory       (:37777)         — SQLite FTS5, vector search
+
++ Lunaria Service (packages/lunaria-service):
+  ├── Orchestration (multi-agent, permission ceiling)
+  ├── Consensus voting (weighted, abstention-safe)
+  ├── Autopilot (6-phase pipeline)
+  ├── Extensions (.luna format)
+  ├── Opinions/Personas
+  ├── 6 Agent Recipes
+  └── Smart Cost Advisor
+```
+
+### Monorepo Packages (17)
+
+| Package | Type | Files | Source |
+| --- | --- | --- | --- |
+| @lunaria/dashboard | app | 431 | Mission Control |
+| @lunaria/desktop | app | 355 | Superset |
+| @lunaria/mobile | app | — | Lunaria (preserved) |
+| @lunaria/ui | package | 598 | Lunaria (preserved) |
+| @lunaria/memory | package | 154 | claude-mem |
+| @lunaria/terminal-host | package | 78 | Superset |
+| @lunaria/workspace-fs | package | 21 | Superset |
+| @lunaria/lunaria-service | package | 9 | New (Lunaria) |
+| @lunaria/tokens | package | — | Lunaria (preserved) |
+| @lunaria/i18n | package | — | Lunaria (preserved) |
+| + 7 stub packages | stubs | — | Pending Phase 6 |
 
 ## Test Results
 
-| Suite                               | Status | Coverage | Last Run   |
-| ----------------------------------- | ------ | -------- | ---------- |
-| Unit (lunaria-service)              | PASS   | —        | 2026-03-20 |
-| Cloud removal / namespace migration | PASS   | —        | 2026-03-20 |
-| Integration (tRPC)                  | PASS   | —        | 2026-03-20 |
-| Docs build                          | PASS   | —        | 2026-03-20 |
-| E2E (Playwright)                    | —      | —        | —          |
-| Crypto test vectors                 | —      | —        | —          |
+| Suite | Status | Count | Last Run |
+| --- | --- | --- | --- |
+| MC unit tests (ported) | PENDING | 282 | — |
+| MC E2E tests (ported) | PENDING | 295 | — |
+| lunaria-service unit | IN PROGRESS | ~25 | 2026-03-22 |
+| @lunaria/ui unit | PASS | ~50 | 2026-03-20 |
 
 ## Build Status
 
-| Platform                   | Status | Last Build |
-| -------------------------- | ------ | ---------- |
-| macOS compile / prepackage | PASS   | 2026-03-20 |
-| macOS electron-builder DMG | PASS   | 2026-03-20 |
-| Windows (NSIS)             | —      | —          |
-| Linux (AppImage)           | —      | —          |
-| Mobile (Expo)              | PASS   | 2026-03-20 |
+| Target | Status | Last Build |
+| --- | --- | --- |
+| bun install | PASS | 2026-03-22 |
+| Next.js dashboard dev | PASS (~1s) | 2026-03-22 |
+| Electron packaging | PENDING | — |
+| Mobile (Expo) | PASS | 2026-03-20 |
