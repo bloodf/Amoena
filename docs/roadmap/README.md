@@ -1,6 +1,6 @@
 # Lunaria Migration Roadmap
 
-This folder contains the complete plan, prompts, and tracking for migrating Lunaria from Tauri/Rust to an Electron-based architecture by forking [superset-sh/superset](https://github.com/superset-sh/superset).
+This folder contains the complete plan, prompts, and tracking for migrating Lunaria from Tauri/Rust to an Electron-based architecture by forking [LunariaAi/superset](https://github.com/LunariaAi/superset).
 
 The roadmap is written for the Codex GUI app. The current `lunaria` repo is the source/reference repo. The Superset migration target lives in a sibling workspace, defaulting to `../lunaria-desktop`.
 

@@ -98,7 +98,7 @@ Execution target: `../lunaria-desktop`
 Launch sequence:
 
 1. Create or reuse `../lunaria-desktop`.
-2. Clone `https://github.com/superset-sh/superset.git` into that path if it does not exist.
+2. Clone `https://github.com/LunariaAi/superset.git` into that path if it does not exist.
 3. Execute `docs/roadmap/prompts/phase-1-fork-rebrand.md` against the sibling repo.
 4. Keep the current repo read-only except for roadmap progress updates.
 

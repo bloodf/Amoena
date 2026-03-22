@@ -71,7 +71,7 @@ Additional Lunaria details confirmed:
 ### Superset Architecture (Source)
 
 ```
-superset-sh/superset (Electron, v1.2.1, 7.4K stars)
+LunariaAi/superset (Electron, v1.2.1, 7.4K stars)
 ├── apps/
 │   ├── admin/          — Admin dashboard (Next.js)
 │   ├── api/            — Cloud API (Next.js, Neon, Better Auth, Stripe)
@@ -160,7 +160,7 @@ Lunaria/lunaria (Tauri/Rust, MIT)
 
 ```
 Actions:
-1. Fork superset-sh/superset → Lunaria/lunaria-desktop (or new branch in existing repo)
+1. Fork LunariaAi/superset → Lunaria/lunaria-desktop (or new branch in existing repo)
 2. Remove cloud-only apps: apps/admin, apps/api, apps/marketing, apps/web
 3. Remove cloud packages: packages/auth, packages/db, packages/email
 4. Keep: apps/desktop, apps/docs, packages/* (all desktop-relevant)
@@ -188,7 +188,7 @@ Actions:
 | .desktop file (Linux)      | superset.desktop     | lunaria.desktop                  |
 | Windows installer GUID     | Superset GUID        | New Lunaria GUID                 |
 | package.json name/desc     | @superset/\*         | @lunaria/\*                      |
-| Repository URLs            | superset-sh/superset | Lunaria/lunaria                  |
+| Repository URLs            | LunariaAi/superset | Lunaria/lunaria                  |
 | License headers            | Superset             | Lunaria (preserving Elastic-2.0) |
 | Onboarding copy            | Superset references  | Lunaria references               |
 | Error reporting (Sentry)   | Superset DSN         | Lunaria DSN (or remove)          |

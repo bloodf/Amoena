@@ -1,2 +1,1 @@
-export * from "./client";
-export * from "./types";
+// Stub — runtime client IPC abstraction

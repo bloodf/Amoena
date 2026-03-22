@@ -10,7 +10,7 @@ Final polish: update mobile app, wire i18n across all screens, run full test sui
 
 ## Context
 
-**What is Lunaria?** Lunaria is an Electron desktop application for AI agent orchestration — forked from superset-sh/superset (Electron v40.2.1) and rebranded with a magenta design system. It runs AI coding agents (Claude Code, Codex, Gemini) in managed terminals with unique features: tiered memory system, multi-agent orchestration with consensus voting, 6-phase autopilot pipeline, .luna extension marketplace, remote device access with E2E encryption, kanban task boards that agents can claim, session replay, and visual workflow editing.
+**What is Lunaria?** Lunaria is an Electron desktop application for AI agent orchestration — forked from LunariaAi/superset (Electron v40.2.1) and rebranded with a magenta design system. It runs AI coding agents (Claude Code, Codex, Gemini) in managed terminals with unique features: tiered memory system, multi-agent orchestration with consensus voting, 6-phase autopilot pipeline, .luna extension marketplace, remote device access with E2E encryption, kanban task boards that agents can claim, session replay, and visual workflow editing.
 
 **System Architecture:** Two daemon processes run alongside the Electron main process:
 

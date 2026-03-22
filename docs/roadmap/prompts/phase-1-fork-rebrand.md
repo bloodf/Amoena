@@ -2,7 +2,7 @@
 
 ## Mission
 
-Fork superset-sh/superset and transform it into Lunaria. Strip all Superset branding, remove cloud dependencies, apply Lunaria's magenta design system, and produce a buildable Electron app that is visually and functionally Lunaria.
+Fork LunariaAi/superset and transform it into Lunaria. Strip all Superset branding, remove cloud dependencies, apply Lunaria's magenta design system, and produce a buildable Electron app that is visually and functionally Lunaria.
 
 **Duration:** 1 week
 **Prerequisite:** None (first phase)
@@ -12,7 +12,7 @@ Fork superset-sh/superset and transform it into Lunaria. Strip all Superset bran
 
 ## Context
 
-Lunaria is migrating from Tauri/Rust to Electron by forking Superset (superset-sh/superset, Electron v40.2.1, 7.4K stars). This is a strategic fork — Superset becomes Lunaria. There is no side-by-side operation.
+Lunaria is migrating from Tauri/Rust to Electron by forking Superset (LunariaAi/superset, Electron v40.2.1, 7.4K stars). This is a strategic fork — Superset becomes Lunaria. There is no side-by-side operation.
 
 ### Key Technical Facts
 
@@ -36,7 +36,7 @@ EXISTING (read-only source):
   └── packages/ui/                 ← Reference for Lunaria components
 
 NEW (your working directory after clone):
-  lunaria-desktop/ (cloned from superset-sh/superset)
+  lunaria-desktop/ (cloned from LunariaAi/superset)
   ├── apps/desktop/                ← Electron app (being rebranded)
   ├── packages/                    ← Superset packages (being extended)
   └── ...
@@ -64,7 +64,7 @@ The old Lunaria repo is only used as a read-only source for copying assets and r
 
 ```bash
 # Clone Superset into a new directory
-git clone https://github.com/superset-sh/superset.git lunaria-desktop
+git clone https://github.com/LunariaAi/superset.git lunaria-desktop
 cd lunaria-desktop
 
 # Remove cloud-only apps
@@ -98,7 +98,7 @@ Perform global find-and-replace across the entire codebase. This is a comprehens
 | `superset.sh` (domain)           | Update to Lunaria domain |
 | `.superset/` (config dir)        | `.lunaria/`              |
 | `Superset/x.x.x` (user agent)    | `Lunaria/x.x.x`          |
-| `superset-sh/superset` (repo)    | `Lunaria/lunaria`        |
+| `LunariaAi/superset` (repo)    | `Lunaria/lunaria`        |
 
 **Additional branding files to update:**
 
