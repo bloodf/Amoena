@@ -12,7 +12,7 @@ process.env[LUNARIA_HOME_DIR_ENV] = LUNARIA_HOME_DIR;
 export const LUNARIA_HOME_DIR_MODE = 0o700;
 export const LUNARIA_SENSITIVE_FILE_MODE = 0o600;
 
-export function ensureSupersetHomeDirExists(): void {
+export function ensureLunariaHomeDirExists(): void {
 	if (!existsSync(LUNARIA_HOME_DIR)) {
 		mkdirSync(LUNARIA_HOME_DIR, {
 			recursive: true,
@@ -25,7 +25,7 @@ export function ensureSupersetHomeDirExists(): void {
 		chmodSync(LUNARIA_HOME_DIR, LUNARIA_HOME_DIR_MODE);
 	} catch (error) {
 		console.warn(
-			"[app-environment] Failed to chmod Superset home dir (best-effort):",
+			"[app-environment] Failed to chmod Lunaria home dir (best-effort):",
 			LUNARIA_HOME_DIR,
 			error,
 		);

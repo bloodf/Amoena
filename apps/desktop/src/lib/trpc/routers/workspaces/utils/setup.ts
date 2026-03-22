@@ -12,18 +12,18 @@ import type { LocalSetupConfig, SetupConfig } from "shared/types";
 
 /**
  * Worktrees don't include gitignored files, so copy .superset from main repo
- * if it's missing — ensures setup scripts like "./.superset/setup.sh" work.
+ * if it's missing — ensures setup scripts like "./.lunaria/setup.sh" work.
  */
 export function copyLunariaConfigToWorktree(
 	mainRepoPath: string,
 	worktreePath: string,
 ): void {
-	const mainSupersetDir = join(mainRepoPath, PROJECT_LUNARIA_DIR_NAME);
-	const worktreeSupersetDir = join(worktreePath, PROJECT_LUNARIA_DIR_NAME);
+	const mainLunariaDir = join(mainRepoPath, PROJECT_LUNARIA_DIR_NAME);
+	const worktreeLunariaDir = join(worktreePath, PROJECT_LUNARIA_DIR_NAME);
 
-	if (existsSync(mainSupersetDir) && !existsSync(worktreeSupersetDir)) {
+	if (existsSync(mainLunariaDir) && !existsSync(worktreeLunariaDir)) {
 		try {
-			cpSync(mainSupersetDir, worktreeSupersetDir, { recursive: true });
+			cpSync(mainLunariaDir, worktreeLunariaDir, { recursive: true });
 		} catch (error) {
 			console.error(
 				`Failed to copy ${PROJECT_LUNARIA_DIR_NAME} to worktree: ${error instanceof Error ? error.message : String(error)}`,
@@ -159,9 +159,9 @@ export function mergeConfigs(
 
 /**
  * Resolves setup/teardown/run config with a three-tier priority:
- *   1. User override:  ~/.superset/projects/<projectId>/config.json
- *   2. Worktree:       <worktreePath>/.superset/config.json
- *   3. Main repo:      <mainRepoPath>/.superset/config.json
+ *   1. User override:  ~/.lunaria/projects/<projectId>/config.json
+ *   2. Worktree:       <worktreePath>/.lunaria/config.json
+ *   3. Main repo:      <mainRepoPath>/.lunaria/config.json
  *
  * Higher-priority configs override only the keys they explicitly define.
  * Missing keys inherit from lower-priority sources, so stale copied worktree

@@ -36,7 +36,7 @@ export function writeFileIfChanged(
 	return true;
 }
 
-export function isSupersetManagedHookCommand(
+export function isLunariaManagedHookCommand(
 	command: string | undefined,
 	scriptName: string,
 ): boolean {
@@ -92,7 +92,7 @@ function buildRealBinaryResolver(): string {
     [ -z "$dir" ] && continue
     dir="\${dir%/}"
     case "$dir" in
-      "${BIN_DIR}"|"$HOME"/.superset/bin|"$HOME"/.superset-*/bin) continue ;;
+      "${BIN_DIR}"|"$HOME"/.lunaria/bin|"$HOME"/.superset-*/bin) continue ;;
     esac
     if [ -x "$dir/$name" ] && [ ! -d "$dir/$name" ]; then
       printf "%s\\n" "$dir/$name"
@@ -118,7 +118,7 @@ export function buildWrapperScript(
 ): string {
 	return `#!/bin/bash
 ${WRAPPER_MARKER}
-# Superset wrapper for ${binaryName}
+# Lunaria wrapper for ${binaryName}
 
 ${buildRealBinaryResolver()}
 REAL_BIN="$(find_real_binary "${binaryName}")"

@@ -12,7 +12,7 @@ import path from "node:path";
 
 const TEST_ROOT = path.join(
 	realOs.tmpdir(),
-	`superset-agent-wrappers-${process.pid}-${Date.now()}`,
+	`lunaria-agent-wrappers-${process.pid}-${Date.now()}`,
 );
 const TEST_BIN_DIR = path.join(TEST_ROOT, "superset", "bin");
 const TEST_HOOKS_DIR = path.join(TEST_ROOT, "superset", "hooks");
@@ -31,7 +31,7 @@ mock.module("shared/env.shared", () => ({
 
 mock.module("./notify-hook", () => ({
 	NOTIFY_SCRIPT_NAME: "notify.sh",
-	NOTIFY_SCRIPT_MARKER: "# Superset agent notification hook",
+	NOTIFY_SCRIPT_MARKER: "# Lunaria agent notification hook",
 	getNotifyScriptPath: () => path.join(TEST_HOOKS_DIR, "notify.sh"),
 	getNotifyScriptContent: () => "#!/bin/bash\nexit 0\n",
 	createNotifyScript: () => {},
@@ -127,10 +127,10 @@ describe("agent-wrappers copilot", () => {
 		rmSync(TEST_ROOT, { recursive: true, force: true });
 	});
 
-	it("rewrites stale superset-notify.json with current hook path", () => {
+	it("rewrites stale lunaria-notify.json with current hook path", () => {
 		const projectDir = path.join(TEST_ROOT, "project");
 		const hooksDir = path.join(projectDir, ".github", "hooks");
-		const hookFile = path.join(hooksDir, "superset-notify.json");
+		const hookFile = path.join(hooksDir, "lunaria-notify.json");
 		const gitInfoDir = path.join(projectDir, ".git", "info");
 		const realBinDir = path.join(TEST_ROOT, "real-bin");
 		const realCopilot = path.join(realBinDir, "copilot");
@@ -142,7 +142,7 @@ describe("agent-wrappers copilot", () => {
 		mkdirSync(realBinDir, { recursive: true });
 
 		writeFileSync(hookScriptPath, "#!/bin/bash\nexit 0\n", { mode: 0o755 });
-		writeFileSync(hookFile, '{"superset":"old","bash":"/tmp/old-hook.sh"}');
+		writeFileSync(hookFile, '{"lunaria":"old","bash":"/tmp/old-hook.sh"}');
 
 		writeFileSync(realCopilot, "#!/bin/bash\necho real-copilot\n", {
 			mode: 0o755,
@@ -179,23 +179,23 @@ describe("agent-wrappers copilot", () => {
 
 		expect(wrapper).toContain("export CODEX_TUI_RECORD_SESSION=1");
 		expect(wrapper).toContain('"msg":{"type":"task_started"');
-		expect(wrapper).toContain('_superset_last_turn_id=""');
-		expect(wrapper).toContain('_superset_last_approval_id=""');
-		expect(wrapper).toContain('_superset_last_exec_call_id=""');
-		expect(wrapper).toContain("_superset_approval_fallback_seq=0");
-		expect(wrapper).toContain("_superset_emit_event()");
-		expect(wrapper).toContain("_superset_turn_id=$(printf");
-		expect(wrapper).toContain("_superset_approval_id=$(printf");
-		expect(wrapper).toContain("_superset_exec_call_id=$(printf");
+		expect(wrapper).toContain('_lunaria_last_turn_id=""');
+		expect(wrapper).toContain('_lunaria_last_approval_id=""');
+		expect(wrapper).toContain('_lunaria_last_exec_call_id=""');
+		expect(wrapper).toContain("_lunaria_approval_fallback_seq=0");
+		expect(wrapper).toContain("_lunaria_emit_event()");
+		expect(wrapper).toContain("_lunaria_turn_id=$(printf");
+		expect(wrapper).toContain("_lunaria_approval_id=$(printf");
+		expect(wrapper).toContain("_lunaria_exec_call_id=$(printf");
 		expect(wrapper).toContain('awk -F\'"turn_id":"\'');
 		expect(wrapper).toContain('"msg":{"type":"exec_command_begin"');
 		expect(wrapper).toContain('_approval_request"');
 		expect(wrapper).toContain(
-			`approval_request_\${_superset_approval_fallback_seq}`,
+			`approval_request_\${_lunaria_approval_fallback_seq}`,
 		);
 		expect(wrapper).toContain('awk -F\'"approval_id":"\'');
-		expect(wrapper).toContain('_superset_emit_event "Start"');
-		expect(wrapper).toContain('_superset_emit_event "PermissionRequest"');
+		expect(wrapper).toContain('_lunaria_emit_event "Start"');
+		expect(wrapper).toContain('_lunaria_emit_event "PermissionRequest"');
 		expect(wrapper).toContain(
 			`"$REAL_BIN" -c 'notify=["bash","${path.join(TEST_HOOKS_DIR, "notify.sh")}"]' "$@"`,
 		);
@@ -215,7 +215,7 @@ describe("agent-wrappers copilot", () => {
 		const wrapperPath = path.join(TEST_BIN_DIR, "mastracode");
 		const wrapper = readFileSync(wrapperPath, "utf-8");
 
-		expect(wrapper).toContain("# Superset wrapper for mastracode");
+		expect(wrapper).toContain("# Lunaria wrapper for mastracode");
 		expect(wrapper).toContain('REAL_BIN="$(find_real_binary "mastracode")"');
 		expect(wrapper).toContain('exec "$REAL_BIN" "$@"');
 	});
@@ -226,7 +226,7 @@ describe("agent-wrappers copilot", () => {
 		const wrapperPath = path.join(TEST_BIN_DIR, "droid");
 		const wrapper = readFileSync(wrapperPath, "utf-8");
 
-		expect(wrapper).toContain("# Superset wrapper for droid");
+		expect(wrapper).toContain("# Lunaria wrapper for droid");
 		expect(wrapper).toContain('REAL_BIN="$(find_real_binary "droid")"');
 		expect(wrapper).toContain('exec "$REAL_BIN" "$@"');
 	});
@@ -600,7 +600,7 @@ describe("agent-wrappers claude settings.json", () => {
 	});
 
 	it("creates Claude settings.json with hooks when no file exists", () => {
-		const notifyPath = "/tmp/.superset/hooks/notify.sh";
+		const notifyPath = "/tmp/.lunaria/hooks/notify.sh";
 		const content = getClaudeGlobalSettingsJsonContent(notifyPath);
 		expect(content).not.toBeNull();
 		if (content === null) throw new Error("Expected content");
@@ -663,7 +663,7 @@ describe("agent-wrappers claude settings.json", () => {
 			),
 		);
 
-		const notifyPath = "/tmp/.superset/hooks/notify.sh";
+		const notifyPath = "/tmp/.lunaria/hooks/notify.sh";
 		const content = getClaudeGlobalSettingsJsonContent(notifyPath);
 		expect(content).not.toBeNull();
 		if (content === null) throw new Error("Expected content");
@@ -800,7 +800,7 @@ describe("agent-wrappers claude settings.json", () => {
 		writeFileSync(claudeSettingsPath, invalidJson);
 
 		expect(
-			getClaudeGlobalSettingsJsonContent("/tmp/.superset/hooks/notify.sh"),
+			getClaudeGlobalSettingsJsonContent("/tmp/.lunaria/hooks/notify.sh"),
 		).toBeNull();
 
 		createClaudeSettingsJson();
@@ -820,7 +820,7 @@ describe("agent-wrappers claude settings.json", () => {
 		writeFileSync(claudeSettingsPath, JSON.stringify("not-an-object"));
 
 		expect(
-			getClaudeGlobalSettingsJsonContent("/tmp/.superset/hooks/notify.sh"),
+			getClaudeGlobalSettingsJsonContent("/tmp/.lunaria/hooks/notify.sh"),
 		).toBeNull();
 	});
 });
@@ -837,7 +837,7 @@ describe("agent-wrappers codex hooks.json", () => {
 	});
 
 	it("creates Codex hooks.json with SessionStart and Stop when no file exists", () => {
-		const notifyPath = "/tmp/.superset/hooks/notify.sh";
+		const notifyPath = "/tmp/.lunaria/hooks/notify.sh";
 		const content = getCodexGlobalHooksJsonContent(notifyPath);
 		expect(content).not.toBeNull();
 		if (content === null) throw new Error("Expected content");
@@ -883,7 +883,7 @@ describe("agent-wrappers codex hooks.json", () => {
 			),
 		);
 
-		const notifyPath = "/tmp/.superset/hooks/notify.sh";
+		const notifyPath = "/tmp/.lunaria/hooks/notify.sh";
 		const content = getCodexGlobalHooksJsonContent(notifyPath);
 		expect(content).not.toBeNull();
 		if (content === null) throw new Error("Expected content");
@@ -921,7 +921,7 @@ describe("agent-wrappers codex hooks.json", () => {
 	});
 
 	it("does not add UserPromptSubmit to the Codex fallback hooks.json merge", () => {
-		const notifyPath = "/tmp/.superset/hooks/notify.sh";
+		const notifyPath = "/tmp/.lunaria/hooks/notify.sh";
 		const content = getCodexGlobalHooksJsonContent(notifyPath);
 		expect(content).not.toBeNull();
 		if (content === null) throw new Error("Expected content");
@@ -1023,7 +1023,7 @@ describe("agent-wrappers codex hooks.json", () => {
 		writeFileSync(codexHooksPath, invalidJson);
 
 		expect(
-			getCodexGlobalHooksJsonContent("/tmp/.superset/hooks/notify.sh"),
+			getCodexGlobalHooksJsonContent("/tmp/.lunaria/hooks/notify.sh"),
 		).toBeNull();
 
 		createCodexHooksJson();
@@ -1038,7 +1038,7 @@ describe("agent-wrappers codex hooks.json", () => {
 		writeFileSync(codexHooksPath, JSON.stringify("not-an-object"));
 
 		expect(
-			getCodexGlobalHooksJsonContent("/tmp/.superset/hooks/notify.sh"),
+			getCodexGlobalHooksJsonContent("/tmp/.lunaria/hooks/notify.sh"),
 		).toBeNull();
 	});
 });

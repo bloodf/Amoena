@@ -339,7 +339,7 @@ async function detectSetupDefaults(
 }
 
 function getConfigPath(mainRepoPath: string): string {
-	return join(mainRepoPath, ".superset", "config.json");
+	return join(mainRepoPath, ".lunaria", "config.json");
 }
 
 function ensureConfigExists(mainRepoPath: string): string {

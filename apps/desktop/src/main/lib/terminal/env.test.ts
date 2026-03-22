@@ -709,9 +709,9 @@ describe("env", () => {
 			});
 
 			it("should preserve LUNARIA_HOME_DIR for app-launched hooks", () => {
-				process.env.LUNARIA_HOME_DIR = "/tmp/superset-home";
+				process.env.LUNARIA_HOME_DIR = "/tmp/lunaria-home";
 				const result = buildTerminalEnv(baseParams);
-				expect(result.LUNARIA_HOME_DIR).toBe("/tmp/superset-home");
+				expect(result.LUNARIA_HOME_DIR).toBe("/tmp/lunaria-home");
 			});
 		});
 

@@ -5,7 +5,7 @@ import { env } from "shared/env.shared";
 import {
 	buildWrapperScript,
 	createWrapper,
-	isSupersetManagedHookCommand,
+	isLunariaManagedHookCommand,
 	reconcileManagedEntries,
 	writeFileIfChanged,
 } from "./agent-wrappers-common";
@@ -92,7 +92,7 @@ export function getCursorHooksJsonContent(hookScriptPath: string): string {
 			desired: [ourEntry],
 			isManaged: (entry: CursorHookEntry) =>
 				entry.command?.includes(hookScriptPath) ||
-				isSupersetManagedHookCommand(entry.command, CURSOR_HOOK_SCRIPT_NAME),
+				isLunariaManagedHookCommand(entry.command, CURSOR_HOOK_SCRIPT_NAME),
 			isEquivalent: (entry: CursorHookEntry, desiredEntry: CursorHookEntry) =>
 				entry.command === desiredEntry.command,
 		});

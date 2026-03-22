@@ -86,7 +86,7 @@ export function buildCopilotWrapperExecLine(): string {
 # Auto-inject Superset notification hooks when running inside a Superset terminal.
 if [ -n "$LUNARIA_TAB_ID" ] && [ -f "${hookScriptPath}" ]; then
   COPILOT_HOOKS_DIR=".github/hooks"
-  COPILOT_HOOK_FILE="$COPILOT_HOOKS_DIR/superset-notify.json"
+  COPILOT_HOOK_FILE="$COPILOT_HOOKS_DIR/lunaria-notify.json"
 
   # Always refresh our dedicated hook file so stale absolute hook paths from
   # older installs/workspaces cannot silently break notifications.
@@ -94,8 +94,8 @@ if [ -n "$LUNARIA_TAB_ID" ] && [ -f "${hookScriptPath}" ]; then
   printf '%s\\n' '${escapedJson}' > "$COPILOT_HOOK_FILE" 2>/dev/null
 
   if [ -d ".git/info" ]; then
-    grep -qF ".github/hooks/superset-notify.json" ".git/info/exclude" 2>/dev/null || \\
-      printf '%s\\n' ".github/hooks/superset-notify.json" >> ".git/info/exclude" 2>/dev/null
+    grep -qF ".github/hooks/lunaria-notify.json" ".git/info/exclude" 2>/dev/null || \\
+      printf '%s\\n' ".github/hooks/lunaria-notify.json" >> ".git/info/exclude" 2>/dev/null
   fi
 fi
 

@@ -30,13 +30,13 @@ function getShellName(shell: string): string {
  *
  * @see https://github.com/AidenIO/superset/issues/2386
  */
-const SUPERSET_ENV_SAVE = `_superset_saved_env="$(export -p 2>/dev/null | grep ' SUPERSET_')"`;
+const SUPERSET_ENV_SAVE = `_lunaria_saved_env="$(export -p 2>/dev/null | grep ' SUPERSET_')"`;
 
 /**
  * Shell snippet to restore previously saved SUPERSET_* env vars after
  * sourcing user RC files.
  */
-const SUPERSET_ENV_RESTORE = `eval "$_superset_saved_env" 2>/dev/null || true`;
+const SUPERSET_ENV_RESTORE = `eval "$_lunaria_saved_env" 2>/dev/null || true`;
 
 function quoteShellLiteral(value: string): string {
 	return `'${value.replaceAll("'", `'"'"'`)}'`;
@@ -88,9 +88,9 @@ function buildManagedCommandPrelude(shellName: string, binDir: string): string {
 			(name) =>
 				`functions -q ${name}; and functions -e ${name}
 function ${name}
-  set -l _superset_wrapper "${escapedBinDir}/${name}"
-  if test -x "$_superset_wrapper"; and not test -d "$_superset_wrapper"
-    "$_superset_wrapper" $argv
+  set -l _lunaria_wrapper "${escapedBinDir}/${name}"
+  if test -x "$_lunaria_wrapper"; and not test -d "$_lunaria_wrapper"
+    "$_lunaria_wrapper" $argv
   else
     command ${name} $argv
   end
@@ -102,9 +102,9 @@ end`,
 		(name) =>
 			`unalias ${name} 2>/dev/null || true
 ${name}() {
-  _superset_wrapper=${quoteShellLiteral(`${binDir}/${name}`)}
-  if [ -x "$_superset_wrapper" ] && [ ! -d "$_superset_wrapper" ]; then
-    "$_superset_wrapper" "$@"
+  _lunaria_wrapper=${quoteShellLiteral(`${binDir}/${name}`)}
+  if [ -x "$_lunaria_wrapper" ] && [ ! -d "$_lunaria_wrapper" ]; then
+    "$_lunaria_wrapper" "$@"
   else
     command ${name} "$@"
   fi
@@ -114,13 +114,13 @@ ${name}() {
 
 /** Build a shell snippet that idempotently prepends BIN_DIR to PATH. */
 function buildPathPrependFunction(binDir: string): string {
-	return `_superset_prepend_bin() {
+	return `_lunaria_prepend_bin() {
   case ":$PATH:" in
     *:${quoteShellLiteral(binDir)}:*) ;;
     *) export PATH=${quoteShellLiteral(binDir)}:"$PATH" ;;
   esac
 }
-_superset_prepend_bin`;
+_lunaria_prepend_bin`;
 }
 
 /**
@@ -131,7 +131,7 @@ _superset_prepend_bin`;
  */
 function buildZshPrecmdHook(binDir: string): string {
 	return `typeset -ga precmd_functions 2>/dev/null || true
-_superset_ensure_path() {
+_lunaria_ensure_path() {
   case ":$PATH:" in
     *:${quoteShellLiteral(binDir)}:*) ;;
     *) PATH=${quoteShellLiteral(binDir)}:"$PATH" ;;
@@ -139,7 +139,7 @@ _superset_ensure_path() {
 }
 {
   # Keep our hook last so it wins over other PATH-mutating precmd hooks.
-  precmd_functions=(\${precmd_functions:#_superset_ensure_path} _superset_ensure_path)
+  precmd_functions=(\${precmd_functions:#_lunaria_ensure_path} _lunaria_ensure_path)
 } 2>/dev/null || true`;
 }
 
@@ -162,9 +162,9 @@ export function createZshWrapper(
 	const zshenvPath = path.join(paths.ZSH_DIR, ".zshenv");
 	const zshenvScript = `# Superset zsh env wrapper
 ${SUPERSET_ENV_SAVE}
-_superset_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
-export ZDOTDIR="$_superset_home"
-[[ -f "$_superset_home/.zshenv" ]] && source "$_superset_home/.zshenv"
+_lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
+export ZDOTDIR="$_lunaria_home"
+[[ -f "$_lunaria_home/.zshenv" ]] && source "$_lunaria_home/.zshenv"
 ${SUPERSET_ENV_RESTORE}
 export ZDOTDIR=${quotedZshDir}
 `;
@@ -175,9 +175,9 @@ export ZDOTDIR=${quotedZshDir}
 	const zprofilePath = path.join(paths.ZSH_DIR, ".zprofile");
 	const zprofileScript = `# Superset zsh profile wrapper
 ${SUPERSET_ENV_SAVE}
-_superset_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
-export ZDOTDIR="$_superset_home"
-[[ -f "$_superset_home/.zprofile" ]] && source "$_superset_home/.zprofile"
+_lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
+export ZDOTDIR="$_lunaria_home"
+[[ -f "$_lunaria_home/.zprofile" ]] && source "$_lunaria_home/.zprofile"
 ${SUPERSET_ENV_RESTORE}
 export ZDOTDIR=${quotedZshDir}
 `;
@@ -187,9 +187,9 @@ export ZDOTDIR=${quotedZshDir}
 	const zshrcPath = path.join(paths.ZSH_DIR, ".zshrc");
 	const zshrcScript = `# Superset zsh rc wrapper
 ${SUPERSET_ENV_SAVE}
-_superset_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
-export ZDOTDIR="$_superset_home"
-[[ -f "$_superset_home/.zshrc" ]] && source "$_superset_home/.zshrc"
+_lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
+export ZDOTDIR="$_lunaria_home"
+[[ -f "$_lunaria_home/.zshrc" ]] && source "$_lunaria_home/.zshrc"
 ${SUPERSET_ENV_RESTORE}
 ${buildPathPrependFunction(paths.BIN_DIR)}
 ${buildZshPrecmdHook(paths.BIN_DIR)}
@@ -206,10 +206,10 @@ export ZDOTDIR=${quotedZshDir}
 	const zloginPath = path.join(paths.ZSH_DIR, ".zlogin");
 	const zloginScript = `# Superset zsh login wrapper
 ${SUPERSET_ENV_SAVE}
-_superset_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
-export ZDOTDIR="$_superset_home"
+_lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
+export ZDOTDIR="$_lunaria_home"
 if [[ -o interactive ]]; then
-  [[ -f "$_superset_home/.zlogin" ]] && source "$_superset_home/.zlogin"
+  [[ -f "$_lunaria_home/.zlogin" ]] && source "$_lunaria_home/.zlogin"
 fi
 ${SUPERSET_ENV_RESTORE}
 ${buildZshPrecmdHook(paths.BIN_DIR)}
@@ -218,13 +218,13 @@ rehash 2>/dev/null || true
 # One-shot shell-ready marker for preset command timing.
 # Uses precmd so it fires AFTER direnv and other hooks complete,
 # right before the first prompt is displayed.
-_superset_shell_ready() {
-  precmd_functions=(\${precmd_functions:#_superset_shell_ready})
+_lunaria_shell_ready() {
+  precmd_functions=(\${precmd_functions:#_lunaria_shell_ready})
   printf '\\033]777;LunariaAiell-ready\\007'
 }
 # Keep our hook LAST so it fires after direnv and other precmd hooks complete.
-precmd_functions=(\${precmd_functions[@]} _superset_shell_ready)
-export ZDOTDIR="$_superset_home"
+precmd_functions=(\${precmd_functions[@]} _lunaria_shell_ready)
+export ZDOTDIR="$_lunaria_home"
 `;
 	const wroteZlogin = writeFileIfChanged(zloginPath, zloginScript, 0o644);
 	const changed = wroteZshenv || wroteZprofile || wroteZshrc || wroteZlogin;
@@ -270,28 +270,28 @@ export PS1=$'\\[\\e[1;38;2;52;211;153m\\]❯\\[\\e[0m\\] '
 # One-shot shell-ready marker for preset command timing.
 # Uses PROMPT_COMMAND so it fires AFTER direnv and other hooks complete.
 # Supports both scalar and array PROMPT_COMMAND (Bash 5.1+).
-_superset_shell_ready() {
+_lunaria_shell_ready() {
   printf '\\033]777;LunariaAiell-ready\\007'
   if [[ "$(declare -p PROMPT_COMMAND 2>/dev/null)" == "declare -a"* ]]; then
     local -a _new=()
     for _cmd in "\${PROMPT_COMMAND[@]}"; do
-      [[ "$_cmd" != "_superset_shell_ready" ]] && _new+=("$_cmd")
+      [[ "$_cmd" != "_lunaria_shell_ready" ]] && _new+=("$_cmd")
     done
     PROMPT_COMMAND=("\${_new[@]}")
   else
-    PROMPT_COMMAND="\${_superset_orig_prompt_cmd}"
-    unset _superset_orig_prompt_cmd
+    PROMPT_COMMAND="\${_lunaria_orig_prompt_cmd}"
+    unset _lunaria_orig_prompt_cmd
   fi
-  unset -f _superset_shell_ready
+  unset -f _lunaria_shell_ready
 }
 if [[ "$(declare -p PROMPT_COMMAND 2>/dev/null)" == "declare -a"* ]]; then
-  PROMPT_COMMAND=("\${PROMPT_COMMAND[@]}" "_superset_shell_ready")
+  PROMPT_COMMAND=("\${PROMPT_COMMAND[@]}" "_lunaria_shell_ready")
 else
-  _superset_orig_prompt_cmd="\${PROMPT_COMMAND}"
-  if [[ -n "\${_superset_orig_prompt_cmd}" ]]; then
-    PROMPT_COMMAND="\${_superset_orig_prompt_cmd};_superset_shell_ready"
+  _lunaria_orig_prompt_cmd="\${PROMPT_COMMAND}"
+  if [[ -n "\${_lunaria_orig_prompt_cmd}" ]]; then
+    PROMPT_COMMAND="\${_lunaria_orig_prompt_cmd};_lunaria_shell_ready"
   else
-    PROMPT_COMMAND="_superset_shell_ready"
+    PROMPT_COMMAND="_lunaria_shell_ready"
   fi
 fi
 `;
@@ -329,7 +329,7 @@ export function getShellArgs(
 		return [
 			"-l",
 			"--init-command",
-			`set -l _superset_bin "${escapedBinDir}"; contains -- "$_superset_bin" $PATH; or set -gx PATH "$_superset_bin" $PATH; function _superset_shell_ready --on-event fish_prompt; printf '\\033]777;LunariaAiell-ready\\007'; functions -e _superset_shell_ready; end`,
+			`set -l _lunaria_bin "${escapedBinDir}"; contains -- "$_lunaria_bin" $PATH; or set -gx PATH "$_lunaria_bin" $PATH; function _lunaria_shell_ready --on-event fish_prompt; printf '\\033]777;LunariaAiell-ready\\007'; functions -e _lunaria_shell_ready; end`,
 		];
 	}
 	if (["zsh", "sh", "ksh"].includes(shellName)) {

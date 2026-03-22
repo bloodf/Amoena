@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { PROJECTS_DIR_NAME, LUNARIA_DIR_NAME } from "shared/constants";
 import { loadSetupConfig, mergeConfigs } from "./setup";
 
-const TEST_DIR = join(tmpdir(), `superset-test-setup-${process.pid}`);
+const TEST_DIR = join(tmpdir(), `lunaria-test-setup-${process.pid}`);
 const MAIN_REPO = join(TEST_DIR, "main-repo");
 const WORKTREE = join(TEST_DIR, "worktree");
 const PROJECT_ID = "test-project-id";

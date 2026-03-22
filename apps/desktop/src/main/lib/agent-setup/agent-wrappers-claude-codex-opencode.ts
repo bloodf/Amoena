@@ -4,7 +4,7 @@ import path from "node:path";
 import {
 	buildWrapperScript,
 	createWrapper,
-	isSupersetManagedHookCommand,
+	isLunariaManagedHookCommand,
 	writeFileIfChanged,
 } from "./agent-wrappers-common";
 import { getNotifyScriptPath, NOTIFY_SCRIPT_NAME } from "./notify-hook";
@@ -28,7 +28,7 @@ const CODEX_WRAPPER_EXEC_TEMPLATE_PATH = path.join(
 );
 
 /**
- * Returns the environment-scoped OpenCode plugin path under Superset home.
+ * Returns the environment-scoped OpenCode plugin path under Lunaria home.
  */
 export function getOpenCodePluginPath(): string {
 	return path.join(OPENCODE_PLUGIN_DIR, OPENCODE_PLUGIN_FILE);
@@ -88,7 +88,7 @@ function isManagedClaudeHookCommand(
 	return (
 		command?.includes(notifyScriptPath) ||
 		command?.includes(CLAUDE_DYNAMIC_NOTIFY_PATH_MARKER) ||
-		isSupersetManagedHookCommand(command, NOTIFY_SCRIPT_NAME)
+		isLunariaManagedHookCommand(command, NOTIFY_SCRIPT_NAME)
 	);
 }
 

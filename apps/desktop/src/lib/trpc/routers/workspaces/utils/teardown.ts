@@ -45,12 +45,12 @@ export async function runTeardown({
 		const shell =
 			process.env.SHELL ||
 			(process.platform === "darwin" ? "/bin/zsh" : "/bin/bash");
-		const supersetHomeDir =
+		const lunariaHomeDir =
 			process.env.LUNARIA_HOME_DIR || join(homedir(), LUNARIA_DIR_NAME);
 		const shellWrapperPaths = {
-			BIN_DIR: join(supersetHomeDir, "bin"),
-			ZSH_DIR: join(supersetHomeDir, "zsh"),
-			BASH_DIR: join(supersetHomeDir, "bash"),
+			BIN_DIR: join(lunariaHomeDir, "bin"),
+			ZSH_DIR: join(lunariaHomeDir, "zsh"),
+			BASH_DIR: join(lunariaHomeDir, "bash"),
 		};
 
 		const baseEnv = buildSafeEnv(sanitizeEnv(process.env) || {});

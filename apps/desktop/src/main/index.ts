@@ -197,12 +197,14 @@ app.on("before-quit", async (event) => {
 	// Quit confirmed or no confirmation needed - exit immediately
 	// Let OS clean up child processes, tray, etc.
 	isQuitting = true;
-	// Stop child services
+	// Stop all child services
 	try {
 		const { stopDashboard } = await import("./lib/dashboard-service");
 		const { stopTerminalHost } = await import("./lib/terminal-host-service");
+		const { stopMemoryService } = await import("./lib/memory-service");
 		stopDashboard();
 		stopTerminalHost();
+		stopMemoryService();
 	} catch { /* services may not have started */ }
 	getHostServiceManager().stopAll();
 	disposeTray();
@@ -352,25 +354,27 @@ if (!gotTheLock) {
 			console.error("[main] Failed to set up agent hooks:", error);
 		}
 
-		// Start services in parallel before opening the window
+		// Start all services in parallel before opening the window
 		const { startDashboard } = await import("./lib/dashboard-service");
 		const { startTerminalHost } = await import("./lib/terminal-host-service");
+		const { startMemoryService } = await import("./lib/memory-service");
 
-		const [dashboardResult, terminalResult] = await Promise.allSettled([
+		const [dashboardResult, terminalResult, memoryResult] = await Promise.allSettled([
 			startDashboard(),
 			startTerminalHost(),
+			startMemoryService(),
 		]);
 
-		if (dashboardResult.status === "fulfilled") {
-			console.log("[main] Dashboard ready on port", dashboardResult.value);
-		} else {
-			console.error("[main] Failed to start dashboard:", dashboardResult.reason);
-		}
-
-		if (terminalResult.status === "fulfilled") {
-			console.log("[main] Terminal host ready on port", terminalResult.value);
-		} else {
-			console.error("[main] Failed to start terminal host:", terminalResult.reason);
+		for (const [name, result] of [
+			["Dashboard", dashboardResult],
+			["Terminal host", terminalResult],
+			["Memory service", memoryResult],
+		] as const) {
+			if (result.status === "fulfilled") {
+				console.log(`[main] ${name} ready on port`, result.value);
+			} else {
+				console.error(`[main] Failed to start ${name}:`, result.reason);
+			}
 		}
 
 		await makeAppSetup(() => MainWindow());
