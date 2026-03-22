@@ -19,8 +19,8 @@ describe("clearGitHubCachesForWorktree", () => {
 
 		const status: GitHubStatus = {
 			pr: null,
-			repoUrl: "https://github.com/LunariaAi/superset",
-			upstreamUrl: "https://github.com/LunariaAi/superset",
+			repoUrl: "https://github.com/LunariaAi/lunaria",
+			upstreamUrl: "https://github.com/LunariaAi/lunaria",
 			isFork: false,
 			branchExistsOnRemote: true,
 			lastRefreshed: Date.now(),
@@ -36,19 +36,19 @@ describe("clearGitHubCachesForWorktree", () => {
 
 		setCachedGitHubStatus(worktreePath, status);
 		setCachedRepoContext(worktreePath, {
-			repoUrl: "https://github.com/LunariaAi/superset",
-			upstreamUrl: "https://github.com/LunariaAi/superset",
+			repoUrl: "https://github.com/LunariaAi/lunaria",
+			upstreamUrl: "https://github.com/LunariaAi/lunaria",
 			isFork: false,
 		});
 
 		const commentsCacheKey = makePullRequestCommentsCacheKey({
 			worktreePath,
-			repoNameWithOwner: "LunariaAi/superset",
+			repoNameWithOwner: "LunariaAi/lunaria",
 			pullRequestNumber: 2681,
 		});
 		const otherCommentsCacheKey = makePullRequestCommentsCacheKey({
 			worktreePath: otherWorktreePath,
-			repoNameWithOwner: "LunariaAi/superset",
+			repoNameWithOwner: "LunariaAi/lunaria",
 			pullRequestNumber: 2682,
 		});
 
@@ -73,8 +73,8 @@ describe("getCachedGitHubStatusState", () => {
 		const worktreePath = "/tmp/worktrees/review-cache-stale-test";
 		const status: GitHubStatus = {
 			pr: null,
-			repoUrl: "https://github.com/LunariaAi/superset",
-			upstreamUrl: "https://github.com/LunariaAi/superset",
+			repoUrl: "https://github.com/LunariaAi/lunaria",
+			upstreamUrl: "https://github.com/LunariaAi/lunaria",
 			isFork: false,
 			branchExistsOnRemote: true,
 			lastRefreshed: 1000,

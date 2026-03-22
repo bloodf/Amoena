@@ -197,11 +197,13 @@ app.on("before-quit", async (event) => {
 	// Quit confirmed or no confirmation needed - exit immediately
 	// Let OS clean up child processes, tray, etc.
 	isQuitting = true;
-	// Stop the Next.js dashboard server
+	// Stop child services
 	try {
 		const { stopDashboard } = await import("./lib/dashboard-service");
+		const { stopTerminalHost } = await import("./lib/terminal-host-service");
 		stopDashboard();
-	} catch { /* dashboard may not have started */ }
+		stopTerminalHost();
+	} catch { /* services may not have started */ }
 	getHostServiceManager().stopAll();
 	disposeTray();
 	app.exit(0);
@@ -350,14 +352,25 @@ if (!gotTheLock) {
 			console.error("[main] Failed to set up agent hooks:", error);
 		}
 
-		// Start the Next.js dashboard server before opening the window
+		// Start services in parallel before opening the window
 		const { startDashboard } = await import("./lib/dashboard-service");
-		try {
-			const dashboardPort = await startDashboard();
-			console.log("[main] Dashboard ready on port", dashboardPort);
-		} catch (error) {
-			console.error("[main] Failed to start dashboard:", error);
-			// Window loader has retry logic, so proceed anyway
+		const { startTerminalHost } = await import("./lib/terminal-host-service");
+
+		const [dashboardResult, terminalResult] = await Promise.allSettled([
+			startDashboard(),
+			startTerminalHost(),
+		]);
+
+		if (dashboardResult.status === "fulfilled") {
+			console.log("[main] Dashboard ready on port", dashboardResult.value);
+		} else {
+			console.error("[main] Failed to start dashboard:", dashboardResult.reason);
+		}
+
+		if (terminalResult.status === "fulfilled") {
+			console.log("[main] Terminal host ready on port", terminalResult.value);
+		} else {
+			console.error("[main] Failed to start terminal host:", terminalResult.reason);
 		}
 
 		await makeAppSetup(() => MainWindow());

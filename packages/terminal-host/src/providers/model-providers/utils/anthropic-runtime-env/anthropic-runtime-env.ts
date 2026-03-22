@@ -91,7 +91,7 @@ export function getAnthropicEnvConfigPath(
 ): string {
 	if (options?.configPath) return options.configPath;
 	const lunariaHome =
-		process.env.LUNARIA_HOME_DIR?.trim() || join(homedir(), ".superset");
+		process.env.LUNARIA_HOME_DIR?.trim() || join(homedir(), ".lunaria");
 	return join(lunariaHome, CONFIG_FILE_NAME);
 }
 

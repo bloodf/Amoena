@@ -161,7 +161,7 @@ describe("agent-wrappers copilot", () => {
 			env: {
 				...process.env,
 				PATH: `${TEST_BIN_DIR}:${realBinDir}:${process.env.PATH || ""}`,
-				SUPERSET_TAB_ID: "tab-1",
+				LUNARIA_TAB_ID: "tab-1",
 			},
 			encoding: "utf-8",
 		});
@@ -199,8 +199,8 @@ describe("agent-wrappers copilot", () => {
 		expect(wrapper).toContain(
 			`"$REAL_BIN" -c 'notify=["bash","${path.join(TEST_HOOKS_DIR, "notify.sh")}"]' "$@"`,
 		);
-		expect(wrapper).toContain("SUPERSET_CODEX_START_WATCHER_PID");
-		expect(wrapper).toContain('kill "$SUPERSET_CODEX_START_WATCHER_PID"');
+		expect(wrapper).toContain("LUNARIA_CODEX_START_WATCHER_PID");
+		expect(wrapper).toContain('kill "$LUNARIA_CODEX_START_WATCHER_PID"');
 
 		const execLine = buildCodexWrapperExecLine(
 			path.join(TEST_HOOKS_DIR, "notify.sh"),

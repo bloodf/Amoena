@@ -8,7 +8,7 @@ export const PLATFORM = {
 };
 
 const workspace = getWorkspaceName();
-export const SUPERSET_DIR_NAME = workspace
+export const LUNARIA_DIR_NAME = workspace
 	? `.lunaria-${workspace}`
 	: ".lunaria";
 export const PROTOCOL_SCHEME = workspace

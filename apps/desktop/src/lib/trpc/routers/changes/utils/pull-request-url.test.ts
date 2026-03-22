@@ -10,12 +10,12 @@ describe("pull-request-url", () => {
 		expect(
 			normalizeGitHubRepoUrl("https://github.com/LunariaAi/superset.git"),
 		).toBe("https://github.com/LunariaAi/superset");
-		expect(normalizeGitHubRepoUrl("git@github.com:Kitenite/superset.git")).toBe(
-			"https://github.com/Kitenite/superset",
+		expect(normalizeGitHubRepoUrl("git@github.com:Kitenite/lunaria.git")).toBe(
+			"https://github.com/Kitenite/lunaria",
 		);
 		expect(
-			normalizeGitHubRepoUrl("ssh://git@github.com/Kitenite/superset.git"),
-		).toBe("https://github.com/Kitenite/superset");
+			normalizeGitHubRepoUrl("ssh://git@github.com/Kitenite/lunaria.git"),
+		).toBe("https://github.com/Kitenite/lunaria");
 	});
 
 	test("parses upstream refs with slashes in branch names", () => {

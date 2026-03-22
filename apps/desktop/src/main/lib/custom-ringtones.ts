@@ -13,12 +13,12 @@ import { copyFile, rename, unlink } from "node:fs/promises";
 import { basename, extname, join, resolve } from "node:path";
 import { CUSTOM_RINGTONE_ID } from "shared/ringtones";
 import {
-	SUPERSET_HOME_DIR,
-	SUPERSET_HOME_DIR_MODE,
+	LUNARIA_HOME_DIR,
+	LUNARIA_HOME_DIR_MODE,
 	SUPERSET_SENSITIVE_FILE_MODE,
 } from "./app-environment";
 
-const RINGTONES_ASSETS_DIR = join(SUPERSET_HOME_DIR, "assets", "ringtones");
+const RINGTONES_ASSETS_DIR = join(LUNARIA_HOME_DIR, "assets", "ringtones");
 const CUSTOM_RINGTONE_FILE_STEM = "notification-custom";
 const CUSTOM_RINGTONE_METADATA_PATH = join(
 	RINGTONES_ASSETS_DIR,
@@ -137,12 +137,12 @@ export function ensureCustomRingtonesDir(): void {
 	if (!existsSync(RINGTONES_ASSETS_DIR)) {
 		mkdirSync(RINGTONES_ASSETS_DIR, {
 			recursive: true,
-			mode: SUPERSET_HOME_DIR_MODE,
+			mode: LUNARIA_HOME_DIR_MODE,
 		});
 	}
 
 	try {
-		chmodSync(RINGTONES_ASSETS_DIR, SUPERSET_HOME_DIR_MODE);
+		chmodSync(RINGTONES_ASSETS_DIR, LUNARIA_HOME_DIR_MODE);
 	} catch {
 		// Best effort only.
 	}

@@ -63,7 +63,7 @@ const MAX_OUTPUT_BATCH_SIZE_BYTES = 128 * 1024; // 128KB max per flush
 let stdoutDraining = true;
 let ptyPaused = false;
 
-const DEBUG_OUTPUT_BATCHING = process.env.SUPERSET_PTY_SUBPROCESS_DEBUG === "1";
+const DEBUG_OUTPUT_BATCHING = process.env.LUNARIA_PTY_SUBPROCESS_DEBUG === "1";
 
 // =============================================================================
 // Helpers
@@ -289,7 +289,7 @@ function handleSpawn(payload: Buffer): void {
 			cols: msg.cols,
 			rows: msg.rows,
 			ZDOTDIR: msg.env.ZDOTDIR,
-			SUPERSET_ORIG_ZDOTDIR: msg.env.SUPERSET_ORIG_ZDOTDIR,
+			LUNARIA_ORIG_ZDOTDIR: msg.env.LUNARIA_ORIG_ZDOTDIR,
 			PATH_start: msg.env.PATH?.substring(0, 100),
 		});
 	}

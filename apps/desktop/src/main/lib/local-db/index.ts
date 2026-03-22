@@ -11,11 +11,11 @@ import { validate as uuidValidate, version as uuidVersion } from "uuid";
 import { env } from "../../env.main";
 import {
 	ensureSupersetHomeDirExists,
-	SUPERSET_HOME_DIR,
+	LUNARIA_HOME_DIR,
 	SUPERSET_SENSITIVE_FILE_MODE,
 } from "../app-environment";
 
-const DB_PATH = join(SUPERSET_HOME_DIR, "local.db");
+const DB_PATH = join(LUNARIA_HOME_DIR, "local.db");
 
 ensureSupersetHomeDirExists();
 

@@ -2,9 +2,9 @@ import { randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, unlinkSync } from "node:fs";
 import { copyFile, writeFile } from "node:fs/promises";
 import { extname, join } from "node:path";
-import { SUPERSET_HOME_DIR } from "./app-environment";
+import { LUNARIA_HOME_DIR } from "./app-environment";
 
-export const PROJECT_ICONS_DIR = join(SUPERSET_HOME_DIR, "project-icons");
+export const PROJECT_ICONS_DIR = join(LUNARIA_HOME_DIR, "project-icons");
 
 /** Max icon file size: 512KB */
 const MAX_ICON_SIZE = 512 * 1024;

@@ -467,15 +467,15 @@ describe("env", () => {
 		describe("includes SUPERSET_* prefix vars", () => {
 			it("should include SUPERSET_* vars (our metadata)", () => {
 				const env = {
-					SUPERSET_PANE_ID: "pane-1",
-					SUPERSET_TAB_ID: "tab-1",
-					SUPERSET_WORKSPACE_ID: "ws-1",
+					LUNARIA_PANE_ID: "pane-1",
+					LUNARIA_TAB_ID: "tab-1",
+					LUNARIA_WORKSPACE_ID: "ws-1",
 					PATH: "/usr/bin",
 				};
 				const result = buildSafeEnv(env);
-				expect(result.SUPERSET_PANE_ID).toBe("pane-1");
-				expect(result.SUPERSET_TAB_ID).toBe("tab-1");
-				expect(result.SUPERSET_WORKSPACE_ID).toBe("ws-1");
+				expect(result.LUNARIA_PANE_ID).toBe("pane-1");
+				expect(result.LUNARIA_TAB_ID).toBe("tab-1");
+				expect(result.LUNARIA_WORKSPACE_ID).toBe("ws-1");
 			});
 		});
 
@@ -539,12 +539,12 @@ describe("env", () => {
 			it("should include Superset_* prefix vars case-insensitively on Windows", () => {
 				const env = {
 					Superset_Pane_Id: "pane-1",
-					SUPERSET_TAB_ID: "tab-1",
+					LUNARIA_TAB_ID: "tab-1",
 					PATH: "/usr/bin",
 				};
 				const result = buildSafeEnv(env, { platform: "win32" });
 				expect(result.Superset_Pane_Id).toBe("pane-1");
-				expect(result.SUPERSET_TAB_ID).toBe("tab-1");
+				expect(result.LUNARIA_TAB_ID).toBe("tab-1");
 			});
 
 			it("should preserve original key casing in output", () => {
@@ -592,7 +592,7 @@ describe("env", () => {
 			"DATABASE_URL",
 			"CLERK_SECRET_KEY",
 			"SSL_CERT_FILE",
-			"SUPERSET_HOME_DIR",
+			"LUNARIA_HOME_DIR",
 		];
 
 		beforeEach(() => {
@@ -671,9 +671,9 @@ describe("env", () => {
 			it("should set Superset-specific env vars", () => {
 				const result = buildTerminalEnv(baseParams);
 
-				expect(result.SUPERSET_PANE_ID).toBe("pane-1");
-				expect(result.SUPERSET_TAB_ID).toBe("tab-1");
-				expect(result.SUPERSET_WORKSPACE_ID).toBe("ws-1");
+				expect(result.LUNARIA_PANE_ID).toBe("pane-1");
+				expect(result.LUNARIA_TAB_ID).toBe("tab-1");
+				expect(result.LUNARIA_WORKSPACE_ID).toBe("ws-1");
 			});
 
 			it("should handle optional workspace params", () => {
@@ -684,17 +684,17 @@ describe("env", () => {
 					rootPath: "/root/path",
 				});
 
-				expect(result.SUPERSET_WORKSPACE_NAME).toBe("my-workspace");
-				expect(result.SUPERSET_WORKSPACE_PATH).toBe("/path/to/workspace");
-				expect(result.SUPERSET_ROOT_PATH).toBe("/root/path");
+				expect(result.LUNARIA_WORKSPACE_NAME).toBe("my-workspace");
+				expect(result.LUNARIA_WORKSPACE_PATH).toBe("/path/to/workspace");
+				expect(result.LUNARIA_ROOT_PATH).toBe("/root/path");
 			});
 
 			it("should default optional params to empty string", () => {
 				const result = buildTerminalEnv(baseParams);
 
-				expect(result.SUPERSET_WORKSPACE_NAME).toBe("");
-				expect(result.SUPERSET_WORKSPACE_PATH).toBe("");
-				expect(result.SUPERSET_ROOT_PATH).toBe("");
+				expect(result.LUNARIA_WORKSPACE_NAME).toBe("");
+				expect(result.LUNARIA_WORKSPACE_PATH).toBe("");
+				expect(result.LUNARIA_ROOT_PATH).toBe("");
 			});
 
 			it("should set LANG to a UTF-8 locale", () => {
@@ -702,16 +702,16 @@ describe("env", () => {
 				expect(result.LANG).toContain("UTF-8");
 			});
 
-			it("should include SUPERSET_PORT", () => {
+			it("should include LUNARIA_PORT", () => {
 				const result = buildTerminalEnv(baseParams);
-				expect(result.SUPERSET_PORT).toBeDefined();
-				expect(typeof result.SUPERSET_PORT).toBe("string");
+				expect(result.LUNARIA_PORT).toBeDefined();
+				expect(typeof result.LUNARIA_PORT).toBe("string");
 			});
 
-			it("should preserve SUPERSET_HOME_DIR for app-launched hooks", () => {
-				process.env.SUPERSET_HOME_DIR = "/tmp/superset-home";
+			it("should preserve LUNARIA_HOME_DIR for app-launched hooks", () => {
+				process.env.LUNARIA_HOME_DIR = "/tmp/superset-home";
 				const result = buildTerminalEnv(baseParams);
-				expect(result.SUPERSET_HOME_DIR).toBe("/tmp/superset-home");
+				expect(result.LUNARIA_HOME_DIR).toBe("/tmp/superset-home");
 			});
 		});
 

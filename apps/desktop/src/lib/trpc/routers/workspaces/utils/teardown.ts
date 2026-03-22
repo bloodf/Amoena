@@ -6,7 +6,7 @@ import {
 	getShellEnv,
 } from "main/lib/agent-setup/shell-wrappers";
 import { buildSafeEnv, sanitizeEnv } from "main/lib/terminal/env";
-import { SUPERSET_DIR_NAME } from "shared/constants";
+import { LUNARIA_DIR_NAME } from "shared/constants";
 import { removeWorktree } from "./git";
 import { loadSetupConfig } from "./setup";
 
@@ -46,7 +46,7 @@ export async function runTeardown({
 			process.env.SHELL ||
 			(process.platform === "darwin" ? "/bin/zsh" : "/bin/bash");
 		const supersetHomeDir =
-			process.env.SUPERSET_HOME_DIR || join(homedir(), SUPERSET_DIR_NAME);
+			process.env.LUNARIA_HOME_DIR || join(homedir(), LUNARIA_DIR_NAME);
 		const shellWrapperPaths = {
 			BIN_DIR: join(supersetHomeDir, "bin"),
 			ZSH_DIR: join(supersetHomeDir, "zsh"),
@@ -66,7 +66,7 @@ export async function runTeardown({
 					...baseEnv,
 					...wrapperEnv,
 					LUNARIA_WORKSPACE_NAME: workspaceName,
-					SUPERSET_ROOT_PATH: mainRepoPath,
+					LUNARIA_ROOT_PATH: mainRepoPath,
 				},
 			});
 

@@ -141,13 +141,13 @@ describe("existing PR push target resolution", () => {
 					},
 					{
 						name: "kitenite",
-						fetchUrl: "git@github.com:kitenite/superset.git",
-						pushUrl: "git@github.com:kitenite/superset.git",
+						fetchUrl: "git@github.com:kitenite/lunaria.git",
+						pushUrl: "git@github.com:kitenite/lunaria.git",
 					},
 				],
 				pr: {
 					headRepositoryOwner: "kitenite",
-					headRepositoryName: "superset",
+					headRepositoryName: "lunaria",
 					isCrossRepository: true,
 				},
 				fallbackRemote: "origin",
@@ -166,7 +166,7 @@ describe("existing PR push target resolution", () => {
 				],
 				pr: {
 					headRepositoryOwner: "kitenite",
-					headRepositoryName: "superset",
+					headRepositoryName: "lunaria",
 					isCrossRepository: true,
 				},
 				fallbackRemote: "origin",
@@ -178,9 +178,9 @@ describe("existing PR push target resolution", () => {
 		expect(
 			getExistingPRHeadRepoUrl({
 				headRepositoryOwner: "kitenite",
-				headRepositoryName: "superset",
+				headRepositoryName: "lunaria",
 				isCrossRepository: true,
 			}),
-		).toBe("https://github.com/kitenite/superset");
+		).toBe("https://github.com/kitenite/lunaria");
 	});
 });

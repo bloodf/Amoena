@@ -3,7 +3,7 @@ import * as childProcess from "node:child_process";
 import path from "node:path";
 import { app } from "electron";
 import { getProcessEnvWithShellPath } from "../../lib/trpc/routers/workspaces/utils/shell-env";
-import { SUPERSET_HOME_DIR } from "./app-environment";
+import { LUNARIA_HOME_DIR } from "./app-environment";
 import { getDeviceName, getHashedDeviceId } from "./device-info";
 
 type HostServiceStatus = "starting" | "running" | "crashed";
@@ -160,7 +160,7 @@ export class HostServiceManager {
 			DEVICE_CLIENT_ID: getHashedDeviceId(),
 			DEVICE_NAME: getDeviceName(),
 			HOST_DB_PATH: path.join(
-				SUPERSET_HOME_DIR,
+				LUNARIA_HOME_DIR,
 				"host",
 				organizationId,
 				"host.db",

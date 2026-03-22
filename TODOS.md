@@ -1,6 +1,6 @@
 # TODOS
 
-## Superset Migration Plan — Engineering Review Items
+## Lunaria Migration Plan — Engineering Review Items
 
 ### TODO-001: Consensus voting edge case — all agents abstain
 
@@ -34,15 +34,15 @@
 
 ### TODO-004: Full app i18n string extraction
 
-- **What:** Wrap all hardcoded English strings across Superset-derived screens in `t()` calls and extract to translation files
-- **Why:** User chose full app i18n (not just Lunaria screens). Superset has zero i18n — ~500+ strings across 90+ components need extraction.
+- **What:** Wrap all hardcoded English strings across Lunaria-derived screens in `t()` calls and extract to translation files
+- **Why:** User chose full app i18n (not just Lunaria screens). Lunaria has zero i18n — ~500+ strings across 90+ components need extraction.
 - **Pros:** Complete internationalization, consistent UX across languages, no half-English/half-translated experience
 - **Cons:** Time-consuming mechanical work (~2 hours CC time), translation files need actual translations later
-- **Context:** Can be done incrementally: Phase 1 (branding strip) is a natural time to touch every file. Extract strings to `packages/i18n/locales/en.json` organized by screen/component namespace. Use `react-i18next` or equivalent. Superset components in `packages/ui/src/components/ui/` and `apps/desktop/src/renderer/` all need wrapping.
+- **Context:** Can be done incrementally: Phase 1 (branding strip) is a natural time to touch every file. Extract strings to `packages/i18n/locales/en.json` organized by screen/component namespace. Use `react-i18next` or equivalent. Lunaria components in `packages/ui/src/components/ui/` and `apps/desktop/src/renderer/` all need wrapping.
 - **Depends on:** Phase 1 completion (files are accessible after fork)
 - **Added:** 2026-03-19 via /plan-eng-review
 
-## Superset Migration Plan — CEO Review Expansions
+## Lunaria Migration Plan — CEO Review Expansions
 
 ### TODO-005: Session Replay storage cleanup policy
 

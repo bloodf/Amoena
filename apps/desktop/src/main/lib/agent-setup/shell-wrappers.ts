@@ -26,7 +26,7 @@ function getShellName(shell: string): string {
  * Shell snippet to save all SUPERSET_* env vars before sourcing user RC files.
  * Used in tandem with {@link SUPERSET_ENV_RESTORE} to prevent user shell
  * configs from overriding Superset-managed environment variables (e.g.
- * SUPERSET_WORKSPACE_NAME).
+ * LUNARIA_WORKSPACE_NAME).
  *
  * @see https://github.com/AidenIO/superset/issues/2386
  */
@@ -162,7 +162,7 @@ export function createZshWrapper(
 	const zshenvPath = path.join(paths.ZSH_DIR, ".zshenv");
 	const zshenvScript = `# Superset zsh env wrapper
 ${SUPERSET_ENV_SAVE}
-_superset_home="\${SUPERSET_ORIG_ZDOTDIR:-$HOME}"
+_superset_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
 export ZDOTDIR="$_superset_home"
 [[ -f "$_superset_home/.zshenv" ]] && source "$_superset_home/.zshenv"
 ${SUPERSET_ENV_RESTORE}
@@ -175,7 +175,7 @@ export ZDOTDIR=${quotedZshDir}
 	const zprofilePath = path.join(paths.ZSH_DIR, ".zprofile");
 	const zprofileScript = `# Superset zsh profile wrapper
 ${SUPERSET_ENV_SAVE}
-_superset_home="\${SUPERSET_ORIG_ZDOTDIR:-$HOME}"
+_superset_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
 export ZDOTDIR="$_superset_home"
 [[ -f "$_superset_home/.zprofile" ]] && source "$_superset_home/.zprofile"
 ${SUPERSET_ENV_RESTORE}
@@ -187,7 +187,7 @@ export ZDOTDIR=${quotedZshDir}
 	const zshrcPath = path.join(paths.ZSH_DIR, ".zshrc");
 	const zshrcScript = `# Superset zsh rc wrapper
 ${SUPERSET_ENV_SAVE}
-_superset_home="\${SUPERSET_ORIG_ZDOTDIR:-$HOME}"
+_superset_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
 export ZDOTDIR="$_superset_home"
 [[ -f "$_superset_home/.zshrc" ]] && source "$_superset_home/.zshrc"
 ${SUPERSET_ENV_RESTORE}
@@ -206,7 +206,7 @@ export ZDOTDIR=${quotedZshDir}
 	const zloginPath = path.join(paths.ZSH_DIR, ".zlogin");
 	const zloginScript = `# Superset zsh login wrapper
 ${SUPERSET_ENV_SAVE}
-_superset_home="\${SUPERSET_ORIG_ZDOTDIR:-$HOME}"
+_superset_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
 export ZDOTDIR="$_superset_home"
 if [[ -o interactive ]]; then
   [[ -f "$_superset_home/.zlogin" ]] && source "$_superset_home/.zlogin"
@@ -306,7 +306,7 @@ export function getShellEnv(
 	const shellName = getShellName(shell);
 	if (shellName === "zsh") {
 		return {
-			SUPERSET_ORIG_ZDOTDIR: process.env.ZDOTDIR || os.homedir(),
+			LUNARIA_ORIG_ZDOTDIR: process.env.ZDOTDIR || os.homedir(),
 			ZDOTDIR: paths.ZSH_DIR,
 		};
 	}
