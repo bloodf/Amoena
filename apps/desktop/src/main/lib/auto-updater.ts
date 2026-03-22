@@ -28,8 +28,8 @@ const IS_AUTO_UPDATE_PLATFORM = PLATFORM.IS_MAC || PLATFORM.IS_LINUX;
 // - Stable: fetches from /releases/latest/download/ (latest non-prerelease)
 // - Canary: fetches from /releases/download/desktop-canary/ (rolling canary tag)
 const UPDATE_FEED_URL = IS_PRERELEASE
-	? "https://github.com/LunariaAi/superset/releases/download/desktop-canary"
-	: "https://github.com/LunariaAi/superset/releases/latest/download";
+	? "https://github.com/Lunaria/lunaria/releases/download/desktop-canary"
+	: "https://github.com/Lunaria/lunaria/releases/latest/download";
 
 export interface AutoUpdateStatusEvent {
 	status: AutoUpdateStatus;

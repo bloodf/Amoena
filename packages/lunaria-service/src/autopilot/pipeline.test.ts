@@ -122,18 +122,25 @@ describe("rollbackPhase", () => {
     expect(rolled.currentPhase).toBe(AutopilotPhase.Analysis);
   });
 
-  it("removes the current phase record and reopens the previous phase", async () => {
+  it("removes the current phase record and appends a fresh previous phase record", async () => {
     const run = await startAutopilot("goal");
     await advancePhase(run.id); // → Planning (phases: Analysis[closed], Planning[open])
     const rolled = await rollbackPhase(run.id);
-    // Planning record should be gone; only Analysis (re-opened) remains
+
+    // Planning record should be gone entirely
     const planningRecord = rolled.phases.find(
       (p) => p.phase === AutopilotPhase.Planning,
     );
     expect(planningRecord).toBeUndefined();
-    expect(rolled.phases).toHaveLength(1);
-    expect(rolled.phases[0].phase).toBe(AutopilotPhase.Analysis);
-    expect(rolled.phases[0].endedAt).toBeNull();
+
+    // The implementation keeps the original closed Analysis record and appends
+    // a fresh re-opened one, so phases.length is 2.
+    expect(rolled.phases).toHaveLength(2);
+
+    // The last record is the freshly re-opened Analysis phase
+    const lastRecord = rolled.phases[rolled.phases.length - 1];
+    expect(lastRecord.phase).toBe(AutopilotPhase.Analysis);
+    expect(lastRecord.endedAt).toBeNull();
   });
 
   it("throws AutopilotRollbackError when already at the first phase", async () => {

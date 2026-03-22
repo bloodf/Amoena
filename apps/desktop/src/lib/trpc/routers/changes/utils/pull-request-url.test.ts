@@ -8,8 +8,8 @@ import {
 describe("pull-request-url", () => {
 	test("normalizes GitHub remote URLs", () => {
 		expect(
-			normalizeGitHubRepoUrl("https://github.com/LunariaAi/superset.git"),
-		).toBe("https://github.com/LunariaAi/superset");
+			normalizeGitHubRepoUrl("https://github.com/Lunaria/lunaria.git"),
+		).toBe("https://github.com/Lunaria/lunaria");
 		expect(normalizeGitHubRepoUrl("git@github.com:Kitenite/lunaria.git")).toBe(
 			"https://github.com/Kitenite/lunaria",
 		);
@@ -28,13 +28,13 @@ describe("pull-request-url", () => {
 	test("builds compare URLs for fork branches", () => {
 		expect(
 			buildPullRequestCompareUrl({
-				baseRepoUrl: "https://github.com/LunariaAi/superset.git",
+				baseRepoUrl: "https://github.com/Lunaria/lunaria.git",
 				baseBranch: "main",
 				headRepoOwner: "Kitenite",
 				headBranch: "kitenite/halved-position",
 			}),
 		).toBe(
-			"https://github.com/LunariaAi/superset/compare/main...Kitenite:kitenite/halved-position?expand=1",
+			"https://github.com/Lunaria/lunaria/compare/main...Kitenite:kitenite/halved-position?expand=1",
 		);
 	});
 });

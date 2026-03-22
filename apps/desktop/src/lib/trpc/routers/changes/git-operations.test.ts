@@ -120,7 +120,7 @@ describe("existing PR push target resolution", () => {
 				remotes: [
 					{
 						name: "origin",
-						fetchUrl: "git@github.com:LunariaAi/superset.git",
+						fetchUrl: "git@github.com:Lunaria/lunaria.git",
 					},
 				],
 				pr: {
@@ -137,7 +137,7 @@ describe("existing PR push target resolution", () => {
 				remotes: [
 					{
 						name: "origin",
-						fetchUrl: "git@github.com:LunariaAi/superset.git",
+						fetchUrl: "git@github.com:Lunaria/lunaria.git",
 					},
 					{
 						name: "kitenite",
@@ -161,7 +161,7 @@ describe("existing PR push target resolution", () => {
 				remotes: [
 					{
 						name: "origin",
-						fetchUrl: "git@github.com:LunariaAi/superset.git",
+						fetchUrl: "git@github.com:Lunaria/lunaria.git",
 					},
 				],
 				pr: {

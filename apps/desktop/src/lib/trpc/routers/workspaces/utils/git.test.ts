@@ -732,7 +732,7 @@ describe("hasUnpushedCommits", () => {
 describe("parsePrUrl", () => {
 	test("parses canonical GitHub PR URL", () => {
 		expect(
-			parsePrUrl("https://github.com/LunariaAi/superset/pull/1781"),
+			parsePrUrl("https://github.com/Lunaria/lunaria/pull/1781"),
 		).toEqual({
 			owner: "LunariaAi",
 			repo: "lunaria",
@@ -741,7 +741,7 @@ describe("parsePrUrl", () => {
 	});
 
 	test("parses GitHub URL without protocol", () => {
-		expect(parsePrUrl("github.com/LunariaAi/superset/pull/1781")).toEqual({
+		expect(parsePrUrl("github.com/Lunaria/lunaria/pull/1781")).toEqual({
 			owner: "LunariaAi",
 			repo: "lunaria",
 			number: 1781,
@@ -750,7 +750,7 @@ describe("parsePrUrl", () => {
 
 	test("returns null for non-PR URLs", () => {
 		expect(
-			parsePrUrl("https://github.com/LunariaAi/superset/issues/1781"),
+			parsePrUrl("https://github.com/Lunaria/lunaria/issues/1781"),
 		).toBe(null);
 	});
 });
