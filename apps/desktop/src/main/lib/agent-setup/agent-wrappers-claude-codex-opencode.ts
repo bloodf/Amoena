@@ -10,9 +10,9 @@ import {
 import { getNotifyScriptPath, NOTIFY_SCRIPT_NAME } from "./notify-hook";
 import { OPENCODE_CONFIG_DIR, OPENCODE_PLUGIN_DIR } from "./paths";
 
-export const OPENCODE_PLUGIN_FILE = "superset-notify.js";
+export const OPENCODE_PLUGIN_FILE = "lunaria-notify.js";
 
-const OPENCODE_PLUGIN_SIGNATURE = "// Superset opencode plugin";
+const OPENCODE_PLUGIN_SIGNATURE = "// Lunaria opencode plugin";
 const OPENCODE_PLUGIN_VERSION = "v8";
 export const OPENCODE_PLUGIN_MARKER = `${OPENCODE_PLUGIN_SIGNATURE} ${OPENCODE_PLUGIN_VERSION}`;
 
@@ -235,7 +235,7 @@ export function getClaudeGlobalSettingsJsonContent(
 }
 
 /**
- * Writes Superset hook definitions directly into ~/.claude/settings.json.
+ * Writes Lunaria hook definitions directly into ~/.claude/settings.json.
  * This ensures hooks work regardless of whether the binary wrapper is in PATH,
  * matching the approach used for Cursor, Gemini, Droid, and Mastra.
  */
@@ -264,19 +264,19 @@ export function getOpenCodePluginContent(notifyPath: string): string {
 }
 
 /**
- * Creates the Claude wrapper that forwards SUPERSET_* env vars into the agent.
+ * Creates the Claude wrapper that forwards LUNARIA_* env vars into the agent.
  */
 export function createClaudeWrapper(): void {
 	// Hooks are now written directly to ~/.claude/settings.json via
 	// createClaudeSettingsJson(), so the wrapper is a plain pass-through.
-	// We still create the wrapper so SUPERSET_* env vars flow through
-	// and the notify script can identify the Superset terminal context.
+	// We still create the wrapper so LUNARIA_* env vars flow through
+	// and the notify script can identify the Lunaria terminal context.
 	const script = buildWrapperScript("claude", `exec "$REAL_BIN" "$@"`);
 	createWrapper("claude", script);
 }
 
 /**
- * Creates the Codex wrapper that injects Superset's notify/session-log logic.
+ * Creates the Codex wrapper that injects Lunaria's notify/session-log logic.
  */
 export function createCodexWrapper(): void {
 	const notifyPath = getNotifyScriptPath();
@@ -339,9 +339,9 @@ export function getCodexGlobalHooksJsonPath(): string {
  * Codex hooks.json uses the same nested structure as Claude/Droid:
  *   { hooks: { EventName: [{ matcher?, hooks: [{ type, command }] }] } }
  *
- * Superset intentionally keeps this native Codex hook registration narrow.
+ * Lunaria intentionally keeps this native Codex hook registration narrow.
  * The primary integration path is still the wrapper + notify/session-log
- * watcher, which works inside Superset-managed terminal sessions and covers
+ * watcher, which works inside Lunaria-managed terminal sessions and covers
  * richer lifecycle events like per-turn Start and PermissionRequest.
  *
  * This hooks.json merge is only a fallback for cases where the wrapper is
@@ -398,12 +398,12 @@ export function getCodexGlobalHooksJsonContent(
 }
 
 /**
- * Writes Superset hook definitions directly into ~/.codex/hooks.json.
+ * Writes Lunaria hook definitions directly into ~/.codex/hooks.json.
  * This provides a fallback notification path that works even when the
  * binary wrapper is not in PATH (e.g. user runs codex from outside
- * a Superset terminal).
+ * a Lunaria terminal).
  *
- * The wrapper remains the primary integration path for Superset-managed
+ * The wrapper remains the primary integration path for Lunaria-managed
  * terminals because it can synthesize richer lifecycle events from Codex's
  * notify callback and session log (task_started, approval_request,
  * exec_command_begin) without mutating project-local CODEX_HOME state.

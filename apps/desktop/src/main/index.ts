@@ -80,7 +80,7 @@ async function processDeepLink(url: string): Promise<void> {
 	}
 
 	// Non-auth deep links: extract path and navigate in renderer
-	// e.g. superset://tasks/my-slug -> /tasks/my-slug
+	// e.g. lunaria://tasks/my-slug -> /tasks/my-slug
 	const path = `/${url.split("://")[1]}`;
 	focusMainWindow();
 

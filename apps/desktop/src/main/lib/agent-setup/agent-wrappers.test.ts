@@ -14,10 +14,10 @@ const TEST_ROOT = path.join(
 	realOs.tmpdir(),
 	`lunaria-agent-wrappers-${process.pid}-${Date.now()}`,
 );
-const TEST_BIN_DIR = path.join(TEST_ROOT, "superset", "bin");
-const TEST_HOOKS_DIR = path.join(TEST_ROOT, "superset", "hooks");
-const TEST_ZSH_DIR = path.join(TEST_ROOT, "superset", "zsh");
-const TEST_BASH_DIR = path.join(TEST_ROOT, "superset", "bash");
+const TEST_BIN_DIR = path.join(TEST_ROOT, "lunaria", "bin");
+const TEST_HOOKS_DIR = path.join(TEST_ROOT, "lunaria", "hooks");
+const TEST_ZSH_DIR = path.join(TEST_ROOT, "lunaria", "zsh");
+const TEST_BASH_DIR = path.join(TEST_ROOT, "lunaria", "bash");
 const TEST_OPENCODE_CONFIG_DIR = path.join(TEST_HOOKS_DIR, "opencode");
 const TEST_OPENCODE_PLUGIN_DIR = path.join(TEST_OPENCODE_CONFIG_DIR, "plugin");
 let mockedHomeDir = path.join(TEST_ROOT, "home");
@@ -83,35 +83,35 @@ describe("reconcileManagedEntries", () => {
 		const result = reconcileManagedEntries({
 			current: [
 				"/usr/local/bin/custom-hook Start",
-				"/tmp/.superset-old/hooks/notify.sh Start",
+				"/tmp/.lunaria-old/hooks/notify.sh Start",
 			],
-			desired: ["/tmp/.superset-new/hooks/notify.sh Start"],
-			isManaged: (entry: string) => entry.includes("/.superset-"),
+			desired: ["/tmp/.lunaria-new/hooks/notify.sh Start"],
+			isManaged: (entry: string) => entry.includes("/.lunaria-"),
 			isEquivalent: (entry: string, desired: string) => entry === desired,
 		});
 
 		expect(result.entries).toEqual([
 			"/usr/local/bin/custom-hook Start",
-			"/tmp/.superset-new/hooks/notify.sh Start",
+			"/tmp/.lunaria-new/hooks/notify.sh Start",
 		]);
 		expect(result.replacedManagedEntries).toEqual([
-			"/tmp/.superset-old/hooks/notify.sh Start",
+			"/tmp/.lunaria-old/hooks/notify.sh Start",
 		]);
 	});
 
 	it("reconciles edited managed entries even when a managed hook already exists", () => {
 		const result = reconcileManagedEntries({
-			current: ["/tmp/.superset-current/hooks/notify.sh Start --debug"],
-			desired: ["/tmp/.superset-current/hooks/notify.sh Start"],
-			isManaged: (entry: string) => entry.includes("/.superset-"),
+			current: ["/tmp/.lunaria-current/hooks/notify.sh Start --debug"],
+			desired: ["/tmp/.lunaria-current/hooks/notify.sh Start"],
+			isManaged: (entry: string) => entry.includes("/.lunaria-"),
 			isEquivalent: (entry: string, desired: string) => entry === desired,
 		});
 
 		expect(result.entries).toEqual([
-			"/tmp/.superset-current/hooks/notify.sh Start",
+			"/tmp/.lunaria-current/hooks/notify.sh Start",
 		]);
 		expect(result.replacedManagedEntries).toEqual([
-			"/tmp/.superset-current/hooks/notify.sh Start --debug",
+			"/tmp/.lunaria-current/hooks/notify.sh Start --debug",
 		]);
 	});
 });
@@ -231,10 +231,10 @@ describe("agent-wrappers copilot", () => {
 		expect(wrapper).toContain('exec "$REAL_BIN" "$@"');
 	});
 
-	it("replaces stale Cursor hook commands from old superset paths", () => {
+	it("replaces stale Cursor hook commands from old lunaria paths", () => {
 		const cursorHooksPath = path.join(mockedHomeDir, ".cursor", "hooks.json");
-		const staleHookPath = "/tmp/.superset-old/hooks/cursor-hook.sh";
-		const currentHookPath = "/tmp/.superset-new/hooks/cursor-hook.sh";
+		const staleHookPath = "/tmp/.lunaria-old/hooks/cursor-hook.sh";
+		const currentHookPath = "/tmp/.lunaria-new/hooks/cursor-hook.sh";
 
 		mkdirSync(path.dirname(cursorHooksPath), { recursive: true });
 		writeFileSync(
@@ -282,14 +282,14 @@ describe("agent-wrappers copilot", () => {
 		expect(JSON.parse(content2)).toEqual(JSON.parse(content));
 	});
 
-	it("replaces stale Gemini hook commands from old superset paths", () => {
+	it("replaces stale Gemini hook commands from old lunaria paths", () => {
 		const geminiSettingsPath = path.join(
 			mockedHomeDir,
 			".gemini",
 			"settings.json",
 		);
-		const staleHookPath = "/tmp/.superset-old/hooks/gemini-hook.sh";
-		const currentHookPath = "/tmp/.superset-new/hooks/gemini-hook.sh";
+		const staleHookPath = "/tmp/.lunaria-old/hooks/gemini-hook.sh";
+		const currentHookPath = "/tmp/.lunaria-new/hooks/gemini-hook.sh";
 
 		mkdirSync(path.dirname(geminiSettingsPath), { recursive: true });
 		writeFileSync(
@@ -389,14 +389,14 @@ describe("agent-wrappers copilot", () => {
 		expect(JSON.parse(content2)).toEqual(JSON.parse(content));
 	});
 
-	it("replaces stale Mastra hook commands from old superset paths", () => {
+	it("replaces stale Mastra hook commands from old lunaria paths", () => {
 		const mastraHooksPath = path.join(
 			mockedHomeDir,
 			".mastracode",
 			"hooks.json",
 		);
-		const staleHookPath = "/tmp/.superset-old/hooks/notify.sh";
-		const currentHookPath = "/tmp/.superset-new/hooks/notify.sh";
+		const staleHookPath = "/tmp/.lunaria-old/hooks/notify.sh";
+		const currentHookPath = "/tmp/.lunaria-new/hooks/notify.sh";
 
 		mkdirSync(path.dirname(mastraHooksPath), { recursive: true });
 		writeFileSync(
@@ -450,14 +450,14 @@ describe("agent-wrappers copilot", () => {
 		expect(JSON.parse(content2)).toEqual(JSON.parse(content));
 	});
 
-	it("replaces stale Droid hook commands from old superset paths", () => {
+	it("replaces stale Droid hook commands from old lunaria paths", () => {
 		const droidSettingsPath = path.join(
 			mockedHomeDir,
 			".factory",
 			"settings.json",
 		);
-		const staleHookPath = "/tmp/.superset-old/hooks/notify.sh";
-		const currentHookPath = "/tmp/.superset-new/hooks/notify.sh";
+		const staleHookPath = "/tmp/.lunaria-old/hooks/notify.sh";
+		const currentHookPath = "/tmp/.lunaria-new/hooks/notify.sh";
 
 		mkdirSync(path.dirname(droidSettingsPath), { recursive: true });
 		writeFileSync(
@@ -564,7 +564,7 @@ describe("agent-wrappers copilot", () => {
 		writeFileSync(droidSettingsPath, invalidJson);
 
 		expect(
-			getDroidSettingsJsonContent("/tmp/.superset-new/hooks/notify.sh"),
+			getDroidSettingsJsonContent("/tmp/.lunaria-new/hooks/notify.sh"),
 		).toBeNull();
 
 		createDroidSettingsJson();
@@ -583,7 +583,7 @@ describe("agent-wrappers copilot", () => {
 		writeFileSync(droidSettingsPath, JSON.stringify("not-an-object"));
 
 		expect(
-			getDroidSettingsJsonContent("/tmp/.superset-new/hooks/notify.sh"),
+			getDroidSettingsJsonContent("/tmp/.lunaria-new/hooks/notify.sh"),
 		).toBeNull();
 	});
 });
@@ -696,14 +696,14 @@ describe("agent-wrappers claude settings.json", () => {
 		).toBe(true);
 	});
 
-	it("replaces stale Claude hook commands from old superset paths", () => {
+	it("replaces stale Claude hook commands from old lunaria paths", () => {
 		const claudeSettingsPath = path.join(
 			mockedHomeDir,
 			".claude",
 			"settings.json",
 		);
-		const staleHookPath = "/tmp/.superset-old/hooks/notify.sh";
-		const currentHookPath = "/tmp/.superset-new/hooks/notify.sh";
+		const staleHookPath = "/tmp/.lunaria-old/hooks/notify.sh";
+		const currentHookPath = "/tmp/.lunaria-new/hooks/notify.sh";
 
 		mkdirSync(path.dirname(claudeSettingsPath), { recursive: true });
 		writeFileSync(
@@ -939,10 +939,10 @@ describe("agent-wrappers codex hooks.json", () => {
 		expect(parsed.hooks.UserPromptSubmit).toBeUndefined();
 	});
 
-	it("replaces stale Codex hook commands from old superset paths", () => {
+	it("replaces stale Codex hook commands from old lunaria paths", () => {
 		const codexHooksPath = path.join(mockedHomeDir, ".codex", "hooks.json");
-		const staleHookPath = "/tmp/.superset-old/hooks/notify.sh";
-		const currentHookPath = "/tmp/.superset-new/hooks/notify.sh";
+		const staleHookPath = "/tmp/.lunaria-old/hooks/notify.sh";
+		const currentHookPath = "/tmp/.lunaria-new/hooks/notify.sh";
 
 		mkdirSync(path.dirname(codexHooksPath), { recursive: true });
 		writeFileSync(

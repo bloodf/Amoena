@@ -12,7 +12,7 @@ import { join } from "node:path";
 import { PROJECTS_DIR_NAME, LUNARIA_DIR_NAME } from "shared/constants";
 
 const TEST_DIR = join(tmpdir(), `lunaria-test-teardown-${process.pid}`);
-const TEST_SUPERSET_HOME = join(TEST_DIR, "lunaria-home");
+const TEST_LUNARIA_HOME = join(TEST_DIR, "lunaria-home");
 const MAIN_REPO = join(TEST_DIR, "main-repo");
 const WORKTREE = join(TEST_DIR, "worktree");
 const PROJECT_ID = "test-teardown-project";
@@ -31,7 +31,7 @@ const { runTeardown } = await import("./teardown");
 
 describe("runTeardown", () => {
 	beforeEach(() => {
-		process.env.LUNARIA_HOME_DIR = TEST_SUPERSET_HOME;
+		process.env.LUNARIA_HOME_DIR = TEST_LUNARIA_HOME;
 		// Create test directories
 		mkdirSync(join(MAIN_REPO, ".lunaria"), { recursive: true });
 		mkdirSync(WORKTREE, { recursive: true });
@@ -279,7 +279,7 @@ describe("runTeardown", () => {
 		const markerFile = join(WORKTREE, "managed-wrapper-used.txt");
 		const shellHome = join(TEST_DIR, "shell-home");
 		const systemBinDir = join(TEST_DIR, "system-bin");
-		const wrapperBinDir = join(TEST_SUPERSET_HOME, "bin");
+		const wrapperBinDir = join(TEST_LUNARIA_HOME, "bin");
 
 		mkdirSync(shellHome, { recursive: true });
 		mkdirSync(systemBinDir, { recursive: true });

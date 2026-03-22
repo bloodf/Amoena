@@ -1,7 +1,7 @@
 import type { Theme } from "../types";
 
 /**
- * Light theme - based on the original Superset light mode colors
+ * Light theme - based on the original Lunaria light mode colors
  */
 export const lightTheme: Theme = {
 	id: "light",

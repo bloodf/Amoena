@@ -11,7 +11,7 @@ import {
 import type { LocalSetupConfig, SetupConfig } from "shared/types";
 
 /**
- * Worktrees don't include gitignored files, so copy .superset from main repo
+ * Worktrees don't include gitignored files, so copy .lunaria from main repo
  * if it's missing — ensures setup scripts like "./.lunaria/setup.sh" work.
  */
 export function copyLunariaConfigToWorktree(
@@ -168,7 +168,7 @@ export function mergeConfigs(
  * configs do not mask newly added project-level commands like `run`.
  *
  * After resolving the base config, a local overlay is applied if
- * `.superset/config.local.json` exists in the workspace (worktree or main repo).
+ * `.lunaria/config.local.json` exists in the workspace (worktree or main repo).
  * The local config can prepend (before), append (after), or override each key.
  */
 export function loadSetupConfig({

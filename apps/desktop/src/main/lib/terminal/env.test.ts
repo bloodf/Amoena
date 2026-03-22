@@ -289,13 +289,13 @@ describe("env", () => {
 
 			it("should include shell wrapper control vars", () => {
 				const env = {
-					ZDOTDIR: "/Users/test/.superset-dev/zsh",
-					BASH_ENV: "/Users/test/.superset-dev/bash/rcfile",
+					ZDOTDIR: "/Users/test/.lunaria-dev/zsh",
+					BASH_ENV: "/Users/test/.lunaria-dev/bash/rcfile",
 					PATH: "/usr/bin",
 				};
 				const result = buildSafeEnv(env);
-				expect(result.ZDOTDIR).toBe("/Users/test/.superset-dev/zsh");
-				expect(result.BASH_ENV).toBe("/Users/test/.superset-dev/bash/rcfile");
+				expect(result.ZDOTDIR).toBe("/Users/test/.lunaria-dev/zsh");
+				expect(result.BASH_ENV).toBe("/Users/test/.lunaria-dev/bash/rcfile");
 			});
 
 			it("should include proxy vars (both cases)", () => {
@@ -464,8 +464,8 @@ describe("env", () => {
 			});
 		});
 
-		describe("includes SUPERSET_* prefix vars", () => {
-			it("should include SUPERSET_* vars (our metadata)", () => {
+		describe("includes LUNARIA_* prefix vars", () => {
+			it("should include LUNARIA_* vars (our metadata)", () => {
 				const env = {
 					LUNARIA_PANE_ID: "pane-1",
 					LUNARIA_TAB_ID: "tab-1",
@@ -536,14 +536,14 @@ describe("env", () => {
 				expect(result.PATHEXT).toBe(".COM;.EXE;.BAT;.CMD");
 			});
 
-			it("should include Superset_* prefix vars case-insensitively on Windows", () => {
+			it("should include Lunaria_* prefix vars case-insensitively on Windows", () => {
 				const env = {
-					Superset_Pane_Id: "pane-1",
+					Lunaria_Pane_Id: "pane-1",
 					LUNARIA_TAB_ID: "tab-1",
 					PATH: "/usr/bin",
 				};
 				const result = buildSafeEnv(env, { platform: "win32" });
-				expect(result.Superset_Pane_Id).toBe("pane-1");
+				expect(result.Lunaria_Pane_Id).toBe("pane-1");
 				expect(result.LUNARIA_TAB_ID).toBe("tab-1");
 			});
 
@@ -658,9 +658,9 @@ describe("env", () => {
 		});
 
 		describe("terminal metadata", () => {
-			it("should set TERM_PROGRAM to Superset", () => {
+			it("should set TERM_PROGRAM to Lunaria", () => {
 				const result = buildTerminalEnv(baseParams);
-				expect(result.TERM_PROGRAM).toBe("Superset");
+				expect(result.TERM_PROGRAM).toBe("Lunaria");
 			});
 
 			it("should set COLORTERM to truecolor", () => {
@@ -668,7 +668,7 @@ describe("env", () => {
 				expect(result.COLORTERM).toBe("truecolor");
 			});
 
-			it("should set Superset-specific env vars", () => {
+			it("should set Lunaria-specific env vars", () => {
 				const result = buildTerminalEnv(baseParams);
 
 				expect(result.LUNARIA_PANE_ID).toBe("pane-1");
@@ -715,16 +715,16 @@ describe("env", () => {
 			});
 		});
 
-		it("should include SUPERSET_ENV for dev/prod separation", () => {
+		it("should include LUNARIA_ENV for dev/prod separation", () => {
 			const result = buildTerminalEnv(baseParams);
-			expect(result.SUPERSET_ENV).toBeDefined();
-			expect(["development", "production"]).toContain(result.SUPERSET_ENV);
+			expect(result.LUNARIA_ENV).toBeDefined();
+			expect(["development", "production"]).toContain(result.LUNARIA_ENV);
 		});
 
-		it("should include SUPERSET_HOOK_VERSION for protocol versioning", () => {
+		it("should include LUNARIA_HOOK_VERSION for protocol versioning", () => {
 			const result = buildTerminalEnv(baseParams);
-			expect(result.SUPERSET_HOOK_VERSION).toBeDefined();
-			expect(result.SUPERSET_HOOK_VERSION).toBe("2");
+			expect(result.LUNARIA_HOOK_VERSION).toBeDefined();
+			expect(result.LUNARIA_HOOK_VERSION).toBe("2");
 		});
 
 		describe("SSL_CERT_FILE fallback on macOS", () => {

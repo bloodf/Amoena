@@ -15,7 +15,7 @@ import { CUSTOM_RINGTONE_ID } from "shared/ringtones";
 import {
 	LUNARIA_HOME_DIR,
 	LUNARIA_HOME_DIR_MODE,
-	SUPERSET_SENSITIVE_FILE_MODE,
+	LUNARIA_SENSITIVE_FILE_MODE,
 } from "./app-environment";
 
 const RINGTONES_ASSETS_DIR = join(LUNARIA_HOME_DIR, "assets", "ringtones");
@@ -127,7 +127,7 @@ function writeCustomRingtoneMetadata(name: string): void {
 	);
 
 	try {
-		chmodSync(CUSTOM_RINGTONE_METADATA_PATH, SUPERSET_SENSITIVE_FILE_MODE);
+		chmodSync(CUSTOM_RINGTONE_METADATA_PATH, LUNARIA_SENSITIVE_FILE_MODE);
 	} catch {
 		// Best effort only.
 	}
@@ -205,7 +205,7 @@ export async function importCustomRingtoneFromPath(
 	// Re-importing the same file path should not delete the active ringtone.
 	if (areSamePath(sourcePath, destinationPath) && existsSync(destinationPath)) {
 		try {
-			chmodSync(destinationPath, SUPERSET_SENSITIVE_FILE_MODE);
+			chmodSync(destinationPath, LUNARIA_SENSITIVE_FILE_MODE);
 		} catch {
 			// Best effort only.
 		}
@@ -240,7 +240,7 @@ export async function importCustomRingtoneFromPath(
 	}
 
 	try {
-		chmodSync(destinationPath, SUPERSET_SENSITIVE_FILE_MODE);
+		chmodSync(destinationPath, LUNARIA_SENSITIVE_FILE_MODE);
 	} catch {
 		// Best effort only.
 	}

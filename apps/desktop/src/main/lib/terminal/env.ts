@@ -348,7 +348,7 @@ const ALLOWED_ENV_VARS = new Set([
  * These are checked after exact matches fail.
  */
 const ALLOWED_PREFIXES = [
-	"SUPERSET_", // Our own metadata vars
+	"LUNARIA_", // Our own metadata vars
 	"LC_", // Locale settings
 ];
 
@@ -378,7 +378,7 @@ function hasAllowedPrefix(key: string, isWindows: boolean): boolean {
 
 /**
  * Build a safe environment by only including allowlisted variables.
- * This prevents Superset app secrets and build-time config from leaking to terminals.
+ * This prevents Lunaria app secrets and build-time config from leaking to terminals.
  *
  * Threat model: Prevent app secrets (DATABASE_URL, API keys from .env) from leaking.
  * User shell config vars (proxy, tool paths) are intentionally allowed so terminals
@@ -464,7 +464,7 @@ export function buildTerminalEnv(params: {
 	const terminalEnv: Record<string, string> = {
 		...baseEnv,
 		...shellEnv,
-		TERM_PROGRAM: "Superset",
+		TERM_PROGRAM: "Lunaria",
 		TERM_PROGRAM_VERSION: process.env.npm_package_version || "1.0.0",
 		COLORTERM: "truecolor",
 		COLORFGBG: colorFgBg,
@@ -477,9 +477,9 @@ export function buildTerminalEnv(params: {
 		LUNARIA_ROOT_PATH: rootPath || "",
 		LUNARIA_PORT: String(env.DESKTOP_NOTIFICATIONS_PORT),
 		// Environment identifier for dev/prod separation
-		SUPERSET_ENV: env.NODE_ENV === "development" ? "development" : "production",
+		LUNARIA_ENV: env.NODE_ENV === "development" ? "development" : "production",
 		// Hook protocol version for forward compatibility
-		SUPERSET_HOOK_VERSION: HOOK_PROTOCOL_VERSION,
+		LUNARIA_HOOK_VERSION: HOOK_PROTOCOL_VERSION,
 	};
 
 	delete terminalEnv.GOOGLE_API_KEY;

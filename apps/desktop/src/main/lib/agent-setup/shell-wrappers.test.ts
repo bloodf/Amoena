@@ -152,7 +152,7 @@ describe("shell-wrappers", () => {
 		if (!isZshAvailable()) return;
 
 		const integrationRoot = path.join(TEST_ROOT, "zlogin-node-repro");
-		const integrationBinDir = path.join(integrationRoot, "superset-bin");
+		const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
 		const integrationZshDir = path.join(integrationRoot, "zsh");
 		const integrationBashDir = path.join(integrationRoot, "bash");
 		const homeDir = path.join(integrationRoot, "home");
@@ -417,7 +417,7 @@ echo wrapper
 		if (!isZshAvailable()) return;
 
 		const integrationRoot = path.join(TEST_ROOT, "mise-precmd-repro");
-		const integrationBinDir = path.join(integrationRoot, "superset-bin");
+		const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
 		const integrationZshDir = path.join(integrationRoot, "zsh");
 		const integrationBashDir = path.join(integrationRoot, "bash");
 		const homeDir = path.join(integrationRoot, "home");
@@ -489,7 +489,7 @@ precmd_functions+=(_mise_hook_precmd)
 		if (!isZshAvailable()) return;
 
 		const integrationRoot = path.join(TEST_ROOT, SPECIAL_SHELL_PATH_SEGMENT);
-		const integrationBinDir = path.join(integrationRoot, "superset-bin");
+		const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
 		const integrationZshDir = path.join(integrationRoot, "zsh");
 		const integrationBashDir = path.join(integrationRoot, "bash");
 		const homeDir = path.join(integrationRoot, "home");
@@ -530,7 +530,7 @@ precmd_functions+=(_mise_hook_precmd)
 		if (!isZshAvailable()) return;
 
 		const integrationRoot = path.join(TEST_ROOT, "readonly-precmd-functions");
-		const integrationBinDir = path.join(integrationRoot, "superset-bin");
+		const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
 		const integrationZshDir = path.join(integrationRoot, "zsh");
 		const integrationBashDir = path.join(integrationRoot, "bash");
 		const homeDir = path.join(integrationRoot, "home");
@@ -614,7 +614,7 @@ echo wrapper
 		expect(output).toBe("wrapper");
 	});
 
-	describe("SUPERSET_* env var protection from user RC overrides", () => {
+	describe("LUNARIA_* env var protection from user RC overrides", () => {
 		it("bash wrapper restores LUNARIA_WORKSPACE_NAME after user .bashrc overrides it", () => {
 			const integrationRoot = path.join(TEST_ROOT, "bash-env-protect");
 			const homeDir = path.join(integrationRoot, "home");
@@ -685,7 +685,7 @@ echo wrapper
 			expect(lines[lines.length - 1]).toBe("correct-name");
 		});
 
-		it("bash wrapper restores multiple SUPERSET_* vars after user RC overrides them", () => {
+		it("bash wrapper restores multiple LUNARIA_* vars after user RC overrides them", () => {
 			const integrationRoot = path.join(TEST_ROOT, "bash-multi-env-protect");
 			const homeDir = path.join(integrationRoot, "home");
 			mkdirSync(homeDir, { recursive: true });
@@ -726,7 +726,7 @@ export LUNARIA_WORKSPACE_PATH="/wrong/path"
 			if (!isZshAvailable()) return;
 
 			const integrationRoot = path.join(TEST_ROOT, "zsh-env-protect");
-			const integrationBinDir = path.join(integrationRoot, "superset-bin");
+			const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
 			const integrationZshDir = path.join(integrationRoot, "zsh");
 			const integrationBashDir = path.join(integrationRoot, "bash");
 			const homeDir = path.join(integrationRoot, "home");
@@ -774,7 +774,7 @@ export LUNARIA_WORKSPACE_PATH="/wrong/path"
 			if (!isZshAvailable()) return;
 
 			const integrationRoot = path.join(TEST_ROOT, "zsh-zlogin-env-protect");
-			const integrationBinDir = path.join(integrationRoot, "superset-bin");
+			const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
 			const integrationZshDir = path.join(integrationRoot, "zsh");
 			const integrationBashDir = path.join(integrationRoot, "bash");
 			const homeDir = path.join(integrationRoot, "home");

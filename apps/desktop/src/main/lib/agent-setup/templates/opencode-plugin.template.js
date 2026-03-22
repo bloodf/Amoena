@@ -1,6 +1,6 @@
 {{MARKER}}
 /**
- * Superset Notification Plugin for OpenCode
+ * Lunaria Notification Plugin for OpenCode
  *
  * This plugin sends desktop notifications when OpenCode sessions need attention.
  * It hooks into session.status (busy/idle), session.idle, session.error, and permission.ask events.
@@ -22,11 +22,11 @@
  *
  * @see https://github.com/sst/opencode/blob/dev/packages/app/src/context/notification.tsx
  */
-export const SupersetNotifyPlugin = async ({ $, client }) => {
-  if (globalThis.__supersetOpencodeNotifyPluginV8) return {};
-  globalThis.__supersetOpencodeNotifyPluginV8 = true;
+export const LunariaNotifyPlugin = async ({ $, client }) => {
+  if (globalThis.__lunariaOpencodeNotifyPluginV8) return {};
+  globalThis.__lunariaOpencodeNotifyPluginV8 = true;
 
-  // Only run inside a Superset terminal session
+  // Only run inside a Lunaria terminal session
   if (!process?.env?.LUNARIA_TAB_ID) return {};
 
   const notifyPath = "{{NOTIFY_PATH}}";
@@ -38,11 +38,11 @@ export const SupersetNotifyPlugin = async ({ $, client }) => {
   let stopSent = false;      // Prevent duplicate Stop notifications
 
   const log = (...args) => {
-    if (debug) console.log('[superset-plugin]', ...args);
+    if (debug) console.log('[lunaria-plugin]', ...args);
   };
 
   /**
-   * Sends a notification to Superset's notification server.
+   * Sends a notification to Lunaria's notification server.
    * Best-effort only - failures are silently ignored to avoid breaking the agent.
    */
   const notify = async (hookEventName) => {

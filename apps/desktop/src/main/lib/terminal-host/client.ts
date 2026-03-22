@@ -67,7 +67,7 @@ enum ConnectionState {
 // Configuration
 // =============================================================================
 
-const DEBUG_CLIENT = process.env.SUPERSET_TERMINAL_DEBUG === "1";
+const DEBUG_CLIENT = process.env.LUNARIA_TERMINAL_DEBUG === "1";
 
 // Get from shared constants for multi-worktree support (imported at top of file)
 const LUNARIA_HOME_DIR = join(homedir(), LUNARIA_DIR_NAME);
@@ -1040,7 +1040,7 @@ export class TerminalHostClient extends EventEmitter {
 	 */
 	private acquireSpawnLock(): boolean {
 		try {
-			// Ensure superset home directory exists before any file operations
+			// Ensure lunaria home directory exists before any file operations
 			if (!existsSync(LUNARIA_HOME_DIR)) {
 				mkdirSync(LUNARIA_HOME_DIR, { recursive: true, mode: 0o700 });
 			}

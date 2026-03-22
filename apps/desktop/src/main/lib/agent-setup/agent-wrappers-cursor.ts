@@ -13,7 +13,7 @@ import { HOOKS_DIR } from "./paths";
 
 export const CURSOR_HOOK_SCRIPT_NAME = "cursor-hook.sh";
 
-const CURSOR_HOOK_SIGNATURE = "# Superset cursor hook";
+const CURSOR_HOOK_SIGNATURE = "# Lunaria cursor hook";
 const CURSOR_HOOK_VERSION = "v1";
 export const CURSOR_HOOK_MARKER = `${CURSOR_HOOK_SIGNATURE} ${CURSOR_HOOK_VERSION}`;
 

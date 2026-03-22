@@ -1,0 +1,13 @@
+{
+  "name": "@lunaria/lunaria-service",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "zod": "^4.3.6",
+    "express": "^5.1.0"
+  }
+}

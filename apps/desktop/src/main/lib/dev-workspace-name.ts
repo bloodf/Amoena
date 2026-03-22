@@ -9,7 +9,7 @@ import { deriveWorkspaceNameFromWorktreeSegments } from "shared/worktree-id";
 import { localDb } from "./local-db";
 
 const IS_DEV = process.env.NODE_ENV === "development";
-const WORKTREE_BASE = path.resolve(homedir(), ".superset/worktrees");
+const WORKTREE_BASE = path.resolve(homedir(), ".lunaria/worktrees");
 const PROD_LOCAL_DB_PATH = path.join(homedir(), ".lunaria", "local.db");
 
 function getWorktreeSegmentsFromCwd(cwd: string): string[] | undefined {

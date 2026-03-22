@@ -73,7 +73,7 @@ export function setupAgentHooks(): void {
 	console.log("[agent-setup] Agent hooks initialized");
 }
 
-export function getSupersetBinDir(): string {
+export function getLunariaBinDir(): string {
 	return BIN_DIR;
 }
 

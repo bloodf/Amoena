@@ -88,7 +88,7 @@ describe("getDefaultBranch", () => {
 	} {
 		const testDir = join(
 			realpathSync(tmpdir()),
-			`superset-test-${testName}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+			`lunaria-test-${testName}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
 		);
 		mkdirSync(testDir, { recursive: true });
 		execSync("git init", { cwd: testDir, stdio: "ignore" });

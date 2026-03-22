@@ -12,7 +12,7 @@ import { env } from "../../env.main";
 import {
 	ensureLunariaHomeDirExists,
 	LUNARIA_HOME_DIR,
-	SUPERSET_SENSITIVE_FILE_MODE,
+	LUNARIA_SENSITIVE_FILE_MODE,
 } from "../app-environment";
 
 const DB_PATH = join(LUNARIA_HOME_DIR, "local.db");
@@ -77,7 +77,7 @@ const migrationsFolder = getMigrationsDirectory();
 
 const sqlite = new Database(DB_PATH);
 try {
-	chmodSync(DB_PATH, SUPERSET_SENSITIVE_FILE_MODE);
+	chmodSync(DB_PATH, LUNARIA_SENSITIVE_FILE_MODE);
 } catch {
 	// Best-effort; directory permissions should still protect the DB.
 }

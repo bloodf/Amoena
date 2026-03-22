@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { SUPERSET_MANAGED_BINARIES } from "./agent-wrappers-common";
+import { LUNARIA_MANAGED_BINARIES } from "./agent-wrappers-common";
 import { BASH_DIR, BIN_DIR, ZSH_DIR } from "./paths";
 
 export interface ShellWrapperPaths {
@@ -23,20 +23,20 @@ function getShellName(shell: string): string {
 }
 
 /**
- * Shell snippet to save all SUPERSET_* env vars before sourcing user RC files.
- * Used in tandem with {@link SUPERSET_ENV_RESTORE} to prevent user shell
- * configs from overriding Superset-managed environment variables (e.g.
+ * Shell snippet to save all LUNARIA_* env vars before sourcing user RC files.
+ * Used in tandem with {@link LUNARIA_ENV_RESTORE} to prevent user shell
+ * configs from overriding Lunaria-managed environment variables (e.g.
  * LUNARIA_WORKSPACE_NAME).
  *
- * @see https://github.com/AidenIO/superset/issues/2386
+ * @see https://github.com/Lunaria/lunaria/issues/2386
  */
-const SUPERSET_ENV_SAVE = `_lunaria_saved_env="$(export -p 2>/dev/null | grep ' SUPERSET_')"`;
+const LUNARIA_ENV_SAVE = `_lunaria_saved_env="$(export -p 2>/dev/null | grep ' LUNARIA_')"`;
 
 /**
- * Shell snippet to restore previously saved SUPERSET_* env vars after
+ * Shell snippet to restore previously saved LUNARIA_* env vars after
  * sourcing user RC files.
  */
-const SUPERSET_ENV_RESTORE = `eval "$_lunaria_saved_env" 2>/dev/null || true`;
+const LUNARIA_ENV_RESTORE = `eval "$_lunaria_saved_env" 2>/dev/null || true`;
 
 function quoteShellLiteral(value: string): string {
 	return `'${value.replaceAll("'", `'"'"'`)}'`;
@@ -84,7 +84,7 @@ function writeFileIfChanged(
 function buildManagedCommandPrelude(shellName: string, binDir: string): string {
 	if (shellName === "fish") {
 		const escapedBinDir = escapeFishDoubleQuoted(binDir);
-		return SUPERSET_MANAGED_BINARIES.map(
+		return LUNARIA_MANAGED_BINARIES.map(
 			(name) =>
 				`functions -q ${name}; and functions -e ${name}
 function ${name}
@@ -98,7 +98,7 @@ end`,
 		).join("\n");
 	}
 
-	return SUPERSET_MANAGED_BINARIES.map(
+	return LUNARIA_MANAGED_BINARIES.map(
 		(name) =>
 			`unalias ${name} 2>/dev/null || true
 ${name}() {
@@ -160,12 +160,12 @@ export function createZshWrapper(
 	// Temporarily restore the user's ZDOTDIR while sourcing user config, then
 	// switch back so zsh continues through our wrapper chain.
 	const zshenvPath = path.join(paths.ZSH_DIR, ".zshenv");
-	const zshenvScript = `# Superset zsh env wrapper
-${SUPERSET_ENV_SAVE}
+	const zshenvScript = `# Lunaria zsh env wrapper
+${LUNARIA_ENV_SAVE}
 _lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
 export ZDOTDIR="$_lunaria_home"
 [[ -f "$_lunaria_home/.zshenv" ]] && source "$_lunaria_home/.zshenv"
-${SUPERSET_ENV_RESTORE}
+${LUNARIA_ENV_RESTORE}
 export ZDOTDIR=${quotedZshDir}
 `;
 	const wroteZshenv = writeFileIfChanged(zshenvPath, zshenvScript, 0o644);
@@ -173,24 +173,24 @@ export ZDOTDIR=${quotedZshDir}
 	// Source user .zprofile with their ZDOTDIR, then restore wrapper ZDOTDIR
 	// so startup continues into our .zshrc wrapper.
 	const zprofilePath = path.join(paths.ZSH_DIR, ".zprofile");
-	const zprofileScript = `# Superset zsh profile wrapper
-${SUPERSET_ENV_SAVE}
+	const zprofileScript = `# Lunaria zsh profile wrapper
+${LUNARIA_ENV_SAVE}
 _lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
 export ZDOTDIR="$_lunaria_home"
 [[ -f "$_lunaria_home/.zprofile" ]] && source "$_lunaria_home/.zprofile"
-${SUPERSET_ENV_RESTORE}
+${LUNARIA_ENV_RESTORE}
 export ZDOTDIR=${quotedZshDir}
 `;
 	const wroteZprofile = writeFileIfChanged(zprofilePath, zprofileScript, 0o644);
 
 	// Reset ZDOTDIR before sourcing so Oh My Zsh works correctly
 	const zshrcPath = path.join(paths.ZSH_DIR, ".zshrc");
-	const zshrcScript = `# Superset zsh rc wrapper
-${SUPERSET_ENV_SAVE}
+	const zshrcScript = `# Lunaria zsh rc wrapper
+${LUNARIA_ENV_SAVE}
 _lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
 export ZDOTDIR="$_lunaria_home"
 [[ -f "$_lunaria_home/.zshrc" ]] && source "$_lunaria_home/.zshrc"
-${SUPERSET_ENV_RESTORE}
+${LUNARIA_ENV_RESTORE}
 ${buildPathPrependFunction(paths.BIN_DIR)}
 ${buildZshPrecmdHook(paths.BIN_DIR)}
 rehash 2>/dev/null || true
@@ -201,17 +201,17 @@ export ZDOTDIR=${quotedZshDir}
 
 	// .zlogin runs AFTER .zshrc in login shells. By restoring ZDOTDIR above,
 	// zsh sources our .zlogin instead of the user's directly. We source the
-	// user's .zlogin only for interactive shells, then re-assert Superset's
+	// user's .zlogin only for interactive shells, then re-assert Lunaria's
 	// PATH prepend after user startup hooks run.
 	const zloginPath = path.join(paths.ZSH_DIR, ".zlogin");
-	const zloginScript = `# Superset zsh login wrapper
-${SUPERSET_ENV_SAVE}
+	const zloginScript = `# Lunaria zsh login wrapper
+${LUNARIA_ENV_SAVE}
 _lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
 export ZDOTDIR="$_lunaria_home"
 if [[ -o interactive ]]; then
   [[ -f "$_lunaria_home/.zlogin" ]] && source "$_lunaria_home/.zlogin"
 fi
-${SUPERSET_ENV_RESTORE}
+${LUNARIA_ENV_RESTORE}
 ${buildZshPrecmdHook(paths.BIN_DIR)}
 ${buildPathPrependFunction(paths.BIN_DIR)}
 rehash 2>/dev/null || true
@@ -239,10 +239,10 @@ export function createBashWrapper(
 	logModeDiagnostics("bash");
 
 	const rcfilePath = path.join(paths.BASH_DIR, "rcfile");
-	const script = `# Superset bash rcfile wrapper
+	const script = `# Lunaria bash rcfile wrapper
 
-# Save Superset env vars before sourcing user config
-${SUPERSET_ENV_SAVE}
+# Save Lunaria env vars before sourcing user config
+${LUNARIA_ENV_SAVE}
 
 # Source system profile
 [[ -f /etc/profile ]] && source /etc/profile
@@ -259,10 +259,10 @@ fi
 # Source bashrc if separate
 [[ -f "$HOME/.bashrc" ]] && source "$HOME/.bashrc"
 
-# Restore Superset env vars that user config may have overridden
-${SUPERSET_ENV_RESTORE}
+# Restore Lunaria env vars that user config may have overridden
+${LUNARIA_ENV_RESTORE}
 
-# Keep superset bin first without duplicating entries
+# Keep lunaria bin first without duplicating entries
 ${buildPathPrependFunction(paths.BIN_DIR)}
 hash -r 2>/dev/null || true
 # Minimal prompt (path/env shown in toolbar) - emerald to match app theme
