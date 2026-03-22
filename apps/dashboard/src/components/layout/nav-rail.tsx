@@ -64,6 +64,16 @@ const navGroups: NavGroup[] = [
 			},
 			{ id: "skills", label: "Skills", icon: <SkillsIcon />, priority: false },
 			{ id: "memory", label: "Memory", icon: <MemoryIcon />, priority: false },
+			{ id: "terminal", label: "Terminal", icon: <TerminalIcon />, priority: true, essential: true },
+		],
+	},
+	{
+		id: "orchestrate",
+		label: "ORCHESTRATE",
+		items: [
+			{ id: "autopilot", label: "Autopilot", icon: <AutopilotIcon />, priority: false },
+			{ id: "recipes", label: "Recipes", icon: <RecipesIcon />, priority: false },
+			{ id: "cost-advisor", label: "Cost Advisor", icon: <CostAdvisorIcon />, priority: false },
 		],
 	},
 	{
@@ -199,6 +209,10 @@ const navItemTranslationKeys: Record<string, string> = {
 	integrations: "integrations",
 	debug: "debug",
 	settings: "settings",
+	terminal: "terminal",
+	autopilot: "autopilot",
+	recipes: "recipes",
+	"cost-advisor": "costAdvisor",
 };
 
 // Map group IDs to translation keys in the 'nav.group' namespace
@@ -2291,6 +2305,48 @@ function MonitorIcon() {
 			<rect x="1" y="2" width="14" height="10" rx="1.5" />
 			<polyline points="4,9 6,6 8,8 12,4" />
 			<path d="M5 14h6" />
+		</svg>
+	);
+}
+
+function TerminalIcon() {
+	return (
+		<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+			<rect x="1" y="2" width="14" height="12" rx="1.5" />
+			<polyline points="4,6 7,8 4,10" />
+			<path d="M9 10h3" />
+		</svg>
+	);
+}
+
+function AutopilotIcon() {
+	return (
+		<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+			<circle cx="8" cy="8" r="6" />
+			<path d="M8 4v4l3 2" />
+			<path d="M12 2l2 2" />
+		</svg>
+	);
+}
+
+function RecipesIcon() {
+	return (
+		<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+			<rect x="2" y="1" width="12" height="14" rx="1.5" />
+			<path d="M5 5h6" />
+			<path d="M5 8h6" />
+			<path d="M5 11h3" />
+		</svg>
+	);
+}
+
+function CostAdvisorIcon() {
+	return (
+		<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+			<circle cx="8" cy="8" r="6" />
+			<path d="M8 5v6" />
+			<path d="M6 7h4" />
+			<path d="M6 9h4" />
 		</svg>
 	);
 }

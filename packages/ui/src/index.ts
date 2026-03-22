@@ -76,6 +76,14 @@ export * from './components/SessionTimeline';
 export { SidebarRail as LunariaSidebarRail } from './components/SidebarRail';
 export * from './components/StatusBar';
 export * from './components/TerminalPanel';
+export * from './components/AgentStatusDot';
+export * from './components/SparklineChart';
+export * from './components/CostStreamGraph';
+export * from './components/EvalScoreCard';
+export * from './components/SecurityRadarChart';
+export * from './components/TerminalMiniView';
+export * from './components/CollaborationGraph';
+export * from './components/ReplayTimeline';
 
 // Screens — route-level page components
 export * from './screens/AutopilotScreen';
