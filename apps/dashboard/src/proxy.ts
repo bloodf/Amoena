@@ -210,6 +210,12 @@ export function proxy(request: NextRequest) {
 		}
 	}
 
+	// Local desktop mode: skip auth entirely (single-user, no cloud)
+	if (envFlag("LUNARIA_LOCAL_MODE")) {
+		const { response, nonce } = nextResponseWithNonce(request);
+		return addSecurityHeaders(response, request, nonce);
+	}
+
 	// Allow login, setup, auth API, docs, and container health probe without session
 	const isPublicHealthProbe =
 		pathname === "/api/status" &&

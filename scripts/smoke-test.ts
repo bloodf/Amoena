@@ -55,22 +55,18 @@ async function runSmokeTests(): Promise<void> {
 	results.push(await testEndpoint("Activities", "/api/activities"));
 	results.push(await testEndpoint("Sessions", "/api/sessions"));
 
-	// Memory endpoints
-	results.push(await testEndpoint("Memory health", "/api/memory/health"));
-	results.push(
-		await testEndpoint("Memory search", "/api/memory/search?q=test&limit=5"),
-	);
+	// Memory endpoints (503/500 expected when memory service not running)
+	results.push(await testEndpoint("Memory health", "/api/memory/health", { expectStatus: 503 }));
+	results.push(await testEndpoint("Memory search", "/api/memory/search?q=test&limit=5", { expectStatus: 500 }));
 
 	// Lunaria-specific endpoints
-	results.push(
-		await testEndpoint("Cost advisor", "/api/cost-advisor", {
-			method: "POST",
-			body: {
-				currentModel: "claude-opus-4-6",
-				taskDescription: "rename a variable",
-			},
-		}),
-	);
+	results.push(await testEndpoint("Cost advisor", "/api/cost-advisor", {
+		method: "POST",
+		body: {
+			currentModel: "claude-opus-4-6",
+			taskDescription: "rename a variable",
+		},
+	}));
 	results.push(await testEndpoint("Upstream sync", "/api/upstream-sync"));
 	results.push(await testEndpoint("Remote devices", "/api/remote"));
 

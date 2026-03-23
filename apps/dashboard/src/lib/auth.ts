@@ -800,6 +800,10 @@ export function requireRole(
 ):
 	| { user: User; error?: never; status?: never }
 	| { user?: never; error: string; status: 401 | 403 } {
+	// Local desktop mode: bypass auth with a default admin user
+	if (process.env.LUNARIA_LOCAL_MODE === "true" || process.env.LUNARIA_LOCAL_MODE === "1") {
+		return { user: { id: "local-admin", username: "admin", role: "admin" } as User };
+	}
 	const user = getUserFromRequest(request);
 	if (!user) {
 		return { error: "Authentication required", status: 401 };

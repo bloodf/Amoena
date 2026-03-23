@@ -50,5 +50,51 @@
     "test": "Test",
     "delete": "Delete",
     "availableEvents": "Available Events"
+  },
+  "auth": {
+    "title": "Sign In",
+    "subtitle": "Sign in to Lunaria",
+    "username": "Username",
+    "password": "Password",
+    "signIn": "Sign In",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "confirm": "Confirm"
+  },
+  "boot": {
+    "loading": "Loading Lunaria...",
+    "initializing": "Initializing services...",
+    "connecting": "Connecting to services...",
+    "ready": "Ready",
+    "title": "Lunaria",
+    "subtitle": "AI Agent Operating System",
+    "authenticatingOperator": "Authenticating operator...",
+    "detectingStationMode": "Detecting station mode...",
+    "loadingControlConfig": "Loading control config...",
+    "connectingRuntimeLinks": "Connecting runtime links...",
+    "syncingAgentRegistry": "Syncing agent registry...",
+    "loadingActiveSessions": "Loading active sessions...",
+    "hydratingWorkspaceBoard": "Hydrating workspace board...",
+    "mappingMemoryGraph": "Mapping memory graph...",
+    "indexingSkillCatalog": "Indexing skill catalog...",
+    "missionControl": "Lunaria",
+    "agentOrchestration": "Agent Orchestration Platform"
+  },
+  "page": {
+    "home": "Home",
+    "agents": "Agents",
+    "tasks": "Tasks",
+    "terminal": "Terminal",
+    "memory": "Memory",
+    "settings": "Settings"
   }
 }
