@@ -59,7 +59,7 @@ describe("POST /api/cost-advisor", () => {
 		const response = await POST(
 			makeRequest({
 				currentModel: "claude-opus-4-6",
-				taskDescription: "fix typo in README",
+				taskDescription: "rename a variable in utils.ts",
 			}),
 		);
 		expect(response.status).toBe(200);
@@ -73,7 +73,7 @@ describe("POST /api/cost-advisor", () => {
 		const response = await POST(
 			makeRequest({
 				currentModel: "claude-opus-4-6",
-				taskDescription: "fix typo in README",
+				taskDescription: "architect a security audit migration",
 			}),
 		);
 		const body = await response.json();
@@ -88,11 +88,12 @@ describe("POST /api/cost-advisor", () => {
 	});
 
 	it("returns null suggestion when already using the cheapest viable model", async () => {
-		// haiku is the cheapest; for a simple task it should be the cheapest viable option
+		// For expert tasks, only opus meets the 95 quality threshold.
+		// If already using opus, no cheaper model qualifies.
 		const response = await POST(
 			makeRequest({
-				currentModel: "claude-haiku-4-5",
-				taskDescription: "fix typo in README",
+				currentModel: "claude-opus-4-6",
+				taskDescription: "architect a security audit migration",
 			}),
 		);
 		expect(response.status).toBe(200);
