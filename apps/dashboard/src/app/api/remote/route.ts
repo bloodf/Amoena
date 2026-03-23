@@ -5,7 +5,7 @@ import {
 	generatePairingCode,
 	getPairedDeviceIds,
 	revokeDevice,
-} from "@lunaria/lunaria-service";
+} from "@lunaria/lunaria-service/src/remote-access/pairing";
 
 /**
  * GET /api/remote
