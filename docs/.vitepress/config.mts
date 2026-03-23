@@ -19,7 +19,8 @@ export default defineConfig({
 
     nav: [
       { text: 'Guide', link: '/getting-started/' },
-      { text: 'Features', link: '/features/sessions' },
+      { text: 'Architecture', link: '/architecture/' },
+      { text: 'Features', link: '/features' },
       { text: 'Extensions', link: '/extensions/' },
       { text: 'API', link: '/api/' },
       {

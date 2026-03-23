@@ -333,6 +333,9 @@
     "packages/trpc": {
       "name": "@lunaria/trpc",
       "version": "0.1.0",
+      "dependencies": {
+        "@trpc/server": "^11.0.0",
+      },
     },
     "packages/typescript": {
       "name": "@lunaria/typescript",

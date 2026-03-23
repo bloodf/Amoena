@@ -26,3 +26,6 @@ export * from "./cost-advisor/advisor.js";
 
 // Upstream Sync
 export * from "./upstream-sync/sync.js";
+
+// Remote Access
+export * from "./remote-access/index.js";
