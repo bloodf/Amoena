@@ -1648,6 +1648,79 @@ const migrations: Migration[] = [
 			);
 		},
 	},
+	{
+		id: "046_mission_control",
+		up: (db) => {
+			db.transaction(() => {
+				db.exec(`
+          CREATE TABLE IF NOT EXISTS goal_runs (
+            id          TEXT    PRIMARY KEY,
+            description TEXT    NOT NULL,
+            status      TEXT    NOT NULL DEFAULT 'pending',
+            base_ref    TEXT    NOT NULL DEFAULT 'main',
+            started_at  INTEGER NOT NULL DEFAULT (unixepoch()),
+            completed_at INTEGER,
+            total_cost_usd REAL,
+            merge_strategy TEXT,
+            created_at  INTEGER NOT NULL DEFAULT (unixepoch())
+          )
+        `);
+				db.exec(`
+          CREATE TABLE IF NOT EXISTS task_runs (
+            id            TEXT    PRIMARY KEY,
+            goal_run_id   TEXT    NOT NULL REFERENCES goal_runs(id) ON DELETE CASCADE,
+            task_type     TEXT    NOT NULL,
+            complexity    TEXT    NOT NULL,
+            description   TEXT    NOT NULL,
+            status        TEXT    NOT NULL DEFAULT 'queued',
+            agent_type    TEXT,
+            routing_reason TEXT   NOT NULL DEFAULT '',
+            attempt_count INTEGER NOT NULL DEFAULT 0,
+            worktree_path TEXT,
+            started_at    INTEGER,
+            completed_at  INTEGER,
+            duration_ms   INTEGER,
+            input_tokens  INTEGER,
+            output_tokens INTEGER,
+            cost_usd      REAL,
+            error_message TEXT,
+            created_at    INTEGER NOT NULL DEFAULT (unixepoch())
+          )
+        `);
+				db.exec(`
+          CREATE TABLE IF NOT EXISTS agent_performance (
+            agent_type        TEXT    PRIMARY KEY,
+            total_tasks       INTEGER NOT NULL DEFAULT 0,
+            completed_tasks   INTEGER NOT NULL DEFAULT 0,
+            failed_tasks      INTEGER NOT NULL DEFAULT 0,
+            timed_out_tasks   INTEGER NOT NULL DEFAULT 0,
+            total_duration_ms INTEGER NOT NULL DEFAULT 0,
+            total_cost_usd    REAL    NOT NULL DEFAULT 0,
+            avg_duration_ms   REAL    NOT NULL DEFAULT 0,
+            success_rate      REAL    NOT NULL DEFAULT 0,
+            last_used_at      INTEGER NOT NULL DEFAULT (unixepoch()),
+            updated_at        INTEGER NOT NULL DEFAULT (unixepoch())
+          )
+        `);
+				db.exec(`
+          CREATE TABLE IF NOT EXISTS goal_run_state (
+            goal_id     TEXT    PRIMARY KEY REFERENCES goal_runs(id) ON DELETE CASCADE,
+            state_json  TEXT    NOT NULL,
+            updated_at  INTEGER NOT NULL DEFAULT (unixepoch())
+          )
+        `);
+				db.exec(
+					`CREATE INDEX IF NOT EXISTS idx_task_runs_goal ON task_runs(goal_run_id)`,
+				);
+				db.exec(
+					`CREATE INDEX IF NOT EXISTS idx_task_runs_agent_type ON task_runs(agent_type)`,
+				);
+				db.exec(
+					`CREATE INDEX IF NOT EXISTS idx_goal_runs_status ON goal_runs(status)`,
+				);
+			})();
+		},
+	},
 ];
 
 export function runMigrations(db: Database.Database) {
