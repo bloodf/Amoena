@@ -65,6 +65,24 @@ const config: Configuration = {
 			to: "resources/host-migrations",
 			filter: ["**/*"],
 		},
+		// Next.js dashboard standalone output - served by main process in production
+		{
+			from: "../dashboard/.next/standalone",
+			to: "dashboard",
+			filter: ["**/*"],
+		},
+		// Terminal host package - spawned as a child process for terminal persistence
+		{
+			from: "../../packages/terminal-host",
+			to: "terminal-host",
+			filter: ["**/*"],
+		},
+		// Memory package - used by the host service for workspace memory
+		{
+			from: "../../packages/memory",
+			to: "memory",
+			filter: ["**/*"],
+		},
 	],
 
 	files: [
