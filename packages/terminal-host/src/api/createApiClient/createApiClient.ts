@@ -1,4 +1,4 @@
-import type { AppRouter } from "@superset/trpc";
+import type { AppRouter } from "@lunaria/trpc";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import SuperJSON from "superjson";
 import type { AuthProvider } from "../../providers/auth";

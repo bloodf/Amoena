@@ -94,7 +94,7 @@ export async function checkAllUpstreams(): Promise<readonly SyncStatus[]> {
 				repo,
 				lastChecked: new Date().toISOString(),
 				latestRelease: release,
-				currentVersion: null, // TODO: read from local package.json
+				currentVersion: null as string | null,
 				hasUpdate: release !== null,
 			} satisfies SyncStatus;
 		}),
