@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { createElement, useEffect, useMemo, useState } from "react";
+import { createElement, useCallback, useEffect, useMemo, useState } from "react";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { Dashboard } from "@/components/dashboard/dashboard";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -13,7 +13,9 @@ import { LunariaDoctorBanner } from "@/components/layout/lunaria-doctor-banner";
 import { LunariaUpdateBanner } from "@/components/layout/lunaria-update-banner";
 import { NavRail } from "@/components/layout/nav-rail";
 import { UpdateBanner } from "@/components/layout/update-banner";
+import { useGlobalKeyboard } from "@/components/layout/useGlobalKeyboard";
 import { ExecApprovalOverlay } from "@/components/modals/exec-approval-overlay";
+import { MemorySpotlightPanel } from "@/components/panels/memory-spotlight-panel";
 import { ProjectManagerModal } from "@/components/modals/project-manager-modal";
 import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
 import { ActivityFeedPanel } from "@/components/panels/activity-feed-panel";
@@ -133,6 +135,10 @@ export default function Home() {
 		setMemoryGraphAgents,
 		setSkillsData,
 	} = useLunaria();
+
+	const [spotlightOpen, setSpotlightOpen] = useState(false);
+	const toggleSpotlight = useCallback(() => setSpotlightOpen((v) => !v), []);
+	useGlobalKeyboard(toggleSpotlight);
 
 	// Sync URL → Zustand activeTab
 	const pathname = usePathname();
@@ -573,6 +579,12 @@ export default function Home() {
 			)}
 
 			<OnboardingWizard />
+
+			{/* Global Cmd+K memory spotlight */}
+			<MemorySpotlightPanel
+				open={spotlightOpen}
+				onClose={() => setSpotlightOpen(false)}
+			/>
 		</div>
 	);
 }

@@ -20,3 +20,9 @@ export * from "./opinions/persona.js";
 
 // Recipes
 export * from "./recipes/built-in.js";
+
+// Cost Advisor
+export * from "./cost-advisor/advisor.js";
+
+// Upstream Sync
+export * from "./upstream-sync/sync.js";
