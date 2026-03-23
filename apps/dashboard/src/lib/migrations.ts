@@ -1721,6 +1721,35 @@ const migrations: Migration[] = [
 			})();
 		},
 	},
+	{
+		id: "047_goal_templates",
+		up: (db) => {
+			db.transaction(() => {
+				db.exec(`
+          CREATE TABLE IF NOT EXISTS goal_templates (
+            id          TEXT    PRIMARY KEY,
+            name        TEXT    NOT NULL,
+            description TEXT    NOT NULL,
+            goal_text   TEXT    NOT NULL,
+            category    TEXT    NOT NULL DEFAULT 'custom',
+            tags        TEXT    NOT NULL DEFAULT '[]',
+            task_hints  TEXT    NOT NULL DEFAULT '[]',
+            options     TEXT    NOT NULL DEFAULT '{}',
+            use_count   INTEGER NOT NULL DEFAULT 0,
+            last_used_at INTEGER,
+            created_at  INTEGER NOT NULL DEFAULT (unixepoch()),
+            updated_at  INTEGER NOT NULL DEFAULT (unixepoch())
+          )
+        `);
+				db.exec(
+					`CREATE INDEX IF NOT EXISTS idx_goal_templates_category ON goal_templates(category)`,
+				);
+				db.exec(
+					`CREATE INDEX IF NOT EXISTS idx_goal_templates_use_count ON goal_templates(use_count DESC)`,
+				);
+			})();
+		},
+	},
 ];
 
 export function runMigrations(db: Database.Database) {
