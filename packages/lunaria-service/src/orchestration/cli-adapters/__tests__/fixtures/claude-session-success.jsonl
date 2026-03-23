@@ -1,0 +1,11 @@
+{"type":"system","subtype":"init","session_id":"sess-abc123","model":"claude-sonnet-4-6","tools":["Bash","Read","Write","Edit"]}
+{"type":"assistant","message":{"id":"msg-001","type":"message","role":"assistant","content":[{"type":"text","text":"I'll help you with this task. Let me start by exploring the codebase."}],"model":"claude-sonnet-4-6","stop_reason":null}}
+{"type":"assistant","message":{"id":"msg-002","type":"message","role":"assistant","content":[{"type":"text","text":"Looking at the files..."}],"model":"claude-sonnet-4-6","stop_reason":null}}
+{"type":"assistant","message":{"id":"msg-003","type":"message","role":"assistant","content":[{"type":"tool_use","id":"tool-001","name":"Read","input":{"file_path":"/src/index.ts"}}],"model":"claude-sonnet-4-6","stop_reason":"tool_use"}}
+{"type":"assistant","message":{"id":"msg-004","type":"message","role":"assistant","content":[{"type":"text","text":"I can see the structure. Now let me implement the changes."}],"model":"claude-sonnet-4-6","stop_reason":null}}
+{"type":"assistant","message":{"id":"msg-005","type":"message","role":"assistant","content":[{"type":"tool_use","id":"tool-002","name":"Edit","input":{"file_path":"/src/index.ts","old_string":"export {}","new_string":"export { foo } from './foo';"}}],"model":"claude-sonnet-4-6","stop_reason":"tool_use"}}
+{"type":"assistant","message":{"id":"msg-006","type":"message","role":"assistant","content":[{"type":"text","text":"The changes have been applied. The implementation is complete."}],"model":"claude-sonnet-4-6","stop_reason":"end_turn"}}
+{"type":"assistant","message":{"id":"msg-007","type":"message","role":"assistant","content":[{"type":"text","text":"Running verification..."}],"model":"claude-sonnet-4-6","stop_reason":null}}
+{"type":"assistant","message":{"id":"msg-008","type":"message","role":"assistant","content":[{"type":"tool_use","id":"tool-003","name":"Bash","input":{"command":"bun tsc --noEmit"}}],"model":"claude-sonnet-4-6","stop_reason":"tool_use"}}
+{"type":"assistant","message":{"id":"msg-009","type":"message","role":"assistant","content":[{"type":"text","text":"Type check passed. All done!"}],"model":"claude-sonnet-4-6","stop_reason":"end_turn"}}
+{"type":"result","subtype":"success","result":"Task completed successfully.","session_id":"sess-abc123"}

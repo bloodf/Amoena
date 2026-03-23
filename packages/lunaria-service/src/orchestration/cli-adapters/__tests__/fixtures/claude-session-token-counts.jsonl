@@ -1,0 +1,5 @@
+{"type":"system","subtype":"init","session_id":"sess-token-test","model":"claude-sonnet-4-6","tools":["Bash","Read"]}
+{"type":"assistant","message":{"id":"msg-t01","type":"message","role":"assistant","content":[{"type":"text","text":"Starting analysis..."}],"model":"claude-sonnet-4-6","stop_reason":null}}
+{"type":"assistant","message":{"id":"msg-t02","type":"message","role":"assistant","content":[{"type":"text","text":"Processing request with 150 input tokens budgeted."}],"model":"claude-sonnet-4-6","stop_reason":null}}
+{"type":"assistant","message":{"id":"msg-t03","type":"message","role":"assistant","content":[{"type":"text","text":"Analysis complete."}],"model":"claude-sonnet-4-6","stop_reason":"end_turn"}}
+{"type":"result","subtype":"success","result":"Analysis complete.","session_id":"sess-token-test","usage":{"input_tokens":342,"output_tokens":127},"cost_usd":0.000073}
