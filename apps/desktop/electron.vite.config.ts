@@ -102,7 +102,12 @@ export default defineConfig({
 				output: {
 					dir: resolve(devPath, "main"),
 				},
-				external: ["electron", ...mainExternalizedDependencies],
+				external: ["electron", ...mainExternalizedDependencies, ...workspaceDependencies, "tailwindcss", "tailwindcss/colors", /^@lunaria\//, /^@trpc\//, /^@tanstack\//],
+				onwarn(warning, warn) {
+					// Suppress unresolved import warnings for renderer-only deps
+					if (warning.code === "UNRESOLVED_IMPORT") return;
+					warn(warning);
+				},
 				plugins: [sentryPlugin].filter(Boolean),
 			},
 		},
