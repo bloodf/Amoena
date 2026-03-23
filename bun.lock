@@ -29,6 +29,7 @@
       "version": "2.0.1",
       "dependencies": {
         "@lunaria/i18n": "workspace:*",
+        "@lunaria/lunaria-service": "workspace:*",
         "@lunaria/tokens": "workspace:*",
         "@lunaria/ui": "workspace:*",
         "@radix-ui/react-slot": "^1.2.4",

@@ -29,3 +29,6 @@ export * from "./upstream-sync/sync.js";
 
 // Remote Access
 export * from "./remote-access/index.js";
+
+// Memory Security
+export * from "./memory-security/scrubber.js";

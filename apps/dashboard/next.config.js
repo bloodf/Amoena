@@ -4,13 +4,12 @@ const withNextIntl = require('next-intl/plugin')('./src/i18n/request.ts')
 const nextConfig = {
   output: 'standalone',
   typescript: { ignoreBuildErrors: true },
-  eslint: { ignoreDuringBuilds: true },
   outputFileTracingExcludes: {
     '/*': ['./.data/**/*'],
   },
   turbopack: {},
   // Transpile ESM-only packages so they resolve correctly in all environments
-  transpilePackages: ['react-markdown', 'remark-gfm'],
+  transpilePackages: ['react-markdown', 'remark-gfm', '@lunaria/lunaria-service'],
   
   // Security headers
   // Content-Security-Policy is set in src/proxy.ts with a per-request nonce.

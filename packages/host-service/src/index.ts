@@ -1,1 +1,1 @@
-// Stub — will be implemented in Phase 2+
+export * from "@lunaria/terminal-host";
