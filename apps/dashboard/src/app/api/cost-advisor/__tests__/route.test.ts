@@ -70,21 +70,21 @@ describe("POST /api/cost-advisor", () => {
 	});
 
 	it("suggestion includes required fields when a cheaper model is found", async () => {
+		// "rename" -> complexity=simple -> cheaper models qualify against opus
 		const response = await POST(
 			makeRequest({
 				currentModel: "claude-opus-4-6",
-				taskDescription: "architect a security audit migration",
+				taskDescription: "rename a variable in utils.ts",
 			}),
 		);
 		const body = await response.json();
-		if (body.suggestion !== null) {
-			expect(body.suggestion).toHaveProperty("currentModel");
-			expect(body.suggestion).toHaveProperty("suggestedModel");
-			expect(body.suggestion).toHaveProperty("suggestedModelId");
-			expect(body.suggestion).toHaveProperty("estimatedSavings");
-			expect(body.suggestion).toHaveProperty("complexity");
-			expect(body.suggestion).toHaveProperty("reasoning");
-		}
+		expect(body.suggestion).not.toBeNull();
+		expect(body.suggestion).toHaveProperty("currentModel");
+		expect(body.suggestion).toHaveProperty("suggestedModel");
+		expect(body.suggestion).toHaveProperty("suggestedModelId");
+		expect(body.suggestion).toHaveProperty("estimatedSavings");
+		expect(body.suggestion).toHaveProperty("complexity");
+		expect(body.suggestion).toHaveProperty("reasoning");
 	});
 
 	it("returns null suggestion when already using the cheapest viable model", async () => {
