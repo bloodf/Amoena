@@ -1,31 +1,40 @@
-import { getCurrentWindow } from "@tauri-apps/api/window";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+
+type ElectronWindowBridge = {
+  minimize: () => void;
+  maximize: () => void;
+  unmaximize: () => void;
+  close: () => void;
+  isMaximized: () => Promise<boolean>;
+  onMaximizeChange: (cb: (maximized: boolean) => void) => () => void;
+  platform: string;
+};
+
+function getWindowBridge(): ElectronWindowBridge | null {
+  const win = window as unknown as { lunariaWindow?: ElectronWindowBridge };
+  return win.lunariaWindow ?? null;
+}
 
 function WindowControls() {
   const [isMaximized, setIsMaximized] = useState(false);
+  const bridge = getWindowBridge();
 
   useEffect(() => {
-    const win = getCurrentWindow();
-    win.isMaximized().then(setIsMaximized).catch(() => {});
+    if (bridge === null) return;
 
-    const unlisten = win.onResized(() => {
-      win.isMaximized().then(setIsMaximized).catch(() => {});
-    });
+    void bridge.isMaximized().then(setIsMaximized);
+    const unlisten = bridge.onMaximizeChange(setIsMaximized);
+    return unlisten;
+  }, [bridge]);
 
-    return () => {
-      unlisten.then((fn) => fn()).catch(() => {});
-    };
-  }, []);
+  const handleMinimize = () => bridge?.minimize();
+  const handleMaximize = () => (isMaximized ? bridge?.unmaximize() : bridge?.maximize());
+  const handleClose = () => bridge?.close();
 
-  const handleMinimize = () => getCurrentWindow().minimize().catch(() => {});
-  const handleMaximize = () =>
-    isMaximized
-      ? getCurrentWindow().unmaximize().catch(() => {})
-      : getCurrentWindow().maximize().catch(() => {});
-  const handleClose = () => getCurrentWindow().close().catch(() => {});
+  const isMacOS = bridge?.platform === 'darwin';
 
   // macOS — traffic lights
-  if (window.__TAURI_OS_PLUGIN_INTERNALS__?.platform === "macos") {
+  if (isMacOS) {
     return (
       <div className="flex items-center gap-2 pl-3">
         <button
@@ -42,7 +51,7 @@ function WindowControls() {
         />
         <button
           type="button"
-          aria-label={isMaximized ? "Restore" : "Maximize"}
+          aria-label={isMaximized ? 'Restore' : 'Maximize'}
           onClick={handleMaximize}
           className="h-3 w-3 rounded-full bg-[#27c93f] hover:brightness-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400"
         />
@@ -65,17 +74,39 @@ function WindowControls() {
       </button>
       <button
         type="button"
-        aria-label={isMaximized ? "Restore" : "Maximize"}
+        aria-label={isMaximized ? 'Restore' : 'Maximize'}
         onClick={handleMaximize}
         className="flex h-full w-10 items-center justify-center text-foreground/70 hover:bg-foreground/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-foreground/30"
       >
         {isMaximized ? (
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1">
+          <svg
+            width="10"
+            height="10"
+            viewBox="0 0 10 10"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+          >
             <rect x="2" y="0" width="8" height="8" />
-            <rect x="0" y="2" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1" />
+            <rect
+              x="0"
+              y="2"
+              width="8"
+              height="8"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+            />
           </svg>
         ) : (
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1">
+          <svg
+            width="10"
+            height="10"
+            viewBox="0 0 10 10"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+          >
             <rect x="0" y="0" width="10" height="10" />
           </svg>
         )}
@@ -86,7 +117,14 @@ function WindowControls() {
         onClick={handleClose}
         className="flex h-full w-10 items-center justify-center text-foreground/70 hover:bg-red-600 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-400"
       >
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg
+          width="10"
+          height="10"
+          viewBox="0 0 10 10"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
           <line x1="0" y1="0" x2="10" y2="10" />
           <line x1="10" y1="0" x2="0" y2="10" />
         </svg>
@@ -96,21 +134,19 @@ function WindowControls() {
 }
 
 export function Titlebar() {
-  const isMacOS = window.__TAURI_OS_PLUGIN_INTERNALS__?.platform === "macos";
+  const bridge = getWindowBridge();
+  const isMacOS = bridge?.platform === 'darwin';
 
   return (
     <header
-      data-tauri-drag-region
       className="flex h-9 w-full select-none items-center bg-background/80 backdrop-blur-sm border-b border-border/40"
+      style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
     >
       {/* macOS traffic lights sit left of the drag region */}
       {isMacOS && <WindowControls />}
 
       {/* App name centered — pointer-events-none keeps drag working */}
-      <span
-        data-tauri-drag-region
-        className="pointer-events-none flex-1 text-center text-xs font-medium text-foreground/60"
-      >
+      <span className="pointer-events-none flex-1 text-center text-xs font-medium text-foreground/60">
         Lunaria
       </span>
 
@@ -118,13 +154,4 @@ export function Titlebar() {
       {!isMacOS && <WindowControls />}
     </header>
   );
-}
-
-// Augment window type for platform detection used above
-declare global {
-  interface Window {
-    __TAURI_OS_PLUGIN_INTERNALS__?: {
-      platform?: string;
-    };
-  }
 }

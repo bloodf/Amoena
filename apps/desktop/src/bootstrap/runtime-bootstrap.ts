@@ -1,5 +1,3 @@
-import { invoke } from '@tauri-apps/api/core';
-
 export type LaunchContext = {
   apiBaseUrl: string;
   bootstrapPath: string;
@@ -27,8 +25,11 @@ type BootstrapEnv = Record<string, string | undefined>;
 
 const defaultEnv: BootstrapEnv = import.meta.env;
 
-export function isTauriRuntime() {
-  return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
+export function isElectronRuntime(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    typeof (window as unknown as { lunaria?: unknown }).lunaria !== 'undefined'
+  );
 }
 
 export function readDevLaunchContext(env: BootstrapEnv = defaultEnv): LaunchContext | null {
@@ -48,19 +49,26 @@ export function readDevLaunchContext(env: BootstrapEnv = defaultEnv): LaunchCont
   };
 }
 
-export async function resolveLaunchContext(
-  invokeCommand: typeof invoke = invoke,
-  env: BootstrapEnv = defaultEnv,
-) {
-  if (isTauriRuntime()) {
-    return invokeCommand<LaunchContext>('desktop_launch_context');
+type ElectronBridge = {
+  getLaunchContext: () => Promise<LaunchContext>;
+};
+
+function getElectronBridge(): ElectronBridge | null {
+  const win = window as unknown as { lunaria?: ElectronBridge };
+  return win.lunaria ?? null;
+}
+
+export async function resolveLaunchContext(env: BootstrapEnv = defaultEnv): Promise<LaunchContext> {
+  const bridge = getElectronBridge();
+  if (bridge !== null) {
+    return bridge.getLaunchContext();
   }
 
   const devLaunchContext = readDevLaunchContext(env);
 
   if (!devLaunchContext) {
     throw new Error(
-      'Missing Lunaria launch context. Run through Tauri or set VITE_LUNARIA_API_BASE_URL and VITE_LUNARIA_BOOTSTRAP_TOKEN.',
+      'Missing Lunaria launch context. Run through Electron or set VITE_LUNARIA_API_BASE_URL and VITE_LUNARIA_BOOTSTRAP_TOKEN.',
     );
   }
 
@@ -70,7 +78,7 @@ export async function resolveLaunchContext(
 export async function authenticateLaunchContext(
   launchContext: LaunchContext,
   fetchImpl: typeof fetch = fetch,
-) {
+): Promise<BootstrapSession> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10_000);
 

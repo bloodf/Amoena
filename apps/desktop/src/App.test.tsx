@@ -21,16 +21,6 @@ const bootstrapSession = {
   tokenType: 'Bearer',
 };
 
-vi.mock('@tauri-apps/api/window', () => ({
-  getCurrentWindow: vi.fn(() => ({
-    isMaximized: vi.fn(async () => false),
-    onResized: vi.fn(async () => () => {}),
-    minimize: vi.fn(async () => {}),
-    toggleMaximize: vi.fn(async () => {}),
-    close: vi.fn(async () => {}),
-  })),
-}));
-
 vi.mock('./bootstrap/runtime-bootstrap', () => ({
   resolveLaunchContext: vi.fn(async () => launchContext),
   authenticateLaunchContext: vi.fn(async () => bootstrapSession),

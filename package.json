@@ -11,7 +11,7 @@
   "keywords": [
     "ai",
     "development-environment",
-    "tauri",
+    "electron",
     "desktop",
     "multi-agent",
     "extensions"
@@ -39,7 +39,7 @@
     "desktop:dev": "bun run --cwd apps/desktop dev",
     "desktop:test": "bun run --cwd apps/desktop test",
     "desktop:build": "bun run --cwd apps/desktop build",
-    "desktop:smoke": "bun run --cwd apps/desktop tauri:smoke",
+    "desktop:smoke": "bun run --cwd apps/desktop e2e",
     "mobile:dev": "bun run --cwd apps/mobile start",
     "mobile:test": "bun run --cwd apps/mobile test",
     "format": "prettier --write .",
@@ -70,9 +70,16 @@
     "vitepress": "^1.6.3"
   },
   "lint-staged": {
-    "*.{ts,tsx}": ["eslint --fix", "prettier --write"],
-    "*.{json,md,yml,yaml,html,css}": ["prettier --write"],
-    "*.rs": ["cargo fmt --check"]
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml,html,css}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx,json,md}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "date-fns": "^4.1.0",
