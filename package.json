@@ -1,8 +1,8 @@
 {
-  "name": "@lunaria/monorepo",
+  "name": "@lunaria/desktop",
   "version": "0.1.0",
   "private": true,
-  "description": "The AI Agent Operating System — Desktop IDE with agent orchestration, persistent memory, and extensibility",
+  "description": "Desktop-first AI development environment with multi-agent orchestration and extensibility",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -10,12 +10,10 @@
   },
   "keywords": [
     "ai",
-    "ai-agents",
-    "desktop-ide",
+    "development-environment",
     "electron",
+    "desktop",
     "multi-agent",
-    "memory",
-    "orchestration",
     "extensions"
   ],
   "packageManager": "bun@1.3.9",
@@ -27,44 +25,61 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "bun run desktop:dev",
+    "commitlint": "commitlint --edit",
+    "prepare": "husky",
+    "lint": "eslint 'packages/*/src/**/*.{ts,tsx}' 'apps/desktop/src/**/*.{ts,tsx}'",
+    "lint:fix": "eslint --fix 'packages/*/src/**/*.{ts,tsx}' 'apps/desktop/src/**/*.{ts,tsx}'",
+    "type-check": "bunx tsc --noEmit -p packages/tokens/tsconfig.json && bunx tsc --noEmit -p packages/runtime-client/tsconfig.json && bunx tsc --noEmit -p packages/i18n/tsconfig.json && bunx tsc --noEmit -p packages/ui/tsconfig.json && bunx tsc --noEmit -p apps/desktop/tsconfig.json && bunx tsc --noEmit -p apps/mobile/tsconfig.json",
+    "test": "bun run desktop:test",
     "build": "bun run desktop:build",
-    "test": "bun run test:unit && bun run test:e2e",
-    "test:unit": "bun run --cwd packages/ui test && bun run --cwd apps/dashboard test",
-    "test:e2e": "bun run --cwd apps/dashboard test:e2e",
+    "docs:agents:generate": "bun run scripts/generate-agent-reference.ts",
+    "agents:validate": "bun run scripts/export-agents.ts --validate-only",
+    "docs:dev": "bun run docs:agents:generate && bunx vitepress dev docs",
+    "docs:build": "bun run docs:agents:generate && bunx vitepress build docs",
     "desktop:dev": "bun run --cwd apps/desktop dev",
+    "desktop:test": "bun run --cwd apps/desktop test",
     "desktop:build": "bun run --cwd apps/desktop build",
-    "dashboard:dev": "bun run --cwd apps/dashboard dev",
-    "dashboard:build": "bun run --cwd apps/dashboard build",
+    "desktop:smoke": "bun run --cwd apps/desktop e2e",
     "mobile:dev": "bun run --cwd apps/mobile start",
-    "storybook": "bun run --cwd packages/ui storybook",
-    "lint": "biome check .",
-    "lint:fix": "biome check --fix .",
-    "format": "biome format --write .",
-    "type-check": "bunx tsc --noEmit -p packages/tokens/tsconfig.json && bunx tsc --noEmit -p packages/i18n/tsconfig.json && bunx tsc --noEmit -p packages/ui/tsconfig.json",
-    "docs:dev": "bunx vitepress dev docs",
-    "docs:build": "bunx vitepress build docs",
-    "prepare": "husky"
+    "mobile:test": "bun run --cwd apps/mobile test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "dev:verify": "bun run type-check && bun run desktop:test && bun run mobile:test"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.2",
     "@commitlint/cli": "^19.0.0",
     "@commitlint/config-conventional": "^19.0.0",
+    "@eslint/js": "^9.0.0",
+    "@happy-dom/global-registrator": "^20.8.3",
+    "eslint": "^9.0.0",
+    "eslint-plugin-react": "^7.37.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vitest": "^0.5.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "typescript-eslint": "^8.0.0",
     "@types/bun": "latest",
     "@types/node": "^22.15.30",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
-    "husky": "^9.0.0",
-    "lint-staged": "^15.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "prettier": "^3.4.0",
     "typescript": "^5.8.2",
     "vitepress": "^1.6.3"
   },
   "lint-staged": {
-    "packages/ui/**/*.{ts,tsx}": ["biome check --fix"],
-    "packages/tokens/**/*.{ts,tsx}": ["biome check --fix"],
-    "packages/i18n/**/*.{ts,tsx}": ["biome check --fix"]
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml,html,css}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx,json,md}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "date-fns": "^4.1.0",
