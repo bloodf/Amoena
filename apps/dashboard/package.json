@@ -27,6 +27,7 @@
     "quality:gate": "pnpm test:all"
   },
   "dependencies": {
+    "@lunaria/contracts": "workspace:*",
     "@lunaria/lunaria-service": "workspace:*",
     "@lunaria/tokens": "workspace:*",
     "@lunaria/ui": "workspace:*",

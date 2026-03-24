@@ -1,128 +1,30 @@
-// UI-specific types for Mission Control panel
-// Stubs for types from other packages (replaced with real imports during merge)
+/**
+ * Mission Control panel types.
+ *
+ * Canonical shared types are imported from @lunaria/contracts and re-exported
+ * for backward compatibility with existing imports within the dashboard.
+ * UI-specific types that have no service counterpart are defined here.
+ */
 
-export type TaskStatus =
-	| "pending"
-	| "running"
-	| "completed"
-	| "failed"
-	| "cancelled"
-	| "timed_out"
-	| "partial_failure";
+// Re-export canonical types from the contracts package
+export type {
+	TaskStatus,
+	GoalRunStatus,
+	TaskRunRow,
+	GoalRunRow,
+	AgentPerformanceRow,
+	RunReport,
+	RoutingDecision,
+	MCServerEvent,
+	MCClientEvent,
+	GoalOptions,
+} from "@lunaria/contracts";
 
-export type GoalRunStatus =
-	| "pending"
-	| "running"
-	| "completed"
-	| "failed"
-	| "cancelled"
-	| "partial_failure";
-
-// --- Type stubs (replaced with imports from telemetry/reporter on merge) ---
-
-export interface TaskRunRow {
-	taskId: string;
-	goalId: string;
-	adapterId: string;
-	description: string;
-	taskType: string;
-	complexity?: string;
-	status: TaskStatus;
-	startedAt?: number;
-	completedAt?: number;
-	durationMs?: number;
-	costUsd?: number;
-	attempts?: number;
-	dependsOn?: string[];
-	routingReason?: string;
-	couldImprove?: boolean;
-}
-
-export interface GoalRunRow {
-	goalId: string;
-	description: string;
-	status: GoalRunStatus;
-	startedAt: number;
-	completedAt?: number;
-	durationMs?: number;
-	totalCostUsd?: number;
-	taskCount?: number;
-}
-
-export interface AgentPerformanceRow {
-	adapterId: string;
-	assigned: number;
-	completed: number;
-	failed: number;
-	avgDurationMs?: number;
-	totalCostUsd?: number;
-	successRate?: number;
-}
-
-export interface RoutingDecision {
-	taskId: string;
-	adapterId: string;
-	reason: string;
-	couldImprove: boolean;
-}
-
-export interface RunReport {
-	goalId: string;
-	description: string;
-	status: GoalRunStatus;
-	startedAt: number;
-	completedAt?: number;
-	durationMs?: number;
-	totalCostUsd?: number;
-	tasks: TaskRunRow[];
-	agents: AgentPerformanceRow[];
-	routing: RoutingDecision[];
-}
+// --- UI-specific types (no service equivalent) ---
 
 export interface AgentCapability {
 	provider: "claude-code" | "codex" | "gemini";
 	available: boolean;
-}
-
-// --- MC WebSocket event types ---
-
-export type MCServerEvent =
-	| {
-			type: "task:dispatched";
-			taskId: string;
-			adapterId: string;
-			routingReason: string;
-			description?: string;
-	  }
-	| {
-			type: "task:output";
-			taskId: string;
-			adapterId: string;
-			text: string;
-			timestamp: number;
-	  }
-	| { type: "task:status"; taskId: string; status: TaskStatus }
-	| { type: "task:completed"; task: TaskRunRow }
-	| { type: "task:failed"; task: TaskRunRow }
-	| { type: "goal:status"; goalId: string; status: GoalRunStatus }
-	| { type: "goal:completed"; report: RunReport }
-	| { type: "goal:cancelled"; goalId: string }
-	| {
-			type: "cost:update";
-			goalId: string;
-			totalUsd: number;
-			byAgent: Record<string, number>;
-	  };
-
-export type MCClientEvent =
-	| { type: "goal:submit"; description: string; options?: GoalOptions }
-	| { type: "goal:cancel"; goalId: string };
-
-// --- Component props types ---
-
-export interface GoalOptions {
-	maxConcurrency?: number;
-	timeoutMs?: number;
 }
 
 export interface AudioSettings {
@@ -138,6 +40,9 @@ export interface OutputLine {
 }
 
 export type ViewState = "pre-run" | "during-run" | "post-run";
+
+// TaskStatus is imported from contracts; used here via the re-export above
+import type { TaskStatus } from "@lunaria/contracts";
 
 export interface AgentPanelState {
 	adapterId: string;
