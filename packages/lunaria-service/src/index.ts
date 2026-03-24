@@ -1,3 +1,3 @@
-export * from './extensions/index.js';
-export * from './settings/index.js';
-export * from './config-recognition/index.js';
+export * from './orchestration/cli-adapters/index';
+export * from './usage-telemetry/index';
+export * from './remote-access/index';

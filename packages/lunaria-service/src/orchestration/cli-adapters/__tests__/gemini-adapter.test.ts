@@ -1,101 +1,134 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { GeminiAdapter } from "../gemini-adapter.js";
-import type { AdapterTask } from "../types.js";
+import { describe, expect, mock, test, beforeEach, afterEach } from 'bun:test';
+import type { ChildProcess } from 'child_process';
 
-const task: AdapterTask = {
-  id: "task-gemini-1",
-  prompt: "Generate code",
-  worktreePath: "/tmp/gemini-worktree",
+// We mock the spawn module before importing the adapter
+const mockSpawnProcess = mock(() => mockSpawnResult);
+const mockSpawnResult = {
+  process: {} as unknown as ChildProcess,
+  onStdout: mock((_handler: (line: string) => void) => {}),
+  onStderr: mock((_handler: (line: string) => void) => {}),
+  onExit: mock((_handler: (code: number) => void) => {}),
+  write: mock((_data: string) => {}),
+  kill: mock(() => {}),
 };
 
-let savedGoogleKey: string | undefined;
+mock.module('../utils/spawn', () => ({
+  spawnProcess: mockSpawnProcess,
+}));
 
-beforeEach(() => {
-  savedGoogleKey = process.env["GOOGLE_API_KEY"];
-});
+// Import after mock is set up
+const { geminiAdapter } = await import('../gemini-adapter');
 
-afterEach(() => {
-  if (savedGoogleKey !== undefined) {
-    process.env["GOOGLE_API_KEY"] = savedGoogleKey;
-  } else {
-    delete process.env["GOOGLE_API_KEY"];
-  }
-});
+describe('gemini adapter', () => {
+  beforeEach(() => {
+    mockSpawnProcess.mockClear();
+    mockSpawnResult.onStdout.mockClear();
+    mockSpawnResult.onStderr.mockClear();
+    mockSpawnResult.onExit.mockClear();
+    mockSpawnResult.write.mockClear();
+    mockSpawnResult.kill.mockClear();
+  });
 
-describe("GeminiAdapter", () => {
-  describe("isAvailable()", () => {
-    it("missing GOOGLE_API_KEY → isAvailable() returns false", async () => {
-      delete process.env["GOOGLE_API_KEY"];
-      const adapter = new GeminiAdapter();
-      expect(await adapter.isAvailable()).toBe(false);
+  describe('isAvailable', () => {
+    afterEach(() => {
+      delete process.env['GOOGLE_API_KEY'];
+      delete process.env['GEMINI_API_KEY'];
     });
 
-    it("isAvailable() returns false even if GOOGLE_API_KEY is present (stub not ready)", async () => {
-      process.env["GOOGLE_API_KEY"] = "goog-test-key";
-      const adapter = new GeminiAdapter();
-      expect(await adapter.isAvailable()).toBe(false);
+    test('returns true when GOOGLE_API_KEY is set', () => {
+      process.env['GOOGLE_API_KEY'] = 'gapi-key';
+      expect(geminiAdapter.isAvailable()).toBe(true);
     });
 
-    it("isAvailable() never throws", async () => {
-      const adapter = new GeminiAdapter();
-      await expect(adapter.isAvailable()).resolves.toBe(false);
+    test('returns true when GEMINI_API_KEY is set', () => {
+      process.env['GEMINI_API_KEY'] = 'gemini-key';
+      expect(geminiAdapter.isAvailable()).toBe(true);
+    });
+
+    test('returns false when neither key is set', () => {
+      delete process.env['GOOGLE_API_KEY'];
+      delete process.env['GEMINI_API_KEY'];
+      expect(geminiAdapter.isAvailable()).toBe(false);
     });
   });
 
-  describe("spawn()", () => {
-    it("spawn() emits status 'failed' without spawning a process", async () => {
-      const adapter = new GeminiAdapter();
-      const session = adapter.spawn(task);
+  describe('createSession', () => {
+    test('spawns gemini cli with -p flag and task', () => {
+      geminiAdapter.createSession({ task: 'write tests' });
 
-      const result = await session.result;
-      expect(session.status).toBe("failed");
-      expect(result.stderr).toContain("not yet implemented");
+      expect(mockSpawnProcess).toHaveBeenCalledWith(
+        'gemini',
+        ['-p', 'write tests'],
+        expect.any(Object),
+      );
     });
 
-    it("spawn() result resolves (not rejects) with failed status", async () => {
-      const adapter = new GeminiAdapter();
-      const session = adapter.spawn(task);
-      await expect(session.result).resolves.toBeDefined();
+    test('session provider is gemini', () => {
+      expect(geminiAdapter.provider).toBe('gemini');
     });
 
-    it("spawn() result has null exitCode and null tokenUsage", async () => {
-      const adapter = new GeminiAdapter();
-      const session = adapter.spawn(task);
-
-      const result = await session.result;
-      expect(result.exitCode).toBeNull();
-      expect(result.tokenUsage).toBeNull();
+    test('session starts in running status', () => {
+      const session = geminiAdapter.createSession({ task: 'do something' });
+      expect(session.status).toBe('running');
     });
 
-    it("cancel() on stub session is a no-op", async () => {
-      const adapter = new GeminiAdapter();
-      const session = adapter.spawn(task);
-      await expect(session.cancel()).resolves.toBeUndefined();
+    test('session collects stdout lines into output', () => {
+      const session = geminiAdapter.createSession({ task: 'generate code' });
+
+      // Grab the stdout handler registered during construction
+      const stdoutHandler = mockSpawnResult.onStdout.mock.calls[0]?.[0] as
+        | ((line: string) => void)
+        | undefined;
+      expect(stdoutHandler).toBeDefined();
+      stdoutHandler?.('line one');
+      stdoutHandler?.('line two');
+
+      expect(session.output).toContain('line one');
+      expect(session.output).toContain('line two');
     });
 
-    it("session has correct adapterId", () => {
-      const adapter = new GeminiAdapter();
-      const session = adapter.spawn(task);
-      expect(session.adapterId).toBe("gemini");
-    });
-  });
-
-  describe("adapter properties", () => {
-    it("has correct id and displayName", () => {
-      const adapter = new GeminiAdapter();
-      expect(adapter.id).toBe("gemini");
-      expect(adapter.displayName).toBe("Google Gemini");
+    test('session.kill() terminates the process', () => {
+      const session = geminiAdapter.createSession({ task: 'task' });
+      session.kill();
+      expect(mockSpawnResult.kill).toHaveBeenCalled();
+      expect(session.status).toBe('error');
     });
 
-    it("costPerToken is null", () => {
-      const adapter = new GeminiAdapter();
-      expect(adapter.costPerToken).toBeNull();
+    test('session.send() writes to stdin', () => {
+      const session = geminiAdapter.createSession({ task: 'task' });
+      session.send('user input\n');
+      expect(mockSpawnResult.write).toHaveBeenCalledWith('user input\n');
     });
 
-    it("capabilities include code-generation and analysis", () => {
-      const adapter = new GeminiAdapter();
-      expect(adapter.capabilities).toContain("code-generation");
-      expect(adapter.capabilities).toContain("analysis");
+    test('session.wait() resolves with exit code on success', async () => {
+      const session = geminiAdapter.createSession({ task: 'task' });
+
+      const exitHandler = mockSpawnResult.onExit.mock.calls[0]?.[0] as
+        | ((code: number) => void)
+        | undefined;
+      expect(exitHandler).toBeDefined();
+
+      const waitPromise = session.wait();
+      exitHandler?.(0);
+
+      const code = await waitPromise;
+      expect(code).toBe(0);
+      expect(session.status).toBe('done');
+    });
+
+    test('session.wait() resolves with non-zero exit code on failure', async () => {
+      const session = geminiAdapter.createSession({ task: 'task' });
+
+      const exitHandler = mockSpawnResult.onExit.mock.calls[0]?.[0] as
+        | ((code: number) => void)
+        | undefined;
+
+      const waitPromise = session.wait();
+      exitHandler?.(1);
+
+      const code = await waitPromise;
+      expect(code).toBe(1);
+      expect(session.status).toBe('error');
     });
   });
 });

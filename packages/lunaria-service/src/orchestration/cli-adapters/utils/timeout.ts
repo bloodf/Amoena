@@ -1,59 +1,20 @@
-import type { ChildProcess } from "node:child_process";
+export const DEFAULT_SESSION_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 
-export interface TimeoutHandle {
-  clear(): void;
-}
+export function withTimeout<T>(promise: Promise<T>, ms: number, label = 'operation'): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`Timeout: ${label} exceeded ${ms}ms`));
+    }, ms);
 
-/**
- * Sets a timeout on a child process.
- *
- * When the timer fires:
- *   1. `onTimeout()` is called immediately (so callers can update status before the process dies)
- *   2. SIGTERM is sent to the process
- *   3. After 5 seconds, if the process is still alive, SIGKILL is sent
- *
- * Call `handle.clear()` when the process exits normally to cancel the timer.
- */
-export function handleTimeout(
-  child: ChildProcess,
-  timeoutMs: number,
-  onTimeout: () => void,
-): TimeoutHandle {
-  let alive = true;
-  child.once("exit", () => {
-    alive = false;
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (err: unknown) => {
+        clearTimeout(timer);
+        reject(err);
+      },
+    );
   });
-
-  const outerTimer = setTimeout(() => {
-    if (!alive) return;
-
-    // Notify caller first so status is updated before the process is killed
-    onTimeout();
-
-    try {
-      child.kill("SIGTERM");
-    } catch {
-      // Process may have already exited
-    }
-
-    const innerTimer = setTimeout(() => {
-      if (!alive) return;
-      try {
-        child.kill("SIGKILL");
-      } catch {
-        // Process may have already exited
-      }
-    }, 5_000);
-
-    // If the process exits during the 5s window, cancel the SIGKILL
-    child.once("exit", () => {
-      clearTimeout(innerTimer);
-    });
-  }, timeoutMs);
-
-  return {
-    clear() {
-      clearTimeout(outerTimer);
-    },
-  };
 }

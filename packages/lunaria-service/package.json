@@ -1,8 +1,8 @@
 {
-  "name": "@lunaria/service",
+  "name": "@lunaria/lunaria-service",
   "version": "0.1.0",
   "private": true,
-  "description": "Lunaria service layer — extension runtime, settings persistence, and config recognition",
+  "description": "Lunaria service layer — CLI adapters, usage telemetry, and remote access",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -14,13 +14,5 @@
   "types": "src/index.ts",
   "scripts": {
     "test": "bun test"
-  },
-  "dependencies": {
-    "eventemitter3": "^5.0.1"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/node": "^22.15.30",
-    "typescript": "^5.8.2"
   }
 }
