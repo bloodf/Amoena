@@ -250,7 +250,7 @@ export function useGoalRun() {
 					taskId: event.taskId,
 					adapterId: event.adapterId,
 					routingReason: event.routingReason,
-					description: event.routingReason,
+					description: event.description ?? event.routingReason,
 				});
 				break;
 			case "task:output":

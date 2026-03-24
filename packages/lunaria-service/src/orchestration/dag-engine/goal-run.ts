@@ -18,6 +18,12 @@ import type {
   TaskStatus,
 } from "./types.js";
 
+const COMPLEXITY_TIMEOUT: Record<string, number> = {
+  low: 600_000,
+  medium: 1_200_000,
+  high: 1_800_000,
+};
+
 export interface GoalRunOptions {
   storage?: GoalRunStorage;
   repoRoot?: string;
@@ -76,7 +82,7 @@ export class GoalRun extends EventEmitter {
     await this._persistState();
 
     const sigtermHandler = () => {
-      void this._persistState();
+      void this._persistState().then(() => this.cancel());
     };
     process.once("SIGTERM", sigtermHandler);
 
@@ -107,6 +113,20 @@ export class GoalRun extends EventEmitter {
     }
 
     await Promise.allSettled(cancelPromises);
+
+    // Escalate to SIGKILL for any still-running child processes after 5 seconds
+    setTimeout(() => {
+      for (const node of this._nodes.values()) {
+        if (node.session && node.state.status === "cancelled") {
+          try {
+            const pid = (node.session as { pid?: number }).pid;
+            if (pid != null) process.kill(pid, "SIGKILL");
+          } catch {
+            // process already gone
+          }
+        }
+      }
+    }, 5_000).unref();
 
     this._setGoalStatus("cancelled");
     await this._persistState();
@@ -252,18 +272,23 @@ export class GoalRun extends EventEmitter {
           this.spec.baseRef,
         );
         worktreePath = wt.path;
-      } catch {
-        // Non-fatal — fall back to tmp path
+      } catch (err) {
+        this.emit("task:error", { taskId: node.spec.id, error: err instanceof Error ? err.message : String(err) });
       }
     }
     node.state.worktreePath = worktreePath;
     this._syncTaskState(node);
 
+    const timeoutMs =
+      node.spec.complexity != null
+        ? COMPLEXITY_TIMEOUT[node.spec.complexity]
+        : this.spec.timeoutMs;
+
     const session = adapter.spawn({
       id: node.spec.id,
       prompt: node.spec.description,
       worktreePath,
-      timeoutMs: this.spec.timeoutMs,
+      timeoutMs,
     });
 
     node.session = session;

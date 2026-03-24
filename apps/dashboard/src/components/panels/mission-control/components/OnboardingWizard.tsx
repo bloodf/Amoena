@@ -55,6 +55,7 @@ export function OnboardingWizard({ onConfigureAgent, onSkip }: OnboardingWizardP
 
 	function handleFinish() {
 		onConfigureAgent({ provider, credential });
+		setCredential("");
 	}
 
 	return (

@@ -252,11 +252,7 @@ export class ClaudeCodeAdapter implements AgentAdapter {
   readonly costPerToken = 0.000015;
 
   async isAvailable(): Promise<boolean> {
-    try {
-      return !!process.env["ANTHROPIC_API_KEY"];
-    } catch {
-      return false;
-    }
+    return !!process.env["ANTHROPIC_API_KEY"];
   }
 
   spawn(task: AdapterTask): AgentSession {
@@ -271,6 +267,7 @@ export class ClaudeCodeAdapter implements AgentAdapter {
     const session = new ClaudeCodeSession(randomUUID());
 
     const args = [
+      "--dangerously-skip-permissions",
       "-p",
       task.prompt,
       "--output-format",

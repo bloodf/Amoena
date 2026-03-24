@@ -1,0 +1,3 @@
+{"type":"system","subtype":"init","session_id":"sess-timeout","model":"claude-sonnet-4-6","tools":["Bash","Read"]}
+{"type":"assistant","message":{"id":"msg-to1","type":"message","role":"assistant","content":[{"type":"text","text":"Starting long-running analysis..."}],"model":"claude-sonnet-4-6","stop_reason":null}}
+{"type":"assistant","message":{"id":"msg-to2","type":"message","role":"assistant","content":[{"type":"tool_use","id":"tool-to1","name":"Bash","input":{"command":"sleep 600"}}],"model":"claude-sonnet-4-6","stop_reason":"tool_use"}}

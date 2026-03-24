@@ -228,11 +228,7 @@ export class CodexAdapter implements AgentAdapter {
   readonly costPerToken = 0.000012;
 
   async isAvailable(): Promise<boolean> {
-    try {
-      return !!process.env["OPENAI_API_KEY"];
-    } catch {
-      return false;
-    }
+    return !!process.env["OPENAI_API_KEY"];
   }
 
   spawn(task: AdapterTask): AgentSession {
@@ -246,7 +242,7 @@ export class CodexAdapter implements AgentAdapter {
 
     const session = new CodexSession(randomUUID());
 
-    const args = ["--quiet", task.prompt, ...(task.extraFlags ?? [])];
+    const args = ["exec", task.prompt, "-s", "full-auto", ...(task.extraFlags ?? [])];
 
     const env: NodeJS.ProcessEnv = {
       ...process.env,

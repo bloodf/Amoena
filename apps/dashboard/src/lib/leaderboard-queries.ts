@@ -102,7 +102,7 @@ export function getLeaderboard(
 	db: Database.Database,
 	options?: LeaderboardOptions,
 ): LeaderboardEntry[] {
-	const minTasks = options?.minTasks ?? 3;
+	const minTasks = options?.minTasks ?? 5;
 	const windowDays = options?.windowDays ?? null;
 	const sortBy: keyof LeaderboardEntry = options?.sortBy ?? "score";
 	const sortDir = options?.sortDir ?? "desc";
@@ -172,15 +172,18 @@ export function getLeaderboard(
 			last_used_at: number;
 		}[];
 
+		const tokenRows = db
+			.prepare(
+				`SELECT agent_type,
+                COALESCE(SUM(COALESCE(input_tokens, 0)) + SUM(COALESCE(output_tokens, 0)), 0) AS tokens
+         FROM task_runs GROUP BY agent_type`,
+			)
+			.all() as { agent_type: string; tokens: number }[];
+		const tokensByAgent = new Map(tokenRows.map((r) => [r.agent_type, r.tokens]));
+
 		stats = rows.map((row) => {
 			const avgCostPerTask =
 				row.total_tasks > 0 ? row.total_cost_usd / row.total_tasks : 0;
-			const tokenRow = db
-				.prepare(
-					`SELECT COALESCE(SUM(COALESCE(input_tokens, 0)) + SUM(COALESCE(output_tokens, 0)), 0) AS tokens
-           FROM task_runs WHERE agent_type = ?`,
-				)
-				.get(row.agent_type) as { tokens: number };
 			return {
 				agentType: row.agent_type,
 				totalTasks: row.total_tasks,
@@ -191,7 +194,7 @@ export function getLeaderboard(
 				avgDurationMs: row.avg_duration_ms,
 				totalCostUsd: row.total_cost_usd,
 				avgCostPerTask,
-				totalTokensUsed: tokenRow.tokens,
+				totalTokensUsed: tokensByAgent.get(row.agent_type) ?? 0,
 				lastUsedAt: row.last_used_at,
 			};
 		});

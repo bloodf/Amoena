@@ -30,7 +30,7 @@ export function RunReport({ report, onNewGoal }: RunReportProps) {
 		navigator.clipboard.writeText(JSON.stringify(report, null, 2)).then(() => {
 			setCopied(true);
 			setTimeout(() => setCopied(false), 2000);
-		});
+		}).catch(() => {});
 	}, [report]);
 
 	const statusCounts = report.tasks.reduce(

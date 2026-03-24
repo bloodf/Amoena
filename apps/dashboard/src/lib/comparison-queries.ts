@@ -209,6 +209,16 @@ export function compareRuns(
 		if (summary) runs.push(summary);
 	}
 
+	if (runs.length < 2) {
+		return {
+			runs,
+			deltas: [],
+			taskDiffs: [],
+			agentDiffs: [],
+			verdict: { summary: "Not enough runs to compare.", improvements: [], regressions: [], unchanged: [] },
+		};
+	}
+
 	const first = runs[0];
 	const last = runs[runs.length - 1];
 

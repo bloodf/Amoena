@@ -1,3 +1,4 @@
+import type Database from "better-sqlite3";
 import type { GoalRunState } from "./types.js";
 
 /**
@@ -33,6 +34,42 @@ export class InMemoryGoalRunStorage implements GoalRunStorage {
       }
     }
     return ids;
+  }
+}
+
+/**
+ * SQLite-backed implementation — persists goal run state across process restarts.
+ */
+export class SqliteGoalRunStorage implements GoalRunStorage {
+  constructor(private readonly db: Database.Database) {}
+
+  async save(state: GoalRunState): Promise<void> {
+    this.db
+      .prepare(
+        `INSERT OR REPLACE INTO goal_run_state (goal_run_id, state_json, updated_at)
+         VALUES (?, ?, ?)`,
+      )
+      .run(state.goalId, JSON.stringify(state), Math.floor(Date.now() / 1000));
+  }
+
+  async load(goalId: string): Promise<GoalRunState | null> {
+    const row = this.db
+      .prepare(`SELECT state_json FROM goal_run_state WHERE goal_run_id = ?`)
+      .get(goalId) as { state_json: string } | undefined;
+    if (!row) return null;
+    return JSON.parse(row.state_json) as GoalRunState;
+  }
+
+  async findIncomplete(): Promise<string[]> {
+    const rows = this.db
+      .prepare(
+        `SELECT grs.goal_run_id
+         FROM goal_run_state grs
+         JOIN goal_runs gr ON gr.id = grs.goal_run_id
+         WHERE gr.status = 'running'`,
+      )
+      .all() as { goal_run_id: string }[];
+    return rows.map((r) => r.goal_run_id);
   }
 }
 

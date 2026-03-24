@@ -92,6 +92,7 @@ export type MCServerEvent =
 			taskId: string;
 			adapterId: string;
 			routingReason: string;
+			description?: string;
 	  }
 	| {
 			type: "task:output";

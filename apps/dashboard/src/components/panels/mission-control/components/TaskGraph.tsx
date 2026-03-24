@@ -23,14 +23,17 @@ function buildLayers(tasks: TaskRunRow[]): Layer {
 	const byId = new Map(tasks.map((t) => [t.taskId, t]));
 	const layerMap = new Map<string, number>();
 
-	function getLayer(taskId: string): number {
+	function getLayer(taskId: string, visiting: Set<string> = new Set()): number {
 		if (layerMap.has(taskId)) return layerMap.get(taskId)!;
+		if (visiting.has(taskId)) return 0; // cycle detected — treat as root
 		const task = byId.get(taskId);
 		if (!task || !task.dependsOn || task.dependsOn.length === 0) {
 			layerMap.set(taskId, 0);
 			return 0;
 		}
-		const maxParentLayer = Math.max(...task.dependsOn.map(getLayer));
+		visiting.add(taskId);
+		const maxParentLayer = Math.max(...task.dependsOn.map((id) => getLayer(id, visiting)));
+		visiting.delete(taskId);
 		const layer = maxParentLayer + 1;
 		layerMap.set(taskId, layer);
 		return layer;

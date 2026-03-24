@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { GoalInput } from "./components/GoalInput";
 import { TaskGraph } from "./components/TaskGraph";
+import { AgentPanel } from "./components/AgentPanel";
 import { AgentPanelGrid } from "./components/AgentPanelGrid";
 import { CostTracker } from "./components/CostTracker";
 import { StatusBar } from "./components/StatusBar";
@@ -11,6 +12,7 @@ import { RunReport } from "./components/RunReport";
 import { OnboardingWizard } from "./components/OnboardingWizard";
 import { useGoalRun } from "./hooks/use-goal-run";
 import { useRunHistory } from "./hooks/use-run-history";
+import { AGENT_COLORS } from "./tokens";
 import type { GoalOptions } from "./types";
 
 // Audio helpers — all calls wrapped in try/catch so audio never crashes the UI
@@ -39,9 +41,8 @@ function playTerminalClick(ctx: AudioContext | null): void {
 	}
 }
 
-function playCompletionChime(ctx: AudioContext | null): void {
+function playCompletionChime(ctx: AudioContext | null, notes: number[]): void {
 	if (!ctx) return;
-	const notes = [440, 554, 659];
 	notes.forEach((freq, i) => {
 		try {
 			const osc = ctx.createOscillator();
@@ -90,6 +91,7 @@ export function MissionControlPanel() {
 	const { runs } = useRunHistory(5);
 
 	const [highlightedTaskId, setHighlightedTaskId] = useState<string | null>(null);
+	const [selectedAgentIndex, setSelectedAgentIndex] = useState(0);
 	const [showOnboarding, setShowOnboarding] = useState(false);
 	const [audioSettings, setAudioSettings] = useState(() => loadAudioSettings());
 	const [audioCtx] = useState<AudioContext | null>(() =>
@@ -120,11 +122,6 @@ export function MissionControlPanel() {
 	}, []);
 
 	// Audio: terminal click on each new output line
-	const prevOutputLenRef = useCallback(() => {
-		const total = state.panels.reduce((s, p) => s + p.outputLines.length, 0);
-		return total;
-	}, [state.panels]);
-
 	useEffect(() => {
 		if (!audioSettings.enabled || !audioSettings.terminalClicks) return;
 		// Fire a click sound on any new output line
@@ -132,13 +129,18 @@ export function MissionControlPanel() {
 		if (total > 0) playTerminalClick(audioCtx);
 	}, [state.panels, audioSettings, audioCtx]); // eslint-disable-line react-hooks/exhaustive-deps
 
-	// Audio: completion chime
+	// Audio: completion chime — distinct tones per outcome
 	useEffect(() => {
 		if (!audioSettings.enabled || !audioSettings.completionChime) return;
 		if (state.viewState === "post-run") {
-			playCompletionChime(audioCtx);
+			const status = state.goalStatus;
+			const notes =
+				status === "completed" ? [523, 659, 784] :   // C5, E5, G5 — ascending
+				status === "partial_failure" ? [262, 262] :  // C4, C4 — flat
+				[392, 330, 262];                             // G4, E4, C4 — descending
+			playCompletionChime(audioCtx, notes);
 		}
-	}, [state.viewState, audioSettings, audioCtx]);
+	}, [state.viewState, state.goalStatus, audioSettings, audioCtx]);
 
 	function toggleAudio() {
 		const next = { ...audioSettings, enabled: !audioSettings.enabled };
@@ -323,11 +325,42 @@ export function MissionControlPanel() {
 							{/* Agent panels — 60%+ on desktop */}
 							<div className="flex-1 overflow-y-auto p-3 min-h-0">
 								{/* Mobile tabbed view */}
-								<div className="md:hidden">
-									<AgentPanelGrid
-										panels={state.panels}
-										highlightedTaskId={highlightedTaskId}
-									/>
+								<div className="md:hidden flex flex-col h-full">
+									{state.panels.length > 0 && (
+										<div className="flex overflow-x-auto gap-1 pb-1 flex-shrink-0">
+											{state.panels.map((panel, i) => {
+												const color =
+													AGENT_COLORS[panel.adapterId as keyof typeof AGENT_COLORS] ??
+													AGENT_COLORS.unknown;
+												const isSelected = selectedAgentIndex === i;
+												return (
+													<button
+														key={panel.taskId}
+														type="button"
+														onClick={() => setSelectedAgentIndex(i)}
+														className="flex-shrink-0 px-3 py-1.5 rounded text-xs font-medium transition-colors min-h-[36px]"
+														style={{
+															backgroundColor: isSelected ? color : "transparent",
+															color: isSelected ? "#fff" : color,
+															border: `1px solid ${color}`,
+														}}
+													>
+														{panel.adapterId}
+													</button>
+												);
+											})}
+										</div>
+									)}
+									{state.panels[selectedAgentIndex] && (
+										<div className="flex-1 min-h-0">
+											<AgentPanel
+												{...state.panels[selectedAgentIndex]}
+												isHighlighted={
+													highlightedTaskId === state.panels[selectedAgentIndex].taskId
+												}
+											/>
+										</div>
+									)}
 								</div>
 								{/* Desktop/tablet grid */}
 								<div className="hidden md:block h-full">

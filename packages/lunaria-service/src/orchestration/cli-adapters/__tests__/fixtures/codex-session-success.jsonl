@@ -1,0 +1,7 @@
+{"type":"message","role":"system","content":"Task: implement the feature"}
+{"type":"message","role":"assistant","content":"I'll implement the feature now."}
+{"type":"message","role":"assistant","content":"Creating the file..."}
+{"type":"function_call","name":"write_file","arguments":{"path":"/src/feature.ts","content":"export const feature = () => 'done';"}}
+{"type":"function_result","name":"write_file","result":"File written successfully."}
+{"type":"message","role":"assistant","content":"Implementation complete."}
+{"type":"done","usage":{"prompt_tokens":120,"completion_tokens":85},"finish_reason":"stop"}

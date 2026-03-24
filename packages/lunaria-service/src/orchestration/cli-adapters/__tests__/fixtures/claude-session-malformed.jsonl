@@ -1,0 +1,6 @@
+{"type":"system","subtype":"init","session_id":"sess-malformed","model":"claude-sonnet-4-6","tools":["Bash"]}
+{"type":"assistant","message":{"id":"msg-m01","type":"message","role":"assistant","content":[{"type":"text","text":"Starting task..."}],"model":"claude-sonnet-4-6","stop_reason":null}}
+this is not valid json at all {{{
+{"type":"assistant","message":{"id":"msg-m02","type":"message","role":"assistant","content":[{"type":"text","text":"Continuing..."}],"model":"claude-sonnet-4-6","stop_reason":null}}
+{incomplete json
+{"type":"result","subtype":"success","result":"Done despite errors.","session_id":"sess-malformed","usage":{"input_tokens":50,"output_tokens":20},"cost_usd":0.000010}

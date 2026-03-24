@@ -36,12 +36,8 @@ export class GeminiAdapter implements AgentAdapter {
   readonly costPerToken = null;
 
   async isAvailable(): Promise<boolean> {
-    try {
-      // Stub is not yet implemented: always return false regardless of env vars
-      return false;
-    } catch {
-      return false;
-    }
+    // Stub is not yet implemented: always return false regardless of env vars
+    return false;
   }
 
   spawn(_task: AdapterTask): AgentSession {

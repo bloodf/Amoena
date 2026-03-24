@@ -1,0 +1,2 @@
+{"type":"system","subtype":"init","session_id":"sess-auth-fail","model":"claude-sonnet-4-6","tools":["Bash"]}
+{"type":"system","subtype":"error","error":{"type":"authentication_error","message":"Invalid API key. Please check your ANTHROPIC_API_KEY environment variable."},"session_id":"sess-auth-fail"}

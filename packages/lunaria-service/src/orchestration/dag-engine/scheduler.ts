@@ -41,7 +41,7 @@ export class DagScheduler {
   markRunning(taskId: string): void {
     const node = this.nodes.get(taskId);
     if (node) {
-      node.state.status = "running";
+      node.state = { ...node.state, status: "running" };
       this.running++;
     }
   }
@@ -50,8 +50,7 @@ export class DagScheduler {
   markCompleted(taskId: string): void {
     const node = this.nodes.get(taskId);
     if (node) {
-      node.state.status = "completed";
-      node.state.completedAt = Date.now();
+      node.state = { ...node.state, status: "completed", completedAt: Date.now() };
       this.completed.add(taskId);
       this.running = Math.max(0, this.running - 1);
     }
@@ -167,19 +166,21 @@ export class DagScheduler {
     for (const node of this.nodes.values()) {
       if (
         node.state.status === "queued" &&
-        this._hasFailedAncestor(node.spec.id)
+        this._hasFailedAncestor(node.spec.id, new Set<string>())
       ) {
-        node.state.status = "skipped";
+        node.state = { ...node.state, status: "skipped" };
       }
     }
   }
 
-  private _hasFailedAncestor(taskId: string): boolean {
+  private _hasFailedAncestor(taskId: string, visited: Set<string> = new Set()): boolean {
+    if (visited.has(taskId)) return false;
+    visited.add(taskId);
     const node = this.nodes.get(taskId);
     if (!node) return false;
     for (const dep of node.spec.dependsOn) {
       if (this.failed.has(dep)) return true;
-      if (this._hasFailedAncestor(dep)) return true;
+      if (this._hasFailedAncestor(dep, visited)) return true;
     }
     return false;
   }
