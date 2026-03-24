@@ -17,6 +17,10 @@ import type {
   TaskRunState,
   TaskStatus,
 } from "./types.js";
+import { CommandBus } from "./command-bus.js";
+import { InMemoryEventStore } from "./event-store.js";
+import { OrchestrationPubSub } from "./pubsub.js";
+import type { OrchestrationEvent } from "./events.js";
 
 const COMPLEXITY_TIMEOUT: Record<string, number> = {
   low: 600_000,
@@ -29,6 +33,10 @@ export interface GoalRunOptions {
   repoRoot?: string;
   /** Skip git worktree creation (useful for tests) */
   skipWorktree?: boolean;
+  /** Optional command bus — if omitted, an in-memory bus is created */
+  commandBus?: CommandBus;
+  /** Optional pubsub — if omitted, a local one is created */
+  pubSub?: OrchestrationPubSub;
 }
 
 export class GoalRun extends EventEmitter {
@@ -43,6 +51,10 @@ export class GoalRun extends EventEmitter {
   private _cancelled = false;
   /** Live TaskNode map — holds session references */
   private readonly _nodes: Map<string, TaskNode>;
+  /** CQRS command bus for all state transitions */
+  private readonly _bus: CommandBus;
+  /** PubSub for broadcasting events */
+  private readonly _pubSub: OrchestrationPubSub;
 
   constructor(
     spec: GoalSpec,
@@ -74,6 +86,25 @@ export class GoalRun extends EventEmitter {
       completedAt: null,
       mergeResult: null,
     };
+
+    // Wire up CQRS bus
+    this._pubSub = opts.pubSub ?? new OrchestrationPubSub();
+    this._bus =
+      opts.commandBus ??
+      new CommandBus(new InMemoryEventStore(), this._pubSub);
+
+    // Forward CQRS events to the GoalRun EventEmitter for subscribers
+    this._pubSub.subscribeToGoal(spec.id, (evt: OrchestrationEvent) => {
+      this._handleCqrsEvent(evt);
+    });
+
+    // Bootstrap the read model: submit the goal
+    void this._bus.dispatch({
+      type: "goal.submit",
+      goalId: spec.id,
+      description: spec.description,
+      tasks: spec.tasks,
+    });
   }
 
   /** Start execution; resolves when all tasks finish or goal is cancelled */
@@ -130,6 +161,15 @@ export class GoalRun extends EventEmitter {
 
     this._setGoalStatus("cancelled");
     await this._persistState();
+
+    // Dispatch goal.cancel through CQRS bus
+    await this._bus.dispatch({
+      type: "goal.cancel",
+      goalId: this.goalId,
+    }).catch(() => {
+      // May fail if goal already in terminal state in read model — ignore
+    });
+
     this.emit("goal:cancelled", this.state);
   }
 
@@ -165,6 +205,36 @@ export class GoalRun extends EventEmitter {
     }
 
     return run;
+  }
+
+  // ---------------------------------------------------------------------------
+  // CQRS event handler — forwards bus events to the imperative EventEmitter
+  // ---------------------------------------------------------------------------
+
+  private _handleCqrsEvent(evt: OrchestrationEvent): void {
+    switch (evt.type) {
+      case "task.dispatched":
+        this.emit("task:dispatched", {
+          taskId: evt.taskId,
+          adapterId: evt.adapterId,
+          routingReason: evt.routingReason,
+        });
+        break;
+      case "task.completed":
+        this.emit("task:completed", this.state.tasks[evt.taskId]);
+        break;
+      case "task.failed":
+        this.emit("task:failed", this.state.tasks[evt.taskId]);
+        break;
+      case "task.timed_out":
+        this.emit("task:failed", this.state.tasks[evt.taskId]);
+        break;
+      case "task.output.appended":
+        // output events are emitted directly in _runTask
+        break;
+      default:
+        break;
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -245,10 +315,21 @@ export class GoalRun extends EventEmitter {
     node.state.attemptCount++;
     this._updateTaskStatus(node.spec.id, "running");
 
-    this.emit("task:dispatched", {
+    // Dispatch through CQRS bus (fire-and-forget; invariant errors are non-fatal here
+    // since the read model may not have the task registered yet in all code paths)
+    await this._bus.dispatch({
+      type: "task.dispatch",
+      goalId: this.goalId,
       taskId: node.spec.id,
       adapterId: routing.adapter.id,
       routingReason: routing.reason,
+    }).catch(() => {
+      // Read model may not have the task yet (e.g. resumed runs); emit directly
+      this.emit("task:dispatched", {
+        taskId: node.spec.id,
+        adapterId: routing.adapter.id,
+        routingReason: routing.reason,
+      });
     });
 
     const taskPromise = this._runTask(node, routing.adapter);
@@ -295,6 +376,14 @@ export class GoalRun extends EventEmitter {
 
     session.on("output", (chunk: OutputChunk) => {
       this.emit("task:output", chunk);
+      // Also dispatch output through CQRS bus
+      void this._bus.dispatch({
+        type: "task.output",
+        goalId: this.goalId,
+        taskId: node.spec.id,
+        text: typeof chunk === "string" ? chunk : JSON.stringify(chunk),
+        timestamp: Date.now(),
+      }).catch(() => {});
     });
 
     try {
@@ -308,9 +397,22 @@ export class GoalRun extends EventEmitter {
       const succeeded = result.exitCode === 0 && session.status === "completed";
 
       if (succeeded) {
+        const durationMs = result.durationMs ?? (node.state.startedAt ? Date.now() - node.state.startedAt : 0);
+        const tokenCount = result.tokenUsage?.totalTokens ?? 0;
+
         this._updateTaskStatus(node.spec.id, "completed");
         this.scheduler.markCompleted(node.spec.id);
-        this.emit("task:completed", node.state);
+
+        // Dispatch completion through CQRS bus
+        await this._bus.dispatch({
+          type: "task.complete",
+          goalId: this.goalId,
+          taskId: node.spec.id,
+          durationMs,
+          tokenCount,
+          cost: 0,
+        }).catch(() => {});
+
         await this._persistState();
         node.session = null;
         return;
@@ -322,12 +424,36 @@ export class GoalRun extends EventEmitter {
         errorMessage: `Exit code: ${result.exitCode ?? "null"}`,
       });
 
+      // Dispatch failure through CQRS bus
+      if (timedOut) {
+        await this._bus.dispatch({
+          type: "task.timeout",
+          goalId: this.goalId,
+          taskId: node.spec.id,
+        }).catch(() => {});
+      } else {
+        await this._bus.dispatch({
+          type: "task.fail",
+          goalId: this.goalId,
+          taskId: node.spec.id,
+          error: `Exit code: ${result.exitCode ?? "null"}`,
+          retryable: node.canRetry(),
+        }).catch(() => {});
+      }
+
       node.session = null;
       await this._handleFailedTask(node, adapter);
     } catch {
       node.session = null;
       if (!this._cancelled) {
         this._updateTaskStatus(node.spec.id, "failed");
+        await this._bus.dispatch({
+          type: "task.fail",
+          goalId: this.goalId,
+          taskId: node.spec.id,
+          error: "Session threw an unexpected error",
+          retryable: node.canRetry(),
+        }).catch(() => {});
         await this._handleFailedTask(node, adapter);
       }
     }

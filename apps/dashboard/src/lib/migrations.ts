@@ -1750,6 +1750,28 @@ const migrations: Migration[] = [
 			})();
 		},
 	},
+	{
+		id: "048_dag_events",
+		up: (db) => {
+			db.transaction(() => {
+				db.exec(`
+          CREATE TABLE IF NOT EXISTS dag_events (
+            id          TEXT    PRIMARY KEY,
+            goal_run_id TEXT    NOT NULL,
+            type        TEXT    NOT NULL,
+            payload     TEXT    NOT NULL,
+            timestamp   INTEGER NOT NULL
+          )
+        `);
+				db.exec(
+					`CREATE INDEX IF NOT EXISTS idx_dag_events_goal ON dag_events(goal_run_id)`,
+				);
+				db.exec(
+					`CREATE INDEX IF NOT EXISTS idx_dag_events_timestamp ON dag_events(timestamp)`,
+				);
+			})();
+		},
+	},
 ];
 
 export function runMigrations(db: Database.Database) {
