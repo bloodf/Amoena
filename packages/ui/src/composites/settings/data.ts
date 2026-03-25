@@ -20,7 +20,7 @@ export const settingsSections = [
 ] as const;
 
 export const installedPlugins = [
-  { name: "Git Integration Pro", version: "2.1.0", author: "lunaria-team", enabled: true, trusted: true, updateAvailable: false, permissions: ["file_read", "file_write", "git"] },
+  { name: "Git Integration Pro", version: "2.1.0", author: "amoena-team", enabled: true, trusted: true, updateAvailable: false, permissions: ["file_read", "file_write", "git"] },
   { name: "Rust Patterns", version: "1.4.2", author: "community", enabled: true, trusted: true, updateAvailable: true, permissions: ["memory_read", "memory_write"] },
   { name: "Docker Tools", version: "0.9.1", author: "community", enabled: false, trusted: false, updateAvailable: false, permissions: ["terminal", "file_read"] },
 ];
@@ -41,7 +41,7 @@ export const keybindings = [
 ];
 
 export const installedThemes = [
-  { name: "Lunaria Dark", active: true, author: "Built-in" },
-  { name: "Lunaria Light", active: false, author: "Built-in" },
+  { name: "Amoena Dark", active: true, author: "Built-in" },
+  { name: "Amoena Light", active: false, author: "Built-in" },
   { name: "Midnight Amethyst", active: false, author: "community" },
 ];

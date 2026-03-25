@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 import { createClientLogger } from "@/lib/client-logger";
 import { detectProvider } from "@/lib/token-utils";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 const log = createClientLogger("TokenDashboard");
 
@@ -88,7 +88,7 @@ const TIMEZONE_OPTIONS: TimezoneOption[] = [
 const deriveProvider = detectProvider;
 
 export function TokenDashboardPanel() {
-	const { sessions } = useLunaria();
+	const { sessions } = useAmoena();
 	const t = useTranslations("tokenDashboard");
 
 	const [selectedTimeframe, setSelectedTimeframe] = useState<

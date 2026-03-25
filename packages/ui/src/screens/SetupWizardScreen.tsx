@@ -42,7 +42,7 @@ export function SetupWizardScreen() {
   };
 
   const handleLaunch = () => {
-    toast.success("Lunaria is ready!");
+    toast.success("Amoena is ready!");
     navigate("/");
   };
 

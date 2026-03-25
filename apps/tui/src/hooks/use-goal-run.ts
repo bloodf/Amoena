@@ -1,6 +1,6 @@
 /**
  * useGoalRun — manages connection to either:
- *   - A running Lunaria server via WebSocket (server mode)
+ *   - A running Amoena server via WebSocket (server mode)
  *   - The embedded StandaloneEngine (standalone mode)
  *
  * Dispatches MCServerEvent-compatible events into the shared TUI reducer.

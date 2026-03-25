@@ -1,7 +1,7 @@
 {
   "name": "@lunaria/dashboard",
   "version": "2.0.1",
-  "description": "Lunaria Dashboard — AI agent orchestration and monitoring",
+  "description": "Amoena Dashboard — AI agent orchestration and monitoring",
   "scripts": {
     "verify:node": "node scripts/check-node-version.mjs",
     "api:parity": "node scripts/check-api-contract-parity.mjs --root . --openapi openapi.json --ignore-file scripts/api-contract-parity.ignore",
@@ -20,15 +20,15 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:e2e": "bun run verify:node && playwright test",
-    "test:e2e:lunaria:local": "bun run verify:node && E2E_GATEWAY_EXPECTED=0 playwright test -c playwright.lunaria.local.config.ts",
-    "test:e2e:lunaria:gateway": "bun run verify:node && E2E_GATEWAY_EXPECTED=1 playwright test -c playwright.lunaria.gateway.config.ts",
-    "test:e2e:lunaria": "pnpm test:e2e:lunaria:local && pnpm test:e2e:lunaria:gateway",
+    "test:e2e:amoena:local": "bun run verify:node && E2E_GATEWAY_EXPECTED=0 playwright test -c playwright.amoena.local.config.ts",
+    "test:e2e:amoena:gateway": "bun run verify:node && E2E_GATEWAY_EXPECTED=1 playwright test -c playwright.amoena.gateway.config.ts",
+    "test:e2e:amoena": "pnpm test:e2e:amoena:local && pnpm test:e2e:amoena:gateway",
     "test:all": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm test:e2e",
     "quality:gate": "pnpm test:all"
   },
   "dependencies": {
     "@lunaria/contracts": "workspace:*",
-    "@lunaria/lunaria-service": "workspace:*",
+    "@lunaria/amoena-service": "workspace:*",
     "@lunaria/tokens": "workspace:*",
     "@lunaria/ui": "workspace:*",
     "@lunaria/i18n": "workspace:*",
@@ -85,7 +85,7 @@
     "node": ">=22"
   },
   "keywords": [
-    "lunaria",
+    "amoena",
     "agent",
     "orchestration",
     "dashboard",
@@ -95,7 +95,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LunariaAi/lunaria.git"
+    "url": "https://github.com/AmoenaAi/amoena.git"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

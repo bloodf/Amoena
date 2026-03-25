@@ -21,7 +21,7 @@ export interface CssVariableOptions {
   prefix?: string;
 }
 
-export interface LunariaThemeTokens {
+export interface AmoenaThemeTokens {
   colors: ThemeTokenGroup;
   typography: {
     fontFamily: Record<string, string>;

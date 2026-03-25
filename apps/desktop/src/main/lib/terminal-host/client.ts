@@ -27,7 +27,7 @@ import { connect, type Socket } from "node:net";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { app } from "electron";
-import { LUNARIA_DIR_NAME } from "shared/constants";
+import { AMOENA_DIR_NAME } from "shared/constants";
 import { throwIfAborted } from "../terminal/abort";
 import { TerminalAttachCanceledError } from "../terminal/errors";
 import {
@@ -67,16 +67,16 @@ enum ConnectionState {
 // Configuration
 // =============================================================================
 
-const DEBUG_CLIENT = process.env.LUNARIA_TERMINAL_DEBUG === "1";
+const DEBUG_CLIENT = process.env.AMOENA_TERMINAL_DEBUG === "1";
 
 // Get from shared constants for multi-worktree support (imported at top of file)
-const LUNARIA_HOME_DIR = join(homedir(), LUNARIA_DIR_NAME);
+const AMOENA_HOME_DIR = join(homedir(), AMOENA_DIR_NAME);
 
-const SOCKET_PATH = join(LUNARIA_HOME_DIR, "terminal-host.sock");
-const TOKEN_PATH = join(LUNARIA_HOME_DIR, "terminal-host.token");
-const PID_PATH = join(LUNARIA_HOME_DIR, "terminal-host.pid");
-const SPAWN_LOCK_PATH = join(LUNARIA_HOME_DIR, "terminal-host.spawn.lock");
-const SCRIPT_MTIME_PATH = join(LUNARIA_HOME_DIR, "terminal-host.mtime");
+const SOCKET_PATH = join(AMOENA_HOME_DIR, "terminal-host.sock");
+const TOKEN_PATH = join(AMOENA_HOME_DIR, "terminal-host.token");
+const PID_PATH = join(AMOENA_HOME_DIR, "terminal-host.pid");
+const SPAWN_LOCK_PATH = join(AMOENA_HOME_DIR, "terminal-host.spawn.lock");
+const SCRIPT_MTIME_PATH = join(AMOENA_HOME_DIR, "terminal-host.mtime");
 
 // Connection timeouts
 const CONNECT_TIMEOUT_MS = 5000;
@@ -179,8 +179,8 @@ export class TerminalHostClient extends EventEmitter {
 		super();
 		if (DEBUG_CLIENT) {
 			console.log("[TerminalHostClient] Initialized with paths:", {
-				LUNARIA_DIR_NAME,
-				LUNARIA_HOME_DIR,
+				AMOENA_DIR_NAME,
+				AMOENA_HOME_DIR,
 				SOCKET_PATH,
 				NODE_ENV: process.env.NODE_ENV,
 			});
@@ -1040,12 +1040,12 @@ export class TerminalHostClient extends EventEmitter {
 	 */
 	private acquireSpawnLock(): boolean {
 		try {
-			// Ensure lunaria home directory exists before any file operations
-			if (!existsSync(LUNARIA_HOME_DIR)) {
-				mkdirSync(LUNARIA_HOME_DIR, { recursive: true, mode: 0o700 });
+			// Ensure amoena home directory exists before any file operations
+			if (!existsSync(AMOENA_HOME_DIR)) {
+				mkdirSync(AMOENA_HOME_DIR, { recursive: true, mode: 0o700 });
 			}
 			try {
-				chmodSync(LUNARIA_HOME_DIR, 0o700);
+				chmodSync(AMOENA_HOME_DIR, 0o700);
 			} catch {
 				// Best-effort.
 			}
@@ -1158,7 +1158,7 @@ export class TerminalHostClient extends EventEmitter {
 			}
 
 			// Open log file for daemon output (helps debug daemon-side issues)
-			const logPath = join(LUNARIA_HOME_DIR, "daemon.log");
+			const logPath = join(AMOENA_HOME_DIR, "daemon.log");
 			let logFd: number;
 			try {
 				if (existsSync(logPath)) {

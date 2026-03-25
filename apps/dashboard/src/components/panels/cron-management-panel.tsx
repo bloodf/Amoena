@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 import { createClientLogger } from "@/lib/client-logger";
-import { type CronJob, useLunaria } from "@/store";
+import { type CronJob, useAmoena } from "@/store";
 
 const log = createClientLogger("CronManagement");
 
@@ -103,7 +103,7 @@ function formatDateLabel(date: Date): string {
 
 export function CronManagementPanel() {
 	const t = useTranslations("cronManagement");
-	const { cronJobs, setCronJobs, dashboardMode } = useLunaria();
+	const { cronJobs, setCronJobs, dashboardMode } = useAmoena();
 	const isLocalMode = dashboardMode === "local";
 	const [isLoading, setIsLoading] = useState(false);
 	const [showAddForm, setShowAddForm] = useState(false);
@@ -185,7 +185,7 @@ export function CronManagementPanel() {
 					name: task.name || task.id || "scheduler-task",
 					schedule: "system-managed automation",
 					command: `Built-in local automation (${task.id || "unknown"})`,
-					agentId: "lunaria-local",
+					agentId: "amoena-local",
 					delivery: "local",
 					enabled: task.running ? true : !!task.enabled,
 					lastRun: typeof task.lastRun === "number" ? task.lastRun : undefined,
@@ -326,7 +326,7 @@ export function CronManagementPanel() {
 
 	const loadJobLogs = async (job: CronJob) => {
 		const isLocalAutomation =
-			job.delivery === "local" && job.agentId === "lunaria-local";
+			job.delivery === "local" && job.agentId === "amoena-local";
 		if (isLocalAutomation) {
 			const logs: Array<{ timestamp: number; message: string; level: string }> =
 				[];
@@ -401,7 +401,7 @@ export function CronManagementPanel() {
 
 	const triggerJob = async (job: CronJob, mode: "force" | "due" = "force") => {
 		const isLocalAutomation =
-			job.delivery === "local" && job.agentId === "lunaria-local";
+			job.delivery === "local" && job.agentId === "amoena-local";
 		setRunDropdownJobId(null);
 		try {
 			if (isLocalAutomation) {
@@ -1239,7 +1239,7 @@ export function CronManagementPanel() {
 									{filteredJobs.map((job, index) => {
 										const isLocalAutomation =
 											job.delivery === "local" &&
-											job.agentId === "lunaria-local";
+											job.agentId === "amoena-local";
 										const isSelected = selectedJob?.name === job.name;
 										return (
 											<tr
@@ -1488,7 +1488,7 @@ export function CronManagementPanel() {
 											</span>
 										</div>
 										{selectedJob.delivery === "local" &&
-											selectedJob.agentId === "lunaria-local" && (
+											selectedJob.agentId === "amoena-local" && (
 												<div className="grid grid-cols-[100px_1fr] gap-1 text-sm">
 													<span className="text-muted-foreground">
 														{t("source")}
@@ -1569,7 +1569,7 @@ export function CronManagementPanel() {
 										onClick={() => toggleJob(selectedJob)}
 										disabled={
 											selectedJob.delivery === "local" &&
-											selectedJob.agentId === "lunaria-local"
+											selectedJob.agentId === "amoena-local"
 										}
 										size="sm"
 										className={
@@ -1584,7 +1584,7 @@ export function CronManagementPanel() {
 										onClick={() => cloneJob(selectedJob)}
 										disabled={
 											selectedJob.delivery === "local" &&
-											selectedJob.agentId === "lunaria-local"
+											selectedJob.agentId === "amoena-local"
 										}
 										size="sm"
 										variant="outline"
@@ -1602,7 +1602,7 @@ export function CronManagementPanel() {
 										onClick={() => removeJob(selectedJob)}
 										disabled={
 											selectedJob.delivery === "local" &&
-											selectedJob.agentId === "lunaria-local"
+											selectedJob.agentId === "amoena-local"
 										}
 										variant="destructive"
 										size="sm"

@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { TasksScreen } from "./tasks-screen";
 
 vi.mock("@lunaria/i18n", () => ({
-  useLunariaTranslation: () => ({ t: (key: string) => key }),
+  useAmoenaTranslation: () => ({ t: (key: string) => key }),
 }));
 
 vi.mock("@/runtime/client-context", () => ({

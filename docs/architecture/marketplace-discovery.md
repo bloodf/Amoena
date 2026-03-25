@@ -2,15 +2,15 @@
 
 ## Overview
 
-Lunaria does not host its own marketplace backend. Instead, the **Marketplace Client** (see `system-architecture.md`) aggregates resources from multiple existing registries into a unified local search index. This gives users a single discovery surface for MCP servers, skills, plugins, agents, and extensions across all supported TUI runtimes (Claude Code, OpenCode, Codex CLI, Gemini CLI).
+Amoena does not host its own marketplace backend. Instead, the **Marketplace Client** (see `system-architecture.md`) aggregates resources from multiple existing registries into a unified local search index. This gives users a single discovery surface for MCP servers, skills, plugins, agents, and extensions across all supported TUI runtimes (Claude Code, OpenCode, Codex CLI, Gemini CLI).
 
-The system operates entirely client-side: poll remote registries, normalize results into a common schema, cache in SQLite with FTS5 full-text search, and present a unified browsable/searchable catalog in the Lunaria UI.
+The system operates entirely client-side: poll remote registries, normalize results into a common schema, cache in SQLite with FTS5 full-text search, and present a unified browsable/searchable catalog in the Amoena UI.
 
 ## Registry Sources
 
 > **MVP Recommendation**: Start with 2-3 verified registries only (npm + Smithery, optionally Glama). Add additional registries only after independently verifying their APIs exist and are stable. The full list of 11 registries below includes several unverified endpoints that may not have public APIs. See the Verification Status for each registry.
 
-Lunaria aggregates from up to 11 registry sources. Each source has distinct API access patterns, authentication requirements, and response formats.
+Amoena aggregates from up to 11 registry sources. Each source has distinct API access patterns, authentication requirements, and response formats.
 
 ### 1. Glama — MCP Server Registry
 
@@ -147,7 +147,7 @@ Lunaria aggregates from up to 11 registry sources. Each source has distinct API 
 | Property | Value |
 | --- | --- |
 | Verification Status | ✅ Verified public API |
-| URL | `https://registry.npmjs.org/-/v1/search?text=keywords:mcp-server+keywords:lunaria-plugin` |
+| URL | `https://registry.npmjs.org/-/v1/search?text=keywords:mcp-server+keywords:amoena-plugin` |
 | Auth | None (public REST API) |
 | Transport | HTTPS GET with offset pagination (`?from=0&size=50`) |
 | Response format | JSON with `objects[]` array containing `package.name`, `package.description`, `package.version`, `package.author`, `package.keywords`, `package.links`, `downloads.weekly`, `score.final` |
@@ -252,7 +252,7 @@ export interface MarketplaceResource {
   /** ISO 8601 timestamp of last update at source */
   last_updated: string;
 
-  /** ISO 8601 timestamp when Lunaria last fetched this record */
+  /** ISO 8601 timestamp when Amoena last fetched this record */
   fetched_at: string;
 }
 ```
@@ -335,7 +335,7 @@ pub enum InstallMethod {
 
 ## Deduplication Strategy
 
-The same resource often appears in multiple registries (e.g., an MCP server listed on both Glama and Smithery). Lunaria uses a multi-signal deduplication pipeline to assign a shared `canonical_id`.
+The same resource often appears in multiple registries (e.g., an MCP server listed on both Glama and Smithery). Amoena uses a multi-signal deduplication pipeline to assign a shared `canonical_id`.
 
 ### Deduplication Signals
 
@@ -689,7 +689,7 @@ transport = "stdio"
 
 ```
 1. User clicks "Install" on MCP server resource
-2. Lunaria prompts: "Install for which TUI?" (multi-select from compatible TUIs)
+2. Amoena prompts: "Install for which TUI?" (multi-select from compatible TUIs)
 3. For each selected TUI:
    a. Read current TUI config file
    b. Parse existing MCP server entries
@@ -721,7 +721,7 @@ Skills are SKILL.md files (and optional supporting files) downloaded to the TUI'
 
 ```
 1. User clicks "Install" on skill resource
-2. Lunaria determines target TUI from compatible_tuis
+2. Amoena determines target TUI from compatible_tuis
 3. Fetch SKILL.md content from manifest_url
 4. If skill has supporting files: fetch all files listed in manifest
 5. Create skill directory: <tui_skills_dir>/<skill-name>/
@@ -732,12 +732,12 @@ Skills are SKILL.md files (and optional supporting files) downloaded to the TUI'
 
 ### Plugins (`install_method: npm-install`)
 
-Lunaria plugins follow the manifest schema defined in `plugin-framework.md`.
+Amoena plugins follow the manifest schema defined in `plugin-framework.md`.
 
 #### Installation Paths
 
-- **Plugin directory**: `~/.lunaria/plugins/<plugin-id>/`
-- **npm install target**: `~/.lunaria/plugins/<plugin-id>/node_modules/`
+- **Plugin directory**: `~/.amoena/plugins/<plugin-id>/`
+- **npm install target**: `~/.amoena/plugins/<plugin-id>/node_modules/`
 
 #### Installation Sequence
 
@@ -748,8 +748,8 @@ Lunaria plugins follow the manifest schema defined in `plugin-framework.md`.
 4. Check minAppVersion compatibility
 5. Display requested permissions for user approval
 6. If approved:
-   a. Create plugin directory: ~/.lunaria/plugins/<plugin-id>/
-   b. Run: npm install <npm_package> --prefix ~/.lunaria/plugins/<plugin-id>/
+   a. Create plugin directory: ~/.amoena/plugins/<plugin-id>/
+   b. Run: npm install <npm_package> --prefix ~/.amoena/plugins/<plugin-id>/
    c. Copy/validate manifest.json
    d. Insert plugin record into plugin_state table
    e. Trigger Plugin Host onLoad -> onActivate lifecycle
@@ -764,7 +764,7 @@ Gemini-specific extensions use the Gemini CLI's native extension system.
 
 ```
 1. User clicks "Install" on Gemini extension
-2. Lunaria invokes: gemini extensions install <extension-id>
+2. Amoena invokes: gemini extensions install <extension-id>
 3. Monitor CLI output for success/failure
 4. Persist installation record in plugin_state table
 5. Emit event(marketplace:installed)
@@ -983,7 +983,7 @@ The Marketplace Client exposes Tauri commands consumed by the React UI (aligned 
 
 Marketplace installations write to TUI config files (e.g., `~/.claude.json`, `~/.codex/config.toml`, `~/.gemini/settings.json`). Unsafe or malicious config values could redirect MCP server URLs, inject shell commands, or exfiltrate credentials. The following controls are mandatory:
 
-- **No direct config file writes**: Marketplace installation flows MUST NOT write directly to TUI config files. Instead, the Rust backend generates a proposed config change using Lunaria's managed config layer, validates it, and presents a diff to the user before applying.
+- **No direct config file writes**: Marketplace installation flows MUST NOT write directly to TUI config files. Instead, the Rust backend generates a proposed config change using Amoena's managed config layer, validates it, and presents a diff to the user before applying.
 - **User diff review**: Before any config change is applied, the UI shows the user a clear before/after diff of exactly what will be written. The user must explicitly confirm. No silent background config mutations.
 - **Allowlist schema validation**: All config values are validated against an allowlist schema before writing. The schema enforces:
   - MCP server `command` fields: must be an absolute path or a known safe binary name (e.g., `npx`, `node`, `python`). No shell metacharacters (`; | & > <`).
@@ -998,7 +998,7 @@ Marketplace installations write to TUI config files (e.g., `~/.claude.json`, `~/
 
 ## Architectural Invariants
 
-- Lunaria never hosts or proxies registry data to third parties; all aggregation is client-local.
+- Amoena never hosts or proxies registry data to third parties; all aggregation is client-local.
 - Registry API credentials (Smithery bearer token, Gemini OAuth token) are stored in the Rust-managed auth boundary, never exposed to the webview.
 - FTS5 index is always synchronized with the resource cache via SQLite triggers; no separate index rebuild step.
 - Installation flows always validate manifests and check permissions before writing to TUI config files.

@@ -96,7 +96,7 @@ function applySchema(db: Database): void {
 
 /**
  * Opens (or creates) a SQLite database at `dbPath` with WAL mode enabled
- * and the Lunaria schema applied.
+ * and the Amoena schema applied.
  */
 export function createLocalDb(dbPath: string): Database {
   const db = new Database(dbPath, { create: true, readwrite: true });
@@ -112,11 +112,11 @@ let _instancePath: string | null = null;
 
 /**
  * Returns the existing singleton database, or creates one.
- * If `dbPath` is omitted the database is placed in `~/.lunaria/lunaria.db`.
+ * If `dbPath` is omitted the database is placed in `~/.amoena/amoena.db`.
  */
 export function getOrCreateDb(dbPath?: string): Database {
   const resolvedPath =
-    dbPath ?? path.join(os.homedir(), ".lunaria", "lunaria.db");
+    dbPath ?? path.join(os.homedir(), ".amoena", "amoena.db");
 
   if (_instance && _instancePath === resolvedPath) {
     return _instance;

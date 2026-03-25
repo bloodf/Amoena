@@ -23,7 +23,7 @@ function getDb(): AnyDb | null {
     }
   }
   if (!DatabaseCtor) return null;
-  const dir = join(homedir(), '.lunaria');
+  const dir = join(homedir(), '.amoena');
   mkdirSync(dir, { recursive: true });
   const db = new DatabaseCtor(join(dir, 'tui.db'));
   db.exec(`

@@ -2,7 +2,7 @@
  * Shared types for the remote-access module.
  */
 
-/** A Lunaria instance discovered on the local network. */
+/** A Amoena instance discovered on the local network. */
 export interface Device {
   /** Stable unique identifier for this device. */
   readonly id: string;
@@ -39,7 +39,7 @@ export interface PairingResult {
 export interface RelayRoom {
   /** Unique identifier for this relay room. */
   readonly id: string;
-  /** The Lunaria desktop/host device. */
+  /** The Amoena desktop/host device. */
   readonly host: Device;
   /** The connected mobile device. */
   readonly mobile: Device;

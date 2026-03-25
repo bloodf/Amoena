@@ -1,6 +1,6 @@
 # Docs Governance
 
-Lunaria documentation is maintained like product infrastructure, not as a one-off writing exercise.
+Amoena documentation is maintained like product infrastructure, not as a one-off writing exercise.
 
 ## Ownership Rules
 

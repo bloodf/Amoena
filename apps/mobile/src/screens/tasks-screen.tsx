@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Pressable, RefreshControl, ScrollView, Switch, Text, TextInput, View } from "react-native";
 
-import { useLunariaTranslation } from "@lunaria/i18n";
+import { useAmoenaTranslation } from "@lunaria/i18n";
 import { useTasks } from "@/runtime/hooks/use-tasks";
 import { styles } from "@/theme/styles";
 import { tokens } from "@/theme/tokens";
 
 export function TasksScreen({ sessionId }: { sessionId: string }) {
-  const { t } = useLunariaTranslation();
+  const { t } = useAmoenaTranslation();
   const { data: tasks, isLoading, refresh, createTask, updateTask, deleteTask } = useTasks(sessionId);
   const [newTitle, setNewTitle] = useState("");
 

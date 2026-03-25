@@ -113,7 +113,7 @@ Missing translations in non-English locales are acceptable in PRs but must be tr
 
 ### Formatting
 
-Lunaria uses Biome for formatting and linting:
+Amoena uses Biome for formatting and linting:
 
 ```bash
 # Format

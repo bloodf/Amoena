@@ -1,10 +1,10 @@
-# Lunaria
+# Amoena
 
 The AI Agent Operating System. Run, monitor, remember, orchestrate, evaluate, and evolve AI coding agents — all from one desktop app.
 
-## What is Lunaria?
+## What is Amoena?
 
-Lunaria is a desktop IDE that orchestrates AI coding agents (Claude, Codex, Gemini, and more) with persistent memory, real-time evaluation, and an extension ecosystem. Each agent runs in an isolated git worktree so they never interfere with each other.
+Amoena is a desktop IDE that orchestrates AI coding agents (Claude, Codex, Gemini, and more) with persistent memory, real-time evaluation, and an extension ecosystem. Each agent runs in an isolated git worktree so they never interfere with each other.
 
 Built by merging three battle-tested open-source projects:
 - **[Mission Control](https://github.com/builderz-labs/mission-control)** — 40+ dashboard panels, agent orchestration
@@ -49,8 +49,8 @@ Built by merging three battle-tested open-source projects:
 # Prerequisites: Node.js 22+, Bun 1.1+, Git
 
 # Clone and install
-git clone https://github.com/YOUR_ORG/lunaria.git
-cd lunaria
+git clone https://github.com/YOUR_ORG/amoena.git
+cd amoena
 bun install
 
 # Start the dashboard
@@ -71,7 +71,7 @@ Electron Main
 ### Monorepo Structure
 
 ```
-lunaria/
+amoena/
 ├── apps/
 │   ├── dashboard/      Next.js 16 dashboard (from Mission Control)
 │   ├── desktop/        Electron shell (from Superset)
@@ -80,7 +80,7 @@ lunaria/
 │   ├── ui/             Component library (70+ primitives, 29 components)
 │   ├── memory/         Memory engine (from claude-mem)
 │   ├── terminal-host/  Terminal daemon (from Superset)
-│   ├── lunaria-service/  Orchestration, autopilot, extensions, recipes
+│   ├── amoena-service/  Orchestration, autopilot, extensions, recipes
 │   ├── tokens/         Design tokens
 │   ├── i18n/           Internationalization (10 languages)
 │   └── ...             14 more packages
@@ -95,7 +95,7 @@ lunaria/
 bun run dashboard:dev
 
 # Run tests (1,020 total)
-cd packages/lunaria-service && bunx vitest run  # 125 tests
+cd packages/amoena-service && bunx vitest run  # 125 tests
 cd apps/dashboard && bunx vitest run            # 895 tests
 
 # Electron build
@@ -105,7 +105,7 @@ cd apps/desktop && npx electron-vite build
 cd apps/dashboard && bunx next build
 
 # Smoke test (requires dashboard running on :3456)
-LUNARIA_LOCAL_MODE=true bun run scripts/smoke-test.ts
+AMOENA_LOCAL_MODE=true bun run scripts/smoke-test.ts
 ```
 
 ## Environment
@@ -113,10 +113,10 @@ LUNARIA_LOCAL_MODE=true bun run scripts/smoke-test.ts
 Create `.env` in the project root:
 
 ```env
-LUNARIA_DASHBOARD_PORT=3456
-LUNARIA_TERMINAL_HOST_PORT=4879
-LUNARIA_MEMORY_PORT=37777
-LUNARIA_LOCAL_MODE=true
+AMOENA_DASHBOARD_PORT=3456
+AMOENA_TERMINAL_HOST_PORT=4879
+AMOENA_MEMORY_PORT=37777
+AMOENA_LOCAL_MODE=true
 NODE_ENV=development
 ```
 

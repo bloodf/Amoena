@@ -1,13 +1,13 @@
 {
-  "name": "@lunaria/lunaria-service",
+  "name": "@lunaria/amoena-service",
   "version": "0.1.0",
   "private": true,
-  "description": "Lunaria service layer — CLI adapters, usage telemetry, and remote access",
+  "description": "Amoena service layer — CLI adapters, usage telemetry, and remote access",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LunariaAi/lunaria.git",
-    "directory": "packages/lunaria-service"
+    "url": "https://github.com/AmoenaAi/amoena.git",
+    "directory": "packages/amoena-service"
   },
   "type": "module",
   "main": "src/index.ts",

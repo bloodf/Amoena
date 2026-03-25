@@ -73,7 +73,7 @@ export function setupAgentHooks(): void {
 	console.log("[agent-setup] Agent hooks initialized");
 }
 
-export function getLunariaBinDir(): string {
+export function getAmoenaBinDir(): string {
 	return BIN_DIR;
 }
 

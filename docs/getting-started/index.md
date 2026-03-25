@@ -1,14 +1,14 @@
 # Overview
 
-Lunaria is a desktop-first AI development environment built for software engineers who want deep, persistent, multi-agent AI assistance integrated directly into their workflow.
+Amoena is a desktop-first AI development environment built for software engineers who want deep, persistent, multi-agent AI assistance integrated directly into their workflow.
 
-## What is Lunaria?
+## What is Amoena?
 
-Lunaria is a native desktop application (macOS, Windows, Linux) that combines:
+Amoena is a native desktop application (macOS, Windows, Linux) that combines:
 
 - **A local AI runtime** — Axum-based server exposing 110+ REST and SSE endpoints, running entirely on your machine.
 - **A React 19 frontend** — high-performance webview shell with a full component library, Storybook, and i18n support for 5 languages.
-- **Dual execution modes** — Native mode (Lunaria's own agentic loop via Vercel AI SDK) and Wrapper mode (GUI shell around Claude Code, Codex CLI, Gemini CLI, or OpenCode).
+- **Dual execution modes** — Native mode (Amoena's own agentic loop via Vercel AI SDK) and Wrapper mode (GUI shell around Claude Code, Codex CLI, Gemini CLI, or OpenCode).
 - **Deep memory** — L0/L1/L2 observation hierarchy backed by SQLite and LanceDB vector search.
 - **Multi-agent orchestration** — subagent spawning, team formation, mailbox-based communication, and Autopilot for autonomous task execution.
 - **Full extensibility** — single `.luna` binary extensions with manifest-driven contributions and rich lifecycle hooks.
@@ -27,7 +27,7 @@ Lunaria is a native desktop application (macOS, Windows, Linux) that combines:
 
 ## How It Works
 
-Lunaria runs as a **multi-process system**:
+Amoena runs as a **multi-process system**:
 
 1. **Tauri Main Process (Rust)** — the state authority. Hosts all core managers: Provider Manager, Memory Manager, Agent Orchestrator, Workspace Manager, Tool Executor, Hook Engine, Session Manager, Autopilot Engine. Manages the SQLite database and communicates with the webview via zero-copy `invoke()` calls.
 

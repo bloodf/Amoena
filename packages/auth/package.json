@@ -2,11 +2,11 @@
   "name": "@lunaria/auth",
   "version": "0.1.0",
   "private": true,
-  "description": "Lunaria auth — OAuth flow and token management",
+  "description": "Amoena auth — OAuth flow and token management",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LunariaAi/lunaria.git",
+    "url": "https://github.com/AmoenaAi/amoena.git",
     "directory": "packages/auth"
   },
   "type": "module",

@@ -3,9 +3,9 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
-interface LunariaDoctorStatus {
+interface AmoenaDoctorStatus {
 	level: "healthy" | "warning" | "error";
 	category: "config" | "state" | "security" | "general";
 	healthy: boolean;
@@ -15,20 +15,20 @@ interface LunariaDoctorStatus {
 	raw: string;
 }
 
-interface LunariaDoctorFixProgress {
+interface AmoenaDoctorFixProgress {
 	step: string;
 	detail: string;
 }
 
 type BannerState = "idle" | "fixing" | "success" | "error";
 
-export function LunariaDoctorBanner() {
+export function AmoenaDoctorBanner() {
 	const t = useTranslations("doctorBanner");
 	const tc = useTranslations("common");
-	const [doctor, setDoctor] = useState<LunariaDoctorStatus | null>(null);
+	const [doctor, setDoctor] = useState<AmoenaDoctorStatus | null>(null);
 	const [loading, setLoading] = useState(true);
-	const doctorDismissedAt = useLunaria((s) => s.doctorDismissedAt);
-	const dismissDoctor = useLunaria((s) => s.dismissDoctor);
+	const doctorDismissedAt = useAmoena((s) => s.doctorDismissedAt);
+	const dismissDoctor = useAmoena((s) => s.dismissDoctor);
 	const [state, setState] = useState<BannerState>("idle");
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
 	const [showDetails, setShowDetails] = useState(false);
@@ -36,7 +36,7 @@ export function LunariaDoctorBanner() {
 
 	async function loadDoctorStatus() {
 		try {
-			const res = await fetch("/api/lunaria/doctor", { cache: "no-store" });
+			const res = await fetch("/api/amoena/doctor", { cache: "no-store" });
 			if (!res.ok) {
 				setDoctor(null);
 				return;
@@ -72,7 +72,7 @@ export function LunariaDoctorBanner() {
 		}, 1400);
 
 		try {
-			const res = await fetch("/api/lunaria/doctor", { method: "POST" });
+			const res = await fetch("/api/amoena/doctor", { method: "POST" });
 			const data = await res.json();
 			window.clearInterval(progressTimer);
 
@@ -88,7 +88,7 @@ export function LunariaDoctorBanner() {
 
 			setDoctor(data.status);
 			const progress = Array.isArray(data.progress)
-				? (data.progress as LunariaDoctorFixProgress[])
+				? (data.progress as AmoenaDoctorFixProgress[])
 				: [];
 			setFixProgress(
 				progress

@@ -19,7 +19,7 @@ describe("removeAgentFromConfig", () => {
 
 	it("removes matching agent entries by id and display name", async () => {
 		tempDir = mkdtempSync(path.join(os.tmpdir(), "mc-agent-sync-"));
-		const configPath = path.join(tempDir, "lunaria.json");
+		const configPath = path.join(tempDir, "amoena.json");
 		writeFileSync(
 			configPath,
 			`${JSON.stringify(
@@ -38,8 +38,8 @@ describe("removeAgentFromConfig", () => {
 			"utf-8",
 		);
 
-		process.env.LUNARIA_CONFIG_PATH = configPath;
-		process.env.LUNARIA_STATE_DIR = tempDir;
+		process.env.AMOENA_CONFIG_PATH = configPath;
+		process.env.AMOENA_STATE_DIR = tempDir;
 
 		const { removeAgentFromConfig } = await import("@/lib/agent-sync");
 		const result = await removeAgentFromConfig({ id: "neo", name: "Neo" });
@@ -54,15 +54,15 @@ describe("removeAgentFromConfig", () => {
 
 	it("is a no-op when no matching agent entry exists", async () => {
 		tempDir = mkdtempSync(path.join(os.tmpdir(), "mc-agent-sync-"));
-		const configPath = path.join(tempDir, "lunaria.json");
+		const configPath = path.join(tempDir, "amoena.json");
 		writeFileSync(
 			configPath,
 			`${JSON.stringify({ agents: { list: [{ id: "keep-me", name: "keep-me" }] } }, null, 2)}\n`,
 			"utf-8",
 		);
 
-		process.env.LUNARIA_CONFIG_PATH = configPath;
-		process.env.LUNARIA_STATE_DIR = tempDir;
+		process.env.AMOENA_CONFIG_PATH = configPath;
+		process.env.AMOENA_STATE_DIR = tempDir;
 
 		const { removeAgentFromConfig } = await import("@/lib/agent-sync");
 		const result = await removeAgentFromConfig({
@@ -77,7 +77,7 @@ describe("removeAgentFromConfig", () => {
 
 	it("normalizes nested model.primary payloads when writing config", async () => {
 		tempDir = mkdtempSync(path.join(os.tmpdir(), "mc-agent-sync-"));
-		const configPath = path.join(tempDir, "lunaria.json");
+		const configPath = path.join(tempDir, "amoena.json");
 		writeFileSync(
 			configPath,
 			`${JSON.stringify(
@@ -105,8 +105,8 @@ describe("removeAgentFromConfig", () => {
 			"utf-8",
 		);
 
-		process.env.LUNARIA_CONFIG_PATH = configPath;
-		process.env.LUNARIA_STATE_DIR = tempDir;
+		process.env.AMOENA_CONFIG_PATH = configPath;
+		process.env.AMOENA_STATE_DIR = tempDir;
 
 		const { writeAgentToConfig } = await import("@/lib/agent-sync");
 		await writeAgentToConfig({

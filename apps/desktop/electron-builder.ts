@@ -20,7 +20,7 @@ const linuxIconPath = join(pkg.resources, "build/icons");
 const winIconPath = join(pkg.resources, "build/icons/icon.ico");
 
 const config: Configuration = {
-	appId: "com.lunaria.desktop",
+	appId: "com.amoena.desktop",
 	productName,
 	copyright: `Copyright © ${currentYear} — ${author}`,
 	electronVersion: pkg.devDependencies.electron.replace(/^\^/, ""),
@@ -32,8 +32,8 @@ const config: Configuration = {
 	// Generate latest-mac.yml for auto-update (workflow handles actual upload)
 	publish: {
 		provider: "github",
-		owner: "Lunaria",
-		repo: "lunaria",
+		owner: "Amoena",
+		repo: "amoena",
 	},
 
 	// Directories
@@ -122,22 +122,22 @@ const config: Configuration = {
 			CFBundleDisplayName: productName,
 			// Required for macOS microphone permission prompt
 			NSMicrophoneUsageDescription:
-				"Lunaria needs microphone access so voice-enabled tools like Codex transcription can capture audio input.",
+				"Amoena needs microphone access so voice-enabled tools like Codex transcription can capture audio input.",
 			// Required for macOS local network permission prompt
 			NSLocalNetworkUsageDescription:
-				"Lunaria needs access to your local network to discover and connect to development servers running on your network.",
+				"Amoena needs access to your local network to discover and connect to development servers running on your network.",
 			// Bonjour service types to browse for (triggers the permission prompt)
 			NSBonjourServices: ["_http._tcp", "_https._tcp"],
 			// Required for Apple Events / Automation permission prompt
 			NSAppleEventsUsageDescription:
-				"Lunaria needs to interact with other applications to run terminal commands and development tools.",
+				"Amoena needs to interact with other applications to run terminal commands and development tools.",
 		},
 	},
 
 	// Deep linking protocol
 	protocols: {
 		name: productName,
-		schemes: ["lunaria"],
+		schemes: ["amoena"],
 	},
 
 	// Linux
@@ -146,7 +146,7 @@ const config: Configuration = {
 		category: "Utility",
 		synopsis: pkg.description,
 		target: ["AppImage"],
-		artifactName: `lunaria-\${version}-\${arch}.\${ext}`,
+		artifactName: `amoena-\${version}-\${arch}.\${ext}`,
 	},
 
 	// Windows

@@ -1,11 +1,11 @@
 # Creating a Plugin
 
-This guide walks through building a Lunaria plugin from scratch: directory layout, manifest, entry point, registering hooks, and installation.
+This guide walks through building a Amoena plugin from scratch: directory layout, manifest, entry point, registering hooks, and installation.
 
 ## Prerequisites
 
 - [Bun](https://bun.sh) installed (plugins run on Bun)
-- Lunaria desktop app
+- Amoena desktop app
 
 ## Directory Layout
 
@@ -94,7 +94,7 @@ function dispatch(request) {
 function handleSession(id, payload) {
   const { session_id, working_dir } = payload;
   console.error(`[my-plugin] Session started: ${session_id} in ${working_dir}`);
-  // Return a result — this goes back to Lunaria
+  // Return a result — this goes back to Amoena
   return rpcResult(id, { ok: true, message: 'Session noted' });
 }
 
@@ -117,7 +117,7 @@ function rpcError(id, code, message) {
 
 ## Step 3: Register Hook Handlers
 
-Activation events control which hooks your plugin receives. Each string in `activationEvents` is matched against the hook event name before Lunaria calls your plugin.
+Activation events control which hooks your plugin receives. Each string in `activationEvents` is matched against the hook event name before Amoena calls your plugin.
 
 ```json
 {
@@ -132,8 +132,8 @@ Your `dispatch` function routes to the right handler based on `params.hook`.
 ### Option A: Copy to plugins directory
 
 ```bash
-cp -r my-plugin ~/.lunaria/plugins/
-# Restart Lunaria, or use Settings → Plugins → Rescan
+cp -r my-plugin ~/.amoena/plugins/
+# Restart Amoena, or use Settings → Plugins → Rescan
 ```
 
 ### Option B: Deeplink installation
@@ -141,13 +141,13 @@ cp -r my-plugin ~/.lunaria/plugins/
 Serve your plugin directory as a tarball and use the deeplink:
 
 ```
-lunaria://plugin/install?id=com.example.my-plugin&source=https://example.com/my-plugin.tar.gz&publisher=Your+Name&title=My+Plugin
+amoena://plugin/install?id=com.example.my-plugin&source=https://example.com/my-plugin.tar.gz&publisher=Your+Name&title=My+Plugin
 ```
 
 The user sees a review dialog showing the plugin's permissions and warnings before confirming. Trusted installations require an HTTPS `manifestUrl` and a `signature` parameter:
 
 ```
-lunaria://plugin/install
+amoena://plugin/install
   ?id=com.example.my-plugin
   &source=https://example.com/my-plugin.tar.gz
   &manifestUrl=https://example.com/my-plugin/manifest.json
@@ -226,7 +226,7 @@ Bun resolves dependencies from the plugin directory at runtime, so `node_modules
 
 ## Debugging
 
-Write debug output to stderr — it appears in the Lunaria developer logs:
+Write debug output to stderr — it appears in the Amoena developer logs:
 
 ```js
 console.error('[my-plugin] Processing hook:', hook, JSON.stringify(payload));

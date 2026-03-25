@@ -249,7 +249,7 @@ export function useComposerInteractions({
       event.preventDefault();
       setIsDragOver(false);
 
-      const fileData = event.dataTransfer.getData("lunaria/file");
+      const fileData = event.dataTransfer.getData("amoena/file");
       if (fileData) {
         try {
           const parsed = JSON.parse(fileData);

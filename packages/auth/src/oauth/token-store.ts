@@ -3,7 +3,7 @@ import { dirname, join } from 'path';
 import { homedir } from 'os';
 import type { OAuthTokens } from './types';
 
-const DEFAULT_TOKENS_PATH = join(homedir(), '.lunaria', 'tokens.json');
+const DEFAULT_TOKENS_PATH = join(homedir(), '.amoena', 'tokens.json');
 const FILE_MODE = 0o600;
 
 type TokenStore = Record<string, OAuthTokens>;

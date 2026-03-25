@@ -1,6 +1,6 @@
 # Orchestration Engine
 
-Lunaria's orchestration engine manages the lifecycle of AI agents, teams, and their communication. It is implemented as a service layer backed by SQLite repositories, with clear separation between commands (writes) and queries (reads).
+Amoena's orchestration engine manages the lifecycle of AI agents, teams, and their communication. It is implemented as a service layer backed by SQLite repositories, with clear separation between commands (writes) and queries (reads).
 
 > **Note:** The engine uses a command/query separation pattern rather than a full event-sourced CQRS system. State is stored directly in SQLite tables, not rebuilt from an event log.
 

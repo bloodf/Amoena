@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 import { db_helpers, getDatabase } from "@/lib/db";
 import { logger } from "@/lib/logger";
 
@@ -44,7 +44,7 @@ export async function POST(
 			customMessage ||
 			`Wake up check-in for ${agent.name}. Please review assigned tasks and notifications.`;
 
-		const { stdout, stderr } = await runLunaria(
+		const { stdout, stderr } = await runAmoena(
 			[
 				"gateway",
 				"sessions_send",

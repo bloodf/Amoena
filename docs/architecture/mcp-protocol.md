@@ -2,7 +2,7 @@
 
 ## Scope
 
-This document defines Lunaria's integration with the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) as both a **server** (exposing Lunaria's agents, tools, and resources to external MCP clients) and a **client** (aggregating tools from remote MCP servers into Lunaria's agent loop). MCP support enables ecosystem interoperability with Cursor, Claude Desktop, VS Code, Windsurf, and any other MCP-compatible tool.
+This document defines Amoena's integration with the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) as both a **server** (exposing Amoena's agents, tools, and resources to external MCP clients) and a **client** (aggregating tools from remote MCP servers into Amoena's agent loop). MCP support enables ecosystem interoperability with Cursor, Claude Desktop, VS Code, Windsurf, and any other MCP-compatible tool.
 
 **Priority:** V1.0 (server), V1.5 (client), V2.0 (WebSocket transport).
 
@@ -10,7 +10,7 @@ This document defines Lunaria's integration with the [Model Context Protocol (MC
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
-│                         Lunaria Desktop App                              │
+│                         Amoena Desktop App                              │
 │                                                                          │
 │  ┌──────────────────────┐    ┌─────────────────────────────────────────┐ │
 │  │  MCP Server           │    │  Tauri Main Process — State Authority   │ │
@@ -42,7 +42,7 @@ This document defines Lunaria's integration with the [Model Context Protocol (MC
 
 ## MCP Server Mode
 
-Lunaria exposes its agents, tools, and resources as an MCP server so that external clients can invoke them without switching context.
+Amoena exposes its agents, tools, and resources as an MCP server so that external clients can invoke them without switching context.
 
 ### Transports
 
@@ -58,14 +58,14 @@ The SSE and WebSocket transports are mounted as an **Axum route group** on the e
 
 #### Tools
 
-Lunaria tool definitions are mapped to MCP tool schema at registration time. The mapping is deterministic and lossless.
+Amoena tool definitions are mapped to MCP tool schema at registration time. The mapping is deterministic and lossless.
 
 ```rust
-/// Lunaria tool definition → MCP tool schema mapping
+/// Amoena tool definition → MCP tool schema mapping
 pub struct McpToolMapping {
-    /// Lunaria tool name (e.g., "file_read", "shell_exec")
-    pub lunaria_name: String,
-    /// MCP tool name (namespaced: "lunaria.file_read")
+    /// Amoena tool name (e.g., "file_read", "shell_exec")
+    pub amoena_name: String,
+    /// MCP tool name (namespaced: "amoena.file_read")
     pub mcp_name: String,
     /// JSON Schema for tool input parameters
     pub input_schema: serde_json::Value,
@@ -78,12 +78,12 @@ Exposed tools include all Tool Executor registered tools:
 
 | Tool Category | Examples | MCP Name Prefix |
 |---------------|----------|-----------------|
-| File operations | read, write, search, list | `lunaria.file.*` |
-| Shell execution | exec, background | `lunaria.shell.*` |
-| Git operations | status, diff, commit | `lunaria.git.*` |
-| Memory | search, observe | `lunaria.memory.*` |
-| Session | create, send, list | `lunaria.session.*` |
-| Agent | spawn, delegate, status | `lunaria.agent.*` |
+| File operations | read, write, search, list | `amoena.file.*` |
+| Shell execution | exec, background | `amoena.shell.*` |
+| Git operations | status, diff, commit | `amoena.git.*` |
+| Memory | search, observe | `amoena.memory.*` |
+| Session | create, send, list | `amoena.session.*` |
+| Agent | spawn, delegate, status | `amoena.agent.*` |
 
 #### Resources
 
@@ -91,36 +91,36 @@ MCP resources expose read-only data that clients can reference in prompts.
 
 | Resource URI | Description | MIME Type |
 |--------------|-------------|-----------|
-| `lunaria://sessions` | Active session list with metadata | `application/json` |
-| `lunaria://sessions/{id}/history` | Message history for a session | `application/json` |
-| `lunaria://memory/search?q={query}` | Memory observation search results | `application/json` |
-| `lunaria://workspace/files` | Workspace file tree | `application/json` |
-| `lunaria://workspace/files/{path}` | Individual file content | `text/plain` |
-| `lunaria://agents/profiles` | Available agent profiles | `application/json` |
+| `amoena://sessions` | Active session list with metadata | `application/json` |
+| `amoena://sessions/{id}/history` | Message history for a session | `application/json` |
+| `amoena://memory/search?q={query}` | Memory observation search results | `application/json` |
+| `amoena://workspace/files` | Workspace file tree | `application/json` |
+| `amoena://workspace/files/{path}` | Individual file content | `text/plain` |
+| `amoena://agents/profiles` | Available agent profiles | `application/json` |
 
 #### Prompts
 
-Agent system prompts are exposed as MCP prompt templates, allowing external clients to reuse Lunaria's agent configurations.
+Agent system prompts are exposed as MCP prompt templates, allowing external clients to reuse Amoena's agent configurations.
 
 | Prompt Name | Description | Arguments |
 |-------------|-------------|-----------|
-| `lunaria.agent.default` | Default agent system prompt | `workspace_path`, `context` |
-| `lunaria.agent.code_review` | Code review agent prompt | `diff`, `language` |
-| `lunaria.agent.planning` | Planning agent prompt | `task_description` |
+| `amoena.agent.default` | Default agent system prompt | `workspace_path`, `context` |
+| `amoena.agent.code_review` | Code review agent prompt | `diff`, `language` |
+| `amoena.agent.planning` | Planning agent prompt | `task_description` |
 
 ### Tool Call Flow (Server Mode)
 
 ```
 External Client (Cursor)
     │
-    ├─ MCP tool_call: lunaria.file.read { path: "src/main.rs" }
+    ├─ MCP tool_call: amoena.file.read { path: "src/main.rs" }
     │
     ▼
 MCP Server (Axum route)
     │
     ├─ Validate auth token
     ├─ Check permission model
-    ├─ Map MCP tool name → Lunaria tool name
+    ├─ Map MCP tool name → Amoena tool name
     │
     ▼
 Tool Executor (Tauri main process)
@@ -140,7 +140,7 @@ The MCP server listens on `http://127.0.0.1:{port}/mcp` by default. Clients conf
 
 ## MCP Client Mode
 
-Lunaria aggregates tools from external MCP servers, making them available to agents in the native backend's tool loop.
+Amoena aggregates tools from external MCP servers, making them available to agents in the native backend's tool loop.
 
 ### Connection Lifecycle
 
@@ -275,7 +275,7 @@ Client mode: outgoing MCP requests include auth credentials from the connection 
 
 - Rate limiting per client identity (token bucket, configurable in settings).
 - Tool-level permission enforcement — the same permission model used for local tool calls applies to MCP tool calls.
-- Read-only resources (`lunaria://` URIs) are not rate-limited.
+- Read-only resources (`amoena://` URIs) are not rate-limited.
 
 **Client mode:**
 
@@ -344,7 +344,7 @@ Prefer the Rust SDK for all server and client transport logic since the Tauri ma
 
 ### Competitive Reference
 
-Osaurus provides full MCP server and client with compatible drop-in endpoints at `http://127.0.0.1:1337` and support for all MCP transports. Lunaria's approach differs in two ways:
+Osaurus provides full MCP server and client with compatible drop-in endpoints at `http://127.0.0.1:1337` and support for all MCP transports. Amoena's approach differs in two ways:
 
 1. **Axum-native**: MCP routes are a first-class Axum route group, not a standalone server. This shares the existing auth, rate-limiting, and connection infrastructure.
 2. **Rust-first**: Server and client logic live in the Tauri main process (Rust), keeping the state authority boundary clean. Osaurus uses a mixed Node/Rust approach.

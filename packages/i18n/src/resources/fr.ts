@@ -1,7 +1,7 @@
 export const fr = {
   app: {
     runtimeEyebrow: "Runtime Bureau",
-    title: "Lunaria",
+    title: "Amoena",
     connecting:
       "Initialisation du runtime localhost de confiance et hydratation de l interface bureau.",
     bootstrapFailed: "Echec du Demarrage",

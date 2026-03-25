@@ -66,7 +66,7 @@ export function deriveSharedSecret(
     "sha256",
     rawSecret,
     Buffer.alloc(0),
-    Buffer.from("lunaria-remote-access-v1"),
+    Buffer.from("amoena-remote-access-v1"),
     KEY_LENGTH,
   );
 

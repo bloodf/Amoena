@@ -10,15 +10,15 @@
 - **Tech:** Tauri 2 + React 18 + SQLite. AGPL licensed. YC-backed.
 - **Key features:** Session checkpoints with diff viewing and forking, project browser with metadata, custom agents in isolated processes, usage analytics.
 - **Threat level:** HIGH — same tech stack, significant mindshare.
-- **Lunaria advantages:** React 19, multi-backend adapters (Opcode is Claude-only), richer permission model.
+- **Amoena advantages:** React 19, multi-backend adapters (Opcode is Claude-only), richer permission model.
 - **Features to study:** Session checkpoints with forking, project browser, usage analytics.
 
 ### BridgeMind
 
 - **URL:** bridgemind.ai (70K Discord community)
 - **Products:** BridgeSpace (Tauri v2 + React 19 desktop), BridgeMCP (MCP server integration), BridgeSwarm (2-16 agent orchestration).
-- **Threat level:** HIGH — identical tech stack, claims features Lunaria plans.
-- **Lunaria advantages:** Actual open-source repo, architecture documentation, deeper TUI integration.
+- **Threat level:** HIGH — identical tech stack, claims features Amoena plans.
+- **Amoena advantages:** Actual open-source repo, architecture documentation, deeper TUI integration.
 - **Features to study:** MCP-first integration, agent swarm orchestration, Kanban task board.
 
 ### CCMate
@@ -26,7 +26,7 @@
 - **URL:** github.com/djyde/ccmate
 - **Tech:** Tauri v2 + React 19. Lightweight config management tool.
 - **Threat level:** MEDIUM — narrow scope (config only), but shipping cross-platform.
-- **Lunaria advantages:** Full session management, agent orchestration, memory system.
+- **Amoena advantages:** Full session management, agent orchestration, memory system.
 - **Features to study:** Token monitoring dashboard, config profile switching UX, shipping speed.
 
 ### Osaurus
@@ -34,15 +34,15 @@
 - **URL:** github.com/osaurus-ai/osaurus
 - **Tech:** Pure Swift for Apple Silicon, macOS-only. MIT licensed. Uses Apple Containerization framework (macOS 26+) for sandboxed execution.
 - **Key features:** 4-layer memory system (user profile, working memory, conversation summaries, knowledge graph with entity extraction), cryptographic identity (secp256k1 chain of trust), Work Mode (autonomous task breakdown → issues → parallel execution), 20+ native plugins (Mail, Calendar, Vision, Browser, Git, etc.), plugin architecture (v1 tools-only + v2 full host API with HTTP routes, SQLite, inference dispatch), on-device voice input (FluidAudio on Neural Engine), local model inference via MLX, Apple Foundation Models, MCP server + client, automation via cron-like schedules and filesystem watchers, WebSocket relay for remote access.
-- **Threat level:** HIGH — most feature-complete open-source AI harness shipping today; deep Apple ecosystem integration creates a polished experience Lunaria must match on cross-platform.
-- **Lunaria advantages:** Cross-platform (macOS + Windows + Linux), wrapper mode for existing CLI agents (Claude Code, OpenCode, Codex, Gemini), React 19 / TypeScript ecosystem (larger contributor pool), multi-backend adapters with unified interface, not locked to Apple Silicon.
+- **Threat level:** HIGH — most feature-complete open-source AI harness shipping today; deep Apple ecosystem integration creates a polished experience Amoena must match on cross-platform.
+- **Amoena advantages:** Cross-platform (macOS + Windows + Linux), wrapper mode for existing CLI agents (Claude Code, OpenCode, Codex, Gemini), React 19 / TypeScript ecosystem (larger contributor pool), multi-backend adapters with unified interface, not locked to Apple Silicon.
 - **Osaurus strengths:** Native Swift performance on Apple Silicon, mature plugin ecosystem (20+ built-in), sophisticated memory system with knowledge graph and contradiction detection, cryptographic identity for agents/humans/devices, sandboxed Linux VM execution, on-device voice and local model inference, full MCP support, agentskills.io compatibility.
 - **Osaurus weaknesses:** macOS-only (no Windows/Linux), no wrapper mode for existing CLI tools, Apple-locked ecosystem limits reach, requires macOS 26+ for sandbox features, Swift-only codebase limits contributor pool vs TypeScript/Rust.
 - **Features to study:** 4-layer memory architecture, cryptographic identity model, plugin v2 host API design, Work Mode parallel execution, filesystem watcher automation, WebSocket relay for remote access.
 
-## Feature Comparison: Lunaria vs Osaurus
+## Feature Comparison: Amoena vs Osaurus
 
-| Feature Area | Lunaria | Osaurus |
+| Feature Area | Amoena | Osaurus |
 |---|---|---|
 | **Platform** | macOS, Windows, Linux | macOS only (Apple Silicon) |
 | **Tech Stack** | Tauri 2 + Rust + React 19 + TypeScript | Pure Swift |
@@ -87,7 +87,7 @@
 
 ## Strategic Position
 
-**Lunaria's unique opportunity:** The market lacks an open-source agentic dev environment that works with ANY CLI coding agent across ALL platforms. No one does agent adapter standardization, progressive memory, or true multi-provider orchestration well. Osaurus proves deep demand for a rich AI harness but locks users into macOS — Lunaria can capture Windows/Linux users and developers who want to wrap existing CLI tools rather than replace them.
+**Amoena's unique opportunity:** The market lacks an open-source agentic dev environment that works with ANY CLI coding agent across ALL platforms. No one does agent adapter standardization, progressive memory, or true multi-provider orchestration well. Osaurus proves deep demand for a rich AI harness but locks users into macOS — Amoena can capture Windows/Linux users and developers who want to wrap existing CLI tools rather than replace them.
 
 **Biggest threats:**
 1. Anthropic building native GUI into Claude Desktop

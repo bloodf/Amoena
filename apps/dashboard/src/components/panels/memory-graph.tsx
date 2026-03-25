@@ -10,7 +10,7 @@ import {
 	type GraphNode as ReagraphNode,
 	type Theme,
 } from "reagraph";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 // --- Data interfaces (match API response) ---
 
@@ -119,7 +119,7 @@ const obsidianTheme: Theme = {
 
 export function MemoryGraph() {
 	const t = useTranslations("memoryGraph");
-	const { memoryGraphAgents, setMemoryGraphAgents } = useLunaria();
+	const { memoryGraphAgents, setMemoryGraphAgents } = useAmoena();
 	const agents = memoryGraphAgents || [];
 	const [selectedAgent, setSelectedAgent] = useState<string>("all");
 	const [isLoading, setIsLoading] = useState(memoryGraphAgents === null);

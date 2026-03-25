@@ -1,6 +1,6 @@
 # Extensions API
 
-Extensions add capabilities to Lunaria via `.luna` packages. Each extension can contribute commands, menu items, UI panels, settings, hooks, tools, and providers. Extensions are loaded from the extensions directory and can be installed from a local path or a remote URL.
+Extensions add capabilities to Amoena via `.luna` packages. Each extension can contribute commands, menu items, UI panels, settings, hooks, tools, and providers. Extensions are loaded from the extensions directory and can be installed from a local path or a remote URL.
 
 ---
 
@@ -22,7 +22,7 @@ Authorization: Bearer <token>
     "name": "Git Tools",
     "version": "1.2.0",
     "publisher": "Example Corp",
-    "description": "Enhanced Git integration for Lunaria",
+    "description": "Enhanced Git integration for Amoena",
     "enabled": true,
     "permissions": ["filesystem.read", "shell.execute"]
   }
@@ -72,7 +72,7 @@ Provide either `file` (upload), `path` (local install), or `url` (remote install
   "name": "Git Tools",
   "version": "1.2.0",
   "publisher": "Example Corp",
-  "description": "Enhanced Git integration for Lunaria",
+  "description": "Enhanced Git integration for Amoena",
   "enabled": true,
   "permissions": ["filesystem.read", "shell.execute"]
 }
@@ -233,7 +233,7 @@ console.log(`${contributions.commands.length} commands available`);
 
 ## Get Extension Panel HTML
 
-Returns the HTML content for a specific panel contributed by an extension. Used to render extension UI panels inside Lunaria's panel system.
+Returns the HTML content for a specific panel contributed by an extension. Used to render extension UI panels inside Amoena's panel system.
 
 ```
 GET /api/v1/extensions/{extId}/panels/{panelId}

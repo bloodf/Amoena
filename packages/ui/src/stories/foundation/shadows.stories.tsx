@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { lunariaShadowTokens } from "@lunaria/tokens";
+import { amoenaShadowTokens } from "@lunaria/tokens";
 
 const meta = {
   title: "Foundation/Shadows",
@@ -12,7 +12,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-type ShadowLevel = keyof typeof lunariaShadowTokens.dark;
+type ShadowLevel = keyof typeof amoenaShadowTokens.dark;
 
 const shadowNames: ShadowLevel[] = [
   "xs",
@@ -63,7 +63,7 @@ export const DarkShadows: Story = {
           <ShadowCard
             key={name}
             name={name}
-            shadow={lunariaShadowTokens.dark[name]}
+            shadow={amoenaShadowTokens.dark[name]}
           />
         ))}
       </div>
@@ -88,7 +88,7 @@ export const LightShadows: Story = {
           <ShadowCard
             key={name}
             name={name}
-            shadow={lunariaShadowTokens.light[name]}
+            shadow={amoenaShadowTokens.light[name]}
           />
         ))}
       </div>
@@ -123,7 +123,7 @@ export const Comparison: Story = {
                 className="flex-1 rounded-lg p-4 flex items-center justify-center text-xs font-mono text-muted-foreground"
                 style={{
                   backgroundColor: "hsl(270 7% 7%)",
-                  boxShadow: lunariaShadowTokens.dark[name],
+                  boxShadow: amoenaShadowTokens.dark[name],
                   color: "hsl(0 0% 88%)",
                 }}
               >
@@ -133,7 +133,7 @@ export const Comparison: Story = {
                 className="flex-1 rounded-lg p-4 flex items-center justify-center text-xs font-mono text-muted-foreground"
                 style={{
                   backgroundColor: "hsl(0 0% 98%)",
-                  boxShadow: lunariaShadowTokens.light[name],
+                  boxShadow: amoenaShadowTokens.light[name],
                   color: "hsl(240 10% 10%)",
                 }}
               >

@@ -1,6 +1,6 @@
 # Memory
 
-Lunaria's memory system automatically captures, deduplicates, and retrieves observations across sessions. Every prompt, response, and tool result is a potential observation. Observations are stored with three-level summaries and optional vector embeddings, enabling both fast full-text search and semantic similarity ranking.
+Amoena's memory system automatically captures, deduplicates, and retrieves observations across sessions. Every prompt, response, and tool result is a potential observation. Observations are stored with three-level summaries and optional vector embeddings, enabling both fast full-text search and semantic similarity ranking.
 
 ## Concepts
 
@@ -69,7 +69,7 @@ ObservationInput
 5. extract_concepts(narrative):
    → tokenize, deduplicate, take first 12 tokens > 2 chars
 6. Insert ObservationRecord with URI:
-   lunaria://memory/{scope}/{observation_id}
+   amoena://memory/{scope}/{observation_id}
    (scope = workspace_id if set on session, else session_id)
 7. Build and upsert MemoryTierRecord (L0/L1/L2 computed synchronously)
 8. (async background) embed_observation:
@@ -228,8 +228,8 @@ Response:
       "observation": {
         "id": "...",
         "sessionId": "...",
-        "uri": "lunaria://memory/ws-abc/obs-xyz",
-        "parentUri": "lunaria://memory/ws-abc",
+        "uri": "amoena://memory/ws-abc/obs-xyz",
+        "parentUri": "amoena://memory/ws-abc",
         "type": "assistant_response",
         "category": "pattern",
         "title": "JWT refresh token rotation",

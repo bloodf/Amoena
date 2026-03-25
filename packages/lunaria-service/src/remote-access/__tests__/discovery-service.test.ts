@@ -52,7 +52,7 @@ describe('DiscoveryService', () => {
     const sentMsg = mockSocket.send.mock.calls[0]?.[0] as Buffer | undefined;
     expect(sentMsg).toBeDefined();
     const parsed = JSON.parse((sentMsg ?? Buffer.alloc(0)).toString());
-    expect(parsed.service).toBe('lunaria');
+    expect(parsed.service).toBe('amoena');
     expect(parsed.host).toBe('192.168.1.100');
     expect(parsed.port).toBe(37777);
     expect(parsed.deviceId).toBe('device-test');

@@ -61,7 +61,7 @@ describe("navigation and status surfaces", () => {
     fireEvent.click(screen.getByText("View all →"));
     expect(screen.getByTestId("location").textContent).toBe("/workspaces");
 
-    fireEvent.click(screen.getByText("lunaria-runtime"));
+    fireEvent.click(screen.getByText("amoena-runtime"));
     expect(screen.getByTestId("location").textContent).toBe("/workspaces");
 
     fireEvent.click(screen.getAllByText("Anthropic")[0]);

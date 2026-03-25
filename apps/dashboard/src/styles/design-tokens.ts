@@ -1,5 +1,5 @@
 /**
- * Design tokens for Lunaria "Void" aesthetic.
+ * Design tokens for Amoena "Void" aesthetic.
  * Server-safe — no 'use client' directive needed.
  *
  * Use the `hsl()` helper when you need inline styles (ReactFlow nodes, recharts),

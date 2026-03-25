@@ -1,6 +1,6 @@
 # Plugin and Extension Development Overview
 
-Lunaria supports two plugin architectures: **Bun-based plugins** (legacy) and **.luna extensions** (current).
+Amoena supports two plugin architectures: **Bun-based plugins** (legacy) and **.luna extensions** (current).
 
 ## Plugin Architectures
 
@@ -30,7 +30,7 @@ Single-file binary format (`.luna`) with embedded manifest, assets, and handler 
 
 ## Compatibility
 
-Lunaria can import existing Claude Code and OpenCode plugins and normalize them into the `.luna` format.
+Amoena can import existing Claude Code and OpenCode plugins and normalize them into the `.luna` format.
 
 ## Quick Start
 

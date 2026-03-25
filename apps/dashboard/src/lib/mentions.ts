@@ -91,22 +91,22 @@ export function getMentionTargets(
 		const recipient = String(agent.name || "").trim();
 		if (!recipient) continue;
 
-		let lunariaId: string | null = null;
+		let amoenaId: string | null = null;
 		try {
 			const parsed = agent.config ? JSON.parse(agent.config) : null;
 			if (
 				parsed &&
-				typeof parsed.lunariaId === "string" &&
-				parsed.lunariaId.trim()
+				typeof parsed.amoenaId === "string" &&
+				parsed.amoenaId.trim()
 			) {
-				lunariaId = parsed.lunariaId.trim();
+				amoenaId = parsed.amoenaId.trim();
 			}
 		} catch {
 			// ignore invalid config JSON for mention indexing
 		}
 
 		const candidateHandles = [
-			lunariaId,
+			amoenaId,
 			normalizeAgentHandle(recipient),
 			recipient.toLowerCase(),
 		].filter((value): value is string => Boolean(value));

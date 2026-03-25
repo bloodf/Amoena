@@ -28,7 +28,7 @@ const workspaceDependencies = Object.keys(dependencies).filter((dependency) =>
 // Sentry plugin for uploading sourcemaps (only in CI with auth token)
 const sentryPlugin = process.env.SENTRY_AUTH_TOKEN
 	? sentryVitePlugin({
-			org: "lunaria",
+			org: "amoena",
 			project: "desktop",
 			authToken: process.env.SENTRY_AUTH_TOKEN,
 			release: { name: version },
@@ -47,19 +47,19 @@ export default defineConfig({
 			),
 			"process.env.NEXT_PUBLIC_API_URL": defineEnv(
 				process.env.NEXT_PUBLIC_API_URL,
-				"https://api.lunaria.dev",
+				"https://api.amoena.dev",
 			),
 			"process.env.NEXT_PUBLIC_STREAMS_URL": defineEnv(
 				process.env.NEXT_PUBLIC_STREAMS_URL,
-				"https://streams.lunaria.dev",
+				"https://streams.amoena.dev",
 			),
 			"process.env.NEXT_PUBLIC_WEB_URL": defineEnv(
 				process.env.NEXT_PUBLIC_WEB_URL,
-				"https://app.lunaria.dev",
+				"https://app.amoena.dev",
 			),
 			"process.env.NEXT_PUBLIC_DOCS_URL": defineEnv(
 				process.env.NEXT_PUBLIC_DOCS_URL,
-				"https://docs.lunaria.dev",
+				"https://docs.amoena.dev",
 			),
 			"process.env.SENTRY_DSN_DESKTOP": defineEnv(
 				process.env.SENTRY_DSN_DESKTOP,
@@ -73,15 +73,15 @@ export default defineConfig({
 			),
 			"process.env.STREAMS_URL": defineEnv(
 				process.env.STREAMS_URL,
-				"https://lunaria-stream.fly.dev",
+				"https://amoena-stream.fly.dev",
 			),
 			"process.env.DESKTOP_VITE_PORT": defineEnv(process.env.DESKTOP_VITE_PORT),
 			"process.env.DESKTOP_NOTIFICATIONS_PORT": defineEnv(
 				process.env.DESKTOP_NOTIFICATIONS_PORT,
 			),
 			"process.env.ELECTRIC_PORT": defineEnv(process.env.ELECTRIC_PORT),
-			"process.env.LUNARIA_WORKSPACE_NAME": defineEnv(
-				process.env.LUNARIA_WORKSPACE_NAME,
+			"process.env.AMOENA_WORKSPACE_NAME": defineEnv(
+				process.env.AMOENA_WORKSPACE_NAME,
 			),
 		},
 

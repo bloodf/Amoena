@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Lunaria is a desktop-first AI development environment built on a layered architecture that keeps a native Rust/Axum backend in tight control of all system resources while a React 19 frontend handles the user interface. The two layers communicate entirely through a local HTTP/SSE API — the same API that remote devices use over LAN or relay.
+Amoena is a desktop-first AI development environment built on a layered architecture that keeps a native Rust/Axum backend in tight control of all system resources while a React 19 frontend handles the user interface. The two layers communicate entirely through a local HTTP/SSE API — the same API that remote devices use over LAN or relay.
 
 ## System Layers
 
@@ -53,7 +53,7 @@ The frontend is a Vite-built React 19 application embedded in the Tauri WebView.
 
 ### Axum Runtime Server
 
-The core of Lunaria. A Tokio-powered Axum server that binds to a random available port on `127.0.0.1` at startup. It registers 110+ routes across:
+The core of Amoena. A Tokio-powered Axum server that binds to a random available port on `127.0.0.1` at startup. It registers 110+ routes across:
 
 - `/api/v1/sessions/*` — session lifecycle and message management
 - `/api/v1/agents/*` — agent orchestration and team management

@@ -76,7 +76,7 @@ export function htmlEnvTransformPlugin(): Plugin {
 			return html
 				.replace(
 					/%NEXT_PUBLIC_API_URL%/g,
-					process.env.NEXT_PUBLIC_API_URL || "https://api.lunaria.ai",
+					process.env.NEXT_PUBLIC_API_URL || "https://api.amoena.ai",
 				)
 				.replace(
 					/%NEXT_PUBLIC_ELECTRIC_URL%/g,
@@ -87,7 +87,7 @@ export function htmlEnvTransformPlugin(): Plugin {
 				)
 				.replace(
 					/%NEXT_PUBLIC_STREAMS_URL%/g,
-					process.env.NEXT_PUBLIC_STREAMS_URL || "https://streams.lunaria.ai",
+					process.env.NEXT_PUBLIC_STREAMS_URL || "https://streams.amoena.ai",
 				);
 		},
 	};

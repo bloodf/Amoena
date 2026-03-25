@@ -1,4 +1,4 @@
-import type { LunariaThemeTokens } from "./types";
+import type { AmoenaThemeTokens } from "./types";
 
 /** Returns true when a value looks like a bare HSL triplet (e.g. "270 7% 7%"). */
 function isHslValue(value: string): boolean {
@@ -77,7 +77,7 @@ function isDimension(value: string): boolean {
  * Dark mode colors use the `color` prefix; light mode uses `colorLight`.
  */
 export function buildNativeTokens(
-  tokens: LunariaThemeTokens,
+  tokens: AmoenaThemeTokens,
 ): Record<string, string | number> {
   const result: Record<string, string | number> = {};
 

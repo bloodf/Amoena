@@ -1,11 +1,11 @@
 {
   "name": "@lunaria/ui",
   "version": "0.1.0",
-  "description": "Lunaria UI component library and design system",
+  "description": "Amoena UI component library and design system",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LunariaAi/lunaria.git",
+    "url": "https://github.com/AmoenaAi/amoena.git",
     "directory": "packages/ui"
   },
   "private": true,

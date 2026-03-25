@@ -7,7 +7,7 @@ import { InstallReviewSheet } from "@/composites/marketplace/InstallReviewSheet"
 import { MarketplaceItemCard } from "@/composites/marketplace/MarketplaceItemCard";
 import { allItems } from "@/composites/marketplace/data";
 
-describe("Lunaria direct interactions", () => {
+describe("Amoena direct interactions", () => {
   test("empty session suggestions call back into the composer flow", () => {
     const onSuggestionClick = mock(() => {});
     render(

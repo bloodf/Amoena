@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
 import { config } from "@/lib/config";
 import { logger } from "@/lib/logger";
-import { callLunariaGateway } from "@/lib/lunaria-gateway";
+import { callAmoenaGateway } from "@/lib/amoena-gateway";
 
 const GATEWAY_TIMEOUT = 5000;
 
@@ -38,14 +38,14 @@ export async function GET(request: NextRequest) {
 			}
 
 			try {
-				const data = await callLunariaGateway<{ nodes?: unknown[] }>(
+				const data = await callAmoenaGateway<{ nodes?: unknown[] }>(
 					"node.list",
 					{},
 					GATEWAY_TIMEOUT,
 				);
 				return NextResponse.json({ nodes: data?.nodes ?? [], connected: true });
 			} catch (rpcErr) {
-				// Gateway is reachable but lunaria CLI unavailable (e.g. Docker) or
+				// Gateway is reachable but amoena CLI unavailable (e.g. Docker) or
 				// node.list not supported — return connected=true with empty node list
 				logger.warn(
 					{ err: rpcErr },
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
 			}
 
 			try {
-				const data = await callLunariaGateway<{ devices?: unknown[] }>(
+				const data = await callAmoenaGateway<{ devices?: unknown[] }>(
 					"device.pair.list",
 					{},
 					GATEWAY_TIMEOUT,
@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
 	}
 
 	try {
-		const result = await callLunariaGateway(
+		const result = await callAmoenaGateway(
 			spec.method,
 			params,
 			GATEWAY_TIMEOUT,

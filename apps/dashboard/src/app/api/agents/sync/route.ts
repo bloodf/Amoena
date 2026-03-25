@@ -6,7 +6,7 @@ import { logger } from "@/lib/logger";
 
 /**
  * POST /api/agents/sync - Trigger agent config sync
- * ?source=local triggers local disk scan instead of lunaria.json sync.
+ * ?source=local triggers local disk scan instead of amoena.json sync.
  * Requires admin role.
  */
 export async function POST(request: NextRequest) {
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * GET /api/agents/sync - Preview diff between lunaria.json and MC
+ * GET /api/agents/sync - Preview diff between amoena.json and MC
  * Shows what would change without writing.
  */
 export async function GET(request: NextRequest) {

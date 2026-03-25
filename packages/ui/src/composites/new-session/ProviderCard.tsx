@@ -18,7 +18,7 @@ export function FeaturedProviderCard({
       )}
     >
       <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-primary/10">
-        <ProviderLogo provider="lunaria" size={36} />
+        <ProviderLogo provider="amoena" size={36} />
       </div>
       <div className="min-w-0 flex-1 space-y-1.5">
         <div className="flex items-center gap-2">

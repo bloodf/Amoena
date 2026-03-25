@@ -1,6 +1,6 @@
 /**
  * Upstream Sync Pipeline — watches source repos for new releases
- * and generates merge suggestions for Lunaria.
+ * and generates merge suggestions for Amoena.
  *
  * Monitors: mission-control, superset, claude-mem
  */
@@ -117,7 +117,7 @@ export function generateMergeSummary(release: ReleaseInfo): string {
 		`**Release:** ${release.tag}`,
 		`**Published:** ${release.publishedAt}`,
 		`**URL:** ${release.url}`,
-		`**Lunaria package:** ${release.repo.package}`,
+		`**Amoena package:** ${release.repo.package}`,
 		``,
 		`### Release Notes`,
 		release.body || "(no release notes)",
@@ -125,7 +125,7 @@ export function generateMergeSummary(release: ReleaseInfo): string {
 		`### Suggested Actions`,
 		`1. Review the release notes for breaking changes`,
 		`2. Compare the diff: \`git diff ${release.tag}..HEAD -- ${release.repo.package}\``,
-		`3. Cherry-pick relevant changes into the Lunaria package`,
+		`3. Cherry-pick relevant changes into the Amoena package`,
 		`4. Run tests to verify compatibility`,
 	].join("\n");
 }

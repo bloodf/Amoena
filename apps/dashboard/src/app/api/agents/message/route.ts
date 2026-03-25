@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 import { db_helpers, getDatabase } from "@/lib/db";
 import { scanForInjection } from "@/lib/injection-guard";
 import { logger } from "@/lib/logger";
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		await runLunaria(
+		await runAmoena(
 			[
 				"gateway",
 				"sessions_send",

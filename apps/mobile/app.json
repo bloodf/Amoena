@@ -1,13 +1,53 @@
 {
   "expo": {
-    "name": "Lunaria Mobile",
-    "slug": "lunaria-mobile",
-    "scheme": "lunaria-mobile",
-    "version": "0.0.1",
+    "name": "Amoena",
+    "slug": "amoena",
+    "scheme": "amoena",
+    "version": "1.5.0",
     "orientation": "portrait",
-    "plugins": ["expo-router", "expo-secure-store"],
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0F172A"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.amoena.mobile",
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0F172A"
+      },
+      "package": "com.amoena.mobile",
+      "permissions": ["RECEIVE_BOOT_COMPLETED", "VIBRATE"]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#38BDF8"
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "amoena-mobile"
+      }
     }
   }
 }

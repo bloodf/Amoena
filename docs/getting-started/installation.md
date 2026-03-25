@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Before building Lunaria from source, ensure you have the following installed:
+Before building Amoena from source, ensure you have the following installed:
 
 ### Required
 
@@ -25,8 +25,8 @@ Tauri requires platform-level libraries for WebView and system tray support. Fol
 
 ```bash
 # Clone the repository
-git clone https://github.com/LunariaAi/lunaria.git
-cd lunaria
+git clone https://github.com/AmoenaAi/amoena.git
+cd amoena
 
 # Install all JavaScript/TypeScript dependencies
 bun install
@@ -67,7 +67,7 @@ Release artifacts are placed in `apps/desktop/src-tauri/target/release/bundle/`.
 
 ## Verifying the Build
 
-After installation, launch Lunaria. The Setup Wizard will guide you through:
+After installation, launch Amoena. The Setup Wizard will guide you through:
 
 1. Selecting your default AI provider
 2. Entering your API key (stored securely in the system keyring)
@@ -104,7 +104,7 @@ cd apps/desktop/worker
 bun run index.ts
 ```
 
-Check `~/.lunaria/logs/` for worker error output.
+Check `~/.amoena/logs/` for worker error output.
 
 ### WebView not rendering (Linux)
 

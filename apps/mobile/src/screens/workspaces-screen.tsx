@@ -1,12 +1,12 @@
 import { Alert, Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 
-import { useLunariaTranslation } from "@lunaria/i18n";
+import { useAmoenaTranslation } from "@lunaria/i18n";
 import { useWorkspaces } from "@/runtime/hooks/use-workspaces";
 import { styles } from "@/theme/styles";
 import { tokens } from "@/theme/tokens";
 
 export function WorkspacesScreen() {
-  const { t } = useLunariaTranslation();
+  const { t } = useAmoenaTranslation();
   const { data: workspaces, isLoading, refresh, archive, destroy } = useWorkspaces();
 
   const handleDestroy = (id: string, name: string) => {

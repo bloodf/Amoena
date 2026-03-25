@@ -14,7 +14,7 @@ interface CronJob {
 	nextRun?: number;
 	lastStatus?: "success" | "error" | "running";
 	lastError?: string;
-	// Extended fields from Lunaria format
+	// Extended fields from Amoena format
 	id?: string;
 	agentId?: string;
 	timezone?: string;
@@ -23,10 +23,10 @@ interface CronJob {
 }
 
 /**
- * Lunaria cron jobs live in ~/.lunaria/cron/jobs.json
+ * Amoena cron jobs live in ~/.amoena/cron/jobs.json
  * Format: { version: 1, jobs: [ { id, agentId, name, enabled, schedule: { kind, expr, tz }, payload, delivery, state } ] }
  */
-interface LunariaCronJob {
+interface AmoenaCronJob {
 	id: string;
 	agentId: string;
 	name: string;
@@ -61,18 +61,18 @@ interface LunariaCronJob {
 	};
 }
 
-interface LunariaCronFile {
+interface AmoenaCronFile {
 	version: number;
-	jobs: LunariaCronJob[];
+	jobs: AmoenaCronJob[];
 }
 
 function getCronFilePath(): string {
-	const lunariaStateDir = config.lunariaStateDir;
-	if (!lunariaStateDir) return "";
-	return path.join(lunariaStateDir, "cron", "jobs.json");
+	const amoenaStateDir = config.amoenaStateDir;
+	if (!amoenaStateDir) return "";
+	return path.join(amoenaStateDir, "cron", "jobs.json");
 }
 
-async function loadCronFile(): Promise<LunariaCronFile | null> {
+async function loadCronFile(): Promise<AmoenaCronFile | null> {
 	const filePath = getCronFilePath();
 	if (!filePath) return null;
 	try {
@@ -83,7 +83,7 @@ async function loadCronFile(): Promise<LunariaCronFile | null> {
 	}
 }
 
-async function saveCronFile(data: LunariaCronFile): Promise<boolean> {
+async function saveCronFile(data: AmoenaCronFile): Promise<boolean> {
 	const filePath = getCronFilePath();
 	if (!filePath) return false;
 	try {
@@ -106,7 +106,7 @@ function mapLastStatus(
 	return "success"; // default for unknown non-error statuses
 }
 
-function mapLunariaJob(job: LunariaCronJob): CronJob {
+function mapAmoenaJob(job: AmoenaCronJob): CronJob {
 	// Build a human-readable command description from the payload
 	const payloadSummary = job.payload.message
 		? job.payload.message.slice(0, 200) +
@@ -149,7 +149,7 @@ export async function GET(request: NextRequest) {
 				return NextResponse.json({ jobs: [] });
 			}
 
-			const jobs = cronFile.jobs.map(mapLunariaJob);
+			const jobs = cronFile.jobs.map(mapAmoenaJob);
 			return NextResponse.json({ jobs });
 		}
 
@@ -209,13 +209,13 @@ export async function GET(request: NextRequest) {
 			const query = searchParams.get("query") || "";
 
 			// Try to load run history from the cron runs log file
-			const lunariaStateDir = config.lunariaStateDir;
-			if (!lunariaStateDir) {
+			const amoenaStateDir = config.amoenaStateDir;
+			if (!amoenaStateDir) {
 				return NextResponse.json({ entries: [], total: 0, hasMore: false });
 			}
 
 			try {
-				const runsPath = path.join(lunariaStateDir, "cron", "runs.json");
+				const runsPath = path.join(amoenaStateDir, "cron", "runs.json");
 				const raw = await readFile(runsPath, "utf-8");
 				const runsData = JSON.parse(raw);
 				let entries: any[] = Array.isArray(runsData.runs)
@@ -342,11 +342,11 @@ export async function POST(request: NextRequest) {
 				return NextResponse.json({ error: "Job ID required" }, { status: 400 });
 			}
 
-			if (process.env.LUNARIA_ALLOW_COMMAND_TRIGGER !== "1") {
+			if (process.env.AMOENA_ALLOW_COMMAND_TRIGGER !== "1") {
 				return NextResponse.json(
 					{
 						error:
-							"Manual triggers disabled. Set LUNARIA_ALLOW_COMMAND_TRIGGER=1 to enable.",
+							"Manual triggers disabled. Set AMOENA_ALLOW_COMMAND_TRIGGER=1 to enable.",
 					},
 					{ status: 403 },
 				);
@@ -358,7 +358,7 @@ export async function POST(request: NextRequest) {
 				return NextResponse.json({ error: "Job not found" }, { status: 404 });
 			}
 
-			// For Lunaria cron jobs, trigger via the lunaria CLI
+			// For Amoena cron jobs, trigger via the amoena CLI
 			const triggerMode = body.mode || "force";
 			const { runCommand } = await import("@/lib/command");
 			try {
@@ -366,7 +366,7 @@ export async function POST(request: NextRequest) {
 				if (triggerMode === "due") {
 					args.push("--if-due");
 				}
-				const { stdout, stderr } = await runCommand(config.lunariaBin, args, {
+				const { stdout, stderr } = await runCommand(config.amoenaBin, args, {
 					timeoutMs: 30000,
 				});
 
@@ -437,7 +437,7 @@ export async function POST(request: NextRequest) {
 			// Prevent duplicates: remove existing jobs with the same name
 			cronFile.jobs = cronFile.jobs.filter((j) => j.name !== name);
 
-			const newJob: LunariaCronJob = {
+			const newJob: AmoenaCronJob = {
 				id: `mc-${Date.now().toString(36)}`,
 				agentId: String(
 					process.env.MC_CRON_AGENT_ID ||
@@ -510,7 +510,7 @@ export async function POST(request: NextRequest) {
 				counter++;
 			}
 
-			const clonedJob: LunariaCronJob = {
+			const clonedJob: AmoenaCronJob = {
 				...JSON.parse(JSON.stringify(sourceJob)),
 				id: `mc-${Date.now().toString(36)}`,
 				name: cloneName,

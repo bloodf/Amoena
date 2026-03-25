@@ -1,7 +1,7 @@
 export const en = {
   app: {
     runtimeEyebrow: "Desktop Runtime",
-    title: "Lunaria",
+    title: "Amoena",
     connecting:
       "Establishing the trusted localhost runtime and hydrating the desktop shell.",
     bootstrapFailed: "Bootstrap Failed",

@@ -81,11 +81,11 @@ describe("Universal Templates", () => {
 		}
 	});
 
-	it("templates with lunariaTemplateType reference valid Lunaria templates", () => {
+	it("templates with amoenaTemplateType reference valid Amoena templates", () => {
 		for (const tpl of UNIVERSAL_TEMPLATES) {
-			if (tpl.lunariaTemplateType) {
+			if (tpl.amoenaTemplateType) {
 				const ocTemplate = AGENT_TEMPLATES.find(
-					(t) => t.type === tpl.lunariaTemplateType,
+					(t) => t.type === tpl.amoenaTemplateType,
 				);
 				expect(ocTemplate).toBeDefined();
 			}
@@ -115,15 +115,15 @@ describe("Template-Framework Resolution", () => {
 		expect(getTemplatesForFramework("nonexistent")).toEqual([]);
 	});
 
-	it("resolveTemplateConfig returns Lunaria template for lunaria framework", () => {
-		const result = resolveTemplateConfig("developer", "lunaria");
+	it("resolveTemplateConfig returns Amoena template for amoena framework", () => {
+		const result = resolveTemplateConfig("developer", "amoena");
 		expect(result).toBeDefined();
 		expect(result?.template).toBeDefined();
 		expect(result?.template?.type).toBe("developer");
 		expect(result?.universal.type).toBe("developer");
 	});
 
-	it("resolveTemplateConfig returns universal-only for non-lunaria frameworks", () => {
+	it("resolveTemplateConfig returns universal-only for non-amoena frameworks", () => {
 		const result = resolveTemplateConfig("developer", "langgraph");
 		expect(result).toBeDefined();
 		expect(result?.template).toBeUndefined();

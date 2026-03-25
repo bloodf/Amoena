@@ -2,7 +2,7 @@
 
 ## Mission
 
-Build all 11 Lunaria screens with real tRPC data, integrate into navigation, and implement the Memory Graph Home as the default landing page.
+Build all 11 Amoena screens with real tRPC data, integrate into navigation, and implement the Memory Graph Home as the default landing page.
 
 **Duration:** 2 weeks
 **Prerequisite:** Phase 3 complete (all services functional, tRPC endpoints working)
@@ -14,8 +14,8 @@ Build all 11 Lunaria screens with real tRPC data, integrate into navigation, and
 
 - Renderer uses TanStack Router v1 (file-based), TanStack Query v5, Zustand v5
 - tRPC via trpc-electron (direct IPC, no HTTP)
-- Lunaria routers at `trpc.lunaria.*`
-- UI components in `packages/ui/src/components/lunaria/`
+- Amoena routers at `trpc.amoena.*`
+- UI components in `packages/ui/src/components/amoena/`
 - shadcn/ui primitives + Superset ai-elements available
 
 ### Design Decisions (from design review)
@@ -35,8 +35,8 @@ Every screen needs: Loading (shimmer skeleton), Empty (warm message + primary CT
 ### Information Architecture
 
 ```
-Memory Graph Home (default) → Workspaces / Lunaria Features / Settings
-  Lunaria Features:
+Memory Graph Home (default) → Workspaces / Amoena Features / Settings
+  Amoena Features:
     Memory Browser, Agents, Autopilot, Kanban, Marketplace,
     Remote, Visual Editor, Opinions, Replay, Diagnostics
 ```
@@ -105,7 +105,7 @@ Install dependencies: `bun add d3-force @types/d3-force` in apps/desktop.
 ## Execution Rules
 
 1. **Commit after every completed step** — never batch multiple steps into one commit
-2. **Use conventional commits**: `feat(lunaria): <step description>`
+2. **Use conventional commits**: `feat(amoena): <step description>`
 3. **Run `bun run build` before each commit** — never commit broken code
 4. **If a step fails, fix it before moving on** — don't skip and come back later
 5. **Inspect files before editing them** — use Codex GUI tools and shell reads to understand existing code before changing it
@@ -126,11 +126,11 @@ Install dependencies: `bun add d3-force @types/d3-force` in apps/desktop.
 
 ### StatusBar Enhancement
 
-Add Lunaria widgets to bottom bar: memory count, agent count, autopilot status, device count
+Add Amoena widgets to bottom bar: memory count, agent count, autopilot status, device count
 
 ### Sidebar Navigation
 
-Add "LUNARIA" section to DashboardSidebar with links to all 11 screens, magenta indicator pip on active
+Add "AMOENA" section to DashboardSidebar with links to all 11 screens, magenta indicator pip on active
 
 ## Troubleshooting
 
@@ -149,7 +149,7 @@ Add "LUNARIA" section to DashboardSidebar with links to all 11 screens, magenta 
 ### Commit Safety
 
 - Commit after EVERY completed step (not at the end)
-- Use conventional commits: `feat(lunaria): <description>`
+- Use conventional commits: `feat(amoena): <description>`
 - Run `bun run build` before committing to avoid broken commits
 - If build breaks, fix before committing — never commit broken code
 
@@ -163,7 +163,7 @@ Add "LUNARIA" section to DashboardSidebar with links to all 11 screens, magenta 
 - [ ] All 11 screens render with real tRPC data
 - [ ] All interaction states implemented (loading/empty/error/success/partial)
 - [ ] Sidebar navigation works for all screens
-- [ ] StatusBar shows live Lunaria widgets
+- [ ] StatusBar shows live Amoena widgets
 - [ ] Session Replay plays back recordings with timeline scrubbing
 - [ ] Kanban drag-and-drop works
 - [ ] Accessibility: keyboard navigation on all screens

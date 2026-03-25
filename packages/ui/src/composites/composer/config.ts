@@ -75,7 +75,7 @@ export const composerBuiltinCommands = [
   { name: "fork", desc: "Fork this thread into local or a new worktree", Icon: GitFork },
 ];
 
-export type ComposerProvider = "lunaria" | "claude" | "opencode" | "codex" | "gemini" | "ollama";
+export type ComposerProvider = "amoena" | "claude" | "opencode" | "codex" | "gemini" | "ollama";
 
 export interface ComposerAgentVariant {
   id: string;
@@ -85,7 +85,7 @@ export interface ComposerAgentVariant {
 }
 
 export const composerProviderModels: Record<ComposerProvider, { name: string; models: { id: string; label: string }[] }> = {
-  lunaria: { name: "Lunaria AI", models: [{ id: "lunaria-pro", label: "Lunaria Pro" }, { id: "lunaria-fast", label: "Lunaria Fast" }] },
+  amoena: { name: "Amoena AI", models: [{ id: "amoena-pro", label: "Amoena Pro" }, { id: "amoena-fast", label: "Amoena Fast" }] },
   claude: { name: "Claude Code", models: [{ id: "claude-4-sonnet", label: "Claude 4 Sonnet" }, { id: "claude-4-opus", label: "Claude 4 Opus" }, { id: "claude-3.5-sonnet", label: "Claude 3.5 Sonnet" }] },
   opencode: { name: "OpenCode", models: [{ id: "gpt-5.4", label: "GPT-5.4" }, { id: "gpt-5.3-codex", label: "GPT-5.3 Codex" }, { id: "gpt-5.2", label: "GPT-5.2" }] },
   codex: { name: "Codex CLI", models: [{ id: "codex-ultra", label: "Codex Ultra" }, { id: "codex-pro", label: "Codex Pro" }] },
@@ -94,10 +94,10 @@ export const composerProviderModels: Record<ComposerProvider, { name: string; mo
 };
 
 export const composerProviderAgents: Record<ComposerProvider, ComposerAgentVariant[]> = {
-  lunaria: [
-    { id: "lunaria-default", name: "Lunaria", role: "Default Agent", color: "text-primary" },
-    { id: "lunaria-architect", name: "Architect", role: "System Designer", color: "text-primary" },
-    { id: "lunaria-reviewer", name: "Reviewer", role: "Code Reviewer", color: "text-warning" },
+  amoena: [
+    { id: "amoena-default", name: "Amoena", role: "Default Agent", color: "text-primary" },
+    { id: "amoena-architect", name: "Architect", role: "System Designer", color: "text-primary" },
+    { id: "amoena-reviewer", name: "Reviewer", role: "Code Reviewer", color: "text-warning" },
   ],
   opencode: [
     { id: "sisyphus", name: "Sisyphus", role: "Ultraworker", color: "text-tui-opencode" },

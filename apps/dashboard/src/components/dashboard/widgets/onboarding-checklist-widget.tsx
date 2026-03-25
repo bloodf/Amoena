@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigateToPanel } from "@/lib/navigation";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface ChecklistItem {
 	id: string;
@@ -13,7 +13,7 @@ interface ChecklistItem {
 }
 
 export function OnboardingChecklistWidget() {
-	const { agents, tasks, securityPosture, dashboardMode } = useLunaria();
+	const { agents, tasks, securityPosture, dashboardMode } = useAmoena();
 	const navigateToPanel = useNavigateToPanel();
 	const [visible, setVisible] = useState(false);
 	const [dismissing, setDismissing] = useState(false);

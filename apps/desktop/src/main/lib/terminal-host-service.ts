@@ -3,7 +3,7 @@ import * as childProcess from "node:child_process";
 import path from "node:path";
 import { app } from "electron";
 
-const TERMINAL_HOST_PORT = Number(process.env.LUNARIA_TERMINAL_HOST_PORT ?? 4879);
+const TERMINAL_HOST_PORT = Number(process.env.AMOENA_TERMINAL_HOST_PORT ?? 4879);
 const STARTUP_TIMEOUT = 15_000;
 const MAX_RESTARTS = 3;
 

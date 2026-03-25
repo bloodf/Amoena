@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 import { createClientLogger } from "@/lib/client-logger";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 import { MemoryGraph } from "./memory-graph";
 
 const log = createClientLogger("MemoryBrowser");
@@ -119,7 +119,7 @@ export function MemoryBrowserPanel() {
 		setMemoryContent,
 		setMemoryFileLinks,
 		setMemoryHealth,
-	} = useLunaria();
+	} = useAmoena();
 	const isLocal = dashboardMode === "local";
 
 	const [isLoading, setIsLoading] = useState(false);

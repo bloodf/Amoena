@@ -19,7 +19,7 @@ import {
 
 const TEST_ROOT = path.join(
 	tmpdir(),
-	`LunariaAiell-wrappers-${process.pid}-${Date.now()}`,
+	`AmoenaAiell-wrappers-${process.pid}-${Date.now()}`,
 );
 const TEST_BIN_DIR = path.join(TEST_ROOT, "bin");
 const TEST_ZSH_DIR = path.join(TEST_ROOT, "zsh");
@@ -74,45 +74,45 @@ describe("shell-wrappers", () => {
 		const zshrc = readFileSync(path.join(TEST_ZSH_DIR, ".zshrc"), "utf-8");
 		const zlogin = readFileSync(path.join(TEST_ZSH_DIR, ".zlogin"), "utf-8");
 
-		expect(zshenv).toContain('source "$_lunaria_home/.zshenv"');
+		expect(zshenv).toContain('source "$_amoena_home/.zshenv"');
 		expect(zshenv).toContain(
 			`export ZDOTDIR=${quoteShellLiteral(TEST_ZSH_DIR)}`,
 		);
-		expect(zprofile).toContain('export ZDOTDIR="$_lunaria_home"');
-		expect(zprofile).toContain('source "$_lunaria_home/.zprofile"');
+		expect(zprofile).toContain('export ZDOTDIR="$_amoena_home"');
+		expect(zprofile).toContain('source "$_amoena_home/.zprofile"');
 		expect(zprofile).toContain(
 			`export ZDOTDIR=${quoteShellLiteral(TEST_ZSH_DIR)}`,
 		);
-		expect(zprofile.indexOf('export ZDOTDIR="$_lunaria_home"')).toBeLessThan(
-			zprofile.indexOf('source "$_lunaria_home/.zprofile"'),
+		expect(zprofile.indexOf('export ZDOTDIR="$_amoena_home"')).toBeLessThan(
+			zprofile.indexOf('source "$_amoena_home/.zprofile"'),
 		);
 
-		expect(zshrc).toContain("_lunaria_prepend_bin()");
+		expect(zshrc).toContain("_amoena_prepend_bin()");
 		expect(zshrc).toContain(
 			`export PATH=${quoteShellLiteral(TEST_BIN_DIR)}:"$PATH"`,
 		);
 		expect(zshrc).not.toContain(`claude() { "${TEST_BIN_DIR}/claude" "$@"; }`);
 		expect(zshrc).toContain("rehash 2>/dev/null || true");
-		expect(zshrc).toContain('export ZDOTDIR="$_lunaria_home"');
-		expect(zshrc).toContain('source "$_lunaria_home/.zshrc"');
-		expect(zshrc.indexOf('export ZDOTDIR="$_lunaria_home"')).toBeLessThan(
-			zshrc.indexOf('source "$_lunaria_home/.zshrc"'),
+		expect(zshrc).toContain('export ZDOTDIR="$_amoena_home"');
+		expect(zshrc).toContain('source "$_amoena_home/.zshrc"');
+		expect(zshrc.indexOf('export ZDOTDIR="$_amoena_home"')).toBeLessThan(
+			zshrc.indexOf('source "$_amoena_home/.zshrc"'),
 		);
 
 		// precmd hook should be registered to survive PATH resets by tools like mise/asdf
 		expect(zshrc).toContain("typeset -ga precmd_functions 2>/dev/null || true");
 		expect(zshrc).toContain(
-			`precmd_functions=(\${precmd_functions:#_lunaria_ensure_path} _lunaria_ensure_path)`,
+			`precmd_functions=(\${precmd_functions:#_amoena_ensure_path} _amoena_ensure_path)`,
 		);
-		expect(zshrc).toContain("_lunaria_ensure_path()");
+		expect(zshrc).toContain("_amoena_ensure_path()");
 
 		expect(zlogin).toContain("if [[ -o interactive ]]; then");
-		expect(zlogin).toContain('export ZDOTDIR="$_lunaria_home"');
-		expect(zlogin).toContain('source "$_lunaria_home/.zlogin"');
-		expect(zlogin.indexOf('export ZDOTDIR="$_lunaria_home"')).toBeLessThan(
-			zlogin.indexOf('source "$_lunaria_home/.zlogin"'),
+		expect(zlogin).toContain('export ZDOTDIR="$_amoena_home"');
+		expect(zlogin).toContain('source "$_amoena_home/.zlogin"');
+		expect(zlogin.indexOf('export ZDOTDIR="$_amoena_home"')).toBeLessThan(
+			zlogin.indexOf('source "$_amoena_home/.zlogin"'),
 		);
-		expect(zlogin).toContain("_lunaria_prepend_bin()");
+		expect(zlogin).toContain("_amoena_prepend_bin()");
 		expect(zlogin).toContain(
 			`export PATH=${quoteShellLiteral(TEST_BIN_DIR)}:"$PATH"`,
 		);
@@ -120,7 +120,7 @@ describe("shell-wrappers", () => {
 			"typeset -ga precmd_functions 2>/dev/null || true",
 		);
 		expect(zlogin).toContain(
-			`precmd_functions=(\${precmd_functions:#_lunaria_ensure_path} _lunaria_ensure_path)`,
+			`precmd_functions=(\${precmd_functions:#_amoena_ensure_path} _amoena_ensure_path)`,
 		);
 		expect(zlogin).not.toContain(`claude() { "${TEST_BIN_DIR}/claude" "$@"; }`);
 		expect(zlogin).toContain("rehash 2>/dev/null || true");
@@ -134,14 +134,14 @@ describe("shell-wrappers", () => {
 		const zlogin = readFileSync(path.join(TEST_ZSH_DIR, ".zlogin"), "utf-8");
 		const rcfile = readFileSync(path.join(TEST_BASH_DIR, "rcfile"), "utf-8");
 
-		expect(zshrc).toContain("_lunaria_prepend_bin()");
+		expect(zshrc).toContain("_amoena_prepend_bin()");
 		expect(zshrc).toContain(
 			`export PATH=${quoteShellLiteral(TEST_BIN_DIR)}:"$PATH"`,
 		);
 		expect(zshrc).not.toContain(`claude() { "${TEST_BIN_DIR}/claude" "$@"; }`);
-		expect(zlogin).toContain("_lunaria_prepend_bin()");
+		expect(zlogin).toContain("_amoena_prepend_bin()");
 		expect(zlogin).not.toContain(`claude() { "${TEST_BIN_DIR}/claude" "$@"; }`);
-		expect(rcfile).toContain("_lunaria_prepend_bin()");
+		expect(rcfile).toContain("_amoena_prepend_bin()");
 		expect(rcfile).toContain(
 			`export PATH=${quoteShellLiteral(TEST_BIN_DIR)}:"$PATH"`,
 		);
@@ -152,7 +152,7 @@ describe("shell-wrappers", () => {
 		if (!isZshAvailable()) return;
 
 		const integrationRoot = path.join(TEST_ROOT, "zlogin-node-repro");
-		const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
+		const integrationBinDir = path.join(integrationRoot, "amoena-bin");
 		const integrationZshDir = path.join(integrationRoot, "zsh");
 		const integrationBashDir = path.join(integrationRoot, "bash");
 		const homeDir = path.join(integrationRoot, "home");
@@ -197,7 +197,7 @@ fi
 		const fixedWrapperPath = path.join(integrationZshDir, ".zlogin");
 		const fixedWrapper = readFileSync(fixedWrapperPath, "utf-8");
 		const legacyWrapper = fixedWrapper.replace(
-			'export ZDOTDIR="$_lunaria_home"\nif [[ -o interactive ]]; then',
+			'export ZDOTDIR="$_amoena_home"\nif [[ -o interactive ]]; then',
 			"if [[ -o interactive ]]; then",
 		);
 		expect(legacyWrapper).not.toBe(fixedWrapper);
@@ -214,7 +214,7 @@ fi
 					env: {
 						HOME: homeDir,
 						PATH: `${systemBinDir}:/usr/bin:/bin`,
-						LUNARIA_ORIG_ZDOTDIR: homeDir,
+						AMOENA_ORIG_ZDOTDIR: homeDir,
 						ZDOTDIR: integrationZshDir,
 					},
 				},
@@ -235,7 +235,7 @@ fi
 		createBashWrapper(TEST_PATHS);
 
 		const rcfile = readFileSync(path.join(TEST_BASH_DIR, "rcfile"), "utf-8");
-		expect(rcfile).toContain("_lunaria_prepend_bin()");
+		expect(rcfile).toContain("_amoena_prepend_bin()");
 		expect(rcfile).toContain(
 			`export PATH=${quoteShellLiteral(TEST_BIN_DIR)}:"$PATH"`,
 		);
@@ -252,7 +252,7 @@ fi
 			`source ${quoteShellLiteral(path.join(TEST_ZSH_DIR, ".zshrc"))} &&`,
 		);
 		expect(args[1]).toContain(
-			`_lunaria_wrapper=${quoteShellLiteral(path.join(TEST_BIN_DIR, "claude"))}`,
+			`_amoena_wrapper=${quoteShellLiteral(path.join(TEST_BIN_DIR, "claude"))}`,
 		);
 		expect(args[1]).toContain('command claude "$@"');
 		expect(args[1]).toContain("echo ok");
@@ -265,7 +265,7 @@ fi
 			`source ${quoteShellLiteral(path.join(TEST_ZSH_DIR, ".zshrc"))} &&`,
 		);
 		expect(args[1]).toContain(
-			`_lunaria_wrapper=${quoteShellLiteral(path.join(TEST_BIN_DIR, "claude"))}`,
+			`_amoena_wrapper=${quoteShellLiteral(path.join(TEST_BIN_DIR, "claude"))}`,
 		);
 		expect(args[1]).toContain('command claude "$@"');
 		expect(args[1]).toContain("echo ok");
@@ -417,7 +417,7 @@ echo wrapper
 		if (!isZshAvailable()) return;
 
 		const integrationRoot = path.join(TEST_ROOT, "mise-precmd-repro");
-		const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
+		const integrationBinDir = path.join(integrationRoot, "amoena-bin");
 		const integrationZshDir = path.join(integrationRoot, "zsh");
 		const integrationBashDir = path.join(integrationRoot, "bash");
 		const homeDir = path.join(integrationRoot, "home");
@@ -471,7 +471,7 @@ precmd_functions+=(_mise_hook_precmd)
 				env: {
 					HOME: homeDir,
 					PATH: `${systemBinDir}:/usr/bin:/bin`,
-					LUNARIA_ORIG_ZDOTDIR: homeDir,
+					AMOENA_ORIG_ZDOTDIR: homeDir,
 					ZDOTDIR: integrationZshDir,
 				},
 			},
@@ -489,7 +489,7 @@ precmd_functions+=(_mise_hook_precmd)
 		if (!isZshAvailable()) return;
 
 		const integrationRoot = path.join(TEST_ROOT, SPECIAL_SHELL_PATH_SEGMENT);
-		const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
+		const integrationBinDir = path.join(integrationRoot, "amoena-bin");
 		const integrationZshDir = path.join(integrationRoot, "zsh");
 		const integrationBashDir = path.join(integrationRoot, "bash");
 		const homeDir = path.join(integrationRoot, "home");
@@ -518,7 +518,7 @@ precmd_functions+=(_mise_hook_precmd)
 			env: {
 				HOME: homeDir,
 				PATH: "/usr/bin:/bin",
-				LUNARIA_ORIG_ZDOTDIR: homeDir,
+				AMOENA_ORIG_ZDOTDIR: homeDir,
 				ZDOTDIR: integrationZshDir,
 			},
 		}).trim();
@@ -530,7 +530,7 @@ precmd_functions+=(_mise_hook_precmd)
 		if (!isZshAvailable()) return;
 
 		const integrationRoot = path.join(TEST_ROOT, "readonly-precmd-functions");
-		const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
+		const integrationBinDir = path.join(integrationRoot, "amoena-bin");
 		const integrationZshDir = path.join(integrationRoot, "zsh");
 		const integrationBashDir = path.join(integrationRoot, "bash");
 		const homeDir = path.join(integrationRoot, "home");
@@ -560,7 +560,7 @@ typeset -gr -a precmd_functions
 			env: {
 				HOME: homeDir,
 				PATH: "/usr/bin:/bin",
-				LUNARIA_ORIG_ZDOTDIR: homeDir,
+				AMOENA_ORIG_ZDOTDIR: homeDir,
 				ZDOTDIR: integrationZshDir,
 			},
 		}).trim();
@@ -614,16 +614,16 @@ echo wrapper
 		expect(output).toBe("wrapper");
 	});
 
-	describe("LUNARIA_* env var protection from user RC overrides", () => {
-		it("bash wrapper restores LUNARIA_WORKSPACE_NAME after user .bashrc overrides it", () => {
+	describe("AMOENA_* env var protection from user RC overrides", () => {
+		it("bash wrapper restores AMOENA_WORKSPACE_NAME after user .bashrc overrides it", () => {
 			const integrationRoot = path.join(TEST_ROOT, "bash-env-protect");
 			const homeDir = path.join(integrationRoot, "home");
 			mkdirSync(homeDir, { recursive: true });
 
-			// User .bashrc overrides LUNARIA_WORKSPACE_NAME with corrupted value
+			// User .bashrc overrides AMOENA_WORKSPACE_NAME with corrupted value
 			writeFileSync(
 				path.join(homeDir, ".bashrc"),
-				`export LUNARIA_WORKSPACE_NAME="user@host:~/path/to/worktree"\n`,
+				`export AMOENA_WORKSPACE_NAME="user@host:~/path/to/worktree"\n`,
 			);
 
 			createBashWrapper(TEST_PATHS);
@@ -632,14 +632,14 @@ echo wrapper
 				"--rcfile",
 				path.join(TEST_BASH_DIR, "rcfile"),
 				"-ic",
-				'echo "$LUNARIA_WORKSPACE_NAME"',
+				'echo "$AMOENA_WORKSPACE_NAME"',
 			];
 			const output = execFileSync("bash", args, {
 				encoding: "utf-8",
 				env: {
 					HOME: homeDir,
 					PATH: "/usr/bin:/bin",
-					LUNARIA_WORKSPACE_NAME: "my-clean-workspace",
+					AMOENA_WORKSPACE_NAME: "my-clean-workspace",
 				},
 			}).trim();
 
@@ -650,15 +650,15 @@ echo wrapper
 			expect(lines[lines.length - 1]).toBe("my-clean-workspace");
 		});
 
-		it("bash wrapper restores LUNARIA_WORKSPACE_NAME after user .bash_profile overrides it", () => {
+		it("bash wrapper restores AMOENA_WORKSPACE_NAME after user .bash_profile overrides it", () => {
 			const integrationRoot = path.join(TEST_ROOT, "bash-profile-env-protect");
 			const homeDir = path.join(integrationRoot, "home");
 			mkdirSync(homeDir, { recursive: true });
 
-			// User .bash_profile overrides LUNARIA_WORKSPACE_NAME
+			// User .bash_profile overrides AMOENA_WORKSPACE_NAME
 			writeFileSync(
 				path.join(homeDir, ".bash_profile"),
-				`export LUNARIA_WORKSPACE_NAME="$(whoami)@$(hostname):$(pwd)"\n`,
+				`export AMOENA_WORKSPACE_NAME="$(whoami)@$(hostname):$(pwd)"\n`,
 			);
 
 			createBashWrapper(TEST_PATHS);
@@ -667,14 +667,14 @@ echo wrapper
 				"--rcfile",
 				path.join(TEST_BASH_DIR, "rcfile"),
 				"-ic",
-				'echo "$LUNARIA_WORKSPACE_NAME"',
+				'echo "$AMOENA_WORKSPACE_NAME"',
 			];
 			const output = execFileSync("bash", args, {
 				encoding: "utf-8",
 				env: {
 					HOME: homeDir,
 					PATH: "/usr/bin:/bin",
-					LUNARIA_WORKSPACE_NAME: "correct-name",
+					AMOENA_WORKSPACE_NAME: "correct-name",
 				},
 			}).trim();
 
@@ -685,15 +685,15 @@ echo wrapper
 			expect(lines[lines.length - 1]).toBe("correct-name");
 		});
 
-		it("bash wrapper restores multiple LUNARIA_* vars after user RC overrides them", () => {
+		it("bash wrapper restores multiple AMOENA_* vars after user RC overrides them", () => {
 			const integrationRoot = path.join(TEST_ROOT, "bash-multi-env-protect");
 			const homeDir = path.join(integrationRoot, "home");
 			mkdirSync(homeDir, { recursive: true });
 
 			writeFileSync(
 				path.join(homeDir, ".bashrc"),
-				`export LUNARIA_WORKSPACE_NAME="corrupted"
-export LUNARIA_WORKSPACE_PATH="/wrong/path"
+				`export AMOENA_WORKSPACE_NAME="corrupted"
+export AMOENA_WORKSPACE_PATH="/wrong/path"
 `,
 			);
 
@@ -703,15 +703,15 @@ export LUNARIA_WORKSPACE_PATH="/wrong/path"
 				"--rcfile",
 				path.join(TEST_BASH_DIR, "rcfile"),
 				"-ic",
-				'echo "$LUNARIA_WORKSPACE_NAME|$LUNARIA_WORKSPACE_PATH"',
+				'echo "$AMOENA_WORKSPACE_NAME|$AMOENA_WORKSPACE_PATH"',
 			];
 			const output = execFileSync("bash", args, {
 				encoding: "utf-8",
 				env: {
 					HOME: homeDir,
 					PATH: "/usr/bin:/bin",
-					LUNARIA_WORKSPACE_NAME: "correct-name",
-					LUNARIA_WORKSPACE_PATH: "/correct/path",
+					AMOENA_WORKSPACE_NAME: "correct-name",
+					AMOENA_WORKSPACE_PATH: "/correct/path",
 				},
 			}).trim();
 
@@ -722,11 +722,11 @@ export LUNARIA_WORKSPACE_PATH="/wrong/path"
 			expect(lines[lines.length - 1]).toBe("correct-name|/correct/path");
 		});
 
-		it("zsh wrapper restores LUNARIA_WORKSPACE_NAME after user .zshrc overrides it", () => {
+		it("zsh wrapper restores AMOENA_WORKSPACE_NAME after user .zshrc overrides it", () => {
 			if (!isZshAvailable()) return;
 
 			const integrationRoot = path.join(TEST_ROOT, "zsh-env-protect");
-			const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
+			const integrationBinDir = path.join(integrationRoot, "amoena-bin");
 			const integrationZshDir = path.join(integrationRoot, "zsh");
 			const integrationBashDir = path.join(integrationRoot, "bash");
 			const homeDir = path.join(integrationRoot, "home");
@@ -736,10 +736,10 @@ export LUNARIA_WORKSPACE_PATH="/wrong/path"
 			mkdirSync(integrationBashDir, { recursive: true });
 			mkdirSync(homeDir, { recursive: true });
 
-			// User .zshrc overrides LUNARIA_WORKSPACE_NAME with corrupted value
+			// User .zshrc overrides AMOENA_WORKSPACE_NAME with corrupted value
 			writeFileSync(
 				path.join(homeDir, ".zshrc"),
-				`export LUNARIA_WORKSPACE_NAME="user@host:~/path/to/worktree"\n`,
+				`export AMOENA_WORKSPACE_NAME="user@host:~/path/to/worktree"\n`,
 			);
 
 			createZshWrapper({
@@ -750,15 +750,15 @@ export LUNARIA_WORKSPACE_PATH="/wrong/path"
 
 			const output = execFileSync(
 				"zsh",
-				["-lic", 'echo "$LUNARIA_WORKSPACE_NAME"'],
+				["-lic", 'echo "$AMOENA_WORKSPACE_NAME"'],
 				{
 					encoding: "utf-8",
 					env: {
 						HOME: homeDir,
 						PATH: "/usr/bin:/bin",
-						LUNARIA_ORIG_ZDOTDIR: homeDir,
+						AMOENA_ORIG_ZDOTDIR: homeDir,
 						ZDOTDIR: integrationZshDir,
-						LUNARIA_WORKSPACE_NAME: "my-clean-workspace",
+						AMOENA_WORKSPACE_NAME: "my-clean-workspace",
 					},
 				},
 			).trim();
@@ -770,11 +770,11 @@ export LUNARIA_WORKSPACE_PATH="/wrong/path"
 			expect(lines[lines.length - 1]).toBe("my-clean-workspace");
 		});
 
-		it("zsh wrapper restores LUNARIA_WORKSPACE_NAME after user .zlogin overrides it", () => {
+		it("zsh wrapper restores AMOENA_WORKSPACE_NAME after user .zlogin overrides it", () => {
 			if (!isZshAvailable()) return;
 
 			const integrationRoot = path.join(TEST_ROOT, "zsh-zlogin-env-protect");
-			const integrationBinDir = path.join(integrationRoot, "lunaria-bin");
+			const integrationBinDir = path.join(integrationRoot, "amoena-bin");
 			const integrationZshDir = path.join(integrationRoot, "zsh");
 			const integrationBashDir = path.join(integrationRoot, "bash");
 			const homeDir = path.join(integrationRoot, "home");
@@ -786,7 +786,7 @@ export LUNARIA_WORKSPACE_PATH="/wrong/path"
 
 			writeFileSync(
 				path.join(homeDir, ".zlogin"),
-				`export LUNARIA_WORKSPACE_NAME="overridden-by-zlogin"\n`,
+				`export AMOENA_WORKSPACE_NAME="overridden-by-zlogin"\n`,
 			);
 
 			createZshWrapper({
@@ -797,15 +797,15 @@ export LUNARIA_WORKSPACE_PATH="/wrong/path"
 
 			const output = execFileSync(
 				"zsh",
-				["-lic", 'echo "$LUNARIA_WORKSPACE_NAME"'],
+				["-lic", 'echo "$AMOENA_WORKSPACE_NAME"'],
 				{
 					encoding: "utf-8",
 					env: {
 						HOME: homeDir,
 						PATH: "/usr/bin:/bin",
-						LUNARIA_ORIG_ZDOTDIR: homeDir,
+						AMOENA_ORIG_ZDOTDIR: homeDir,
 						ZDOTDIR: integrationZshDir,
-						LUNARIA_WORKSPACE_NAME: "correct-name",
+						AMOENA_WORKSPACE_NAME: "correct-name",
 					},
 				},
 			).trim();
@@ -839,7 +839,7 @@ export LUNARIA_WORKSPACE_PATH="/wrong/path"
 			expect(args).toEqual([
 				"-l",
 				"--init-command",
-				`set -l _lunaria_bin "${TEST_BIN_DIR}"; contains -- "$_lunaria_bin" $PATH; or set -gx PATH "$_lunaria_bin" $PATH; function _lunaria_shell_ready --on-event fish_prompt; printf '\\033]777;LunariaAiell-ready\\007'; functions -e _lunaria_shell_ready; end`,
+				`set -l _amoena_bin "${TEST_BIN_DIR}"; contains -- "$_amoena_bin" $PATH; or set -gx PATH "$_amoena_bin" $PATH; function _amoena_shell_ready --on-event fish_prompt; printf '\\033]777;AmoenaAiell-ready\\007'; functions -e _amoena_shell_ready; end`,
 			]);
 		});
 
@@ -853,7 +853,7 @@ export LUNARIA_WORKSPACE_PATH="/wrong/path"
 			expect(args).toEqual([
 				"-l",
 				"--init-command",
-				`set -l _lunaria_bin "/tmp/with space/quote\\"buck\\$slash\\\\bin"; contains -- "$_lunaria_bin" $PATH; or set -gx PATH "$_lunaria_bin" $PATH; function _lunaria_shell_ready --on-event fish_prompt; printf '\\033]777;LunariaAiell-ready\\007'; functions -e _lunaria_shell_ready; end`,
+				`set -l _amoena_bin "/tmp/with space/quote\\"buck\\$slash\\\\bin"; contains -- "$_amoena_bin" $PATH; or set -gx PATH "$_amoena_bin" $PATH; function _amoena_shell_ready --on-event fish_prompt; printf '\\033]777;AmoenaAiell-ready\\007'; functions -e _amoena_shell_ready; end`,
 			]);
 		});
 	});

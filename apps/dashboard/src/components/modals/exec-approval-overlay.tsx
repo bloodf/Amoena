@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useWebSocket } from "@/lib/websocket";
-import { type ExecApprovalRequest, useLunaria } from "@/store";
+import { type ExecApprovalRequest, useAmoena } from "@/store";
 
 const RISK_BORDER: Record<ExecApprovalRequest["risk"], string> = {
 	low: "border-l-green-500",
@@ -42,7 +42,7 @@ function MetaRow({ label, value }: { label: string; value?: string | null }) {
 }
 
 export function ExecApprovalOverlay() {
-	const { execApprovals, updateExecApproval } = useLunaria();
+	const { execApprovals, updateExecApproval } = useAmoena();
 	const { sendMessage } = useWebSocket();
 	const [busy, setBusy] = useState(false);
 	const [error, setError] = useState<string | null>(null);

@@ -21,8 +21,8 @@ interface AgentGraphData {
 	files: AgentFileInfo[];
 }
 
-const memoryDbDir = config.lunariaStateDir
-	? path.join(config.lunariaStateDir, "memory")
+const memoryDbDir = config.amoenaStateDir
+	? path.join(config.amoenaStateDir, "memory")
 	: "";
 
 function getAgentData(

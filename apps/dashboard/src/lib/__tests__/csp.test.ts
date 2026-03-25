@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { buildLunariaCsp, buildNonceRequestHeaders } from "@/lib/csp";
+import { buildAmoenaCsp, buildNonceRequestHeaders } from "@/lib/csp";
 
-describe("buildLunariaCsp", () => {
+describe("buildAmoenaCsp", () => {
 	it("includes the request nonce in script and style directives", () => {
-		const csp = buildLunariaCsp({ nonce: "nonce-123", googleEnabled: false });
+		const csp = buildAmoenaCsp({ nonce: "nonce-123", googleEnabled: false });
 
 		expect(csp).toContain(
 			`script-src 'self' 'nonce-nonce-123' 'strict-dynamic'`,

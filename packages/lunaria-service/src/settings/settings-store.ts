@@ -96,7 +96,7 @@ export class SettingsStore {
 
   private workspaceSettingsPath(): string | null {
     if (this.workspaceRoot === null) return null;
-    return path.join(this.workspaceRoot, '.lunaria', 'settings.json');
+    return path.join(this.workspaceRoot, '.amoena', 'settings.json');
   }
 
   private readWorkspaceFile(): Record<string, unknown> {

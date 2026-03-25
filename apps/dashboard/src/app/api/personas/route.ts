@@ -23,7 +23,7 @@ export interface PersonaRow {
 }
 
 // ---------------------------------------------------------------------------
-// Built-in personas (mirrors packages/lunaria-service/src/opinions/persona.ts)
+// Built-in personas (mirrors packages/amoena-service/src/opinions/persona.ts)
 // ---------------------------------------------------------------------------
 
 const BUILTIN_PERSONAS = [

@@ -1,10 +1,10 @@
 # Features Overview
 
-Lunaria includes 33 integrated features across multi-agent orchestration, memory systems, extensibility, and remote access.
+Amoena includes 33 integrated features across multi-agent orchestration, memory systems, extensibility, and remote access.
 
 ## Session Management (5 features)
 
-- **Native Sessions** — Execute agents with Lunaria's orchestration engine using Vercel AI SDK
+- **Native Sessions** — Execute agents with Amoena's orchestration engine using Vercel AI SDK
 - **Wrapper Sessions** — Shell around Claude Code, OpenCode, Codex CLI, or Gemini CLI with full streaming
 - **Session History** — Persistent chat history with markdown export and JSON backups
 - **Message Streaming** — Real-time token-by-token output with cancel support

@@ -2,13 +2,13 @@
 
 ## Scope
 
-This document defines Lunaria's drop-in API compatibility layer — a set of Axum route groups that expose OpenAI, Anthropic, and Ollama-compatible HTTP endpoints on the existing local server. Any application that speaks one of these provider APIs can use Lunaria as its backend without modification. All requests are routed through the provider registry to whichever upstream provider the user has configured.
+This document defines Amoena's drop-in API compatibility layer — a set of Axum route groups that expose OpenAI, Anthropic, and Ollama-compatible HTTP endpoints on the existing local server. Any application that speaks one of these provider APIs can use Amoena as its backend without modification. All requests are routed through the provider registry to whichever upstream provider the user has configured.
 
 **Priority**: V1.0
 
 ## Motivation
 
-Desktop AI tools, editor extensions, and CLI utilities increasingly expect an OpenAI-compatible local endpoint. By exposing provider-native API surfaces, Lunaria becomes a **local AI gateway** — a single entry point that routes, translates, and augments AI traffic for every tool on the machine. This removes the need for per-tool API key management and enables future capabilities like memory injection, request logging, and cost tracking across all local AI consumers.
+Desktop AI tools, editor extensions, and CLI utilities increasingly expect an OpenAI-compatible local endpoint. By exposing provider-native API surfaces, Amoena becomes a **local AI gateway** — a single entry point that routes, translates, and augments AI traffic for every tool on the machine. This removes the need for per-tool API key management and enables future capabilities like memory injection, request logging, and cost tracking across all local AI consumers.
 
 ## Supported Endpoints
 
@@ -74,7 +74,7 @@ Incoming HTTP Request
 
 ### Model Mapping
 
-Callers use the model names they expect (e.g. `gpt-4o`, `claude-sonnet-4-20250514`, `llama3`). Lunaria resolves these through a two-step process:
+Callers use the model names they expect (e.g. `gpt-4o`, `claude-sonnet-4-20250514`, `llama3`). Amoena resolves these through a two-step process:
 
 1. **Alias table**: explicit user-defined mappings from external model names to internal provider + model pairs.
 2. **Provider registry fallback**: if no alias exists, the provider registry attempts to match the model name against all configured providers.
@@ -211,7 +211,7 @@ Provider-level errors (rate limits, auth failures, model not found) are translat
 
 | Use Case | Description |
 |----------|------------|
-| Editor AI backends | Use Lunaria as the backend for VS Code Continue, Cursor-compatible extensions, or any editor that targets an OpenAI-compatible endpoint. |
+| Editor AI backends | Use Amoena as the backend for VS Code Continue, Cursor-compatible extensions, or any editor that targets an OpenAI-compatible endpoint. |
 | Local AI gateway | Route all local AI traffic through a single gateway with unified provider management, key rotation, and cost visibility. |
 | Provider testing | Switch between providers without changing client configuration — update the model alias and the same endpoint returns responses from a different upstream. |
 | Memory injection (future) | Intercept API calls and inject relevant memory context before forwarding to the upstream provider. |

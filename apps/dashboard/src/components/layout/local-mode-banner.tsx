@@ -3,11 +3,11 @@
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { useNavigateToPanel } from "@/lib/navigation";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 export function LocalModeBanner() {
 	const { dashboardMode, bannerDismissed, capabilitiesChecked, dismissBanner } =
-		useLunaria();
+		useAmoena();
 	const navigateToPanel = useNavigateToPanel();
 	const t = useTranslations("localModeBanner");
 	const tc = useTranslations("common");

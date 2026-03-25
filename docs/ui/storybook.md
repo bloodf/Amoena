@@ -1,6 +1,6 @@
 # Storybook
 
-Lunaria uses **Storybook 10** for visual component development, testing, and documentation.
+Amoena uses **Storybook 10** for visual component development, testing, and documentation.
 
 ## Running Storybook
 
@@ -105,7 +105,7 @@ Screens/
 
 ## Visual Regression Testing
 
-Lunaria uses [Chromatic](https://www.chromatic.com/) for visual regression testing:
+Amoena uses [Chromatic](https://www.chromatic.com/) for visual regression testing:
 
 ```bash
 cd packages/ui

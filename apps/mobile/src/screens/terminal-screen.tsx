@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import { ScrollView, Text, View } from "react-native";
 
-import { useLunariaTranslation } from "@lunaria/i18n";
+import { useAmoenaTranslation } from "@lunaria/i18n";
 import { useTerminalEvents } from "@/runtime/hooks/use-terminal-events";
 import { styles } from "@/theme/styles";
 import { tokens } from "@/theme/tokens";
 
 export function TerminalScreen({ terminalSessionId }: { terminalSessionId: string }) {
-  const { t } = useLunariaTranslation();
+  const { t } = useAmoenaTranslation();
   const { data: events, isLoading } = useTerminalEvents(terminalSessionId);
   const scrollRef = useRef<ScrollView>(null);
 

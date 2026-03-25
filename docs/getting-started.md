@@ -1,6 +1,6 @@
-# Getting Started with Lunaria
+# Getting Started with Amoena
 
-Set up Lunaria in minutes and launch your first AI agent session.
+Set up Amoena in minutes and launch your first AI agent session.
 
 ## Prerequisites
 
@@ -14,8 +14,8 @@ Set up Lunaria in minutes and launch your first AI agent session.
 ### Clone and Install
 
 ```bash
-git clone https://github.com/LunariaAi/lunaria.git
-cd lunaria
+git clone https://github.com/AmoenaAi/amoena.git
+cd amoena
 bun install
 ```
 
@@ -33,7 +33,7 @@ The app will open automatically. You'll see the dashboard with session history a
 
 ## Configure API Keys
 
-Lunaria requires at least one AI provider. Configuration is per-workspace.
+Amoena requires at least one AI provider. Configuration is per-workspace.
 
 ### Option 1: Environment Variables
 
@@ -46,7 +46,7 @@ GOOGLE_API_KEY=...
 
 ### Option 2: Settings UI
 
-1. Open Lunaria desktop app
+1. Open Amoena desktop app
 2. Settings → Providers
 3. Paste your API keys
 4. Save
@@ -75,7 +75,7 @@ The webview opens with:
 1. Click **New Session** in the dashboard
 2. Select a provider (Claude recommended for best quality)
 3. Choose execution mode:
-   - **Native** — Use Lunaria's orchestration engine
+   - **Native** — Use Amoena's orchestration engine
    - **Wrapper** — Use Claude Code, OpenCode, or Codex CLI
 
 ### Step 2: Start Chatting
@@ -135,6 +135,6 @@ bun run dev
 
 **Memory not working:**
 - Ensure embeddings service is running (check logs)
-- LanceDB database may need reset: delete `.lunaria/db/` and restart
+- LanceDB database may need reset: delete `.amoena/db/` and restart
 
-For more help, see [Contributing](/contributing/) or open an issue on [GitHub](https://github.com/LunariaAi/lunaria/issues).
+For more help, see [Contributing](/contributing/) or open an issue on [GitHub](https://github.com/AmoenaAi/amoena/issues).

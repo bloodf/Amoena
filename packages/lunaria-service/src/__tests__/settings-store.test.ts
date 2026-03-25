@@ -98,7 +98,7 @@ describe('SettingsStore', () => {
     let tmpDir: string;
 
     beforeEach(() => {
-      tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lunaria-test-'));
+      tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'amoena-test-'));
     });
 
     afterEach(() => {
@@ -119,7 +119,7 @@ describe('SettingsStore', () => {
       store.setWorkspaceRoot(tmpDir);
       store.set('editor.tabSize', 2, 'workspace');
 
-      const filePath = path.join(tmpDir, '.lunaria', 'settings.json');
+      const filePath = path.join(tmpDir, '.amoena', 'settings.json');
       const raw = JSON.parse(fs.readFileSync(filePath, 'utf8')) as Record<string, unknown>;
       expect(raw['editor.tabSize']).toBe(2);
     });

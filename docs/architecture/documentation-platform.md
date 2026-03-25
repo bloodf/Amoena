@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines Lunaria's **documentation platform**: the documentation site, its information architecture, content sources, developer docs, product docs, and reference-doc generation strategy.
+This document defines Amoena's **documentation platform**: the documentation site, its information architecture, content sources, developer docs, product docs, and reference-doc generation strategy.
 
 This is a documentation surface, **not** a product web app.
 
@@ -29,7 +29,7 @@ Out of scope:
 The docs platform serves four audiences:
 
 1. **End users**
-   - what Lunaria is
+   - what Amoena is
    - how desktop works
    - how mobile pairing works
    - how to use sessions, providers, workspaces, and review flows
@@ -205,7 +205,7 @@ The docs site should be deployed as a static documentation property.
 Requirements:
 
 - static hosting
-- independent from the Lunaria desktop runtime
+- independent from the Amoena desktop runtime
 - independent from the mobile runtime
 - no product auth dependency
 

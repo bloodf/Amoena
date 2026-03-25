@@ -152,7 +152,7 @@ impl Config {
     name: "Cargo.toml",
     type: "file",
     content: `[package]
-name = "lunaria-backend"
+name = "amoena-backend"
 version = "0.3.0"
 edition = "2021"
 

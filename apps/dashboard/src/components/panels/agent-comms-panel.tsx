@@ -5,13 +5,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AggregateEvent } from "@/app/api/sessions/transcript/aggregate/route";
 import { Button } from "@/components/ui/button";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { type LogEntry, type Session, useLunaria } from "@/store";
+import { type LogEntry, type Session, useAmoena } from "@/store";
 
 const COORDINATOR_AGENT = (
 	process.env.NEXT_PUBLIC_COORDINATOR_AGENT || "coordinator"
 ).toLowerCase();
 
-// ── Feed categories (mirrors Lunaria TUI FeedCategory) ──
+// ── Feed categories (mirrors Amoena TUI FeedCategory) ──
 
 type FeedCategory = "chat" | "tools" | "trace" | "system" | "safety";
 type FeedFilter = "all" | FeedCategory;
@@ -26,7 +26,7 @@ interface FeedEvent {
 	data?: any;
 }
 
-// Agent identity: color + emoji (matches lunaria.json)
+// Agent identity: color + emoji (matches amoena.json)
 const AGENT_IDENTITY: Record<
 	string,
 	{ color: string; emoji: string; label: string }
@@ -245,7 +245,7 @@ export function AgentCommsPanel() {
 	const feedEndRef = useRef<HTMLDivElement>(null);
 	const feedContainerRef = useRef<HTMLDivElement>(null);
 
-	const { logs, sessions, connection, currentUser } = useLunaria();
+	const { logs, sessions, connection, currentUser } = useAmoena();
 
 	// Fetch DB-backed comms messages
 	const fetchComms = useCallback(async () => {

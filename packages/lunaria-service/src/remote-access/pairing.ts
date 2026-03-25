@@ -144,7 +144,7 @@ function buildQrDataUrl(pin: string): string {
     `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">`,
     `  <rect width="200" height="200" fill="#fff"/>`,
     `  <text x="100" y="110" font-size="48" text-anchor="middle" font-family="monospace" fill="#000">${pin}</text>`,
-    `  <text x="100" y="150" font-size="14" text-anchor="middle" font-family="sans-serif" fill="#555">Lunaria pairing code</text>`,
+    `  <text x="100" y="150" font-size="14" text-anchor="middle" font-family="sans-serif" fill="#555">Amoena pairing code</text>`,
     `</svg>`,
   ].join("\n");
   const encoded = Buffer.from(svg).toString("base64");

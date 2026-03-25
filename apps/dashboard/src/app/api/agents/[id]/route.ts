@@ -5,7 +5,7 @@ import {
 	writeAgentToConfig,
 } from "@/lib/agent-sync";
 import { requireRole } from "@/lib/auth";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 import { db_helpers, getDatabase, logAuditEvent } from "@/lib/db";
 import { eventBus } from "@/lib/event-bus";
 import { logger } from "@/lib/logger";
@@ -63,7 +63,7 @@ export async function GET(
  *
  * Body: {
  *   role?: string
- *   gateway_config?: object   - Lunaria agent config fields to update
+ *   gateway_config?: object   - Amoena agent config fields to update
  *   write_to_gateway?: boolean - Defaults to true when gateway_config exists
  * }
  */
@@ -112,10 +112,10 @@ export async function PUT(
 					write_to_gateway === null ||
 					write_to_gateway === true),
 		);
-		const lunariaId =
-			existingConfig.lunariaId || agent.name.toLowerCase().replace(/\s+/g, "-");
+		const amoenaId =
+			existingConfig.amoenaId || agent.name.toLowerCase().replace(/\s+/g, "-");
 		const getWriteBackPayload = (source: Record<string, any>) => {
-			const writeBack: any = { id: lunariaId };
+			const writeBack: any = { id: amoenaId };
 			if (source.model) writeBack.model = source.model;
 			if (source.identity) writeBack.identity = source.identity;
 			if (source.sandbox) writeBack.sandbox = source.sandbox;
@@ -196,7 +196,7 @@ export async function PUT(
 				target_id: agent.id,
 				detail: {
 					agent_name: agent.name,
-					lunaria_id: lunariaId,
+					amoena_id: amoenaId,
 					fields: Object.keys(gateway_config || {}),
 				},
 				ip_address: ipAddress,
@@ -285,23 +285,23 @@ export async function DELETE(
 
 		if (removeWorkspace) {
 			const agentConfig = agent.config ? JSON.parse(agent.config) : {};
-			const lunariaId =
-				String(agentConfig?.lunariaId || agent.name || "")
+			const amoenaId =
+				String(agentConfig?.amoenaId || agent.name || "")
 					.toLowerCase()
 					.replace(/[^a-z0-9._-]+/g, "-")
 					.replace(/^-+|-+$/g, "") || agent.name;
 			try {
-				await runLunaria(["agents", "delete", lunariaId, "--force"], {
+				await runAmoena(["agents", "delete", amoenaId, "--force"], {
 					timeoutMs: 30000,
 				});
 			} catch (err: any) {
 				logger.error(
-					{ err, lunariaId, agent: agent.name },
-					"Failed to remove Lunaria agent/workspace",
+					{ err, amoenaId, agent: agent.name },
+					"Failed to remove Amoena agent/workspace",
 				);
 				return NextResponse.json(
 					{
-						error: `Failed to remove Lunaria workspace for ${agent.name}: ${err?.message || "unknown error"}`,
+						error: `Failed to remove Amoena workspace for ${agent.name}: ${err?.message || "unknown error"}`,
 					},
 					{ status: 502 },
 				);
@@ -311,17 +311,17 @@ export async function DELETE(
 		let configCleanupWarning: string | null = null;
 		try {
 			const agentConfig = agent.config ? JSON.parse(agent.config) : {};
-			const lunariaId =
-				String(agentConfig?.lunariaId || agent.name || "")
+			const amoenaId =
+				String(agentConfig?.amoenaId || agent.name || "")
 					.toLowerCase()
 					.replace(/[^a-z0-9._-]+/g, "-")
 					.replace(/^-+|-+$/g, "") || agent.name;
-			await removeAgentFromConfig({ id: lunariaId, name: agent.name });
+			await removeAgentFromConfig({ id: amoenaId, name: agent.name });
 		} catch (err: any) {
-			configCleanupWarning = `Lunaria config cleanup skipped for ${agent.name}: ${err?.message || "unknown error"}`;
+			configCleanupWarning = `Amoena config cleanup skipped for ${agent.name}: ${err?.message || "unknown error"}`;
 			logger.warn(
 				{ err, agent: agent.name },
-				"Failed to remove Lunaria agent config entry",
+				"Failed to remove Amoena agent config entry",
 			);
 		}
 

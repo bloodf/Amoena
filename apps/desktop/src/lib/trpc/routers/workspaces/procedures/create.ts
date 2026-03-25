@@ -36,7 +36,7 @@ import {
 	worktreeExists,
 } from "../utils/git";
 import { resolveWorktreePath } from "../utils/resolve-worktree-path";
-import { copyLunariaConfigToWorktree, loadSetupConfig } from "../utils/setup";
+import { copyAmoenaConfigToWorktree, loadSetupConfig } from "../utils/setup";
 import {
 	createWorkspaceFromExternalWorktree,
 	createWorkspaceFromWorktree,
@@ -195,7 +195,7 @@ async function handleNewWorktree({
 			branch: localBranchName,
 			baseBranch,
 			gitStatus: null,
-			createdByLunaria: true,
+			createdByAmoena: true,
 		})
 		.returning()
 		.get();
@@ -432,7 +432,7 @@ export const createCreateProcedures = () => {
 						branch,
 						baseBranch: targetBranch,
 						gitStatus: null,
-						createdByLunaria: true,
+						createdByAmoena: true,
 					})
 					.returning()
 					.get();
@@ -855,7 +855,7 @@ export const createCreateProcedures = () => {
 								behind: 0,
 								lastRefreshed: Date.now(),
 							},
-							createdByLunaria: false, // External worktree
+							createdByAmoena: false, // External worktree
 						})
 						.returning()
 						.get();
@@ -880,7 +880,7 @@ export const createCreateProcedures = () => {
 						isExplicit: false,
 					});
 
-					copyLunariaConfigToWorktree(project.mainRepoPath, ext.path);
+					copyAmoenaConfigToWorktree(project.mainRepoPath, ext.path);
 					imported++;
 				}
 

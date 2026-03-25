@@ -1,11 +1,11 @@
 /**
- * Lunaria Smoke Test — verifies all critical API endpoints respond correctly.
+ * Amoena Smoke Test — verifies all critical API endpoints respond correctly.
  * Run: bun run scripts/smoke-test.ts
  *
- * Expects the dashboard to be running on LUNARIA_DASHBOARD_PORT (default 3456).
+ * Expects the dashboard to be running on AMOENA_DASHBOARD_PORT (default 3456).
  */
 
-const DASHBOARD_PORT = process.env.LUNARIA_DASHBOARD_PORT ?? "3456";
+const DASHBOARD_PORT = process.env.AMOENA_DASHBOARD_PORT ?? "3456";
 const BASE_URL = `http://localhost:${DASHBOARD_PORT}`;
 
 interface TestResult {
@@ -40,7 +40,7 @@ async function testEndpoint(
 }
 
 async function runSmokeTests(): Promise<void> {
-	console.log(`\n  Lunaria Smoke Test`);
+	console.log(`\n  Amoena Smoke Test`);
 	console.log(`  Dashboard: ${BASE_URL}\n`);
 
 	const results: TestResult[] = [];
@@ -59,7 +59,7 @@ async function runSmokeTests(): Promise<void> {
 	results.push(await testEndpoint("Memory health", "/api/memory/health", { expectStatus: 503 }));
 	results.push(await testEndpoint("Memory search", "/api/memory/search?q=test&limit=5", { expectStatus: 500 }));
 
-	// Lunaria-specific endpoints
+	// Amoena-specific endpoints
 	results.push(await testEndpoint("Cost advisor", "/api/cost-advisor", {
 		method: "POST",
 		body: {

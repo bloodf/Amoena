@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Lunaria is a multi-process AI development environment composed of a native desktop shell, local runtime server, and extensible plugin system.
+Amoena is a multi-process AI development environment composed of a native desktop shell, local runtime server, and extensible plugin system.
 
 ## System Architecture
 

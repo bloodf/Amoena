@@ -27,7 +27,7 @@ describe("resolveCoordinatorDeliveryTarget", () => {
 		const directAgent: CoordinatorAgentRecord = {
 			name: "dev",
 			session_key: "agent:dev:main",
-			config: JSON.stringify({ lunariaId: "dev" }),
+			config: JSON.stringify({ amoenaId: "dev" }),
 		};
 
 		const resolved = resolveCoordinatorDeliveryTarget({
@@ -41,17 +41,17 @@ describe("resolveCoordinatorDeliveryTarget", () => {
 		expect(resolved).toEqual({
 			deliveryName: "dev",
 			sessionKey: "agent:dev:main",
-			lunariaAgentId: "dev",
+			amoenaAgentId: "dev",
 			resolvedBy: "direct",
 		});
 	});
 
 	it("resolves coordinator to explicitly configured target when present", () => {
 		const allAgents: CoordinatorAgentRecord[] = [
-			{ name: "jarv", config: JSON.stringify({ lunariaId: "jarv" }) },
+			{ name: "jarv", config: JSON.stringify({ amoenaId: "jarv" }) },
 			{
 				name: "dev",
-				config: JSON.stringify({ isDefault: true, lunariaId: "dev" }),
+				config: JSON.stringify({ isDefault: true, amoenaId: "dev" }),
 			},
 		];
 
@@ -67,17 +67,17 @@ describe("resolveCoordinatorDeliveryTarget", () => {
 		expect(resolved).toEqual({
 			deliveryName: "jarv",
 			sessionKey: "agent:jarv:main",
-			lunariaAgentId: "jarv",
+			amoenaAgentId: "jarv",
 			resolvedBy: "configured",
 		});
 	});
 
 	it("resolves coordinator to default agent when no explicit target is configured", () => {
 		const allAgents: CoordinatorAgentRecord[] = [
-			{ name: "jarv", config: JSON.stringify({ lunariaId: "jarv" }) },
+			{ name: "jarv", config: JSON.stringify({ amoenaId: "jarv" }) },
 			{
 				name: "dev",
-				config: JSON.stringify({ isDefault: true, lunariaId: "dev" }),
+				config: JSON.stringify({ isDefault: true, amoenaId: "dev" }),
 			},
 		];
 
@@ -92,7 +92,7 @@ describe("resolveCoordinatorDeliveryTarget", () => {
 		expect(resolved).toEqual({
 			deliveryName: "dev",
 			sessionKey: "agent:dev:main",
-			lunariaAgentId: "dev",
+			amoenaAgentId: "dev",
 			resolvedBy: "default",
 		});
 	});
@@ -103,7 +103,7 @@ describe("resolveCoordinatorDeliveryTarget", () => {
 			coordinatorAgent: "Coordinator",
 			directAgent: null,
 			allAgents: [
-				{ name: "admin", config: JSON.stringify({ lunariaId: "admin" }) },
+				{ name: "admin", config: JSON.stringify({ amoenaId: "admin" }) },
 			],
 			sessions: [mkSession("jarv", "agent:jarv:main")],
 		});
@@ -111,7 +111,7 @@ describe("resolveCoordinatorDeliveryTarget", () => {
 		expect(resolved).toEqual({
 			deliveryName: "jarv",
 			sessionKey: "agent:jarv:main",
-			lunariaAgentId: "jarv",
+			amoenaAgentId: "jarv",
 			resolvedBy: "main_session",
 		});
 	});
@@ -128,7 +128,7 @@ describe("resolveCoordinatorDeliveryTarget", () => {
 		expect(resolved).toEqual({
 			deliveryName: "Coordinator Team",
 			sessionKey: null,
-			lunariaAgentId: "coordinator-team",
+			amoenaAgentId: "coordinator-team",
 			resolvedBy: "fallback",
 		});
 	});

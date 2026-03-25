@@ -2,11 +2,11 @@
 
 ## Mission
 
-Port all Lunaria backend services from Rust to TypeScript in lunaria-service. This is the heaviest phase — 5 core services must be fully functional with unit tests.
+Port all Amoena backend services from Rust to TypeScript in amoena-service. This is the heaviest phase — 5 core services must be fully functional with unit tests.
 
 **Duration:** 3 weeks
 **Prerequisite:** Phase 2 complete (monorepo structured, DB schema in place, stubs exist)
-**Deliverable:** All core services functional in lunaria-service with unit tests. Memory search, remote pairing, agent orchestration, extensions, and autopilot work from tRPC.
+**Deliverable:** All core services functional in amoena-service with unit tests. Memory search, remote pairing, agent orchestration, extensions, and autopilot work from tRPC.
 
 ## Context
 
@@ -26,11 +26,11 @@ Read the Rust source files BEFORE implementing the TypeScript port. The Rust cod
 
 ### Source Code (Rust → TypeScript)
 
-- `memory.rs` (494 lines) → `packages/lunaria-service/src/memory/`
-- `remote/mod.rs` (793 lines) → `packages/lunaria-service/src/remote-access/`
-- `orchestration.rs` (406 lines) → `packages/lunaria-service/src/orchestration/`
-- `extensions/format.rs` → `packages/lunaria-service/src/extensions/`
-- Autopilot (new, no Rust equivalent) → `packages/lunaria-service/src/autopilot/`
+- `memory.rs` (494 lines) → `packages/amoena-service/src/memory/`
+- `remote/mod.rs` (793 lines) → `packages/amoena-service/src/remote-access/`
+- `orchestration.rs` (406 lines) → `packages/amoena-service/src/orchestration/`
+- `extensions/format.rs` → `packages/amoena-service/src/extensions/`
+- Autopilot (new, no Rust equivalent) → `packages/amoena-service/src/autopilot/`
 
 ### Key Algorithms to Implement
 
@@ -88,10 +88,10 @@ function computeConsensus(votes: Array<{ weight: number; approve: boolean }>): C
 
 ### Architecture Decisions
 
-- lunaria-service runs as separate daemon process, communicates with host-service via WebSocket for terminal observation
+- amoena-service runs as separate daemon process, communicates with host-service via WebSocket for terminal observation
 - Single SQLite database (same file as local-db)
 - Cross-language crypto test vectors (Rust fixtures → TypeScript must match) for Remote Access
-- Mastra stays for chat, Lunaria orchestration handles multi-agent/consensus
+- Mastra stays for chat, Amoena orchestration handles multi-agent/consensus
 - Eager load all services at startup
 - Memory: FTS5 + cosine similarity + RRF fusion, cross-workspace queries with global tier
 - Crypto: libsodium-wrappers-sumo for X25519 ECDH + XChaCha20-Poly1305
@@ -104,7 +104,7 @@ function computeConsensus(votes: Array<{ weight: number; approve: boolean }>): C
 
 The AI worker bridge spawns CLI agent processes (Claude Code, Codex, etc.) as child processes
 and communicates via stdin/stdout JSON-RPC. The existing Superset chat package already handles
-this via Mastra. Lunaria's orchestration service does NOT replace Mastra — it wraps around it
+this via Mastra. Amoena's orchestration service does NOT replace Mastra — it wraps around it
 to add permission ceilings, tool intersection, and consensus voting.
 
 Integration point: Orchestration service calls into the chat package's runtime creation
@@ -113,7 +113,7 @@ to spawn agents, then monitors their output via the terminal observation WebSock
 ## Execution Rules
 
 1. **Commit after every completed step** — never batch multiple steps into one commit
-2. **Use conventional commits**: `feat(lunaria): <step description>`
+2. **Use conventional commits**: `feat(amoena): <step description>`
 3. **Run `bun run build` before each commit** — never commit broken code
 4. **If a step fails, fix it before moving on** — don't skip and come back later
 5. **Inspect files before editing them** — use Codex GUI tools and shell reads to understand existing code before changing it
@@ -146,7 +146,7 @@ to spawn agents, then monitors their output via the terminal observation WebSock
 7. **CLI Integration** — Output parsers for Claude Code, Codex CLI, Gemini CLI, structured event extraction into Memory + Kanban, WebSocket subscription to host-service terminal output
 8. **Session Replay** — Recording engine (capture terminal output + tool calls + file changes), file-based storage (gzip compressed, 100MB cap), metadata in SQLite
 9. **Opinions Service** — Persona CRUD, system prompt templates, model/temperature preferences
-10. **Diagnostics** — Service health checks, structured JSON logging to ~/.lunaria/logs/
+10. **Diagnostics** — Service health checks, structured JSON logging to ~/.amoena/logs/
 
 ## Testing Requirements
 
@@ -173,7 +173,7 @@ to spawn agents, then monitors their output via the terminal observation WebSock
 ### Commit Safety
 
 - Commit after EVERY completed step (not at the end)
-- Use conventional commits: `feat(lunaria): <description>`
+- Use conventional commits: `feat(amoena): <description>`
 - Run `bun run build` before committing to avoid broken commits
 - If build breaks, fix before committing — never commit broken code
 
@@ -201,4 +201,4 @@ to spawn agents, then monitors their output via the terminal observation WebSock
 - [ ] Session recordings save/load correctly
 - [ ] Cross-language crypto test vectors pass
 - [ ] All unit tests pass (80%+ coverage)
-- [ ] lunaria-service starts and responds to health checks
+- [ ] amoena-service starts and responds to health checks

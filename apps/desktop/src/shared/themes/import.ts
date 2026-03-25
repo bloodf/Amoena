@@ -196,7 +196,7 @@ function parseThemeEntry(
 	if (RESERVED_THEME_IDS.has(id)) {
 		return {
 			ok: false,
-			issue: `Theme ${index + 1}: "${id}" is reserved by Lunaria`,
+			issue: `Theme ${index + 1}: "${id}" is reserved by Amoena`,
 		};
 	}
 

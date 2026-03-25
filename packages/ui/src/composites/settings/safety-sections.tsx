@@ -16,7 +16,7 @@ export function PrivacySettingsSection() {
       <SettingsRow label="Usage analytics" description="Send anonymized usage statistics">
         <SettingsToggle on />
       </SettingsRow>
-      <SettingsRow label="Crash reporting" description="Send crash reports to help improve Lunaria">
+      <SettingsRow label="Crash reporting" description="Send crash reports to help improve Amoena">
         <SettingsToggle on />
       </SettingsRow>
 

@@ -2,7 +2,7 @@ import * as SecureStore from "expo-secure-store";
 
 import type { RemotePairingSession } from "@lunaria/runtime-client";
 
-const STORAGE_KEY = "lunaria.remote.session";
+const STORAGE_KEY = "amoena.remote.session";
 
 export type StoredRemoteSession = RemotePairingSession & {
   pairedAt: string;

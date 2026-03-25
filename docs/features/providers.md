@@ -81,7 +81,7 @@ GET /api/v1/providers
 
 ## API Key Management
 
-API keys are stored in and retrieved from the OS keychain — never in the SQLite database. The keychain service name is `"lunaria"` with the provider ID as the account:
+API keys are stored in and retrieved from the OS keychain — never in the SQLite database. The keychain service name is `"amoena"` with the provider ID as the account:
 
 ```http
 POST /api/v1/settings

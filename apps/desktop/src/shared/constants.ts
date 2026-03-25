@@ -8,14 +8,14 @@ export const PLATFORM = {
 };
 
 const workspace = getWorkspaceName();
-export const LUNARIA_DIR_NAME = workspace
-	? `.lunaria-${workspace}`
-	: ".lunaria";
+export const AMOENA_DIR_NAME = workspace
+	? `.amoena-${workspace}`
+	: ".amoena";
 export const PROTOCOL_SCHEME = workspace
-	? `lunaria-${workspace}`
+	? `amoena-${workspace}`
 	: PROTOCOL_SCHEMES.PROD;
-// Project-level directory name (always .lunaria, not conditional)
-export const PROJECT_LUNARIA_DIR_NAME = ".lunaria";
+// Project-level directory name (always .amoena, not conditional)
+export const PROJECT_AMOENA_DIR_NAME = ".amoena";
 export const WORKTREES_DIR_NAME = "worktrees";
 export const PROJECTS_DIR_NAME = "projects";
 export const CONFIG_FILE_NAME = "config.json";

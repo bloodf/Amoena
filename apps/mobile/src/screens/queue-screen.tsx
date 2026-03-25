@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Alert, Pressable, RefreshControl, ScrollView, Text, TextInput, View } from "react-native";
 
-import { useLunariaTranslation } from "@lunaria/i18n";
+import { useAmoenaTranslation } from "@lunaria/i18n";
 import { useQueue } from "@/runtime/hooks/use-queue";
 import { styles } from "@/theme/styles";
 import { tokens } from "@/theme/tokens";
 
 export function QueueScreen({ sessionId }: { sessionId: string }) {
-  const { t } = useLunariaTranslation();
+  const { t } = useAmoenaTranslation();
   const { data: messages, isLoading, refresh, enqueue, removeMessage, flush } = useQueue(sessionId);
   const [newContent, setNewContent] = useState("");
 

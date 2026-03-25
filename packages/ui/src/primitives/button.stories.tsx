@@ -5,7 +5,7 @@ const meta = {
   title: "Primitives/Button",
   component: Button,
   args: {
-    children: "Launch Lunaria",
+    children: "Launch Amoena",
   },
 } satisfies Meta<typeof Button>;
 

@@ -97,14 +97,14 @@ function buildGatewayProbeUrl(host: string, port: number): string | null {
 function parseGatewayVersion(
 	headers: Record<string, string | null>,
 ): string | null {
-	const direct = headers["x-lunaria-version"] || headers["x-clawdbot-version"];
+	const direct = headers["x-amoena-version"] || headers["x-clawdbot-version"];
 	if (direct) return direct.trim();
 	const server = headers.server || "";
 	const m = server.match(/(\d{4}\.\d+\.\d+)/);
 	return m?.[1] || null;
 }
 
-function hasLunaria32ToolsProfileRisk(version: string | null): boolean {
+function hasAmoena32ToolsProfileRisk(version: string | null): boolean {
 	if (!version) return false;
 	const m = version.match(/^(\d{4})\.(\d+)\.(\d+)/);
 	if (!m) return false;
@@ -244,10 +244,10 @@ describe("buildGatewayProbeUrl", () => {
 });
 
 describe("parseGatewayVersion", () => {
-	it("reads x-lunaria-version header", () => {
+	it("reads x-amoena-version header", () => {
 		expect(
 			parseGatewayVersion({
-				"x-lunaria-version": "2026.3.7",
+				"x-amoena-version": "2026.3.7",
 				server: null,
 				"x-clawdbot-version": null,
 			}),
@@ -257,7 +257,7 @@ describe("parseGatewayVersion", () => {
 	it("reads x-clawdbot-version header", () => {
 		expect(
 			parseGatewayVersion({
-				"x-lunaria-version": null,
+				"x-amoena-version": null,
 				"x-clawdbot-version": "2026.2.1",
 				server: null,
 			}),
@@ -267,9 +267,9 @@ describe("parseGatewayVersion", () => {
 	it("extracts version from server header", () => {
 		expect(
 			parseGatewayVersion({
-				"x-lunaria-version": null,
+				"x-amoena-version": null,
 				"x-clawdbot-version": null,
-				server: "lunaria/2026.3.5",
+				server: "amoena/2026.3.5",
 			}),
 		).toBe("2026.3.5");
 	});
@@ -277,7 +277,7 @@ describe("parseGatewayVersion", () => {
 	it("returns null when no version headers", () => {
 		expect(
 			parseGatewayVersion({
-				"x-lunaria-version": null,
+				"x-amoena-version": null,
 				"x-clawdbot-version": null,
 				server: null,
 			}),
@@ -285,29 +285,29 @@ describe("parseGatewayVersion", () => {
 	});
 });
 
-describe("hasLunaria32ToolsProfileRisk", () => {
+describe("hasAmoena32ToolsProfileRisk", () => {
 	it("returns false for null version", () => {
-		expect(hasLunaria32ToolsProfileRisk(null)).toBe(false);
+		expect(hasAmoena32ToolsProfileRisk(null)).toBe(false);
 	});
 
 	it("returns false for versions before 2026.3.2", () => {
-		expect(hasLunaria32ToolsProfileRisk("2026.3.1")).toBe(false);
-		expect(hasLunaria32ToolsProfileRisk("2026.2.9")).toBe(false);
-		expect(hasLunaria32ToolsProfileRisk("2025.10.0")).toBe(false);
+		expect(hasAmoena32ToolsProfileRisk("2026.3.1")).toBe(false);
+		expect(hasAmoena32ToolsProfileRisk("2026.2.9")).toBe(false);
+		expect(hasAmoena32ToolsProfileRisk("2025.10.0")).toBe(false);
 	});
 
 	it("returns true for version 2026.3.2", () => {
-		expect(hasLunaria32ToolsProfileRisk("2026.3.2")).toBe(true);
+		expect(hasAmoena32ToolsProfileRisk("2026.3.2")).toBe(true);
 	});
 
 	it("returns true for versions after 2026.3.2", () => {
-		expect(hasLunaria32ToolsProfileRisk("2026.3.7")).toBe(true);
-		expect(hasLunaria32ToolsProfileRisk("2026.4.0")).toBe(true);
-		expect(hasLunaria32ToolsProfileRisk("2027.1.0")).toBe(true);
+		expect(hasAmoena32ToolsProfileRisk("2026.3.7")).toBe(true);
+		expect(hasAmoena32ToolsProfileRisk("2026.4.0")).toBe(true);
+		expect(hasAmoena32ToolsProfileRisk("2027.1.0")).toBe(true);
 	});
 
 	it("returns false for unrecognized version format", () => {
-		expect(hasLunaria32ToolsProfileRisk("invalid")).toBe(false);
-		expect(hasLunaria32ToolsProfileRisk("")).toBe(false);
+		expect(hasAmoena32ToolsProfileRisk("invalid")).toBe(false);
+		expect(hasAmoena32ToolsProfileRisk("")).toBe(false);
 	});
 });

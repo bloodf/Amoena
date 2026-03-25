@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 
-import { useLunariaTranslation } from "@lunaria/i18n";
+import { useAmoenaTranslation } from "@lunaria/i18n";
 import { useSessionMemory } from "@/runtime/hooks/use-memory";
 import { styles } from "@/theme/styles";
 import { tokens } from "@/theme/tokens";
 
 export function MemoryScreen({ sessionId }: { sessionId: string }) {
-  const { t } = useLunariaTranslation();
+  const { t } = useAmoenaTranslation();
   const { data: memory, isLoading, refresh } = useSessionMemory(sessionId);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 

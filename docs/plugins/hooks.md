@@ -1,6 +1,6 @@
 # Plugin Hooks Reference
 
-Lunaria fires 24 hook events across the application lifecycle. Plugins and extensions register handlers for these events. This page documents every event: when it fires, its JSON payload schema, and example handlers.
+Amoena fires 24 hook events across the application lifecycle. Plugins and extensions register handlers for these events. This page documents every event: when it fires, its JSON payload schema, and example handlers.
 
 ## Handler Types
 
@@ -94,7 +94,7 @@ curl -X POST http://localhost:8080/api/v1/hooks/import/opencode \
   "event_name": "SessionStart",
   "handler_type": "command",
   "handler_config": {
-    "command": "echo \"Session $LUNARIA_SESSION_ID started\" >> ~/lunaria.log"
+    "command": "echo \"Session $AMOENA_SESSION_ID started\" >> ~/amoena.log"
   }
 }
 ```
@@ -132,7 +132,7 @@ curl -X POST http://localhost:8080/api/v1/hooks/import/opencode \
   "event_name": "SessionEnd",
   "handler_type": "command",
   "handler_config": {
-    "command": "notify-send 'Lunaria' 'Session ended'"
+    "command": "notify-send 'Amoena' 'Session ended'"
   }
 }
 ```
@@ -187,7 +187,7 @@ This is the last chance to intercept a tool call before it runs. A hook that tim
   "event_name": "PreToolUse",
   "handler_type": "command",
   "handler_config": {
-    "command": "logger -t lunaria 'tool_use: $LUNARIA_TOOL_ID'"
+    "command": "logger -t amoena 'tool_use: $AMOENA_TOOL_ID'"
   }
 }
 ```
@@ -267,7 +267,7 @@ This is the last chance to intercept a tool call before it runs. A hook that tim
   "event_name": "PermissionRequest",
   "handler_type": "http",
   "handler_config": {
-    "url": "https://approval.example.com/lunaria-permission"
+    "url": "https://approval.example.com/amoena-permission"
   }
 }
 ```
@@ -293,7 +293,7 @@ This is the last chance to intercept a tool call before it runs. A hook that tim
   "event_name": "SubagentStart",
   "handler_type": "command",
   "handler_config": {
-    "command": "echo 'Subagent started: $LUNARIA_CHILD_ID' >> ~/agents.log"
+    "command": "echo 'Subagent started: $AMOENA_CHILD_ID' >> ~/agents.log"
   }
 }
 ```
@@ -364,7 +364,7 @@ This is the last chance to intercept a tool call before it runs. A hook that tim
   "event_name": "Notification",
   "handler_type": "command",
   "handler_config": {
-    "command": "osascript -e 'display notification \"$LUNARIA_MESSAGE\" with title \"Lunaria\"'"
+    "command": "osascript -e 'display notification \"$AMOENA_MESSAGE\" with title \"Amoena\"'"
   }
 }
 ```
@@ -389,7 +389,7 @@ Use this event to reassign work or log team utilization metrics.
 
 ### `TaskCompleted`
 
-**Fires when:** A task tracked in Lunaria's task system is marked done.
+**Fires when:** A task tracked in Amoena's task system is marked done.
 
 **Payload:**
 ```json
@@ -432,7 +432,7 @@ Use this to validate or augment instructions at load time.
 
 ### `ConfigChange`
 
-**Fires when:** A Lunaria configuration value changes at runtime.
+**Fires when:** A Amoena configuration value changes at runtime.
 
 **Payload:**
 ```json
@@ -449,7 +449,7 @@ Use this to validate or augment instructions at load time.
   "event_name": "ConfigChange",
   "handler_type": "command",
   "handler_config": {
-    "command": "echo \"Config changed: $LUNARIA_KEY\" >> ~/config-audit.log"
+    "command": "echo \"Config changed: $AMOENA_KEY\" >> ~/config-audit.log"
   }
 }
 ```
@@ -489,7 +489,7 @@ Use this to validate or augment instructions at load time.
   "event_name": "WorktreeRemove",
   "handler_type": "command",
   "handler_config": {
-    "command": "rm -rf ~/workspace-backups/$LUNARIA_WORKSPACE_ID"
+    "command": "rm -rf ~/workspace-backups/$AMOENA_WORKSPACE_ID"
   }
 }
 ```
@@ -611,7 +611,7 @@ Use this to validate or augment instructions at load time.
   "event_name": "ProviderSwitch",
   "handler_type": "command",
   "handler_config": {
-    "command": "echo \"Provider: $LUNARIA_OLD_PROVIDER -> $LUNARIA_NEW_PROVIDER\" >> ~/provider.log"
+    "command": "echo \"Provider: $AMOENA_OLD_PROVIDER -> $AMOENA_NEW_PROVIDER\" >> ~/provider.log"
   }
 }
 ```
@@ -620,7 +620,7 @@ Use this to validate or augment instructions at load time.
 
 ### `ErrorUnhandled`
 
-**Fires when:** An unhandled error occurs in the Lunaria runtime.
+**Fires when:** An unhandled error occurs in the Amoena runtime.
 
 **Payload:**
 ```json
@@ -637,7 +637,7 @@ Use this to validate or augment instructions at load time.
   "event_name": "ErrorUnhandled",
   "handler_type": "http",
   "handler_config": {
-    "url": "https://alerts.example.com/lunaria-error"
+    "url": "https://alerts.example.com/amoena-error"
   }
 }
 ```
@@ -685,7 +685,7 @@ When importing hooks from Claude Code or OpenCode, event names are normalized:
 ## Best Practices
 
 - **Keep handlers fast** — The default timeout is 30 seconds; aim for under 2 seconds
-- **Handle errors gracefully** — A crashed command handler returns `status: "failed"` but does not crash Lunaria
+- **Handle errors gracefully** — A crashed command handler returns `status: "failed"` but does not crash Amoena
 - **Use `prompt` for context injection** — It is zero-latency; no process or network involved
 - **Use `http` for webhooks** — Lower overhead than spawning a shell process
 - **Use `command` sparingly** — Shell process spawn adds ~50–100ms; prefer `http` for latency-sensitive hooks

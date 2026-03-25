@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface ConnectionStatusProps {
 	isConnected: boolean;
@@ -16,7 +16,7 @@ export function ConnectionStatus({
 	onDisconnect,
 	onReconnect,
 }: ConnectionStatusProps) {
-	const { connection } = useLunaria();
+	const { connection } = useAmoena();
 	const displayUrl = connection.url || "ws://<gateway-host>:<gateway-port>";
 	const isGatewayOptional = process.env.NEXT_PUBLIC_GATEWAY_OPTIONAL === "true";
 

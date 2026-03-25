@@ -9,7 +9,7 @@ function MobileProbe() {
   return <span>{useIsMobile() ? "mobile" : "desktop"}</span>;
 }
 
-describe("Lunaria mobile shell and opinions", () => {
+describe("Amoena mobile shell and opinions", () => {
   test("useIsMobile responds to viewport width", () => {
     Object.defineProperty(window, "innerWidth", { value: 500, configurable: true, writable: true });
     Object.defineProperty(window, "matchMedia", {

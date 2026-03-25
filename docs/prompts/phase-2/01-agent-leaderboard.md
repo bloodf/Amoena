@@ -88,7 +88,7 @@ RALPH BLOCKED
 
 ## CONTEXT
 
-**Project:** Lunaria — Multi-agent orchestration platform
+**Project:** Amoena — Multi-agent orchestration platform
 **Phase:** 2 (Intelligence Layer) — depends on Phase 1 being merged and smoke-tested
 **Tech stack:** TypeScript, Next.js (App Router), better-sqlite3, Vitest, React
 **Branch to create:** `feature/mission-control-intelligence`

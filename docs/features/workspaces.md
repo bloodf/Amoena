@@ -67,7 +67,7 @@ Response:
   "projectId": "a3f1b2c3...",
   "agentId": "agent-uuid",
   "personaName": "senior-engineer",
-  "clonePath": "/Users/dev/.config/lunaria/workspaces/550e8400-...",
+  "clonePath": "/Users/dev/.config/amoena/workspaces/550e8400-...",
   "cloneType": "cow",
   "status": "active",
   "createdAt": "2026-03-14T10:00:00Z",
@@ -140,7 +140,7 @@ Returns a JSON file tree of the workspace clone, useful for the frontend file br
 ```json
 {
   "workspaceId": "...",
-  "clonePath": "/Users/dev/.config/lunaria/workspaces/...",
+  "clonePath": "/Users/dev/.config/amoena/workspaces/...",
   "tree": [
     {
       "name": "src",
@@ -234,12 +234,12 @@ Hook payloads include `workspaceId`, `clonePath`, `cloneType`, and `projectId`.
 
 ## Storage Location
 
-Workspace clones are stored under the Lunaria app data directory:
+Workspace clones are stored under the Amoena app data directory:
 
 ```
-~/.config/lunaria/workspaces/{workspace-id}/
+~/.config/amoena/workspaces/{workspace-id}/
 ```
 
-On macOS this is typically `~/Library/Application Support/lunaria/workspaces/`.
+On macOS this is typically `~/Library/Application Support/amoena/workspaces/`.
 
 The root path is configurable via the `RuntimePaths::workspace_root` field, which is resolved at startup from the app data directory.

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 
-import { useLunariaTranslation } from "@lunaria/i18n";
+import { useAmoenaTranslation } from "@lunaria/i18n";
 import { useClient } from "@/runtime/client-context";
 import { styles } from "@/theme/styles";
 import type { RemoteDeviceSelf } from "@lunaria/runtime-client";
 
 export function DeviceScreen() {
-  const { t } = useLunariaTranslation();
+  const { t } = useAmoenaTranslation();
   const { client, auth, clearPairing } = useClient();
   const [device, setDevice] = useState<RemoteDeviceSelf | null>(null);
   const [isLoading, setIsLoading] = useState(true);

@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { MoreScreen } from "./more-screen";
 
 vi.mock("@lunaria/i18n", () => ({
-  useLunariaTranslation: () => ({ t: (key: string) => key }),
+  useAmoenaTranslation: () => ({ t: (key: string) => key }),
 }));
 
 describe("MoreScreen", () => {

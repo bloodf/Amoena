@@ -19,7 +19,7 @@ describe("resolveAgentConfigs", () => {
 						enabled: false,
 					},
 					{
-						id: "lunaria-chat",
+						id: "amoena-chat",
 						taskPromptTemplate: "Chat {{slug}}",
 					},
 				],
@@ -27,7 +27,7 @@ describe("resolveAgentConfigs", () => {
 		});
 
 		const claude = presets.find((preset) => preset.id === "claude");
-		const chat = presets.find((preset) => preset.id === "lunaria-chat");
+		const chat = presets.find((preset) => preset.id === "amoena-chat");
 
 		expect(claude).toMatchObject({
 			id: "claude",
@@ -42,7 +42,7 @@ describe("resolveAgentConfigs", () => {
 		);
 
 		expect(chat).toMatchObject({
-			id: "lunaria-chat",
+			id: "amoena-chat",
 			kind: "chat",
 			taskPromptTemplate: "Chat {{slug}}",
 		});

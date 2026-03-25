@@ -3,7 +3,7 @@ import { describe, expect, mock, test } from "bun:test";
 import { ExtensionPanel } from "./ExtensionPanel";
 
 const extensions = [
-  { id: "ext-1", name: "Git Helper", version: "1.0.0", publisher: "Lunaria", description: "Advanced git integration", enabled: true, permissions: ["fs.read", "fs.write"] },
+  { id: "ext-1", name: "Git Helper", version: "1.0.0", publisher: "Amoena", description: "Advanced git integration", enabled: true, permissions: ["fs.read", "fs.write"] },
   { id: "ext-2", name: "Code Formatter", version: "0.5.0", description: "Auto-format code on save", enabled: false, permissions: ["fs.write"] },
 ];
 

@@ -1,12 +1,12 @@
 # Quick Start
 
-This guide walks you through your first session in Lunaria from launch to a working AI interaction.
+This guide walks you through your first session in Amoena from launch to a working AI interaction.
 
-## 1. Launch Lunaria
+## 1. Launch Amoena
 
 Start the app. On first launch, the **Setup Wizard** runs automatically:
 
-1. **Backend step** — choose Native mode (Lunaria's built-in agentic loop) or select a Wrapper (Claude Code, Codex CLI, Gemini CLI, OpenCode).
+1. **Backend step** — choose Native mode (Amoena's built-in agentic loop) or select a Wrapper (Claude Code, Codex CLI, Gemini CLI, OpenCode).
 2. **Provider step** — pick your default AI provider and enter your API key. Keys are stored in the OS keyring; they are never written to disk in plaintext.
 3. **Model step** — select the default model for your provider.
 4. **Profile step** — optional name and persona configuration.
@@ -27,8 +27,8 @@ A session is an AI conversation context. Each session has:
 
 | Mode | Description |
 |------|-------------|
-| **Native** | Lunaria's own agentic loop via Vercel AI SDK. Full control: subagents, memory injection, hooks, autopilot. |
-| **Wrapper** | Lunaria acts as a GUI shell around an external CLI tool (Claude Code, Codex, Gemini CLI, OpenCode). |
+| **Native** | Amoena's own agentic loop via Vercel AI SDK. Full control: subagents, memory injection, hooks, autopilot. |
+| **Wrapper** | Amoena acts as a GUI shell around an external CLI tool (Claude Code, Codex, Gemini CLI, OpenCode). |
 
 Both modes produce the same message timeline UI and write to the same persistence layer.
 
@@ -63,7 +63,7 @@ The **Message Timeline** in the centre panel shows the full conversation history
 
 ## 6. Use the Memory System
 
-Lunaria automatically captures observations from your sessions. The **Memory** tab in the side panel shows recent observations tagged by tier:
+Amoena automatically captures observations from your sessions. The **Memory** tab in the side panel shows recent observations tagged by tier:
 
 | Tier | Description |
 |------|-------------|
@@ -75,7 +75,7 @@ Memory is retrieved via embedding-based search and injected into new sessions au
 
 ## 7. Open a Workspace
 
-Link your session to a git repository via the **Workspaces** panel. Lunaria creates a dedicated branch for the session's work. When the session ends, you can:
+Link your session to a git repository via the **Workspaces** panel. Amoena creates a dedicated branch for the session's work. When the session ends, you can:
 
 - Review the diff in the **Merge Review** panel
 - Merge, discard, or export the changes

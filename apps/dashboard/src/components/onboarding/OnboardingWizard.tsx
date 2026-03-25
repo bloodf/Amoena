@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 /**
- * 5-step onboarding wizard for first-time Lunaria users.
+ * 5-step onboarding wizard for first-time Amoena users.
  * Steps: Welcome → API Keys → Workspace → Security Scan → Get Started
  */
 
@@ -15,7 +15,7 @@ interface WizardStep {
 }
 
 const STEPS: WizardStep[] = [
-	{ id: "welcome", title: "Welcome to Lunaria", subtitle: "The AI Agent Operating System" },
+	{ id: "welcome", title: "Welcome to Amoena", subtitle: "The AI Agent Operating System" },
 	{ id: "api-keys", title: "Connect Your AI Providers", subtitle: "Add API keys for the models you use" },
 	{ id: "workspace", title: "Set Up Your Workspace", subtitle: "Choose a project directory for your agents" },
 	{ id: "security", title: "Security Check", subtitle: "Let's make sure your setup is secure" },
@@ -88,7 +88,7 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
 					{step.id === "welcome" && (
 						<div className="space-y-4">
 							<p className="text-sm text-zinc-300">
-								Lunaria orchestrates AI coding agents — Claude, Codex, Gemini, and more —
+								Amoena orchestrates AI coding agents — Claude, Codex, Gemini, and more —
 								in isolated workspaces with persistent memory. Everything runs locally on your machine.
 							</p>
 							<div className="grid grid-cols-3 gap-3">
@@ -183,7 +183,7 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
 						<div className="text-center py-6 space-y-4">
 							<div className="text-5xl">🚀</div>
 							<p className="text-sm text-zinc-300">
-								Your workspace is ready. Lunaria will remember everything your agents do,
+								Your workspace is ready. Amoena will remember everything your agents do,
 								making each new task easier than the last.
 							</p>
 							<p className="text-xs text-zinc-500">

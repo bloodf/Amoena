@@ -4,7 +4,7 @@ outline: deep
 
 # Features
 
-Lunaria provides a comprehensive set of features for AI-assisted software development.
+Amoena provides a comprehensive set of features for AI-assisted software development.
 
 ## Core
 

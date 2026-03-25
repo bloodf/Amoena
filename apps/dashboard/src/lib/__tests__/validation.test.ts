@@ -69,7 +69,7 @@ describe("createTaskSchema", () => {
 		const result = createTaskSchema.safeParse({
 			title: "Route this task",
 			metadata: {
-				implementation_repo: "LunariaAi/lunaria",
+				implementation_repo: "AmoenaAi/amoena",
 				code_location: "/apps/api",
 			},
 		});

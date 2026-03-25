@@ -64,7 +64,7 @@ function handleRequest(request) {
     return {
       jsonrpc: '2.0',
       id,
-      result: { message: 'Hello from Lunaria extensions!' },
+      result: { message: 'Hello from Amoena extensions!' },
     };
   }
 
@@ -74,8 +74,8 @@ function handleRequest(request) {
 
 **Package and install:**
 ```bash
-lunaria-pack manifest.json --asset main.js --out hello-world.luna
-# Drag hello-world.luna into Lunaria
+amoena-pack manifest.json --asset main.js --out hello-world.luna
+# Drag hello-world.luna into Amoena
 ```
 
 ---
@@ -245,7 +245,7 @@ status-panel/
 
 **Package:**
 ```bash
-lunaria-pack manifest.json --asset panel.html --out status-panel.luna
+amoena-pack manifest.json --asset panel.html --out status-panel.luna
 ```
 
 ---
@@ -357,7 +357,7 @@ async function handleRequest(request) {
 
 **Package:**
 ```bash
-lunaria-pack manifest.json --asset main.js --out npm-search-tool.luna
+amoena-pack manifest.json --asset main.js --out npm-search-tool.luna
 ```
 
 ---
@@ -379,7 +379,7 @@ tool-logger/
   "id": "com.example.tool-logger",
   "name": "Tool Logger",
   "version": "1.0.0",
-  "description": "Logs all AI tool calls to ~/lunaria-tools.log",
+  "description": "Logs all AI tool calls to ~/amoena-tools.log",
   "permissions": ["fs.write"],
   "activationEvents": ["onSession"],
   "contributes": {
@@ -411,7 +411,7 @@ import { appendFileSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 
-const LOG_PATH = join(homedir(), 'lunaria-tools.log');
+const LOG_PATH = join(homedir(), 'amoena-tools.log');
 
 function log(entry) {
   const line = JSON.stringify({ ts: new Date().toISOString(), ...entry }) + '\n';
@@ -478,10 +478,10 @@ function handleRequest(request) {
 
 **Package:**
 ```bash
-lunaria-pack manifest.json --asset main.js --out tool-logger.luna
+amoena-pack manifest.json --asset main.js --out tool-logger.luna
 ```
 
-Logs are written to `~/lunaria-tools.log`, one JSON line per event.
+Logs are written to `~/amoena-tools.log`, one JSON line per event.
 
 ---
 
@@ -503,7 +503,7 @@ ollama-provider/
   "id": "com.example.ollama-provider",
   "name": "Ollama",
   "version": "1.0.0",
-  "description": "Use local Ollama models in Lunaria",
+  "description": "Use local Ollama models in Amoena",
   "permissions": ["network"],
   "activationEvents": ["onSession"],
   "contributes": {
@@ -690,5 +690,5 @@ async function handleRequest(request) {
 
 **Package:**
 ```bash
-lunaria-pack manifest.json --asset main.js --asset panel.html --out ollama-provider.luna
+amoena-pack manifest.json --asset main.js --asset panel.html --out ollama-provider.luna
 ```

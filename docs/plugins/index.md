@@ -1,10 +1,10 @@
 # Plugins
 
-Plugins are backend automation bundles that extend Lunaria's behavior through event hooks, custom commands, and backend processing. Unlike extensions, plugins live as directories on disk and are executed via Bun's JavaScript runtime using a JSON-RPC protocol.
+Plugins are backend automation bundles that extend Amoena's behavior through event hooks, custom commands, and backend processing. Unlike extensions, plugins live as directories on disk and are executed via Bun's JavaScript runtime using a JSON-RPC protocol.
 
 ## What Plugins Do
 
-Plugins respond to Lunaria's lifecycle events (sessions starting, tools being called, prompts submitted) and execute arbitrary logic: calling external APIs, transforming data, spawning processes, or sending notifications.
+Plugins respond to Amoena's lifecycle events (sessions starting, tools being called, prompts submitted) and execute arbitrary logic: calling external APIs, transforming data, spawning processes, or sending notifications.
 
 | Capability | Description |
 |---|---|
@@ -28,7 +28,7 @@ Use plugins for automation and backend logic. Use extensions when you need UI co
 
 ## JSON-RPC Execution Model
 
-Every plugin invocation uses JSON-RPC 2.0 over stdin/stdout. When Lunaria calls a plugin:
+Every plugin invocation uses JSON-RPC 2.0 over stdin/stdout. When Amoena calls a plugin:
 
 1. A Bun process is spawned with the plugin's entry point (`main` field from manifest)
 2. A JSON-RPC request is written to stdin:
@@ -63,7 +63,7 @@ Install → Discover → Activate → Execute (per event) → Disable/Uninstall
 ```
 
 1. **Install** — Plugin directory is copied to the plugins root; `manifest.json` is parsed and the plugin is registered in the database
-2. **Discover** — On startup, Lunaria scans the plugins directory and loads all valid plugins
+2. **Discover** — On startup, Amoena scans the plugins directory and loads all valid plugins
 3. **Activate** — Activation events in the manifest are matched; enabled plugins receive hook calls
 4. **Execute** — For each matched event, a Bun process is spawned with the JSON-RPC payload
 5. **Disable** — Plugin is marked disabled; health status set to `Disabled`; no more invocations
@@ -71,17 +71,17 @@ Install → Discover → Activate → Execute (per event) → Disable/Uninstall
 
 ## Deeplink Installation
 
-Plugins can be installed via the `lunaria://` deeplink scheme. This enables one-click install from the web or a marketplace:
+Plugins can be installed via the `amoena://` deeplink scheme. This enables one-click install from the web or a marketplace:
 
 ```
-lunaria://plugin/install?id=com.example.my-plugin&source=https://example.com/my-plugin.tar.gz&publisher=Example
+amoena://plugin/install?id=com.example.my-plugin&source=https://example.com/my-plugin.tar.gz&publisher=Example
 ```
 
-Lunaria parses the deeplink and shows a review dialog before installing. Plugins with a valid HTTPS `manifestUrl` and a `signature` parameter are marked **trusted**; others show warnings.
+Amoena parses the deeplink and shows a review dialog before installing. Plugins with a valid HTTPS `manifestUrl` and a `signature` parameter are marked **trusted**; others show warnings.
 
 ## Health Monitoring
 
-Lunaria tracks plugin health in its database:
+Amoena tracks plugin health in its database:
 
 | Status | Meaning |
 |---|---|

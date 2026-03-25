@@ -1,6 +1,6 @@
 # Extensions
 
-Extensions add functionality to Lunaria through a single `.luna` file that bundles a manifest and assets. Extensions can contribute commands, menu items, panels, settings, hooks, tools, and providers.
+Extensions add functionality to Amoena through a single `.luna` file that bundles a manifest and assets. Extensions can contribute commands, menu items, panels, settings, hooks, tools, and providers.
 
 ## Installing Extensions
 
@@ -15,17 +15,17 @@ Extensions add functionality to Lunaria through a single `.luna` file that bundl
 
 ```bash
 # Install from a local .luna file
-lunaria extensions install /path/to/my-extension.luna
+amoena extensions install /path/to/my-extension.luna
 
 # List installed extensions
-lunaria extensions list
+amoena extensions list
 
 # Enable/disable an extension
-lunaria extensions toggle my-extension --enable
-lunaria extensions toggle my-extension --disable
+amoena extensions toggle my-extension --enable
+amoena extensions toggle my-extension --disable
 
 # Uninstall
-lunaria extensions uninstall my-extension
+amoena extensions uninstall my-extension
 ```
 
 ### From a URL
@@ -33,7 +33,7 @@ lunaria extensions uninstall my-extension
 Extensions can also be installed from a URL via the `ExtensionManager`:
 
 ```bash
-lunaria extensions install-url https://example.com/my-extension.luna
+amoena extensions install-url https://example.com/my-extension.luna
 ```
 
 ## The .luna Format
@@ -77,7 +77,7 @@ The manifest is a JSON object embedded in the `.luna` file:
   "name": "My Extension",
   "version": "1.0.0",
   "publisher": "my-publisher",
-  "description": "A sample Lunaria extension",
+  "description": "A sample Amoena extension",
   "icon": "icon.png",
   "permissions": ["read_files", "write_files"],
   "activationEvents": ["onSession"],
@@ -136,7 +136,7 @@ Register commands that users can invoke from the Command Palette:
 
 ### Menu Items
 
-Add items to Lunaria's menus. Keys are menu location identifiers:
+Add items to Amoena's menus. Keys are menu location identifiers:
 
 ```json
 {
@@ -176,7 +176,7 @@ Contribute UI panels rendered from HTML assets:
 }
 ```
 
-The `entry` field references an asset name in the `.luna` bundle. The HTML is loaded and rendered within Lunaria's panel system.
+The `entry` field references an asset name in the `.luna` bundle. The HTML is loaded and rendered within Amoena's panel system.
 
 ### Settings
 
@@ -285,7 +285,7 @@ Extensions declare the permissions they need. Users review these before installa
 | `write_files` | Create and modify files         |
 | `execute`     | Run shell commands              |
 | `network`     | Make HTTP requests              |
-| `settings`    | Read and write Lunaria settings |
+| `settings`    | Read and write Amoena settings |
 | `memory`      | Access the memory system        |
 
 ## Viewing Contributions
@@ -293,7 +293,7 @@ Extensions declare the permissions they need. Users review these before installa
 See all active contributions from enabled extensions:
 
 ```bash
-lunaria extensions contributions
+amoena extensions contributions
 ```
 
 This returns the aggregated commands, menu items, panels, settings, hooks, tools, and providers from all enabled extensions.
@@ -303,7 +303,7 @@ This returns the aggregated commands, menu items, panels, settings, hooks, tools
 To create a `.luna` file programmatically, use the `LunaBundle` API from the Rust crate:
 
 ```rust
-use lunaria_desktop::extensions::format::{LunaBundle, ExtensionManifest};
+use amoena_desktop::extensions::format::{LunaBundle, ExtensionManifest};
 
 let bundle = LunaBundle {
     manifest: ExtensionManifest { /* ... */ },

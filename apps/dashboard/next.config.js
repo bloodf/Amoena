@@ -9,7 +9,7 @@ const nextConfig = {
   },
   turbopack: {},
   // Transpile ESM-only packages so they resolve correctly in all environments
-  transpilePackages: ['react-markdown', 'remark-gfm', '@lunaria/lunaria-service'],
+  transpilePackages: ['react-markdown', 'remark-gfm', '@lunaria/amoena-service'],
   
   // Security headers
   // Content-Security-Policy is set in src/proxy.ts with a per-request nonce.

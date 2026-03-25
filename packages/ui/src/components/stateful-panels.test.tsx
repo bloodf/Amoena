@@ -20,7 +20,7 @@ function renderSettingsAt(path: string) {
   );
 }
 
-describe("Lunaria stateful panels", () => {
+describe("Amoena stateful panels", () => {
   test("renders privacy settings content", () => {
     renderSettingsAt("/settings/privacy");
 
@@ -90,7 +90,7 @@ describe("Lunaria stateful panels", () => {
   test("renders themes settings content", () => {
     renderSettingsAt("/settings/themes");
 
-    expect(screen.getByText("Lunaria Dark")).toBeTruthy();
+    expect(screen.getByText("Amoena Dark")).toBeTruthy();
     expect(screen.getByText("Accent color")).toBeTruthy();
     expect(screen.getByText("UI density")).toBeTruthy();
   });

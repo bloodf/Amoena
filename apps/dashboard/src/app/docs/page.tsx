@@ -18,7 +18,7 @@ export default function DocsPage() {
 						clientKey: "curl",
 					},
 					metaData: {
-						title: "Lunaria API Docs",
+						title: "Amoena API Docs",
 					},
 				}}
 			/>

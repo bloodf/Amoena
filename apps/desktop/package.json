@@ -2,11 +2,11 @@
   "name": "@lunaria/desktop-app",
   "version": "0.1.0",
   "private": true,
-  "description": "Lunaria desktop application — Electron + Vite + React",
+  "description": "Amoena desktop application — Electron + Vite + React",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LunariaAi/lunaria.git",
+    "url": "https://github.com/AmoenaAi/amoena.git",
     "directory": "apps/desktop"
   },
   "type": "module",

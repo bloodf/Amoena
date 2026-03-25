@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { type ChatMessage, useLunaria } from "@/store";
+import { type ChatMessage, useAmoena } from "@/store";
 import { MessageBubble } from "./message-bubble";
 
 function formatDateGroup(timestamp: number): string {
@@ -63,7 +63,7 @@ export function MessageList() {
 		updatePendingMessage,
 		removePendingMessage,
 		addChatMessage,
-	} = useLunaria();
+	} = useAmoena();
 	const bottomRef = useRef<HTMLDivElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [showNewMessages, setShowNewMessages] = useState(false);

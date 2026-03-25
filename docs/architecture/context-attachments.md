@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines Lunaria's structured context attachment model for files and folders.
+This document defines Amoena's structured context attachment model for files and folders.
 
 ## Core Rule
 

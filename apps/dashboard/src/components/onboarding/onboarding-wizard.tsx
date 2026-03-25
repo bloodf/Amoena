@@ -18,7 +18,7 @@ import {
 	markOnboardingDismissedThisSession,
 	readOnboardingReplayFromStart,
 } from "@/lib/onboarding-session";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface StepInfo {
 	id: string;
@@ -88,7 +88,7 @@ export function OnboardingWizard() {
 		gatewayAvailable,
 		interfaceMode,
 		setInterfaceMode,
-	} = useLunaria();
+	} = useAmoena();
 	const navigateToPanel = useNavigateToPanel();
 	const t = useTranslations("onboarding");
 	const [step, setStep] = useState(0);
@@ -276,7 +276,7 @@ export function OnboardingWizard() {
 			<div
 				role="dialog"
 				aria-modal="true"
-				aria-label="Lunaria onboarding"
+				aria-label="Amoena onboarding"
 				className="relative z-10 w-full max-w-lg mx-4 bg-background border border-border/50 rounded-xl shadow-2xl overflow-hidden"
 			>
 				{/* Progress bar */}
@@ -391,7 +391,7 @@ function StepWelcome({
 				<div className="w-14 h-14 rounded-xl overflow-hidden bg-surface-1 border border-border/50 flex items-center justify-center shadow-lg">
 					<Image
 						src="/brand/mc-logo-128.png"
-						alt="Lunaria"
+						alt="Amoena"
 						width={56}
 						height={56}
 						className="w-full h-full object-cover"
@@ -565,7 +565,7 @@ function StepInterfaceMode({
 	const mc = modeColors(isGateway);
 	const t = useTranslations("onboarding.interfaceMode");
 	const tc = useTranslations("common");
-	const { interfaceMode, setInterfaceMode } = useLunaria();
+	const { interfaceMode, setInterfaceMode } = useAmoena();
 	const [selected, setSelected] = useState<"essential" | "full">(interfaceMode);
 
 	const handleSelect = async (mode: "essential" | "full") => {

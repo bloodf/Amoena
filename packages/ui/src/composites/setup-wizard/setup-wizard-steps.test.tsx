@@ -17,7 +17,7 @@ import { SetupWizardWorkspaceStep } from "./WorkspaceStep";
 describe("SetupWizardWelcomeStep", () => {
   test("renders welcome heading and description", () => {
     render(<SetupWizardWelcomeStep />);
-    expect(screen.getByText("Welcome to Lunaria")).toBeTruthy();
+    expect(screen.getByText("Welcome to Amoena")).toBeTruthy();
     expect(screen.getByText(/AI-native development environment/)).toBeTruthy();
   });
 
@@ -174,7 +174,7 @@ describe("SetupWizardCompatStep", () => {
   test("fires onLaunch when clicking launch button", () => {
     const onLaunch = mock(() => {});
     render(<SetupWizardCompatStep onLaunch={onLaunch} />);
-    fireEvent.click(screen.getByText("Launch Lunaria"));
+    fireEvent.click(screen.getByText("Launch Amoena"));
     expect(onLaunch).toHaveBeenCalled();
   });
 });
@@ -309,7 +309,7 @@ describe("SetupWizardReadyStep", () => {
   test("fires onLaunch when clicking launch button", () => {
     const onLaunch = mock(() => {});
     render(<SetupWizardReadyStep {...defaultProps} onLaunch={onLaunch} />);
-    fireEvent.click(screen.getByText("Launch Lunaria"));
+    fireEvent.click(screen.getByText("Launch Amoena"));
     expect(onLaunch).toHaveBeenCalled();
   });
 });

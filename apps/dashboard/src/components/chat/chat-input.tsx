@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { type ChatAttachment, useLunaria } from "@/store";
+import { type ChatAttachment, useAmoena } from "@/store";
 
 interface ChatInputProps {
 	onSend: (content: string, attachments?: ChatAttachment[]) => void;
@@ -20,7 +20,7 @@ export function ChatInput({
 	agents = [],
 	isGenerating,
 }: ChatInputProps) {
-	const { chatInput, setChatInput, isSendingMessage } = useLunaria();
+	const { chatInput, setChatInput, isSendingMessage } = useAmoena();
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [showMentions, setShowMentions] = useState(false);

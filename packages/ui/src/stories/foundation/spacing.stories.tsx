@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { lunariaSpacingTokens } from "@lunaria/tokens";
+import { amoenaSpacingTokens } from "@lunaria/tokens";
 
 const meta = {
   title: "Foundation/Spacing",
@@ -12,7 +12,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const spacingEntries = Object.entries(lunariaSpacingTokens) as [
+const spacingEntries = Object.entries(amoenaSpacingTokens) as [
   string,
   string,
 ][];

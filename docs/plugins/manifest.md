@@ -1,6 +1,6 @@
 # Manifest Reference
 
-Every plugin must include a `manifest.json` file at the root of its directory. This file describes the plugin's identity, capabilities, and required permissions. Lunaria validates the manifest on install and on every startup scan.
+Every plugin must include a `manifest.json` file at the root of its directory. This file describes the plugin's identity, capabilities, and required permissions. Amoena validates the manifest on install and on every startup scan.
 
 ## Minimal Manifest
 
@@ -78,7 +78,7 @@ Human-readable plugin name shown in Settings → Plugins.
 
 **Type:** `string`
 
-Semantic version string. Informational only — Lunaria does not enforce upgrade ordering.
+Semantic version string. Informational only — Amoena does not enforce upgrade ordering.
 
 ```json
 "version": "1.2.0"
@@ -151,7 +151,7 @@ If `permissions` is omitted, the plugin is treated as requesting no special capa
 
 **Type:** `string[]`
 
-List of hook event names that activate this plugin. Only events in this list will cause Lunaria to invoke the plugin. If omitted, defaults to `[]` (plugin receives no calls).
+List of hook event names that activate this plugin. Only events in this list will cause Amoena to invoke the plugin. If omitted, defaults to `[]` (plugin receives no calls).
 
 ```json
 "activationEvents": ["SessionStart", "PreToolUse", "PostToolUse"]
@@ -177,7 +177,7 @@ List of workspace division names this plugin is active in. Defaults to `["*"]` (
 "divisionAffinity": ["backend", "devops"]
 ```
 
-Divisions correspond to workspace context labels configured in Lunaria's workspace settings.
+Divisions correspond to workspace context labels configured in Amoena's workspace settings.
 
 ---
 
@@ -224,7 +224,7 @@ Source code repository URL. Displayed in the install review dialog.
 
 ## Validation Rules
 
-Lunaria rejects manifests that:
+Amoena rejects manifests that:
 - Are missing any required field (`id`, `name`, `version`, `main`)
 - Have an `id` that is not a non-empty string
 - Have a `main` path that does not exist in the plugin directory

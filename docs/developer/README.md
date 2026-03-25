@@ -1,6 +1,6 @@
 # Developer Documentation
 
-This section is for Lunaria contributors, plugin authors, adapter authors, and advanced integrators.
+This section is for Amoena contributors, plugin authors, adapter authors, and advanced integrators.
 
 ## Main Areas
 

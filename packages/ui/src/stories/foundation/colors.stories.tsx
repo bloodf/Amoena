@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  lunariaThemeTokens,
+  amoenaThemeTokens,
 } from "@lunaria/tokens";
 
 const meta = {
@@ -75,8 +75,8 @@ function DualSwatch({ name, darkHsl, lightHsl }: SwatchProps) {
 }
 
 function ColorSection({ title, tokens }: { title: string; tokens: string[] }) {
-  const dark = lunariaThemeTokens.dark;
-  const light = lunariaThemeTokens.light;
+  const dark = amoenaThemeTokens.dark;
+  const light = amoenaThemeTokens.light;
 
   return (
     <div className="mb-10">
@@ -181,7 +181,7 @@ export const AllColors: Story = {
     <div className="p-8 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold text-foreground mb-2">Color Tokens</h1>
       <p className="text-muted-foreground mb-8">
-        All semantic color tokens from the Lunaria design system. Each swatch
+        All semantic color tokens from the Amoena design system. Each swatch
         shows dark (left) and light (right) theme values as HSL.
       </p>
       {colorGroups.map((group) => (

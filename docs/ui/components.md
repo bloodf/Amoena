@@ -1,6 +1,6 @@
 # Component Library
 
-The Lunaria component library (`@lunaria/ui`) provides 80+ components organized in four tiers.
+The Amoena component library (`@lunaria/ui`) provides 80+ components organized in four tiers.
 
 ## Primitives
 

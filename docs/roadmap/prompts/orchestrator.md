@@ -1,8 +1,8 @@
-# Lunaria Migration Orchestrator — Codex GUI Prompt
+# Amoena Migration Orchestrator — Codex GUI Prompt
 
 ## Purpose
 
-This is the master orchestration prompt for the Lunaria Superset fork migration. Run it in the Codex GUI app. The Codex chat is the orchestrator/leader. It owns sequencing, verification, and progress tracking across all 5 phases.
+This is the master orchestration prompt for the Amoena Superset fork migration. Run it in the Codex GUI app. The Codex chat is the orchestrator/leader. It owns sequencing, verification, and progress tracking across all 5 phases.
 
 The orchestrator must not use tmux, OMX team mode, Cursor CLI, Claude task APIs, or git worktree isolation. When parallel help is useful, use Codex native subagents only for bounded, non-overlapping work.
 
@@ -19,7 +19,7 @@ The orchestrator must not use tmux, OMX team mode, Cursor CLI, Claude task APIs,
 │  2. Track status in docs/roadmap/PROGRESS.md                │
 │  3. Run phase work directly or delegate bounded slices      │
 │  4. Verify acceptance criteria before phase handoff         │
-│  5. Keep the migration target in ../lunaria-desktop         │
+│  5. Keep the migration target in ../amoena-desktop         │
 │                                                             │
 │  Phase 1  →  Phase 2  →  Phase 3A/3B/3C  →  Phase 4 → 5    │
 │    │          │              │   │   │          │      │    │
@@ -29,10 +29,10 @@ The orchestrator must not use tmux, OMX team mode, Cursor CLI, Claude task APIs,
 
 ### Repository Roles
 
-- Source/reference repo: `/Users/heitor/Developer/github.com/Lunaria/lunaria`
-- Migration target repo: `../lunaria-desktop`
+- Source/reference repo: `/Users/heitor/Developer/github.com/Amoena/amoena`
+- Migration target repo: `../amoena-desktop`
 
-The current repo stays the source of truth for roadmap docs, existing Lunaria code, assets, and Rust behavior references. Phase implementation happens in the sibling Superset-based workspace unless a phase prompt explicitly says otherwise.
+The current repo stays the source of truth for roadmap docs, existing Amoena code, assets, and Rust behavior references. Phase implementation happens in the sibling Superset-based workspace unless a phase prompt explicitly says otherwise.
 
 ---
 
@@ -43,7 +43,7 @@ Before beginning any phase:
 1. Confirm the source repo is available at the current working directory.
 2. Confirm `git`, `bun`, and network access are available.
 3. Confirm `docs/roadmap/MIGRATION-PLAN.md`, `docs/roadmap/TODOS.md`, and `docs/roadmap/PROGRESS.md` are readable.
-4. Confirm the migration target path `../lunaria-desktop` is available or can be created.
+4. Confirm the migration target path `../amoena-desktop` is available or can be created.
 
 ---
 
@@ -93,12 +93,12 @@ Keep work local for:
 
 ### Phase 1: Fork & Rebrand
 
-Execution target: `../lunaria-desktop`
+Execution target: `../amoena-desktop`
 
 Launch sequence:
 
-1. Create or reuse `../lunaria-desktop`.
-2. Clone `https://github.com/LunariaAi/superset.git` into that path if it does not exist.
+1. Create or reuse `../amoena-desktop`.
+2. Clone `https://github.com/AmoenaAi/superset.git` into that path if it does not exist.
 3. Execute `docs/roadmap/prompts/phase-1-fork-rebrand.md` against the sibling repo.
 4. Keep the current repo read-only except for roadmap progress updates.
 
@@ -113,20 +113,20 @@ bun run build
 
 ### Phase 2: Monorepo Restructure
 
-Execution target: `../lunaria-desktop`
+Execution target: `../amoena-desktop`
 
 Verification:
 
 ```bash
 ls packages/local-db/drizzle/0037*.sql packages/local-db/drizzle/0043*.sql
-test -d packages/lunaria-service/src
-grep -r "lunaria" apps/desktop/src/lib/trpc/routers/index.ts
+test -d packages/amoena-service/src
+grep -r "amoena" apps/desktop/src/lib/trpc/routers/index.ts
 bun run build
 ```
 
 ### Phase 3: Core Services
 
-Execution target: `../lunaria-desktop`
+Execution target: `../amoena-desktop`
 
 Recommended delegation:
 
@@ -142,7 +142,7 @@ Verification:
 
 ### Phase 4: UI Integration
 
-Execution target: `../lunaria-desktop`
+Execution target: `../amoena-desktop`
 
 Verification:
 
@@ -153,7 +153,7 @@ Verification:
 
 ### Phase 5: Polish & Release
 
-Execution target: `../lunaria-desktop`
+Execution target: `../amoena-desktop`
 
 Verification:
 
@@ -199,6 +199,6 @@ If a delegated slice fails:
 When asked to begin the project:
 
 1. Update `docs/roadmap/PROGRESS.md` to mark Phase 1 as `IN PROGRESS`.
-2. Prepare `../lunaria-desktop`.
+2. Prepare `../amoena-desktop`.
 3. Begin Phase 1 only.
 4. Do not start Phase 2 until Phase 1 verification succeeds.

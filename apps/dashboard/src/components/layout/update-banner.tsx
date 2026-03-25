@@ -3,13 +3,13 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 type UpdateState = "idle" | "updating" | "restarting" | "error";
 
 export function UpdateBanner() {
 	const { updateAvailable, updateDismissedVersion, dismissUpdate } =
-		useLunaria();
+		useAmoena();
 	const t = useTranslations("updateBanner");
 	const tc = useTranslations("common");
 	const [state, setState] = useState<UpdateState>("idle");

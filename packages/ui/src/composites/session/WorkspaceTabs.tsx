@@ -90,7 +90,7 @@ export function WorkspaceTabs({
                       session.provider === 'opencode' && 'text-tui-opencode',
                       session.provider === 'codex' && 'text-tui-codex',
                       session.provider === 'gemini' && 'text-tui-gemini',
-                      session.provider === 'lunaria' && 'text-primary',
+                      session.provider === 'amoena' && 'text-primary',
                     )}
                   />
                 ) : null}

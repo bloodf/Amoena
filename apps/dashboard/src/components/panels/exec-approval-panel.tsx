@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { matchesGlobPattern } from "@/lib/exec-approval-utils";
 import { useWebSocket } from "@/lib/websocket";
-import { type ExecApprovalRequest, useLunaria } from "@/store";
+import { type ExecApprovalRequest, useAmoena } from "@/store";
 
 type FilterTab = "all" | "pending" | "resolved";
 type PanelView = "approvals" | "allowlist";
@@ -41,7 +41,7 @@ function timeAgo(timestamp: number): string {
 
 export function ExecApprovalPanel() {
 	const t = useTranslations("execApproval");
-	const { execApprovals, updateExecApproval } = useLunaria();
+	const { execApprovals, updateExecApproval } = useAmoena();
 	const { sendMessage } = useWebSocket();
 	const [filter, setFilter] = useState<FilterTab>("pending");
 	const [view, setView] = useState<PanelView>("approvals");

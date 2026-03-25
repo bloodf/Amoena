@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines how Lunaria handles errors across its runtime components — from provider failures and tool crashes to workspace corruption and IPC disconnection. The goal is graceful degradation: every failure mode has a defined recovery path, and the user is always informed.
+This document defines how Amoena handles errors across its runtime components — from provider failures and tool crashes to workspace corruption and IPC disconnection. The goal is graceful degradation: every failure mode has a defined recovery path, and the user is always informed.
 
 ## Error Categories
 

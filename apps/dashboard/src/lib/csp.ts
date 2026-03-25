@@ -1,4 +1,4 @@
-export function buildLunariaCsp(input: {
+export function buildAmoenaCsp(input: {
 	nonce: string;
 	googleEnabled: boolean;
 }): string {
@@ -27,7 +27,7 @@ export function buildNonceRequestHeaders(input: {
 	googleEnabled: boolean;
 }): Headers {
 	const requestHeaders = new Headers(input.headers);
-	const csp = buildLunariaCsp({
+	const csp = buildAmoenaCsp({
 		nonce: input.nonce,
 		googleEnabled: input.googleEnabled,
 	});

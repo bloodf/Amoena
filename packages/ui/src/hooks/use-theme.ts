@@ -5,7 +5,7 @@ type Theme = "dark" | "light";
 export function useTheme() {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window !== "undefined") {
-      return (localStorage.getItem("lunaria-theme") as Theme) || "dark";
+      return (localStorage.getItem("amoena-theme") as Theme) || "dark";
     }
     return "dark";
   });
@@ -17,7 +17,7 @@ export function useTheme() {
     } else {
       root.classList.remove("light");
     }
-    localStorage.setItem("lunaria-theme", theme);
+    localStorage.setItem("amoena-theme", theme);
   }, [theme]);
 
   const toggleTheme = () => setThemeState(prev => prev === "dark" ? "light" : "dark");

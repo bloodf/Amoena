@@ -27,9 +27,9 @@ const LOADER_AGENTS = [
 		labelClass: "absolute left-1/2 -top-5 -translate-x-1/2",
 	},
 	{
-		key: "lunaria",
-		name: "Lunaria",
-		src: "/brand/lunaria-logo.png",
+		key: "amoena",
+		name: "Amoena",
+		src: "/brand/amoena-logo.png",
 		wrapperClass:
 			"absolute left-0 top-1/2 -translate-y-1/2 opacity-0 animate-converge-left",
 		labelClass: "absolute -left-9 top-1/2 -translate-y-1/2",
@@ -118,7 +118,7 @@ function PageLoader({ steps }: { steps?: InitStep[] }) {
 			className={`flex items-center justify-center min-h-screen bg-background void-bg transition-opacity duration-300 ${allDone ? "opacity-0" : "opacity-100"}`}
 		>
 			<div className="flex flex-col items-center gap-8 w-64">
-				{/* Animated logo sequence: Lunaria + Claude converge → morph into MC mark */}
+				{/* Animated logo sequence: Amoena + Claude converge → morph into MC mark */}
 				<div className="relative flex items-center justify-center h-28 w-full">
 					{/* Ambient glow */}
 					<div
@@ -156,7 +156,7 @@ function PageLoader({ steps }: { steps?: InitStep[] }) {
 						<div className="animate-float" style={{ animationDelay: "2.7s" }}>
 							<Image
 								src="/brand/mc-logo-128.png"
-								alt="Lunaria"
+								alt="Amoena"
 								width={56}
 								height={56}
 								priority

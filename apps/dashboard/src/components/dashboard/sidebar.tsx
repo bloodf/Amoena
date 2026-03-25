@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { createClientLogger } from "@/lib/client-logger";
 import { useNavigateToPanel } from "@/lib/navigation";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 const log = createClientLogger("Sidebar");
 
@@ -148,7 +148,7 @@ const menuItems: MenuItem[] = [
 ];
 
 export function Sidebar() {
-	const { activeTab, connection, sessions } = useLunaria();
+	const { activeTab, connection, sessions } = useAmoena();
 	const navigateToPanel = useNavigateToPanel();
 	const [systemStats, setSystemStats] = useState<SystemStats | null>(null);
 
@@ -176,14 +176,14 @@ export function Sidebar() {
 					<div className="w-8 h-8 rounded-lg overflow-hidden bg-background border border-border/50 flex items-center justify-center">
 						<Image
 							src="/brand/mc-logo-128.png"
-							alt="Lunaria logo"
+							alt="Amoena logo"
 							width={32}
 							height={32}
 							className="w-full h-full object-cover"
 						/>
 					</div>
 					<div>
-						<h2 className="font-bold text-foreground">Lunaria</h2>
+						<h2 className="font-bold text-foreground">Amoena</h2>
 						<p className="text-xs text-muted-foreground">
 							ClawdBot Orchestration
 						</p>

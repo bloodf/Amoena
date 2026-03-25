@@ -2,27 +2,27 @@
 
 ## Purpose
 
-This document defines Lunaria's memory system as a **Claude-mem compatible architecture**. The goal is not to borrow ideas loosely. The goal is to replicate the operational model closely enough that:
+This document defines Amoena's memory system as a **Claude-mem compatible architecture**. The goal is not to borrow ideas loosely. The goal is to replicate the operational model closely enough that:
 
-- Lunaria behaves like a first-class Claude-mem host in native mode
+- Amoena behaves like a first-class Claude-mem host in native mode
 - Claude-mem-compatible plugins and workflows can run with minimal adaptation
 - new upstream Claude-mem features can be reviewed, diffed, and ported intentionally
 
 ## Source Of Truth
 
-When Lunaria's memory behavior is ambiguous, use this precedence order:
+When Amoena's memory behavior is ambiguous, use this precedence order:
 
 1. this document
 2. [`system-architecture.md`](./system-architecture.md)
 3. [`agent-backend-interface.md`](./agent-backend-interface.md)
 4. [`data-model.md`](./data-model.md)
-5. upstream Claude-mem behavior, when it does not conflict with Lunaria's desktop-first runtime model
+5. upstream Claude-mem behavior, when it does not conflict with Amoena's desktop-first runtime model
 
 ## Product Decision
 
-Lunaria's memory system is a **Claude-mem parity subsystem**, not a generic notes feature.
+Amoena's memory system is a **Claude-mem parity subsystem**, not a generic notes feature.
 
-That means Lunaria must preserve the same conceptual pipeline:
+That means Amoena must preserve the same conceptual pipeline:
 
 1. observe
 2. normalize
@@ -39,12 +39,12 @@ That means Lunaria must preserve the same conceptual pipeline:
 - **Session-aware**: memory is tied to sessions, workspaces, agents, and lineage.
 - **Observation-first**: raw observations are the canonical primitive.
 - **Deterministic injection**: the same context should produce the same retrieval set when inputs are unchanged.
-- **Claude-mem parity**: when Claude-mem has a real feature, Lunaria should either implement it or explicitly document why it diverges.
+- **Claude-mem parity**: when Claude-mem has a real feature, Amoena should either implement it or explicitly document why it diverges.
 - **Upstream watchability**: new Claude-mem releases must be reviewable and portable through a dedicated sync workflow.
 
 ## Compatibility Scope
 
-Lunaria must mirror the following Claude-mem behaviors where technically possible:
+Amoena must mirror the following Claude-mem behaviors where technically possible:
 
 - observation capture from session/tool activity
 - persisted memory records on disk and in SQLite-backed metadata
@@ -54,7 +54,7 @@ Lunaria must mirror the following Claude-mem behaviors where technically possibl
 - relevance-based injection into the system prompt / turn context
 - project-scoped memory boundaries
 
-Lunaria extends Claude-mem in these ways:
+Amoena extends Claude-mem in these ways:
 
 - multi-agent lineage support
 - workspace/worktree scoping
@@ -172,7 +172,7 @@ The canonical persistence layer remains the data model in [`data-model.md`](./da
 - `session_summaries`
 - memory-related settings keys
 
-If Lunaria also writes Claude-compatible project memory files, those are a compatibility artifact, not the primary database.
+If Amoena also writes Claude-compatible project memory files, those are a compatibility artifact, not the primary database.
 
 ## Injection Rules
 
@@ -211,7 +211,7 @@ Each summary should preserve:
 
 ## Three-Tier Context Loading (OpenViking-inspired)
 
-Lunaria adopts a **three-tier progressive context loading** system inspired by OpenViking's AGFS (Agent File System) architecture. Every memory item — observation, skill, resource — is stored with three levels of detail, loaded on demand to minimize token cost.
+Amoena adopts a **three-tier progressive context loading** system inspired by OpenViking's AGFS (Agent File System) architecture. Every memory item — observation, skill, resource — is stored with three levels of detail, loaded on demand to minimize token cost.
 
 ### Tier Definitions
 
@@ -243,7 +243,7 @@ Every observation is classified into one of six categories (inspired by OpenViki
 |----------|-------------|---------|
 | **Profile** | Persistent information about the user | Role, expertise, working style, background |
 | **Preferences** | User choices and configuration patterns | Coding style, tool preferences, review standards |
-| **Entities** | Named things: people, projects, technologies | "Lunaria", "React 19", "Tauri 2" |
+| **Entities** | Named things: people, projects, technologies | "Amoena", "React 19", "Tauri 2" |
 | **Patterns** | Recurring behaviors, workflows, anti-patterns | Debugging approach, commit style, review process |
 | **Tools** | Tool usage patterns and configurations | MCP servers, CLI tools, IDE settings |
 | **Skills** | Learned capabilities and domain knowledge | Languages known, frameworks mastered, domain expertise |
@@ -263,7 +263,7 @@ This prevents memory bloat from semantically identical observations captured acr
 
 ### MCP Tool-to-Skill Conversion Pipeline
 
-Inspired by OpenViking's skill system, Lunaria can convert MCP tool definitions into reusable agent skills:
+Inspired by OpenViking's skill system, Amoena can convert MCP tool definitions into reusable agent skills:
 
 1. **Discovery**: When an MCP server registers tools, capture the tool schema (name, description, input schema).
 2. **Skill wrapping**: Generate a skill definition that wraps the MCP tool call with: pre-conditions, post-conditions, usage examples, and failure handling.
@@ -302,22 +302,22 @@ Semantic relationship tracking between entities extracted from conversations:
 
 Osaurus uses VecturaKit for vector embeddings across all layers.
 
-### Lunaria ↔ Osaurus Layer Mapping
+### Amoena ↔ Osaurus Layer Mapping
 
-Lunaria's Claude-mem parity model covers most of Osaurus's layers through different abstractions:
+Amoena's Claude-mem parity model covers most of Osaurus's layers through different abstractions:
 
-| Osaurus Layer | Lunaria Equivalent | Status |
+| Osaurus Layer | Amoena Equivalent | Status |
 |---|---|---|
 | User Profile | Observations scoped to workspace/global + pinned context | Covered — observation types and scope boundaries already support persistent user-level knowledge |
 | Working Memory | Session-scoped observations + turn injection pipeline | Covered — the observe → inject pipeline handles active context |
 | Conversation Summaries | `session_summaries` table + continuity summaries | Covered — session summary rules explicitly define generation triggers and preserved content |
 | Knowledge Graph | No direct equivalent | Gap — see Knowledge Graph Layer below |
 
-The primary architectural gap is Layer 4. Lunaria's hybrid FTS5 + sqlite-vec retrieval handles similarity-based recall effectively, but does not model structured relationships between entities or detect factual contradictions.
+The primary architectural gap is Layer 4. Amoena's hybrid FTS5 + sqlite-vec retrieval handles similarity-based recall effectively, but does not model structured relationships between entities or detect factual contradictions.
 
 ## Knowledge Graph Layer (Future)
 
-This section proposes a knowledge graph extension to Lunaria's memory system. It builds on the existing SQLite + FTS5 + sqlite-vec stack and does not require new infrastructure.
+This section proposes a knowledge graph extension to Amoena's memory system. It builds on the existing SQLite + FTS5 + sqlite-vec stack and does not require new infrastructure.
 
 ### Motivation
 
@@ -422,13 +422,13 @@ Relationships use a fixed taxonomy of directed edge labels. New types require a 
 | Category | Relation | Example | Inverse |
 |----------|----------|---------|---------|
 | **Preference** | `prefers` | `user → prefers → TypeScript` | — |
-| **Usage** | `uses` | `project-lunaria → uses → Tauri 2` | `used-by` |
-| **Ownership** | `owns` | `user → owns → project-lunaria` | `owned-by` |
-| **Participation** | `works-on` | `user → works-on → project-lunaria` | — |
-| **Dependency** | `depends-on` | `project-lunaria → depends-on → sqlite-vec` | `dependency-of` |
+| **Usage** | `uses` | `project-amoena → uses → Tauri 2` | `used-by` |
+| **Ownership** | `owns` | `user → owns → project-amoena` | `owned-by` |
+| **Participation** | `works-on` | `user → works-on → project-amoena` | — |
+| **Dependency** | `depends-on` | `project-amoena → depends-on → sqlite-vec` | `dependency-of` |
 | **Knowledge** | `knows` | `user → knows → Rust` | — |
 | **Association** | `relates-to` | `React 19 → relates-to → RSC` | `relates-to` (symmetric) |
-| **Composition** | `part-of` | `auth-module → part-of → project-lunaria` | `contains` |
+| **Composition** | `part-of` | `auth-module → part-of → project-amoena` | `contains` |
 | **Contradiction** | `contradicts` | `rel-42 → contradicts → rel-17` | `contradicts` (symmetric) |
 | **Supersession** | `supersedes` | `"user prefers TS" → supersedes → "user prefers JS"` | `superseded-by` |
 | **Creation** | `created-by` | `auth-module → created-by → user` | `created` |
@@ -450,10 +450,10 @@ Expected structured output format:
 {
   "entities": [
     {
-      "name": "Lunaria",
+      "name": "Amoena",
       "kind": "project",
       "description": "Desktop AI assistant built with Tauri 2",
-      "aliases": ["lunaria-app"]
+      "aliases": ["amoena-app"]
     },
     {
       "name": "TypeScript",
@@ -464,7 +464,7 @@ Expected structured output format:
   ],
   "relationships": [
     {
-      "source": "Lunaria",
+      "source": "Amoena",
       "target": "TypeScript",
       "relation": "uses",
       "confidence": 0.95
@@ -648,7 +648,7 @@ These queries demonstrate common knowledge graph operations. All assume `workspa
 SELECT e.name, e.kind, r.confidence, r.created_at
 FROM kg_relationships r
 JOIN kg_entities e ON r.target_id = e.id
-WHERE r.source_id = (SELECT id FROM kg_entities WHERE name = 'Lunaria' AND workspace_id = :ws)
+WHERE r.source_id = (SELECT id FROM kg_entities WHERE name = 'Amoena' AND workspace_id = :ws)
   AND r.relation = 'uses'
   AND r.superseded_by IS NULL
 ORDER BY r.confidence DESC;
@@ -744,12 +744,12 @@ This is not a V1 feature. It is a post-V1 extension that builds on the hybrid re
 
 ## Claude-mem Upstream Sync Policy
 
-Lunaria must maintain a dedicated **upstream parity workflow** for Claude-mem.
+Amoena must maintain a dedicated **upstream parity workflow** for Claude-mem.
 
 When Claude-mem releases new features:
 
 1. inspect the upstream repository and release notes
-2. compare the new behavior with Lunaria's current implementation
+2. compare the new behavior with Amoena's current implementation
 3. classify each change:
    - already supported
    - missing and should be ported
@@ -763,7 +763,7 @@ The prompt catalog must include a dedicated prompt that tells an implementation 
 
 - inspect the upstream Claude-mem repository
 - identify new features or behavior changes
-- compare them with Lunaria's memory subsystem
+- compare them with Amoena's memory subsystem
 - implement or document parity gaps
 
 That prompt is not optional. It is part of the memory maintenance model.

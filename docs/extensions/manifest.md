@@ -136,8 +136,8 @@ All permissions must be declared upfront. Undeclared permissions will be denied 
 | `notifications` | Send desktop notifications |
 | `sessions.read` | Read session data (messages, metadata) |
 | `sessions.write` | Create or modify sessions |
-| `settings.read` | Read Lunaria settings |
-| `settings.write` | Modify Lunaria settings |
+| `settings.read` | Read Amoena settings |
+| `settings.write` | Modify Amoena settings |
 | `agents.spawn` | Create sub-agents |
 | `memory.observe` | Record memory observations |
 | `memory.search` | Query the memory store |
@@ -169,7 +169,7 @@ The wildcard `*` suffix is supported: `"onCommand:com.example.*"` matches any co
 
 ### `contributes` (object, required)
 
-Declares what this extension contributes to Lunaria. All sub-fields are optional arrays/objects that default to empty.
+Declares what this extension contributes to Amoena. All sub-fields are optional arrays/objects that default to empty.
 
 See [Contributions](./contributions.md) for the complete reference for each type.
 
@@ -206,7 +206,7 @@ The runtime for the backend process. Currently only `"bun"` is supported.
 
 Asset name of the entry point file embedded in the `.luna` bundle. This file is executed by Bun when the extension is activated.
 
-The backend communicates with Lunaria via JSON-RPC over stdin/stdout. See [Getting Started](./getting-started.md) for a backend template.
+The backend communicates with Amoena via JSON-RPC over stdin/stdout. See [Getting Started](./getting-started.md) for a backend template.
 
 ---
 

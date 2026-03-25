@@ -6,13 +6,13 @@ import { config } from "@/lib/config";
 import { logAuditEvent } from "@/lib/db";
 import { scanForInjection } from "@/lib/injection-guard";
 import { logger } from "@/lib/logger";
-import { callLunariaGateway } from "@/lib/lunaria-gateway";
+import { callAmoenaGateway } from "@/lib/amoena-gateway";
 import { heavyLimiter } from "@/lib/rate-limit";
 import { spawnAgentSchema, validateBody } from "@/lib/validation";
 
 function getPreferredToolsProfile(): string {
 	return (
-		String(process.env.LUNARIA_TOOLS_PROFILE || "coding").trim() || "coding"
+		String(process.env.AMOENA_TOOLS_PROFILE || "coding").trim() || "coding"
 	);
 }
 
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
 		const spawnId = `spawn-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
 		// Construct the spawn command
-		// Using Lunaria's sessions_spawn function via clawdbot CLI
+		// Using Amoena's sessions_spawn function via clawdbot CLI
 		const spawnPayload = {
 			task,
 			label,
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
 			let result: any;
 			let compatibilityFallbackUsed = false;
 			try {
-				result = await callLunariaGateway(
+				result = await callAmoenaGateway(
 					"sessions_spawn",
 					spawnPayload,
 					15_000,
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
 
 				const fallbackPayload = { ...spawnPayload };
 				delete (fallbackPayload as any).tools;
-				result = await callLunariaGateway(
+				result = await callAmoenaGateway(
 					"sessions_spawn",
 					fallbackPayload,
 					15_000,

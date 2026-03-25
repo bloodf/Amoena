@@ -46,16 +46,16 @@ describe("getPullRequestRepoArgs", () => {
 		expect(
 			getPullRequestRepoArgs({
 				isFork: true,
-				upstreamUrl: "git@github.com:LunariaAi/lunaria.git",
+				upstreamUrl: "git@github.com:AmoenaAi/amoena.git",
 			}),
-		).toEqual(["--repo", "LunariaAi/lunaria"]);
+		).toEqual(["--repo", "AmoenaAi/amoena"]);
 	});
 
 	test("returns no repo args for non-forks", () => {
 		expect(
 			getPullRequestRepoArgs({
 				isFork: false,
-				upstreamUrl: "https://github.com/LunariaAi/lunaria",
+				upstreamUrl: "https://github.com/AmoenaAi/amoena",
 			}),
 		).toEqual([]);
 	});
@@ -86,7 +86,7 @@ describe("parseReviewThreadCommentsResponse", () => {
 								},
 								body: "Please rename this helper.",
 								createdAt: "2026-03-21T04:19:41Z",
-								url: "https://github.com/LunariaAi/lunaria/pull/2681#discussion_r42",
+								url: "https://github.com/AmoenaAi/amoena/pull/2681#discussion_r42",
 								path: "apps/desktop/src/file.ts",
 								line: 19,
 							},
@@ -105,7 +105,7 @@ describe("parseReviewThreadCommentsResponse", () => {
 				avatarUrl: "https://avatars.githubusercontent.com/u/1?v=4",
 				body: "Please rename this helper.",
 				createdAt: new Date("2026-03-21T04:19:41Z").getTime(),
-				url: "https://github.com/LunariaAi/lunaria/pull/2681#discussion_r42",
+				url: "https://github.com/AmoenaAi/amoena/pull/2681#discussion_r42",
 				kind: "review",
 				path: "apps/desktop/src/file.ts",
 				line: 19,
@@ -128,7 +128,7 @@ describe("parseReviewThreadCommentsResponse", () => {
 								},
 								body: "Please rename this helper.",
 								createdAt: "2026-03-21T04:19:41Z",
-								url: "https://github.com/LunariaAi/lunaria/pull/2681#discussion_r42",
+								url: "https://github.com/AmoenaAi/amoena/pull/2681#discussion_r42",
 								path: "apps/desktop/src/file.ts",
 								line: 19,
 							},
@@ -146,7 +146,7 @@ describe("parseReviewThreadCommentsResponse", () => {
 				authorLogin: "octocat",
 				body: "Please rename this helper.",
 				createdAt: new Date("2026-03-21T04:19:41Z").getTime(),
-				url: "https://github.com/LunariaAi/lunaria/pull/2681#discussion_r42",
+				url: "https://github.com/AmoenaAi/amoena/pull/2681#discussion_r42",
 				kind: "review",
 				path: "apps/desktop/src/file.ts",
 				line: 19,
@@ -169,7 +169,7 @@ describe("parseReviewThreadCommentsResponse", () => {
 								},
 								body: "Please rename this helper.",
 								createdAt: "2026-03-21T04:19:41Z",
-								url: "https://github.com/LunariaAi/lunaria/pull/2681#discussion_r42",
+								url: "https://github.com/AmoenaAi/amoena/pull/2681#discussion_r42",
 								path: "apps/desktop/src/file.ts",
 								originalLine: 19,
 							},
@@ -187,7 +187,7 @@ describe("parseReviewThreadCommentsResponse", () => {
 				authorLogin: "octocat",
 				body: "Please rename this helper.",
 				createdAt: new Date("2026-03-21T04:19:41Z").getTime(),
-				url: "https://github.com/LunariaAi/lunaria/pull/2681#discussion_r42",
+				url: "https://github.com/AmoenaAi/amoena/pull/2681#discussion_r42",
 				kind: "review",
 				path: "apps/desktop/src/file.ts",
 				line: 19,
@@ -226,7 +226,7 @@ describe("parseConversationCommentsResponse", () => {
 					body: "Looks good overall.",
 					created_at: "2026-03-21T04:08:13Z",
 					html_url:
-						"https://github.com/LunariaAi/lunaria/pull/2681#issuecomment-7",
+						"https://github.com/AmoenaAi/amoena/pull/2681#issuecomment-7",
 				},
 			]),
 		).toEqual([
@@ -236,7 +236,7 @@ describe("parseConversationCommentsResponse", () => {
 				avatarUrl: "https://avatars.githubusercontent.com/u/2?v=4",
 				body: "Looks good overall.",
 				createdAt: new Date("2026-03-21T04:08:13Z").getTime(),
-				url: "https://github.com/LunariaAi/lunaria/pull/2681#issuecomment-7",
+				url: "https://github.com/AmoenaAi/amoena/pull/2681#issuecomment-7",
 				kind: "conversation",
 				isResolved: false,
 			},

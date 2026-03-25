@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
 	}
 }
 
-/** Spawn a single pipeline step using `lunaria agent` */
+/** Spawn a single pipeline step using `amoena agent` */
 async function spawnStep(
 	db: ReturnType<typeof getDatabase>,
 	pipelineName: string,
@@ -170,7 +170,7 @@ async function spawnStep(
 	workspaceId: number,
 ): Promise<{ success: boolean; stdout?: string; error?: string }> {
 	try {
-		const { runLunaria } = await import("@/lib/command");
+		const { runAmoena } = await import("@/lib/command");
 		const args = [
 			"agent",
 			"--message",
@@ -179,7 +179,7 @@ async function spawnStep(
 			String(template.timeout_seconds),
 			"--json",
 		];
-		const { stdout } = await runLunaria(args, { timeoutMs: 15000 });
+		const { stdout } = await runAmoena(args, { timeoutMs: 15000 });
 
 		const spawnId = `pipeline-${runId}-step-${stepIdx}-${Date.now()}`;
 		steps[stepIdx].spawn_id = spawnId;

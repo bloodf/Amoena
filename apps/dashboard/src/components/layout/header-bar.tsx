@@ -14,7 +14,7 @@ import {
 	navigationMetricEventName,
 } from "@/lib/navigation-metrics";
 import { useWebSocket } from "@/lib/websocket";
-import { type ConnectionStatus, useLunaria } from "@/store";
+import { type ConnectionStatus, useAmoena } from "@/store";
 
 interface SearchResult {
 	type: string;
@@ -133,7 +133,7 @@ export function HeaderBar() {
 		activeTenant,
 		activeProject,
 		dashboardMode,
-	} = useLunaria();
+	} = useAmoena();
 	const { isConnected, reconnect } = useWebSocket();
 	const navigateToPanel = useNavigateToPanel();
 	const prefetchPanel = usePrefetchPanel();
@@ -654,7 +654,7 @@ function ModeBadge({
 	connection: ConnectionStatus;
 	onReconnect: () => void;
 }) {
-	const { dashboardMode } = useLunaria();
+	const { dashboardMode } = useAmoena();
 	const th = useTranslations("header");
 	const isLocal = dashboardMode === "local";
 	const [showTooltip, setShowTooltip] = useState(false);

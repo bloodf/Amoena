@@ -16,42 +16,42 @@ describe('isTauriRuntime', () => {
 
 describe('readDevLaunchContext', () => {
   it('returns null when only base URL is set', () => {
-    expect(readDevLaunchContext({ VITE_LUNARIA_API_BASE_URL: 'http://localhost' })).toBeNull();
+    expect(readDevLaunchContext({ VITE_AMOENA_API_BASE_URL: 'http://localhost' })).toBeNull();
   });
 
   it('returns null when only token is set', () => {
-    expect(readDevLaunchContext({ VITE_LUNARIA_BOOTSTRAP_TOKEN: 'tok' })).toBeNull();
+    expect(readDevLaunchContext({ VITE_AMOENA_BOOTSTRAP_TOKEN: 'tok' })).toBeNull();
   });
 
   it('uses default bootstrap path when not specified', () => {
     const ctx = readDevLaunchContext({
-      VITE_LUNARIA_API_BASE_URL: 'http://localhost',
-      VITE_LUNARIA_BOOTSTRAP_TOKEN: 'tok',
+      VITE_AMOENA_API_BASE_URL: 'http://localhost',
+      VITE_AMOENA_BOOTSTRAP_TOKEN: 'tok',
     });
     expect(ctx!.bootstrapPath).toBe('/api/v1/bootstrap/auth');
   });
 
   it('uses default instance id when not specified', () => {
     const ctx = readDevLaunchContext({
-      VITE_LUNARIA_API_BASE_URL: 'http://localhost',
-      VITE_LUNARIA_BOOTSTRAP_TOKEN: 'tok',
+      VITE_AMOENA_API_BASE_URL: 'http://localhost',
+      VITE_AMOENA_BOOTSTRAP_TOKEN: 'tok',
     });
     expect(ctx!.instanceId).toBe('dev-browser');
   });
 
   it('defaults expiry to 0 when not specified', () => {
     const ctx = readDevLaunchContext({
-      VITE_LUNARIA_API_BASE_URL: 'http://localhost',
-      VITE_LUNARIA_BOOTSTRAP_TOKEN: 'tok',
+      VITE_AMOENA_API_BASE_URL: 'http://localhost',
+      VITE_AMOENA_BOOTSTRAP_TOKEN: 'tok',
     });
     expect(ctx!.expiresAtUnixMs).toBe(0);
   });
 
   it('parses expiry as number', () => {
     const ctx = readDevLaunchContext({
-      VITE_LUNARIA_API_BASE_URL: 'http://localhost',
-      VITE_LUNARIA_BOOTSTRAP_TOKEN: 'tok',
-      VITE_LUNARIA_BOOTSTRAP_EXPIRES_AT: '1234567890',
+      VITE_AMOENA_API_BASE_URL: 'http://localhost',
+      VITE_AMOENA_BOOTSTRAP_TOKEN: 'tok',
+      VITE_AMOENA_BOOTSTRAP_EXPIRES_AT: '1234567890',
     });
     expect(ctx!.expiresAtUnixMs).toBe(1234567890);
   });
@@ -60,14 +60,14 @@ describe('readDevLaunchContext', () => {
 describe('resolveLaunchContext', () => {
   it('throws when not Tauri and no dev env', async () => {
     await expect(resolveLaunchContext(vi.fn() as any, {})).rejects.toThrow(
-      'Missing Lunaria launch context',
+      'Missing Amoena launch context',
     );
   });
 
   it('returns dev launch context when env vars are set', async () => {
     const env = {
-      VITE_LUNARIA_API_BASE_URL: 'http://localhost:3000',
-      VITE_LUNARIA_BOOTSTRAP_TOKEN: 'my-token',
+      VITE_AMOENA_API_BASE_URL: 'http://localhost:3000',
+      VITE_AMOENA_BOOTSTRAP_TOKEN: 'my-token',
     };
     const result = await resolveLaunchContext(vi.fn() as any, env);
     expect(result.apiBaseUrl).toBe('http://localhost:3000');

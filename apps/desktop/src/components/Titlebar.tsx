@@ -11,8 +11,8 @@ type ElectronWindowBridge = {
 };
 
 function getWindowBridge(): ElectronWindowBridge | null {
-  const win = window as unknown as { lunariaWindow?: ElectronWindowBridge };
-  return win.lunariaWindow ?? null;
+  const win = window as unknown as { amoenaWindow?: ElectronWindowBridge };
+  return win.amoenaWindow ?? null;
 }
 
 function WindowControls() {
@@ -147,7 +147,7 @@ export function Titlebar() {
 
       {/* App name centered — pointer-events-none keeps drag working */}
       <span className="pointer-events-none flex-1 text-center text-xs font-medium text-foreground/60">
-        Lunaria
+        Amoena
       </span>
 
       {/* Windows/Linux controls on the right */}

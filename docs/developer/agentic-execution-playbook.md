@@ -1,6 +1,6 @@
 # Agentic Execution Playbook
 
-How to build Lunaria using AI agents at maximum parallelism. This document maps every implementation prompt to the best AI tool, execution order, and parallel batches.
+How to build Amoena using AI agents at maximum parallelism. This document maps every implementation prompt to the best AI tool, execution order, and parallel batches.
 
 ## AI Toolchain
 
@@ -212,7 +212,7 @@ codex --task "Execute spike: xterm.js throughput. See docs/prompts/00-spike/01-p
 |---|--------|------|-------|------|
 | 01-04 | REST, SSE, & Transcripts | Claude Code (Opus) | tauri-backend | 01-01, 01-02, 01-03 |
 
-**Why Opus:** Complex SSE streaming pipeline, bidirectional channels, JSONL serialization. The streaming architecture is one of Lunaria's most critical paths.
+**Why Opus:** Complex SSE streaming pipeline, bidirectional channels, JSONL serialization. The streaming architecture is one of Amoena's most critical paths.
 
 **Skills:** `brainstorming`, `test-driven-development`
 
@@ -244,7 +244,7 @@ codex --task "Execute spike: xterm.js throughput. See docs/prompts/00-spike/01-p
 |---|--------|------|-------|------|
 | 02-03 | Native Agent Loop | Claude Code (Opus) + OMC deep-executor | tauri-backend | 01-04, 02-02, 03-01 |
 
-**Why Opus + deep-executor:** The most complex MVP prompt. Full agentic loop with tool-use round-trips, streaming, permission gates, context management. This is the heart of Lunaria.
+**Why Opus + deep-executor:** The most complex MVP prompt. Full agentic loop with tool-use round-trips, streaming, permission gates, context management. This is the heart of Amoena.
 
 **Skills:** `brainstorming` → `test-driven-development`, Sequential Thinking MCP, Context7 MCP
 

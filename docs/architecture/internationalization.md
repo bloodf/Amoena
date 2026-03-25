@@ -2,7 +2,7 @@
 
 ## Current State
 
-Lunaria is English-only for MVP through V1.5. Internationalization (i18n) is planned for V2.0+.
+Amoena is English-only for MVP through V1.5. Internationalization (i18n) is planned for V2.0+.
 
 ## Preparation (All Phases)
 

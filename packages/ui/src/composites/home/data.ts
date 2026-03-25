@@ -9,9 +9,9 @@ export const homeRecentSessions: HomeSessionItem[] = [
 ];
 
 export const homeWorkspaces: HomeWorkspaceItem[] = [
-  { name: "lunaria-frontend", branch: "feature/redesign", disk: "2.4 GB", pending: true },
-  { name: "lunaria-runtime", branch: "main", disk: "1.8 GB", pending: false },
-  { name: "lunaria-mobile", branch: "feature/remote-v2", disk: "890 MB", pending: false },
+  { name: "amoena-frontend", branch: "feature/redesign", disk: "2.4 GB", pending: true },
+  { name: "amoena-runtime", branch: "main", disk: "1.8 GB", pending: false },
+  { name: "amoena-mobile", branch: "feature/remote-v2", disk: "890 MB", pending: false },
 ];
 
 export const homeProviders: HomeProviderHealth[] = [

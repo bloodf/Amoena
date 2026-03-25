@@ -80,7 +80,7 @@ export const createQueryProcedures = () => {
 								branch: worktree.branch,
 								// Normalize to null to ensure consistent "incomplete init" detection in UI
 								gitStatus: worktree.gitStatus ?? null,
-								createdByLunaria: worktree.createdByLunaria,
+								createdByAmoena: worktree.createdByAmoena,
 							}
 						: null,
 				};
@@ -111,7 +111,7 @@ export const createQueryProcedures = () => {
 				lastOpenedAt: number;
 				isUnread: boolean;
 				isUnnamed: boolean;
-				createdByLunaria: boolean | null;
+				createdByAmoena: boolean | null;
 			};
 
 			type SectionItem = {
@@ -140,8 +140,8 @@ export const createQueryProcedures = () => {
 			const worktreePathMap: WorktreePathMap = new Map(
 				allWorktrees.map((wt) => [wt.id, wt.path]),
 			);
-			const worktreeCreatedByLunariaMap = new Map(
-				allWorktrees.map((wt) => [wt.id, wt.createdByLunaria]),
+			const worktreeCreatedByAmoenaMap = new Map(
+				allWorktrees.map((wt) => [wt.id, wt.createdByAmoena]),
 			);
 
 			const allSections = localDb.select().from(workspaceSections).all();
@@ -221,8 +221,8 @@ export const createQueryProcedures = () => {
 						worktreePath,
 						isUnread: workspace.isUnread ?? false,
 						isUnnamed: workspace.isUnnamed ?? false,
-						createdByLunaria: workspace.worktreeId
-							? (worktreeCreatedByLunariaMap.get(workspace.worktreeId) ?? null)
+						createdByAmoena: workspace.worktreeId
+							? (worktreeCreatedByAmoenaMap.get(workspace.worktreeId) ?? null)
 							: null,
 					};
 

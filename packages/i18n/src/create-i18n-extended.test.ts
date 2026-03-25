@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { createLunariaI18n, normalizeLocale } from './create-i18n';
+import { createAmoenaI18n, normalizeLocale } from './create-i18n';
 
 describe('normalizeLocale edge cases', () => {
   it('returns en for undefined', () => {
@@ -60,50 +60,50 @@ describe('normalizeLocale edge cases', () => {
   });
 });
 
-describe('createLunariaI18n', () => {
+describe('createAmoenaI18n', () => {
   it('defaults to en when no locale specified', () => {
-    const i18n = createLunariaI18n();
+    const i18n = createAmoenaI18n();
     expect(i18n.language).toBe('en');
   });
 
   it('creates instance with specified locale', () => {
-    const i18n = createLunariaI18n({ locale: 'fr' });
+    const i18n = createAmoenaI18n({ locale: 'fr' });
     expect(i18n.language).toBe('fr');
   });
 
   it('falls back to en for unsupported locale', () => {
-    const i18n = createLunariaI18n({ locale: 'ja' });
+    const i18n = createAmoenaI18n({ locale: 'ja' });
     expect(i18n.language).toBe('en');
   });
 
   it('creates independent instances', () => {
-    const i18n1 = createLunariaI18n({ locale: 'en' });
-    const i18n2 = createLunariaI18n({ locale: 'es' });
+    const i18n1 = createAmoenaI18n({ locale: 'en' });
+    const i18n2 = createAmoenaI18n({ locale: 'es' });
     expect(i18n1).not.toBe(i18n2);
     expect(i18n1.language).not.toBe(i18n2.language);
   });
 
   it('translates keys from en resources', () => {
-    const i18n = createLunariaI18n({ locale: 'en' });
+    const i18n = createAmoenaI18n({ locale: 'en' });
     const result = i18n.t('app.runtimeEyebrow');
     expect(result).toBeTruthy();
     expect(typeof result).toBe('string');
   });
 
   it('translates keys from es resources', () => {
-    const i18n = createLunariaI18n({ locale: 'es' });
+    const i18n = createAmoenaI18n({ locale: 'es' });
     const result = i18n.t('app.bootstrapFailed');
     expect(result).toBeTruthy();
   });
 
   it('translates keys from de resources', () => {
-    const i18n = createLunariaI18n({ locale: 'de' });
+    const i18n = createAmoenaI18n({ locale: 'de' });
     const result = i18n.t('app.bootstrapFailed');
     expect(result).toBeTruthy();
   });
 
   it('translates keys from fr resources', () => {
-    const i18n = createLunariaI18n({ locale: 'fr' });
+    const i18n = createAmoenaI18n({ locale: 'fr' });
     const result = i18n.t('app.bootstrapFailed');
     expect(result).toBeTruthy();
   });

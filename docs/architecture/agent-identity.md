@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document is the detailed specification for Lunaria's cryptographic agent identity system. It expands on the overview in [security-model.md](security-model.md#cryptographic-agent-identity-future) into a complete design covering key hierarchy, access tokens, OS keychain integration, identity lifecycle, and the supporting data model.
+This document is the detailed specification for Amoena's cryptographic agent identity system. It expands on the overview in [security-model.md](security-model.md#cryptographic-agent-identity-future) into a complete design covering key hierarchy, access tokens, OS keychain integration, identity lifecycle, and the supporting data model.
 
 > **Priority:** V2.0. Not yet implemented.
 
@@ -58,12 +58,12 @@ This document is the detailed specification for Lunaria's cryptographic agent id
 
 ```
 PRK  = HKDF-Extract(salt=0x00..00, IKM=master_private_key)
-OKM  = HKDF-Expand(PRK, info="lunaria:agent:<agent_id>", L=32)
+OKM  = HKDF-Expand(PRK, info="amoena:agent:<agent_id>", L=32)
       or
-OKM  = HKDF-Expand(PRK, info="lunaria:device:<device_id>", L=32)
+OKM  = HKDF-Expand(PRK, info="amoena:device:<device_id>", L=32)
 ```
 
-The 32-byte output is used as the Ed25519 private key seed. The `info` string includes a namespace prefix (`lunaria:agent:` or `lunaria:device:`) to prevent collision between agent and device derivation paths.
+The 32-byte output is used as the Ed25519 private key seed. The `info` string includes a namespace prefix (`amoena:agent:` or `amoena:device:`) to prevent collision between agent and device derivation paths.
 
 ## Access Tokens
 
@@ -139,7 +139,7 @@ A token with `perm = 0b00100011` (decimal 35) grants `file_read`, `file_write`, 
 
 If no OS keychain is available (headless Linux, CI environments, containers):
 
-- Keys are stored in `~/.lunaria/keystore.enc`.
+- Keys are stored in `~/.amoena/keystore.enc`.
 - Encrypted with AES-256-GCM using a key derived from a user passphrase via Argon2id.
 - The passphrase is prompted on first use and cached in memory for the session lifetime.
 
@@ -156,7 +156,7 @@ pub trait KeyStore: Send + Sync {
 }
 ```
 
-Implementations: `MacOSKeyStore`, `WindowsKeyStore`, `LinuxKeyStore`, `FileKeyStore`. Runtime selection based on platform detection with explicit override via `LUNARIA_KEYSTORE` environment variable.
+Implementations: `MacOSKeyStore`, `WindowsKeyStore`, `LinuxKeyStore`, `FileKeyStore`. Runtime selection based on platform detection with explicit override via `AMOENA_KEYSTORE` environment variable.
 
 ## Use Cases
 
@@ -178,7 +178,7 @@ Share an agent across devices by issuing a scoped access token. The receiving de
 
 ### MCP Server Authentication
 
-When Lunaria acts as an MCP client, it can present a signed identity to MCP servers for client verification. When Lunaria hosts MCP servers, incoming connections are authenticated against the identity system before tool access is granted.
+When Amoena acts as an MCP client, it can present a signed identity to MCP servers for client verification. When Amoena hosts MCP servers, incoming connections are authenticated against the identity system before tool access is granted.
 
 ## Identity Lifecycle
 
@@ -267,7 +267,7 @@ CREATE INDEX idx_rotated_keys_identity ON rotated_keys(identity_id);
 
 ## Competitive Reference
 
-| Aspect | Osaurus | Lunaria |
+| Aspect | Osaurus | Amoena |
 |--------|---------|---------|
 | Algorithm | secp256k1 (Bitcoin curve) | Ed25519 |
 | Key size | 32-byte private, 33-byte compressed public | 32-byte private, 32-byte public |
@@ -278,12 +278,12 @@ CREATE INDEX idx_rotated_keys_identity ON rotated_keys(identity_id);
 | Platform support | macOS only (Apple Containerization) | macOS, Windows, Linux |
 | Keychain backend | iCloud Keychain | OS-native + encrypted file fallback |
 
-Ed25519 is the better fit for Lunaria's cross-platform constraint: smaller keys, faster operations, and broader library support across Rust (`ring`, `ed25519-dalek`), JavaScript (`tweetnacl`), and mobile (`libsodium`). The secp256k1 ecosystem is stronger in blockchain tooling, which is not a Lunaria requirement.
+Ed25519 is the better fit for Amoena's cross-platform constraint: smaller keys, faster operations, and broader library support across Rust (`ring`, `ed25519-dalek`), JavaScript (`tweetnacl`), and mobile (`libsodium`). The secp256k1 ecosystem is stronger in blockchain tooling, which is not a Amoena requirement.
 
 ## Open Questions
 
 1. **Hardware key support.** Should the `KeyStore` trait support hardware security modules (YubiKey, TPM) in a future phase?
-2. **Key escrow.** Should Lunaria offer optional cloud-based key backup (encrypted) for users who want recovery without managing export files?
+2. **Key escrow.** Should Amoena offer optional cloud-based key backup (encrypted) for users who want recovery without managing export files?
 3. **Multi-user.** The current design assumes a single user per desktop instance. Multi-user support would require a key hierarchy redesign.
 
 ## References

@@ -1,6 +1,6 @@
-import type { FontSizeEntry, LunariaThemeTokens, ThemeTokenGroup } from "./types";
+import type { FontSizeEntry, AmoenaThemeTokens, ThemeTokenGroup } from "./types";
 
-export const lunariaThemeTokens: ThemeTokenGroup = {
+export const amoenaThemeTokens: ThemeTokenGroup = {
   dark: {
     background: "270 7% 7%",
     foreground: "0 0% 88%",
@@ -104,7 +104,7 @@ export const lunariaThemeTokens: ThemeTokenGroup = {
   },
 };
 
-export const lunariaTypographyTokens = {
+export const amoenaTypographyTokens = {
   fontFamily: {
     sans: '"Inter", sans-serif',
     mono: '"JetBrains Mono", monospace',
@@ -128,7 +128,7 @@ export const lunariaTypographyTokens = {
   } satisfies Record<string, FontSizeEntry>,
 };
 
-export const lunariaMotionTokens = {
+export const amoenaMotionTokens = {
   duration: {
     fast: "150ms",
     normal: "200ms",
@@ -145,7 +145,7 @@ export const lunariaMotionTokens = {
   },
 };
 
-export const lunariaSpacingTokens = {
+export const amoenaSpacingTokens = {
   "0": "0px",
   px: "1px",
   "0.5": "2px",
@@ -170,7 +170,7 @@ export const lunariaSpacingTokens = {
   "24": "96px",
 } as const;
 
-export const lunariaRadiusTokens = {
+export const amoenaRadiusTokens = {
   none: "0",
   sm: "0.125rem",
   DEFAULT: "0.25rem",
@@ -182,7 +182,7 @@ export const lunariaRadiusTokens = {
   full: "9999px",
 } as const;
 
-export const lunariaShadowTokens = {
+export const amoenaShadowTokens = {
   light: {
     xs: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
     sm: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
@@ -207,7 +207,7 @@ export const lunariaShadowTokens = {
   },
 } as const;
 
-export const lunariaZIndexTokens = {
+export const amoenaZIndexTokens = {
   base: "0",
   raised: "10",
   dropdown: "20",
@@ -220,7 +220,7 @@ export const lunariaZIndexTokens = {
   max: "9999",
 } as const;
 
-export const lunariaBorderWidthTokens = {
+export const amoenaBorderWidthTokens = {
   DEFAULT: "1px",
   "0": "0px",
   "2": "2px",
@@ -228,7 +228,7 @@ export const lunariaBorderWidthTokens = {
   "8": "8px",
 } as const;
 
-export const lunariaOpacityTokens = {
+export const amoenaOpacityTokens = {
   "0": "0",
   "5": "0.05",
   "10": "0.1",
@@ -247,7 +247,7 @@ export const lunariaOpacityTokens = {
   "100": "1",
 } as const;
 
-export const lunariaTransitionTokens = {
+export const amoenaTransitionTokens = {
   none: "none",
   all: "all 200ms ease",
   colors:
@@ -258,20 +258,20 @@ export const lunariaTransitionTokens = {
 } as const;
 
 /** Aggregate of all token groups for use with build pipeline functions. */
-export const lunariaTokens: LunariaThemeTokens = {
-  colors: lunariaThemeTokens,
-  typography: lunariaTypographyTokens,
-  spacing: lunariaSpacingTokens,
-  radius: lunariaRadiusTokens,
-  shadows: lunariaShadowTokens,
-  zIndex: lunariaZIndexTokens,
-  borderWidth: lunariaBorderWidthTokens,
-  opacity: lunariaOpacityTokens,
-  transitions: lunariaTransitionTokens,
-  motion: lunariaMotionTokens,
+export const amoenaTokens: AmoenaThemeTokens = {
+  colors: amoenaThemeTokens,
+  typography: amoenaTypographyTokens,
+  spacing: amoenaSpacingTokens,
+  radius: amoenaRadiusTokens,
+  shadows: amoenaShadowTokens,
+  zIndex: amoenaZIndexTokens,
+  borderWidth: amoenaBorderWidthTokens,
+  opacity: amoenaOpacityTokens,
+  transitions: amoenaTransitionTokens,
+  motion: amoenaMotionTokens,
 };
 
 // Backward compatibility aliases
-export { lunariaThemeTokens as lovableThemeTokens };
-export { lunariaTypographyTokens as lovableTypographyTokens };
-export { lunariaMotionTokens as lovableMotionTokens };
+export { amoenaThemeTokens as lovableThemeTokens };
+export { amoenaTypographyTokens as lovableTypographyTokens };
+export { amoenaMotionTokens as lovableMotionTokens };

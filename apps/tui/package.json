@@ -1,16 +1,16 @@
 {
   "name": "@lunaria/cli",
   "version": "0.1.0",
-  "description": "Lunaria CLI — terminal interface for multi-agent orchestration",
+  "description": "Amoena CLI — terminal interface for multi-agent orchestration",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LunariaAi/lunaria.git",
+    "url": "https://github.com/AmoenaAi/amoena.git",
     "directory": "apps/tui"
   },
   "type": "module",
   "bin": {
-    "lunaria": "./bin/lunaria.js"
+    "amoena": "./bin/amoena.js"
   },
   "files": [
     "bin/",
@@ -40,7 +40,7 @@
     "node": ">=18.0.0"
   },
   "keywords": [
-    "lunaria",
+    "amoena",
     "cli",
     "ai",
     "multi-agent",

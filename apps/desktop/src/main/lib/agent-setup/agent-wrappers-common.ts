@@ -2,8 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { BIN_DIR } from "./paths";
 
-export const WRAPPER_MARKER = "# Lunaria agent-wrapper v1";
-export const LUNARIA_MANAGED_BINARIES = [
+export const WRAPPER_MARKER = "# Amoena agent-wrapper v1";
+export const AMOENA_MANAGED_BINARIES = [
 	"claude",
 	"codex",
 	"droid",
@@ -13,7 +13,7 @@ export const LUNARIA_MANAGED_BINARIES = [
 	"mastracode",
 ] as const;
 
-const LUNARIA_MANAGED_HOOK_PATH_PATTERN = /\/\.lunaria(?:-[^/'"\s\\]+)?\//;
+const AMOENA_MANAGED_HOOK_PATH_PATTERN = /\/\.amoena(?:-[^/'"\s\\]+)?\//;
 
 export function writeFileIfChanged(
 	filePath: string,
@@ -36,14 +36,14 @@ export function writeFileIfChanged(
 	return true;
 }
 
-export function isLunariaManagedHookCommand(
+export function isAmoenaManagedHookCommand(
 	command: string | undefined,
 	scriptName: string,
 ): boolean {
 	if (!command) return false;
 	const normalized = command.replaceAll("\\", "/");
 	if (!normalized.includes(`/hooks/${scriptName}`)) return false;
-	return LUNARIA_MANAGED_HOOK_PATH_PATTERN.test(normalized);
+	return AMOENA_MANAGED_HOOK_PATH_PATTERN.test(normalized);
 }
 
 interface ReconcileManagedEntriesOptions<T> {
@@ -92,7 +92,7 @@ function buildRealBinaryResolver(): string {
     [ -z "$dir" ] && continue
     dir="\${dir%/}"
     case "$dir" in
-      "${BIN_DIR}"|"$HOME"/.lunaria/bin|"$HOME"/.lunaria-*/bin) continue ;;
+      "${BIN_DIR}"|"$HOME"/.amoena/bin|"$HOME"/.amoena-*/bin) continue ;;
     esac
     if [ -x "$dir/$name" ] && [ ! -d "$dir/$name" ]; then
       printf "%s\\n" "$dir/$name"
@@ -105,7 +105,7 @@ function buildRealBinaryResolver(): string {
 }
 
 function getMissingBinaryMessage(name: string): string {
-	return `Lunaria: ${name} not found in PATH. Install it and ensure it is on PATH, then retry.`;
+	return `Amoena: ${name} not found in PATH. Install it and ensure it is on PATH, then retry.`;
 }
 
 export function getWrapperPath(binaryName: string): string {
@@ -118,7 +118,7 @@ export function buildWrapperScript(
 ): string {
 	return `#!/bin/bash
 ${WRAPPER_MARKER}
-# Lunaria wrapper for ${binaryName}
+# Amoena wrapper for ${binaryName}
 
 ${buildRealBinaryResolver()}
 REAL_BIN="$(find_real_binary "${binaryName}")"

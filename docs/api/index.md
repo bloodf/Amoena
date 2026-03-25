@@ -1,6 +1,6 @@
-# Lunaria Runtime API
+# Amoena Runtime API
 
-The Lunaria desktop app exposes a local HTTP server built with [Axum](https://github.com/tokio-rs/axum). All API calls go to `http://127.0.0.1:{PORT}`, where `PORT` is assigned dynamically at startup. The exact base URL is provided to the UI via the `LaunchContext` handed off by the Tauri layer.
+The Amoena desktop app exposes a local HTTP server built with [Axum](https://github.com/tokio-rs/axum). All API calls go to `http://127.0.0.1:{PORT}`, where `PORT` is assigned dynamically at startup. The exact base URL is provided to the UI via the `LaunchContext` handed off by the Tauri layer.
 
 ## Base URL
 
@@ -12,7 +12,7 @@ The port is ephemeral — it changes on every launch. Always read it from `Launc
 
 ## Authentication
 
-Lunaria uses a two-step auth flow: Bootstrap → Session token (JWT).
+Amoena uses a two-step auth flow: Bootstrap → Session token (JWT).
 
 ### Step 1 — Bootstrap
 

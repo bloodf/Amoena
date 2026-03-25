@@ -1,6 +1,6 @@
-# Contributing to Lunaria
+# Contributing to Amoena
 
-Thank you for your interest in contributing to Lunaria! This guide will help you get started.
+Thank you for your interest in contributing to Amoena! This guide will help you get started.
 
 ## Prerequisites
 
@@ -17,8 +17,8 @@ Platform-specific dependencies: see [Tauri prerequisites](https://v2.tauri.app/s
 
 ```bash
 # Clone the repository
-git clone https://github.com/LunariaAi/lunaria.git
-cd lunaria
+git clone https://github.com/AmoenaAi/amoena.git
+cd amoena
 
 # Install JavaScript dependencies
 bun install
@@ -51,7 +51,7 @@ See [Development](/contributing/development) for a full breakdown of the dev wor
 
 ## Commit Message Format
 
-Lunaria uses [Conventional Commits](https://www.conventionalcommits.org/):
+Amoena uses [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
 <type>(<scope>): <description>
@@ -76,17 +76,17 @@ Quick start:
 1. Create an extension manifest (`manifest.json`)
 2. Add your UI panels, commands, hooks, tools, or providers
 3. Bundle as a `.luna` file
-4. Drop into the Extensions panel or install via `lunaria://extension/install?...`
+4. Drop into the Extensions panel or install via `amoena://extension/install?...`
 
 ## Reporting Issues
 
-- Use [GitHub Issues](https://github.com/LunariaAi/lunaria/issues) with the provided templates
+- Use [GitHub Issues](https://github.com/AmoenaAi/amoena/issues) with the provided templates
 - Include reproduction steps
-- Attach relevant logs from `~/.lunaria/logs/`
+- Attach relevant logs from `~/.amoena/logs/`
 
 ## Code of Conduct
 
-Please read our [Code of Conduct](https://github.com/LunariaAi/lunaria/blob/main/CODE_OF_CONDUCT.md) before contributing.
+Please read our [Code of Conduct](https://github.com/AmoenaAi/amoena/blob/main/CODE_OF_CONDUCT.md) before contributing.
 
 ## Further Reading
 

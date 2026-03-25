@@ -77,7 +77,7 @@ describe("removeWorktree()", () => {
   it("calls git worktree remove --force", async () => {
     makeExecFileMock("");
 
-    await removeWorktree("/repo", "/repo/.lunaria-worktrees/goal-1/task-a");
+    await removeWorktree("/repo", "/repo/.amoena-worktrees/goal-1/task-a");
 
     expect(mockExecFile).toHaveBeenCalledWith(
       "git",
@@ -85,7 +85,7 @@ describe("removeWorktree()", () => {
         "worktree",
         "remove",
         "--force",
-        "/repo/.lunaria-worktrees/goal-1/task-a",
+        "/repo/.amoena-worktrees/goal-1/task-a",
       ],
       { cwd: "/repo" },
       expect.any(Function),
@@ -102,11 +102,11 @@ describe("listStaleWorktrees()", () => {
     "HEAD abc123",
     "branch refs/heads/main",
     "",
-    "worktree /repo/.lunaria-worktrees/goal-1/task-old",
+    "worktree /repo/.amoena-worktrees/goal-1/task-old",
     "HEAD def456",
     "branch refs/heads/mc/goal-goal-1/task-task-old",
     "",
-    "worktree /repo/.lunaria-worktrees/goal-1/task-new",
+    "worktree /repo/.amoena-worktrees/goal-1/task-new",
     "HEAD ghi789",
     "branch refs/heads/mc/goal-goal-1/task-task-new",
     "",
@@ -140,7 +140,7 @@ describe("listStaleWorktrees()", () => {
     expect(mainWorktree).toBeUndefined();
   });
 
-  it("excludes worktrees outside .lunaria-worktrees/", async () => {
+  it("excludes worktrees outside .amoena-worktrees/", async () => {
     const customPorcelain = [
       "worktree /repo",
       "HEAD abc123",

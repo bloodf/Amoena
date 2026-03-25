@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the first-time setup wizard for Lunaria. The wizard guides users from initial launch through TUI detection, installation, authentication, and default selection so they can start their first AI coding session. The same flow is reusable from Settings when adding TUIs later.
+This document defines the first-time setup wizard for Amoena. The wizard guides users from initial launch through TUI detection, installation, authentication, and default selection so they can start their first AI coding session. The same flow is reusable from Settings when adding TUIs later.
 
 ## Wizard State Machine
 
@@ -171,13 +171,13 @@ The detected OS is passed to the React frontend via a Tauri command (`invoke("de
 
 ### UI Description
 
-A full-screen welcome card with the Lunaria logo, a brief tagline ("One home for all your AI agents"), and three configuration controls:
+A full-screen welcome card with the Amoena logo, a brief tagline ("One home for all your AI agents"), and three configuration controls:
 
 1. **Language selector** — dropdown populated from the i18n locale registry. Default is auto-detected from the system locale via `navigator.language` with fallback to `en-US`.
 2. **Theme selector** — three-option toggle: Light, Dark, System. Default is System, which reads the OS preference via `prefers-color-scheme`.
 3. **Mode selector** — two-option choice with detailed explanation:
-   - **Wrapper Mode**: Lunaria wraps installed TUI backends (Claude Code, OpenCode, Codex CLI, Gemini CLI) and provides a unified GUI on top. Requires at least one TUI to be installed.
-   - **Native Mode**: Lunaria connects directly to provider APIs (Anthropic, OpenAI, Google) without any TUI backend. Simpler setup, but does not benefit from TUI-specific features (hooks, MCP servers, etc.).
+   - **Wrapper Mode**: Amoena wraps installed TUI backends (Claude Code, OpenCode, Codex CLI, Gemini CLI) and provides a unified GUI on top. Requires at least one TUI to be installed.
+   - **Native Mode**: Amoena connects directly to provider APIs (Anthropic, OpenAI, Google) without any TUI backend. Simpler setup, but does not benefit from TUI-specific features (hooks, MCP servers, etc.).
 
 A "Get Started" button advances to Step 2.
 
@@ -307,7 +307,7 @@ pub async fn fetch_model_registry(authenticated_providers: &[ProviderId]) -> Vec
 }
 ```
 
-A bundled model list ships with the app as a fallback when the registry is unreachable. The bundled list is updated with each Lunaria release.
+A bundled model list ships with the app as a fallback when the registry is unreachable. The bundled list is updated with each Amoena release.
 
 ### Data Flow
 
@@ -341,7 +341,7 @@ Wizard enters Step 3
 - Detected version and binary path
 - Install button for missing TUIs
 
-**In Native Mode:** This step shows a confirmation panel: "Native mode selected — Lunaria will connect directly to provider APIs. No TUI backend required." with a "Continue" button.
+**In Native Mode:** This step shows a confirmation panel: "Native mode selected — Amoena will connect directly to provider APIs. No TUI backend required." with a "Continue" button.
 
 ### Detection Logic (Wrapper Mode)
 
@@ -404,7 +404,7 @@ This step runs automatically on entry. The user waits for completion (typically 
 
 ```rust
 pub async fn initialize_memory_system(data_dir: &Path) -> MemoryInitResult {
-    let db_path = data_dir.join("lunaria.db");
+    let db_path = data_dir.join("amoena.db");
 
     // 1. Create SQLite database
     let db = SqlitePool::connect(&format!("sqlite:{}?mode=rwc", db_path.display())).await?;
@@ -493,15 +493,15 @@ The wizard scans for existing `.claude/` and `.opencode/` folders and `opencode.
 - **Import checklist** (grouped by ecosystem, all checked by default):
   - **Claude Code** (if `.claude/` found):
     - `settings.json` — user preferences, permissions, model defaults
-    - `hooks.json` — hook configurations (converted to Lunaria hook engine format)
-    - `CLAUDE.md` — project instructions (copied to Lunaria's instruction system)
-    - `.claude/agents/` — agent definitions imported as Lunaria agent profiles
-    - MCP server configurations — imported into Lunaria's MCP registry
+    - `hooks.json` — hook configurations (converted to Amoena hook engine format)
+    - `CLAUDE.md` — project instructions (copied to Amoena's instruction system)
+    - `.claude/agents/` — agent definitions imported as Amoena agent profiles
+    - MCP server configurations — imported into Amoena's MCP registry
   - **OpenCode** (if `opencode.json` or `.opencode/` found):
     - `opencode.json` agents — agent definitions (build, plan, explore, etc.) imported as agent profiles
-    - `opencode.json` providers — provider overrides imported into Lunaria's provider system
-    - `opencode.json` hooks — event hooks normalized to Lunaria hook engine format
-    - `opencode.json` MCP servers — merged into Lunaria's MCP registry
+    - `opencode.json` providers — provider overrides imported into Amoena's provider system
+    - `opencode.json` hooks — event hooks normalized to Amoena hook engine format
+    - `opencode.json` MCP servers — merged into Amoena's MCP registry
   - **Plugins** (auto-discovered):
     - oh-my-claudecode (if installed) — agent catalog, hooks, MCP tools
     - oh-my-opencode (if installed) — agent catalog, hooks
@@ -535,7 +535,7 @@ pub async fn scan_claude_compat(home_dir: &Path) -> ClaudeCompatResult {
         result.settings_imported = true;
     }
 
-    // Scan hooks.json — convert to Lunaria plugin hook format
+    // Scan hooks.json — convert to Amoena plugin hook format
     if claude_dir.join("hooks.json").exists() {
         result.imported_items.push("hooks.json".to_string());
         result.hooks_imported = true;
@@ -556,9 +556,9 @@ pub async fn scan_claude_compat(home_dir: &Path) -> ClaudeCompatResult {
 
 ### Hook Import Translation
 
-Claude Code hooks are translated to Lunaria's plugin hook format during import:
+Claude Code hooks are translated to Amoena's plugin hook format during import:
 
-| Claude Code Format | Lunaria Plugin Format |
+| Claude Code Format | Amoena Plugin Format |
 | --- | --- |
 | `{"PreToolUse": [{"command": "npx lint"}]}` | `{"event": "PreToolUse", "handler": {"type": "command", "command": "npx lint"}}` |
 | `{"PostToolUse": [{"command": "echo done"}]}` | `{"event": "PostToolUse", "handler": {"type": "command", "command": "echo done"}}` |
@@ -596,10 +596,10 @@ A "Start First Session" button closes the wizard and opens the main view.
 
 ### Persistence
 
-On completion, the wizard writes its results to the Lunaria configuration store:
+On completion, the wizard writes its results to the Amoena configuration store:
 
 ```ts
-interface LunariaConfig {
+interface AmoenaConfig {
   setupComplete: boolean;
   locale: string;
   theme: "light" | "dark" | "system";
@@ -626,7 +626,7 @@ interface LunariaConfig {
 }
 ```
 
-On subsequent launches, Lunaria checks `setupComplete`. If `false` or missing, the wizard runs. If `true`, the app launches directly to the main view.
+On subsequent launches, Amoena checks `setupComplete`. If `false` or missing, the wizard runs. If `true`, the app launches directly to the main view.
 
 ### Error Handling
 
@@ -717,7 +717,7 @@ The wizard emits anonymous setup telemetry events (if user opts in during Step 1
 
 ## Adapter Initialization on Completion
 
-When the user clicks "Start First Session" after completing the wizard, Lunaria initializes the appropriate adapter based on the selected mode:
+When the user clicks "Start First Session" after completing the wizard, Amoena initializes the appropriate adapter based on the selected mode:
 
 ```ts
 // Pseudocode for first session initialization
@@ -763,6 +763,6 @@ The `createAdapter` factory selects the concrete adapter implementation:
 
 **Native mode backend:**
 
-- `native` → Lunaria native runtime (provider-backed agent loop)
+- `native` → Amoena native runtime (provider-backed agent loop)
 
 Each backend's transport and capabilities are documented in the agent backend interface. The wizard ensures all prerequisites (binary on PATH for wrapper mode, valid API credentials for native mode) are met before reaching this initialization point.

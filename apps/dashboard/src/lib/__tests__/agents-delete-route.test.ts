@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const requireRole = vi.fn();
-const runLunaria = vi.fn();
+const runAmoena = vi.fn();
 const removeAgentFromConfig = vi.fn();
 const prepare = vi.fn();
 
@@ -11,7 +11,7 @@ vi.mock("@/lib/auth", () => ({
 }));
 
 vi.mock("@/lib/command", () => ({
-	runLunaria,
+	runAmoena,
 }));
 
 vi.mock("@/lib/agent-sync", () => ({
@@ -48,7 +48,7 @@ describe("DELETE /api/agents/[id]", () => {
 		requireRole.mockReturnValue({
 			user: { id: 1, username: "admin", role: "admin", workspace_id: 1 },
 		});
-		runLunaria.mockReset();
+		runAmoena.mockReset();
 		removeAgentFromConfig.mockReset();
 		prepare.mockReset();
 	});
@@ -57,12 +57,12 @@ describe("DELETE /api/agents/[id]", () => {
 		vi.clearAllMocks();
 	});
 
-	it("removes the agent from Lunaria config even when workspace deletion is disabled", async () => {
+	it("removes the agent from Amoena config even when workspace deletion is disabled", async () => {
 		const agent = {
 			id: 7,
 			name: "neo",
 			role: "tester",
-			config: JSON.stringify({ lunariaId: "neo" }),
+			config: JSON.stringify({ amoenaId: "neo" }),
 		};
 		const selectStmt = { get: vi.fn(() => agent) };
 		const deleteStmt = { run: vi.fn() };
@@ -85,7 +85,7 @@ describe("DELETE /api/agents/[id]", () => {
 		const body = await response.json();
 
 		expect(response.status).toBe(200);
-		expect(runLunaria).not.toHaveBeenCalled();
+		expect(runAmoena).not.toHaveBeenCalled();
 		expect(removeAgentFromConfig).toHaveBeenCalledWith({
 			id: "neo",
 			name: "neo",
@@ -94,12 +94,12 @@ describe("DELETE /api/agents/[id]", () => {
 		expect(body.success).toBe(true);
 	});
 
-	it("removes workspace via Lunaria and then removes the config entry", async () => {
+	it("removes workspace via Amoena and then removes the config entry", async () => {
 		const agent = {
 			id: 8,
 			name: "adam",
 			role: "tester",
-			config: JSON.stringify({ lunariaId: "adam" }),
+			config: JSON.stringify({ amoenaId: "adam" }),
 		};
 		const selectStmt = { get: vi.fn(() => agent) };
 		const deleteStmt = { run: vi.fn() };
@@ -121,7 +121,7 @@ describe("DELETE /api/agents/[id]", () => {
 		});
 
 		expect(response.status).toBe(200);
-		expect(runLunaria).toHaveBeenCalledWith(
+		expect(runAmoena).toHaveBeenCalledWith(
 			["agents", "delete", "adam", "--force"],
 			{ timeoutMs: 30000 },
 		);
@@ -132,12 +132,12 @@ describe("DELETE /api/agents/[id]", () => {
 		expect(deleteStmt.run).toHaveBeenCalledWith(8, 1);
 	});
 
-	it("still deletes the Lunaria agent when config cleanup fails", async () => {
+	it("still deletes the Amoena agent when config cleanup fails", async () => {
 		const agent = {
 			id: 9,
 			name: "trinity",
 			role: "tester",
-			config: JSON.stringify({ lunariaId: "trinity" }),
+			config: JSON.stringify({ amoenaId: "trinity" }),
 		};
 		const selectStmt = { get: vi.fn(() => agent) };
 		const deleteStmt = { run: vi.fn() };
@@ -147,7 +147,7 @@ describe("DELETE /api/agents/[id]", () => {
 			throw new Error(`Unexpected SQL: ${sql}`);
 		});
 		removeAgentFromConfig.mockRejectedValue(
-			new Error("LUNARIA_CONFIG_PATH not configured"),
+			new Error("AMOENA_CONFIG_PATH not configured"),
 		);
 
 		const { DELETE } = await import("@/app/api/agents/[id]/route");
@@ -164,6 +164,6 @@ describe("DELETE /api/agents/[id]", () => {
 		expect(response.status).toBe(200);
 		expect(deleteStmt.run).toHaveBeenCalledWith(9, 1);
 		expect(body.success).toBe(true);
-		expect(body.warning).toContain("Lunaria config cleanup skipped");
+		expect(body.warning).toContain("Amoena config cleanup skipped");
 	});
 });

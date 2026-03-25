@@ -1,6 +1,6 @@
 # Plugins API
 
-Plugins are runtime-loaded modules that extend Lunaria's core capabilities. Unlike extensions (which contribute UI and tools), plugins operate at the system level and can provide new AI providers, tool backends, and system integrations.
+Plugins are runtime-loaded modules that extend Amoena's core capabilities. Unlike extensions (which contribute UI and tools), plugins operate at the system level and can provide new AI providers, tool backends, and system integrations.
 
 Plugins are installed from deeplink URLs and can be toggled, executed, and health-checked independently.
 
@@ -57,7 +57,7 @@ Content-Type: application/json
 
 ```json
 {
-  "deeplinkUrl": "lunaria://plugins/install?id=tavily-search&version=1.0.3&source=https://plugins.lunaria.app"
+  "deeplinkUrl": "amoena://plugins/install?id=tavily-search&version=1.0.3&source=https://plugins.amoena.app"
 }
 ```
 
@@ -73,13 +73,13 @@ Content-Type: application/json
 curl -X POST http://127.0.0.1:PORT/api/v1/plugins/install \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"deeplinkUrl": "lunaria://plugins/install?id=tavily-search"}'
+  -d '{"deeplinkUrl": "amoena://plugins/install?id=tavily-search"}'
 ```
 
 **TypeScript**
 
 ```typescript
-await client.installPlugin({ url: "lunaria://plugins/install?id=tavily-search" });
+await client.installPlugin({ url: "amoena://plugins/install?id=tavily-search" });
 ```
 
 ---
@@ -271,7 +271,7 @@ Content-Type: application/json
 
 ```json
 {
-  "deeplink": "lunaria://plugins/install?id=tavily-search&version=1.0.3"
+  "deeplink": "amoena://plugins/install?id=tavily-search&version=1.0.3"
 }
 ```
 

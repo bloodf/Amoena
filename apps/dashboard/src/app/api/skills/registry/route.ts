@@ -11,14 +11,14 @@ import {
 const VALID_SOURCES: RegistrySource[] = [
 	"clawhub",
 	"skills-sh",
-	"awesome-lunaria",
+	"awesome-amoena",
 ];
 const VALID_TARGETS = [
 	"user-agents",
 	"user-codex",
 	"project-agents",
 	"project-codex",
-	"lunaria",
+	"amoena",
 	"workspace",
 ];
 

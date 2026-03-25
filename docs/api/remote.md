@@ -1,6 +1,6 @@
 # Remote Access API
 
-Remote access allows a paired mobile or desktop device to connect to a running Lunaria instance over LAN or relay. The pairing flow uses a PIN-based handshake to exchange credentials without exposing the session token.
+Remote access allows a paired mobile or desktop device to connect to a running Amoena instance over LAN or relay. The pairing flow uses a PIN-based handshake to exchange credentials without exposing the session token.
 
 Remote endpoints are available on both the loopback router (for local clients) and the LAN router (for remote devices over the network).
 
@@ -46,7 +46,7 @@ Content-Type: application/json
   "pairingToken": "pair_tok_abc123",
   "pin": "4829",
   "pinCode": "4829",
-  "qrPayload": "lunaria://pair?token=pair_tok_abc123&pin=4829&host=192.168.1.42:52341",
+  "qrPayload": "amoena://pair?token=pair_tok_abc123&pin=4829&host=192.168.1.42:52341",
   "baseUrl": "http://192.168.1.42:52341",
   "serverUrl": "http://192.168.1.42:52341",
   "expiresAtUnixMs": 1705316400000
@@ -315,7 +315,7 @@ Authorization: Bearer <token>
   "lanEnabled": true,
   "lanBaseUrl": "http://192.168.1.42:8080",
   "bindAddress": "0.0.0.0:8080",
-  "relayEndpoint": "wss://relay.lunaria.app",
+  "relayEndpoint": "wss://relay.amoena.app",
   "pairedDeviceCount": 2
 }
 ```

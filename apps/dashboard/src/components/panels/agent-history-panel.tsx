@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface AgentActivity {
 	id: number;
@@ -54,7 +54,7 @@ const typeIcons: Record<string, string> = {
 
 export function AgentHistoryPanel() {
 	const t = useTranslations("agentHistory");
-	const { agents } = useLunaria();
+	const { agents } = useAmoena();
 	const [selectedAgent, setSelectedAgent] = useState<string>("");
 	const [activities, setActivities] = useState<AgentActivity[]>([]);
 	const [sessions, setSessions] = useState<SessionInfo[]>([]);

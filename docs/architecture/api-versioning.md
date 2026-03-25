@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lunaria exposes multiple API surfaces that require versioning: the Tauri IPC commands, the Axum HTTP API (for remote access), and the plugin API. This document defines versioning strategy for each.
+Amoena exposes multiple API surfaces that require versioning: the Tauri IPC commands, the Axum HTTP API (for remote access), and the plugin API. This document defines versioning strategy for each.
 
 ## Tauri IPC Commands
 

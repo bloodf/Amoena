@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines how Lunaria creates, tracks, reviews, applies, archives, and cleans up isolated workspaces.
+This document defines how Amoena creates, tracks, reviews, applies, archives, and cleans up isolated workspaces.
 
 ## Workspace Types
 

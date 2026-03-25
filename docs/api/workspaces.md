@@ -1,6 +1,6 @@
 # Workspaces API
 
-Workspaces are managed project directories tracked by Lunaria. They can be archived, inspected, and destroyed independently of sessions.
+Workspaces are managed project directories tracked by Amoena. They can be archived, inspected, and destroyed independently of sessions.
 
 ---
 

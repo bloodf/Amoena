@@ -1,6 +1,6 @@
 # Runtime API Reference
 
-Complete documentation of all Lunaria Desktop runtime HTTP endpoints.
+Complete documentation of all Amoena Desktop runtime HTTP endpoints.
 
 ## Authentication
 
@@ -21,7 +21,7 @@ Health check endpoint.
 **Response:**
 ```json
 {
-  "appName": "Lunaria",
+  "appName": "Amoena",
   "appVersion": "0.1.0",
   "instanceId": "uuid",
   "status": "ok"
@@ -805,7 +805,7 @@ Parse a plugin installation deeplink and prepare for install.
 **Request:**
 ```json
 {
-  "deeplink": "lunaria://plugin/install?url=https://..."
+  "deeplink": "amoena://plugin/install?url=https://..."
 }
 ```
 

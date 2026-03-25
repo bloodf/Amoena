@@ -9,7 +9,7 @@ export const workspaceHealthConfig: Record<WorkspaceHealth, { label: string; col
 
 export const initialWorkspaceRecords: WorkspaceRecord[] = [
   {
-    name: "lunaria-frontend",
+    name: "amoena-frontend",
     branch: "feature/redesign",
     source: "main",
     disk: "2.4 GB",
@@ -26,7 +26,7 @@ export const initialWorkspaceRecords: WorkspaceRecord[] = [
     ],
   },
   {
-    name: "lunaria-runtime",
+    name: "amoena-runtime",
     branch: "main",
     source: "main",
     disk: "1.8 GB",
@@ -38,7 +38,7 @@ export const initialWorkspaceRecords: WorkspaceRecord[] = [
     files: [],
   },
   {
-    name: "lunaria-auth-exp",
+    name: "amoena-auth-exp",
     branch: "experiment/jwt",
     source: "feature/auth",
     disk: "890 MB",
@@ -53,7 +53,7 @@ export const initialWorkspaceRecords: WorkspaceRecord[] = [
     ],
   },
   {
-    name: "lunaria-old-experiment",
+    name: "amoena-old-experiment",
     branch: "experiment/old",
     source: "main",
     disk: "1.2 GB",

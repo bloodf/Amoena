@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest a feature for Lunaria
+about: Suggest a feature for Amoena
 title: '[Feature] '
 labels: enhancement
 assignees: ''

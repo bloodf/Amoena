@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 import { createClientLogger } from "@/lib/client-logger";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 const log = createClientLogger("CostTracker");
 
@@ -158,7 +158,7 @@ type Timeframe = "hour" | "day" | "week" | "month";
 
 export function CostTrackerPanel() {
 	const t = useTranslations("costTracker");
-	const { sessions } = useLunaria();
+	const { sessions } = useAmoena();
 
 	const [view, setView] = useState<View>("overview");
 	const [timeframe, setTimeframe] = useState<Timeframe>("day");

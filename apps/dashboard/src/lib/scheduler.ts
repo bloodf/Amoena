@@ -278,20 +278,20 @@ async function syncAgentLiveStatuses(): Promise<number> {
 
 	db.transaction(() => {
 		for (const agent of agents) {
-			// Match by agent name or lunariaId from config
-			let lunariaId: string | null = null;
+			// Match by agent name or amoenaId from config
+			let amoenaId: string | null = null;
 			if (agent.config) {
 				try {
 					const cfg = JSON.parse(agent.config);
-					if (typeof cfg.lunariaId === "string" && cfg.lunariaId.trim()) {
-						lunariaId = cfg.lunariaId.trim();
+					if (typeof cfg.amoenaId === "string" && cfg.amoenaId.trim()) {
+						amoenaId = cfg.amoenaId.trim();
 					}
 				} catch {
 					/* ignore */
 				}
 			}
 
-			const candidates = [lunariaId, agent.name]
+			const candidates = [amoenaId, agent.name]
 				.filter(Boolean)
 				.map((s) => normalize(s!));
 			let matched:
@@ -337,7 +337,7 @@ const TICK_MS = 60 * 1000; // Check every minute
 export function initScheduler() {
 	if (tickInterval) return; // Already running
 
-	// Auto-sync agents from lunaria.json on startup
+	// Auto-sync agents from amoena.json on startup
 	syncAgentsFromConfig("startup").catch((err) => {
 		logger.warn({ err }, "Agent auto-sync failed");
 	});
@@ -413,7 +413,7 @@ export function initScheduler() {
 
 	tasks.set("gateway_agent_sync", {
 		name: "Gateway Agent Sync",
-		intervalMs: TICK_MS, // Every 60s — re-read lunaria.json
+		intervalMs: TICK_MS, // Every 60s — re-read amoena.json
 		lastRun: null,
 		nextRun: now + 20_000, // First scan 20s after startup (after local sync)
 		enabled: true,

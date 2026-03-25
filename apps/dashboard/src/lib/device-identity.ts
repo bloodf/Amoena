@@ -5,7 +5,7 @@ import { createClientLogger } from "@/lib/client-logger";
 const log = createClientLogger("DeviceIdentity");
 
 /**
- * Ed25519 device identity for Lunaria gateway protocol v3 challenge-response.
+ * Ed25519 device identity for Amoena gateway protocol v3 challenge-response.
  *
  * Generates a persistent Ed25519 key pair on first use, stores it in localStorage,
  * and signs server nonces during the WebSocket connect handshake.
@@ -80,7 +80,7 @@ async function createNewIdentity(): Promise<DeviceIdentity> {
 	const pubRaw = await crypto.subtle.exportKey("raw", keyPair.publicKey);
 	const privPkcs8 = await crypto.subtle.exportKey("pkcs8", keyPair.privateKey);
 
-	// Lunaria expects device.id = sha256(rawPublicKey) in lowercase hex.
+	// Amoena expects device.id = sha256(rawPublicKey) in lowercase hex.
 	const deviceId = await sha256Hex(pubRaw);
 	const publicKeyBase64 = toBase64Url(pubRaw);
 	const privateKeyBase64 = toBase64Url(privPkcs8);

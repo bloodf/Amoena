@@ -1,7 +1,7 @@
 {
   "app": {
     "runtimeEyebrow": "Desktop Runtime",
-    "title": "Lunaria",
+    "title": "Amoena",
     "connecting": "Establishing the trusted localhost runtime and hydrating the desktop shell.",
     "bootstrapFailed": "Bootstrap Failed",
     "unknownStatus": "unknown",
@@ -53,7 +53,7 @@
   },
   "auth": {
     "title": "Sign In",
-    "subtitle": "Sign in to Lunaria",
+    "subtitle": "Sign in to Amoena",
     "username": "Username",
     "password": "Password",
     "signIn": "Sign In",
@@ -79,7 +79,7 @@
     "launchingDashboard": "Launching dashboard...",
     "loadingGoogleSignIn": "Loading Google sign-in...",
     "loginFailed": "Login failed",
-    "missionControl": "Lunaria",
+    "missionControl": "Amoena",
     "moreCharsNeeded": "{count} more characters needed",
     "networkError": "Network error",
     "noAdminAccount": "No admin account found",
@@ -89,7 +89,7 @@
     "passwordsDoNotMatch": "Passwords do not match",
     "repeatPassword": "Repeat Password",
     "script": "Script",
-    "settingUpMC": "Setting up Lunaria...",
+    "settingUpMC": "Setting up Amoena...",
     "setupFailed": "Setup failed",
     "signInToContinue": "Sign in to continue",
     "signInWithGoogle": "Sign in with Google",
@@ -97,7 +97,7 @@
     "tryAgain": "Try again",
     "usernameHint": "Lowercase letters, numbers, and hyphens only",
     "validatingCredentials": "Validating credentials...",
-    "welcomeToMC": "Welcome to Lunaria"
+    "welcomeToMC": "Welcome to Amoena"
   },
   "common": {
     "loading": "Loading...",
@@ -124,11 +124,11 @@
     "viewRelease": "View release"
   },
   "boot": {
-    "loading": "Loading Lunaria...",
+    "loading": "Loading Amoena...",
     "initializing": "Initializing services...",
     "connecting": "Connecting to services...",
     "ready": "Ready",
-    "title": "Lunaria",
+    "title": "Amoena",
     "subtitle": "AI Agent Operating System",
     "authenticatingOperator": "Authenticating operator...",
     "detectingStationMode": "Detecting station mode...",
@@ -139,7 +139,7 @@
     "hydratingWorkspaceBoard": "Hydrating workspace board...",
     "mappingMemoryGraph": "Mapping memory graph...",
     "indexingSkillCatalog": "Indexing skill catalog...",
-    "missionControl": "Lunaria",
+    "missionControl": "Amoena",
     "agentOrchestration": "Agent Orchestration Platform",
     "link": "Open"
   },
@@ -368,7 +368,7 @@
     "loadingActivity": "Loading activity...",
     "loadingTasks": "Loading tasks...",
     "loadingWorkspaceFiles": "Loading workspace files...",
-    "lunariaConfig": "Lunaria Config",
+    "amoenaConfig": "Amoena Config",
     "memoryBannerDesc": "Review and manage long-term memory for this agent",
     "memoryBannerPage": "Memory",
     "memoryBannerTitle": "Agent Memory",
@@ -1129,16 +1129,16 @@
     "showing": "Showing {count} of {total} logs",
     "additionalData": "Additional data"
   },
-  "lunariaUpdateBanner": {
+  "amoenaUpdateBanner": {
     "changelog": "Changelog",
     "copied": "Copied!",
     "copyCommand": "Copy command",
     "installed": "Installed",
-    "lunariaUpdateAvailable": "Lunaria update available",
-    "lunariaUpdated": "Lunaria updated",
+    "amoenaUpdateAvailable": "Amoena update available",
+    "amoenaUpdated": "Amoena updated",
     "networkError": "Network error",
     "updateFailed": "Update failed",
-    "updatingLunaria": "Updating Lunaria..."
+    "updatingAmoena": "Updating Amoena..."
   },
   "memoryBrowser": {
     "title": "Memory Browser",
@@ -1411,7 +1411,7 @@
     "taskStatTotal": "Total"
   },
   "onboarding": {
-    "title": "Welcome to Lunaria",
+    "title": "Welcome to Amoena",
     "description": "Let's get your station set up",
     "activeSessionsDetected": "Active sessions detected",
     "adminPassword": "Admin Password",
@@ -1469,7 +1469,7 @@
     "testing": "Testing...",
     "webhookIntegrations": "Webhook Integrations",
     "welcome": {
-      "title": "Welcome to Lunaria",
+      "title": "Welcome to Amoena",
       "description": "Let's get your station set up",
       "activeSessionsDetected": "Active sessions detected",
       "adminPassword": "Admin Password",
@@ -1528,7 +1528,7 @@
       "webhookIntegrations": "Webhook Integrations"
     },
     "interfaceMode": {
-      "title": "Welcome to Lunaria",
+      "title": "Welcome to Amoena",
       "description": "Let's get your station set up",
       "activeSessionsDetected": "Active sessions detected",
       "adminPassword": "Admin Password",
@@ -1587,7 +1587,7 @@
       "webhookIntegrations": "Webhook Integrations"
     },
     "gatewayLink": {
-      "title": "Welcome to Lunaria",
+      "title": "Welcome to Amoena",
       "description": "Let's get your station set up",
       "activeSessionsDetected": "Active sessions detected",
       "adminPassword": "Admin Password",
@@ -1646,7 +1646,7 @@
       "webhookIntegrations": "Webhook Integrations"
     },
     "credentials": {
-      "title": "Welcome to Lunaria",
+      "title": "Welcome to Amoena",
       "description": "Let's get your station set up",
       "activeSessionsDetected": "Active sessions detected",
       "adminPassword": "Admin Password",
@@ -1795,7 +1795,7 @@
     "overallConvergence": "Overall Convergence",
     "rateLimitAbuseSignals": "Rate Limit Abuse Signals",
     "scanCredentials": "Credentials",
-    "scanLunaria": "Lunaria",
+    "scanAmoena": "Amoena",
     "scanNetwork": "Network",
     "scanOs": "OS",
     "scanRuntime": "Runtime",
@@ -1879,7 +1879,7 @@
   },
   "settings": {
     "title": "Settings",
-    "description": "Configure your Lunaria station",
+    "description": "Configure your Amoena station",
     "backingUp": "Backing up...",
     "backupGatewayState": "Backup Gateway State",
     "backupMcDatabase": "Backup MC Database",

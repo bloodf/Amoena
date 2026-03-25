@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface SmartPollOptions {
 	/** Pause polling when WebSocket is connected (data comes via WS anyway) */
@@ -47,7 +47,7 @@ export function useSmartPoll(
 	const isVisibleRef = useRef(true);
 	const initialFiredRef = useRef(false);
 
-	const { connection } = useLunaria();
+	const { connection } = useAmoena();
 
 	// Keep callback ref current without re-triggering the effect
 	useEffect(() => {

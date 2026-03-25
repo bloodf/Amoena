@@ -5,7 +5,7 @@ import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { createClientLogger } from "@/lib/client-logger";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 const log = createClientLogger("SessionDetails");
 
@@ -25,7 +25,7 @@ export function SessionDetailsPanel() {
 		setSelectedSession,
 		setSessions,
 		availableModels,
-	} = useLunaria();
+	} = useAmoena();
 
 	// Smart polling for sessions (60s, visibility-aware)
 	const loadSessions = useCallback(async () => {

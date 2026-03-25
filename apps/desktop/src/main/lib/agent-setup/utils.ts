@@ -9,14 +9,14 @@ import { getDefaultShell } from "../terminal/env";
  */
 function findBinaryPathsUnix(name: string): string[] {
 	const shell = getDefaultShell();
-	const delimiter = "__LUNARIA_WHICH_DELIMITER__";
+	const delimiter = "__AMOENA_WHICH_DELIMITER__";
 	const result = execFileSync(
 		shell,
 		[
 			"-il",
 			"-c",
 			`echo -n "${delimiter}"; which -a -- "$1"; echo -n "${delimiter}"`,
-			"lunaria-find-binary",
+			"amoena-find-binary",
 			name,
 		],
 		{
@@ -48,7 +48,7 @@ function findBinaryPathsWindows(name: string): string[] {
 
 /**
  * Finds the real path of a binary, skipping our wrapper scripts.
- * Filters out all lunaria bin directories (prod, dev, and workspace-specific)
+ * Filters out all amoena bin directories (prod, dev, and workspace-specific)
  * to avoid wrapper scripts calling each other.
  */
 export function findRealBinary(name: string): string | null {
@@ -59,16 +59,16 @@ export function findRealBinary(name: string): string | null {
 			: findBinaryPathsUnix(name);
 
 		const homedir = os.homedir();
-		// Filter out wrapper scripts from all lunaria directories:
-		// - ~/.lunaria/bin
-		// - ~/.lunaria-*/bin (workspace-specific instances)
-		const lunariaBinDir = path.join(homedir, ".lunaria", "bin");
-		const lunariaPrefix = path.join(homedir, ".lunaria-");
+		// Filter out wrapper scripts from all amoena directories:
+		// - ~/.amoena/bin
+		// - ~/.amoena-*/bin (workspace-specific instances)
+		const amoenaBinDir = path.join(homedir, ".amoena", "bin");
+		const amoenaPrefix = path.join(homedir, ".amoena-");
 		const paths = allPaths.filter(
 			(p) =>
 				p &&
-				!p.startsWith(lunariaBinDir) &&
-				!(p.startsWith(lunariaPrefix) && p.includes("/bin/")) &&
+				!p.startsWith(amoenaBinDir) &&
+				!(p.startsWith(amoenaPrefix) && p.includes("/bin/")) &&
 				(isWindows || isExecutableUnixPath(p)),
 		);
 		return paths[0] || null;

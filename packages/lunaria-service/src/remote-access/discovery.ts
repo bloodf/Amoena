@@ -40,7 +40,7 @@ function getLocalIp(): string {
 }
 
 /**
- * Scans the local network for Lunaria instances.
+ * Scans the local network for Amoena instances.
  *
  * Sends a single broadcast, waits 2 seconds for replies, then resolves with
  * all devices heard during that window.

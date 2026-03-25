@@ -1,6 +1,6 @@
 {{MARKER}}
 /**
- * Lunaria Notification Plugin for OpenCode
+ * Amoena Notification Plugin for OpenCode
  *
  * This plugin sends desktop notifications when OpenCode sessions need attention.
  * It hooks into session.status (busy/idle), session.idle, session.error, and permission.ask events.
@@ -9,7 +9,7 @@
  * - Session-scoped: Tracks root sessionID, ignores events from other sessions
  * - Deduplication: Only sends Start on idle→busy, Stop on busy→idle transitions
  * - Safe defaults: On error, assumes child session to avoid false positives
- * - Debug logging: Set LUNARIA_DEBUG=1 to enable verbose logging
+ * - Debug logging: Set AMOENA_DEBUG=1 to enable verbose logging
  *
  * SUBAGENT FILTERING:
  * When using oh-my-opencode or similar tools that spawn background subagents
@@ -22,15 +22,15 @@
  *
  * @see https://github.com/sst/opencode/blob/dev/packages/app/src/context/notification.tsx
  */
-export const LunariaNotifyPlugin = async ({ $, client }) => {
-  if (globalThis.__lunariaOpencodeNotifyPluginV8) return {};
-  globalThis.__lunariaOpencodeNotifyPluginV8 = true;
+export const AmoenaNotifyPlugin = async ({ $, client }) => {
+  if (globalThis.__amoenaOpencodeNotifyPluginV8) return {};
+  globalThis.__amoenaOpencodeNotifyPluginV8 = true;
 
-  // Only run inside a Lunaria terminal session
-  if (!process?.env?.LUNARIA_TAB_ID) return {};
+  // Only run inside a Amoena terminal session
+  if (!process?.env?.AMOENA_TAB_ID) return {};
 
   const notifyPath = "{{NOTIFY_PATH}}";
-  const debug = process?.env?.LUNARIA_DEBUG === '1';
+  const debug = process?.env?.AMOENA_DEBUG === '1';
 
   // State tracking for deduplication and session-scoping
   let currentState = 'idle'; // 'idle' | 'busy'
@@ -38,11 +38,11 @@ export const LunariaNotifyPlugin = async ({ $, client }) => {
   let stopSent = false;      // Prevent duplicate Stop notifications
 
   const log = (...args) => {
-    if (debug) console.log('[lunaria-plugin]', ...args);
+    if (debug) console.log('[amoena-plugin]', ...args);
   };
 
   /**
-   * Sends a notification to Lunaria's notification server.
+   * Sends a notification to Amoena's notification server.
    * Best-effort only - failures are silently ignored to avoid breaking the agent.
    */
   const notify = async (hookEventName) => {

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface NavItem {
 	id: string;
@@ -109,7 +109,7 @@ export function NavRail() {
 		collapsedGroups,
 		toggleSidebar,
 		toggleGroup,
-	} = useLunaria();
+	} = useAmoena();
 
 	// Keyboard shortcut: [ to toggle sidebar
 	useEffect(() => {
@@ -145,7 +145,7 @@ export function NavRail() {
 					<div className="w-9 h-9 rounded-lg overflow-hidden bg-background border border-border/50 flex items-center justify-center shrink-0">
 						<Image
 							src="/brand/mc-logo-128.png"
-							alt="Lunaria logo"
+							alt="Amoena logo"
 							width={36}
 							height={36}
 							className="w-full h-full object-cover"
@@ -153,7 +153,7 @@ export function NavRail() {
 					</div>
 					{sidebarExpanded && (
 						<span className="text-sm font-semibold text-foreground truncate flex-1">
-							Lunaria
+							Amoena
 						</span>
 					)}
 					<Button

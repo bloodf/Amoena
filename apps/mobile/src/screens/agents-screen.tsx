@@ -1,6 +1,6 @@
 import { RefreshControl, ScrollView, Text, View } from "react-native";
 
-import { useLunariaTranslation } from "@lunaria/i18n";
+import { useAmoenaTranslation } from "@lunaria/i18n";
 import { useSessionAgents } from "@/runtime/hooks/use-session-agents";
 import { styles } from "@/theme/styles";
 import { tokens } from "@/theme/tokens";
@@ -30,7 +30,7 @@ function AgentNode({ agent, allAgents, depth = 0 }: { agent: SessionAgent; allAg
 }
 
 export function AgentsScreen({ sessionId }: { sessionId: string }) {
-  const { t } = useLunariaTranslation();
+  const { t } = useAmoenaTranslation();
   const { data: agents, isLoading, refresh } = useSessionAgents(sessionId);
 
   const rootAgents = agents.filter((a) => !a.parentAgentId);

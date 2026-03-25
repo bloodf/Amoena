@@ -2,7 +2,7 @@
 
 ## Project Structure
 
-Lunaria is maintained by a small core team with an open contribution model.
+Amoena is maintained by a small core team with an open contribution model.
 
 ## Decision Making
 

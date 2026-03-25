@@ -80,7 +80,7 @@ export function createRateLimiter(options: RateLimiterOptions) {
 			process.env.MC_DISABLE_RATE_LIMIT === "1" &&
 			!options.critical &&
 			(process.env.NODE_ENV !== "production" ||
-				process.env.LUNARIA_TEST_MODE === "1")
+				process.env.AMOENA_TEST_MODE === "1")
 		)
 			return null;
 		const ip = extractClientIp(request);
@@ -170,7 +170,7 @@ export function createAgentRateLimiter(options: RateLimiterOptions) {
 			process.env.MC_DISABLE_RATE_LIMIT === "1" &&
 			!options.critical &&
 			(process.env.NODE_ENV !== "production" ||
-				process.env.LUNARIA_TEST_MODE === "1")
+				process.env.AMOENA_TEST_MODE === "1")
 		)
 			return null;
 

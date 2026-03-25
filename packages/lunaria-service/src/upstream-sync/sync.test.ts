@@ -249,7 +249,7 @@ describe("generateMergeSummary", () => {
     expect(summary).toContain(release.url);
   });
 
-  it("includes the Lunaria package name", () => {
+  it("includes the Amoena package name", () => {
     const summary = generateMergeSummary(release);
     expect(summary).toContain("@lunaria/dashboard");
   });

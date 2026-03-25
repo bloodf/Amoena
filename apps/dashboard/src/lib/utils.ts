@@ -73,7 +73,7 @@ export function getStatusBadgeColor(status: AgentStatus["status"]): string {
 	}
 }
 
-/** Normalize model field — Lunaria 2026.3.x may send {primary: "model-name"} instead of a string */
+/** Normalize model field — Amoena 2026.3.x may send {primary: "model-name"} instead of a string */
 export function normalizeModel(model: unknown): string {
 	if (typeof model === "string") return model;
 	if (model && typeof model === "object" && "primary" in model)

@@ -10,11 +10,11 @@ describe("EmptySessionState", () => {
     expect(screen.getByText(/sonnet-4/)).toBeTruthy();
   });
 
-  test("falls back to lunaria info for unknown provider", () => {
+  test("falls back to amoena info for unknown provider", () => {
     render(<EmptySessionState provider="unknown-provider" model="custom" sessionName="Fallback" />);
     expect(screen.getByText("Fallback")).toBeTruthy();
-    // Unknown provider falls back to "Lunaria AI"
-    expect(screen.getByText("Lunaria AI")).toBeTruthy();
+    // Unknown provider falls back to "Amoena AI"
+    expect(screen.getByText("Amoena AI")).toBeTruthy();
     expect(screen.getByText(/custom/)).toBeTruthy();
   });
 

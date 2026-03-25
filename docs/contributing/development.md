@@ -5,8 +5,8 @@
 Follow the [Installation guide](/getting-started/installation) to get the project running locally. The short version:
 
 ```bash
-git clone https://github.com/LunariaAi/lunaria.git
-cd lunaria
+git clone https://github.com/AmoenaAi/amoena.git
+cd amoena
 bun install
 cd packages/ui && bun run build && cd ../..
 cd apps/desktop && cargo tauri dev
@@ -15,7 +15,7 @@ cd apps/desktop && cargo tauri dev
 ## Project Structure
 
 ```
-lunaria/
+amoena/
 ├── apps/
 │   ├── desktop/          # Tauri desktop app
 │   │   ├── src/          # React 19 frontend
@@ -59,7 +59,7 @@ bun run test -- --coverage
 
 ### E2E Tests (Playwright)
 
-E2E tests require a running Lunaria instance:
+E2E tests require a running Amoena instance:
 
 ```bash
 # Terminal 1: start the app
@@ -97,7 +97,7 @@ Add `RUST_LOG=debug` before your command:
 RUST_LOG=debug cargo tauri dev
 ```
 
-Logs appear in the terminal. For persistent logging, check `~/.lunaria/logs/lunaria.log`.
+Logs appear in the terminal. For persistent logging, check `~/.amoena/logs/amoena.log`.
 
 Use `tracing::debug!()`, `tracing::info!()`, and `tracing::error!()` in Rust code (not `println!`).
 

@@ -17,14 +17,14 @@ import {
 	readErrorDetailCode,
 	shouldRetryWithoutDeviceIdentity,
 } from "@/lib/websocket-utils";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 const log = createClientLogger("WebSocket");
 
-// Gateway protocol version (v3 required by Lunaria 2026.x)
+// Gateway protocol version (v3 required by Amoena 2026.x)
 const PROTOCOL_VERSION = 3;
 const DEFAULT_GATEWAY_CLIENT_ID =
-	process.env.NEXT_PUBLIC_GATEWAY_CLIENT_ID || "lunaria-control-ui";
+	process.env.NEXT_PUBLIC_GATEWAY_CLIENT_ID || "amoena-control-ui";
 
 // Heartbeat configuration
 const PING_INTERVAL_MS = 30_000;
@@ -111,7 +111,7 @@ export function useWebSocket() {
 		updateAgent,
 		addExecApproval,
 		updateExecApproval,
-	} = useLunaria();
+	} = useAmoena();
 
 	const isNonRetryableGatewayError = useCallback(
 		(message: string, error?: GatewayFrame["error"]): boolean => {
@@ -150,7 +150,7 @@ export function useWebSocket() {
 			normalized.includes("requires device identity") ||
 			normalized.includes("secure context")
 		) {
-			return "Gateway requires device identity. Open Lunaria via HTTPS (or localhost), then reconnect so WebCrypto signing can run.";
+			return "Gateway requires device identity. Open Amoena via HTTPS (or localhost), then reconnect so WebCrypto signing can run.";
 		}
 		if (normalized.includes("device_auth_signature_invalid")) {
 			return "Gateway rejected device signature. Clear local device identity in the browser and reconnect.";
@@ -159,7 +159,7 @@ export function useWebSocket() {
 			normalized.includes("invalid connect params") ||
 			normalized.includes("/client/id")
 		) {
-			return "Gateway rejected client identity params. Ensure NEXT_PUBLIC_GATEWAY_CLIENT_ID is set to lunaria-control-ui and reconnect.";
+			return "Gateway rejected client identity params. Ensure NEXT_PUBLIC_GATEWAY_CLIENT_ID is set to amoena-control-ui and reconnect.";
 		}
 		if (
 			normalized.includes("auth rate limit") ||
@@ -279,7 +279,7 @@ export function useWebSocket() {
 				try {
 					const identity = await getOrCreateDeviceIdentity();
 					const signedAt = Date.now();
-					// Sign Lunaria v2 device-auth payload (gateway accepts v2 and v3).
+					// Sign Amoena v2 device-auth payload (gateway accepts v2 and v3).
 					const payload = [
 						"v2",
 						identity.deviceId,
@@ -318,7 +318,7 @@ export function useWebSocket() {
 					maxProtocol: PROTOCOL_VERSION,
 					client: {
 						id: clientId,
-						displayName: "Lunaria",
+						displayName: "Amoena",
 						version: APP_VERSION,
 						platform: "web",
 						mode: clientMode,

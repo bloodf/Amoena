@@ -12,12 +12,12 @@ import path from "node:path";
 
 const TEST_ROOT = path.join(
 	realOs.tmpdir(),
-	`lunaria-agent-wrappers-${process.pid}-${Date.now()}`,
+	`amoena-agent-wrappers-${process.pid}-${Date.now()}`,
 );
-const TEST_BIN_DIR = path.join(TEST_ROOT, "lunaria", "bin");
-const TEST_HOOKS_DIR = path.join(TEST_ROOT, "lunaria", "hooks");
-const TEST_ZSH_DIR = path.join(TEST_ROOT, "lunaria", "zsh");
-const TEST_BASH_DIR = path.join(TEST_ROOT, "lunaria", "bash");
+const TEST_BIN_DIR = path.join(TEST_ROOT, "amoena", "bin");
+const TEST_HOOKS_DIR = path.join(TEST_ROOT, "amoena", "hooks");
+const TEST_ZSH_DIR = path.join(TEST_ROOT, "amoena", "zsh");
+const TEST_BASH_DIR = path.join(TEST_ROOT, "amoena", "bash");
 const TEST_OPENCODE_CONFIG_DIR = path.join(TEST_HOOKS_DIR, "opencode");
 const TEST_OPENCODE_PLUGIN_DIR = path.join(TEST_OPENCODE_CONFIG_DIR, "plugin");
 let mockedHomeDir = path.join(TEST_ROOT, "home");
@@ -31,7 +31,7 @@ mock.module("shared/env.shared", () => ({
 
 mock.module("./notify-hook", () => ({
 	NOTIFY_SCRIPT_NAME: "notify.sh",
-	NOTIFY_SCRIPT_MARKER: "# Lunaria agent notification hook",
+	NOTIFY_SCRIPT_MARKER: "# Amoena agent notification hook",
 	getNotifyScriptPath: () => path.join(TEST_HOOKS_DIR, "notify.sh"),
 	getNotifyScriptContent: () => "#!/bin/bash\nexit 0\n",
 	createNotifyScript: () => {},
@@ -83,35 +83,35 @@ describe("reconcileManagedEntries", () => {
 		const result = reconcileManagedEntries({
 			current: [
 				"/usr/local/bin/custom-hook Start",
-				"/tmp/.lunaria-old/hooks/notify.sh Start",
+				"/tmp/.amoena-old/hooks/notify.sh Start",
 			],
-			desired: ["/tmp/.lunaria-new/hooks/notify.sh Start"],
-			isManaged: (entry: string) => entry.includes("/.lunaria-"),
+			desired: ["/tmp/.amoena-new/hooks/notify.sh Start"],
+			isManaged: (entry: string) => entry.includes("/.amoena-"),
 			isEquivalent: (entry: string, desired: string) => entry === desired,
 		});
 
 		expect(result.entries).toEqual([
 			"/usr/local/bin/custom-hook Start",
-			"/tmp/.lunaria-new/hooks/notify.sh Start",
+			"/tmp/.amoena-new/hooks/notify.sh Start",
 		]);
 		expect(result.replacedManagedEntries).toEqual([
-			"/tmp/.lunaria-old/hooks/notify.sh Start",
+			"/tmp/.amoena-old/hooks/notify.sh Start",
 		]);
 	});
 
 	it("reconciles edited managed entries even when a managed hook already exists", () => {
 		const result = reconcileManagedEntries({
-			current: ["/tmp/.lunaria-current/hooks/notify.sh Start --debug"],
-			desired: ["/tmp/.lunaria-current/hooks/notify.sh Start"],
-			isManaged: (entry: string) => entry.includes("/.lunaria-"),
+			current: ["/tmp/.amoena-current/hooks/notify.sh Start --debug"],
+			desired: ["/tmp/.amoena-current/hooks/notify.sh Start"],
+			isManaged: (entry: string) => entry.includes("/.amoena-"),
 			isEquivalent: (entry: string, desired: string) => entry === desired,
 		});
 
 		expect(result.entries).toEqual([
-			"/tmp/.lunaria-current/hooks/notify.sh Start",
+			"/tmp/.amoena-current/hooks/notify.sh Start",
 		]);
 		expect(result.replacedManagedEntries).toEqual([
-			"/tmp/.lunaria-current/hooks/notify.sh Start --debug",
+			"/tmp/.amoena-current/hooks/notify.sh Start --debug",
 		]);
 	});
 });
@@ -127,10 +127,10 @@ describe("agent-wrappers copilot", () => {
 		rmSync(TEST_ROOT, { recursive: true, force: true });
 	});
 
-	it("rewrites stale lunaria-notify.json with current hook path", () => {
+	it("rewrites stale amoena-notify.json with current hook path", () => {
 		const projectDir = path.join(TEST_ROOT, "project");
 		const hooksDir = path.join(projectDir, ".github", "hooks");
-		const hookFile = path.join(hooksDir, "lunaria-notify.json");
+		const hookFile = path.join(hooksDir, "amoena-notify.json");
 		const gitInfoDir = path.join(projectDir, ".git", "info");
 		const realBinDir = path.join(TEST_ROOT, "real-bin");
 		const realCopilot = path.join(realBinDir, "copilot");
@@ -142,7 +142,7 @@ describe("agent-wrappers copilot", () => {
 		mkdirSync(realBinDir, { recursive: true });
 
 		writeFileSync(hookScriptPath, "#!/bin/bash\nexit 0\n", { mode: 0o755 });
-		writeFileSync(hookFile, '{"lunaria":"old","bash":"/tmp/old-hook.sh"}');
+		writeFileSync(hookFile, '{"amoena":"old","bash":"/tmp/old-hook.sh"}');
 
 		writeFileSync(realCopilot, "#!/bin/bash\necho real-copilot\n", {
 			mode: 0o755,
@@ -161,7 +161,7 @@ describe("agent-wrappers copilot", () => {
 			env: {
 				...process.env,
 				PATH: `${TEST_BIN_DIR}:${realBinDir}:${process.env.PATH || ""}`,
-				LUNARIA_TAB_ID: "tab-1",
+				AMOENA_TAB_ID: "tab-1",
 			},
 			encoding: "utf-8",
 		});
@@ -179,28 +179,28 @@ describe("agent-wrappers copilot", () => {
 
 		expect(wrapper).toContain("export CODEX_TUI_RECORD_SESSION=1");
 		expect(wrapper).toContain('"msg":{"type":"task_started"');
-		expect(wrapper).toContain('_lunaria_last_turn_id=""');
-		expect(wrapper).toContain('_lunaria_last_approval_id=""');
-		expect(wrapper).toContain('_lunaria_last_exec_call_id=""');
-		expect(wrapper).toContain("_lunaria_approval_fallback_seq=0");
-		expect(wrapper).toContain("_lunaria_emit_event()");
-		expect(wrapper).toContain("_lunaria_turn_id=$(printf");
-		expect(wrapper).toContain("_lunaria_approval_id=$(printf");
-		expect(wrapper).toContain("_lunaria_exec_call_id=$(printf");
+		expect(wrapper).toContain('_amoena_last_turn_id=""');
+		expect(wrapper).toContain('_amoena_last_approval_id=""');
+		expect(wrapper).toContain('_amoena_last_exec_call_id=""');
+		expect(wrapper).toContain("_amoena_approval_fallback_seq=0");
+		expect(wrapper).toContain("_amoena_emit_event()");
+		expect(wrapper).toContain("_amoena_turn_id=$(printf");
+		expect(wrapper).toContain("_amoena_approval_id=$(printf");
+		expect(wrapper).toContain("_amoena_exec_call_id=$(printf");
 		expect(wrapper).toContain('awk -F\'"turn_id":"\'');
 		expect(wrapper).toContain('"msg":{"type":"exec_command_begin"');
 		expect(wrapper).toContain('_approval_request"');
 		expect(wrapper).toContain(
-			`approval_request_\${_lunaria_approval_fallback_seq}`,
+			`approval_request_\${_amoena_approval_fallback_seq}`,
 		);
 		expect(wrapper).toContain('awk -F\'"approval_id":"\'');
-		expect(wrapper).toContain('_lunaria_emit_event "Start"');
-		expect(wrapper).toContain('_lunaria_emit_event "PermissionRequest"');
+		expect(wrapper).toContain('_amoena_emit_event "Start"');
+		expect(wrapper).toContain('_amoena_emit_event "PermissionRequest"');
 		expect(wrapper).toContain(
 			`"$REAL_BIN" -c 'notify=["bash","${path.join(TEST_HOOKS_DIR, "notify.sh")}"]' "$@"`,
 		);
-		expect(wrapper).toContain("LUNARIA_CODEX_START_WATCHER_PID");
-		expect(wrapper).toContain('kill "$LUNARIA_CODEX_START_WATCHER_PID"');
+		expect(wrapper).toContain("AMOENA_CODEX_START_WATCHER_PID");
+		expect(wrapper).toContain('kill "$AMOENA_CODEX_START_WATCHER_PID"');
 
 		const execLine = buildCodexWrapperExecLine(
 			path.join(TEST_HOOKS_DIR, "notify.sh"),
@@ -215,7 +215,7 @@ describe("agent-wrappers copilot", () => {
 		const wrapperPath = path.join(TEST_BIN_DIR, "mastracode");
 		const wrapper = readFileSync(wrapperPath, "utf-8");
 
-		expect(wrapper).toContain("# Lunaria wrapper for mastracode");
+		expect(wrapper).toContain("# Amoena wrapper for mastracode");
 		expect(wrapper).toContain('REAL_BIN="$(find_real_binary "mastracode")"');
 		expect(wrapper).toContain('exec "$REAL_BIN" "$@"');
 	});
@@ -226,15 +226,15 @@ describe("agent-wrappers copilot", () => {
 		const wrapperPath = path.join(TEST_BIN_DIR, "droid");
 		const wrapper = readFileSync(wrapperPath, "utf-8");
 
-		expect(wrapper).toContain("# Lunaria wrapper for droid");
+		expect(wrapper).toContain("# Amoena wrapper for droid");
 		expect(wrapper).toContain('REAL_BIN="$(find_real_binary "droid")"');
 		expect(wrapper).toContain('exec "$REAL_BIN" "$@"');
 	});
 
-	it("replaces stale Cursor hook commands from old lunaria paths", () => {
+	it("replaces stale Cursor hook commands from old amoena paths", () => {
 		const cursorHooksPath = path.join(mockedHomeDir, ".cursor", "hooks.json");
-		const staleHookPath = "/tmp/.lunaria-old/hooks/cursor-hook.sh";
-		const currentHookPath = "/tmp/.lunaria-new/hooks/cursor-hook.sh";
+		const staleHookPath = "/tmp/.amoena-old/hooks/cursor-hook.sh";
+		const currentHookPath = "/tmp/.amoena-new/hooks/cursor-hook.sh";
 
 		mkdirSync(path.dirname(cursorHooksPath), { recursive: true });
 		writeFileSync(
@@ -282,14 +282,14 @@ describe("agent-wrappers copilot", () => {
 		expect(JSON.parse(content2)).toEqual(JSON.parse(content));
 	});
 
-	it("replaces stale Gemini hook commands from old lunaria paths", () => {
+	it("replaces stale Gemini hook commands from old amoena paths", () => {
 		const geminiSettingsPath = path.join(
 			mockedHomeDir,
 			".gemini",
 			"settings.json",
 		);
-		const staleHookPath = "/tmp/.lunaria-old/hooks/gemini-hook.sh";
-		const currentHookPath = "/tmp/.lunaria-new/hooks/gemini-hook.sh";
+		const staleHookPath = "/tmp/.amoena-old/hooks/gemini-hook.sh";
+		const currentHookPath = "/tmp/.amoena-new/hooks/gemini-hook.sh";
 
 		mkdirSync(path.dirname(geminiSettingsPath), { recursive: true });
 		writeFileSync(
@@ -389,14 +389,14 @@ describe("agent-wrappers copilot", () => {
 		expect(JSON.parse(content2)).toEqual(JSON.parse(content));
 	});
 
-	it("replaces stale Mastra hook commands from old lunaria paths", () => {
+	it("replaces stale Mastra hook commands from old amoena paths", () => {
 		const mastraHooksPath = path.join(
 			mockedHomeDir,
 			".mastracode",
 			"hooks.json",
 		);
-		const staleHookPath = "/tmp/.lunaria-old/hooks/notify.sh";
-		const currentHookPath = "/tmp/.lunaria-new/hooks/notify.sh";
+		const staleHookPath = "/tmp/.amoena-old/hooks/notify.sh";
+		const currentHookPath = "/tmp/.amoena-new/hooks/notify.sh";
 
 		mkdirSync(path.dirname(mastraHooksPath), { recursive: true });
 		writeFileSync(
@@ -450,14 +450,14 @@ describe("agent-wrappers copilot", () => {
 		expect(JSON.parse(content2)).toEqual(JSON.parse(content));
 	});
 
-	it("replaces stale Droid hook commands from old lunaria paths", () => {
+	it("replaces stale Droid hook commands from old amoena paths", () => {
 		const droidSettingsPath = path.join(
 			mockedHomeDir,
 			".factory",
 			"settings.json",
 		);
-		const staleHookPath = "/tmp/.lunaria-old/hooks/notify.sh";
-		const currentHookPath = "/tmp/.lunaria-new/hooks/notify.sh";
+		const staleHookPath = "/tmp/.amoena-old/hooks/notify.sh";
+		const currentHookPath = "/tmp/.amoena-new/hooks/notify.sh";
 
 		mkdirSync(path.dirname(droidSettingsPath), { recursive: true });
 		writeFileSync(
@@ -564,7 +564,7 @@ describe("agent-wrappers copilot", () => {
 		writeFileSync(droidSettingsPath, invalidJson);
 
 		expect(
-			getDroidSettingsJsonContent("/tmp/.lunaria-new/hooks/notify.sh"),
+			getDroidSettingsJsonContent("/tmp/.amoena-new/hooks/notify.sh"),
 		).toBeNull();
 
 		createDroidSettingsJson();
@@ -583,7 +583,7 @@ describe("agent-wrappers copilot", () => {
 		writeFileSync(droidSettingsPath, JSON.stringify("not-an-object"));
 
 		expect(
-			getDroidSettingsJsonContent("/tmp/.lunaria-new/hooks/notify.sh"),
+			getDroidSettingsJsonContent("/tmp/.amoena-new/hooks/notify.sh"),
 		).toBeNull();
 	});
 });
@@ -600,7 +600,7 @@ describe("agent-wrappers claude settings.json", () => {
 	});
 
 	it("creates Claude settings.json with hooks when no file exists", () => {
-		const notifyPath = "/tmp/.lunaria/hooks/notify.sh";
+		const notifyPath = "/tmp/.amoena/hooks/notify.sh";
 		const content = getClaudeGlobalSettingsJsonContent(notifyPath);
 		expect(content).not.toBeNull();
 		if (content === null) throw new Error("Expected content");
@@ -663,7 +663,7 @@ describe("agent-wrappers claude settings.json", () => {
 			),
 		);
 
-		const notifyPath = "/tmp/.lunaria/hooks/notify.sh";
+		const notifyPath = "/tmp/.amoena/hooks/notify.sh";
 		const content = getClaudeGlobalSettingsJsonContent(notifyPath);
 		expect(content).not.toBeNull();
 		if (content === null) throw new Error("Expected content");
@@ -696,14 +696,14 @@ describe("agent-wrappers claude settings.json", () => {
 		).toBe(true);
 	});
 
-	it("replaces stale Claude hook commands from old lunaria paths", () => {
+	it("replaces stale Claude hook commands from old amoena paths", () => {
 		const claudeSettingsPath = path.join(
 			mockedHomeDir,
 			".claude",
 			"settings.json",
 		);
-		const staleHookPath = "/tmp/.lunaria-old/hooks/notify.sh";
-		const currentHookPath = "/tmp/.lunaria-new/hooks/notify.sh";
+		const staleHookPath = "/tmp/.amoena-old/hooks/notify.sh";
+		const currentHookPath = "/tmp/.amoena-new/hooks/notify.sh";
 
 		mkdirSync(path.dirname(claudeSettingsPath), { recursive: true });
 		writeFileSync(
@@ -800,7 +800,7 @@ describe("agent-wrappers claude settings.json", () => {
 		writeFileSync(claudeSettingsPath, invalidJson);
 
 		expect(
-			getClaudeGlobalSettingsJsonContent("/tmp/.lunaria/hooks/notify.sh"),
+			getClaudeGlobalSettingsJsonContent("/tmp/.amoena/hooks/notify.sh"),
 		).toBeNull();
 
 		createClaudeSettingsJson();
@@ -820,7 +820,7 @@ describe("agent-wrappers claude settings.json", () => {
 		writeFileSync(claudeSettingsPath, JSON.stringify("not-an-object"));
 
 		expect(
-			getClaudeGlobalSettingsJsonContent("/tmp/.lunaria/hooks/notify.sh"),
+			getClaudeGlobalSettingsJsonContent("/tmp/.amoena/hooks/notify.sh"),
 		).toBeNull();
 	});
 });
@@ -837,7 +837,7 @@ describe("agent-wrappers codex hooks.json", () => {
 	});
 
 	it("creates Codex hooks.json with SessionStart and Stop when no file exists", () => {
-		const notifyPath = "/tmp/.lunaria/hooks/notify.sh";
+		const notifyPath = "/tmp/.amoena/hooks/notify.sh";
 		const content = getCodexGlobalHooksJsonContent(notifyPath);
 		expect(content).not.toBeNull();
 		if (content === null) throw new Error("Expected content");
@@ -883,7 +883,7 @@ describe("agent-wrappers codex hooks.json", () => {
 			),
 		);
 
-		const notifyPath = "/tmp/.lunaria/hooks/notify.sh";
+		const notifyPath = "/tmp/.amoena/hooks/notify.sh";
 		const content = getCodexGlobalHooksJsonContent(notifyPath);
 		expect(content).not.toBeNull();
 		if (content === null) throw new Error("Expected content");
@@ -921,7 +921,7 @@ describe("agent-wrappers codex hooks.json", () => {
 	});
 
 	it("does not add UserPromptSubmit to the Codex fallback hooks.json merge", () => {
-		const notifyPath = "/tmp/.lunaria/hooks/notify.sh";
+		const notifyPath = "/tmp/.amoena/hooks/notify.sh";
 		const content = getCodexGlobalHooksJsonContent(notifyPath);
 		expect(content).not.toBeNull();
 		if (content === null) throw new Error("Expected content");
@@ -939,10 +939,10 @@ describe("agent-wrappers codex hooks.json", () => {
 		expect(parsed.hooks.UserPromptSubmit).toBeUndefined();
 	});
 
-	it("replaces stale Codex hook commands from old lunaria paths", () => {
+	it("replaces stale Codex hook commands from old amoena paths", () => {
 		const codexHooksPath = path.join(mockedHomeDir, ".codex", "hooks.json");
-		const staleHookPath = "/tmp/.lunaria-old/hooks/notify.sh";
-		const currentHookPath = "/tmp/.lunaria-new/hooks/notify.sh";
+		const staleHookPath = "/tmp/.amoena-old/hooks/notify.sh";
+		const currentHookPath = "/tmp/.amoena-new/hooks/notify.sh";
 
 		mkdirSync(path.dirname(codexHooksPath), { recursive: true });
 		writeFileSync(
@@ -1023,7 +1023,7 @@ describe("agent-wrappers codex hooks.json", () => {
 		writeFileSync(codexHooksPath, invalidJson);
 
 		expect(
-			getCodexGlobalHooksJsonContent("/tmp/.lunaria/hooks/notify.sh"),
+			getCodexGlobalHooksJsonContent("/tmp/.amoena/hooks/notify.sh"),
 		).toBeNull();
 
 		createCodexHooksJson();
@@ -1038,7 +1038,7 @@ describe("agent-wrappers codex hooks.json", () => {
 		writeFileSync(codexHooksPath, JSON.stringify("not-an-object"));
 
 		expect(
-			getCodexGlobalHooksJsonContent("/tmp/.lunaria/hooks/notify.sh"),
+			getCodexGlobalHooksJsonContent("/tmp/.amoena/hooks/notify.sh"),
 		).toBeNull();
 	});
 });

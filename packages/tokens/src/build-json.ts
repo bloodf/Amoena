@@ -1,4 +1,4 @@
-import type { LunariaThemeTokens } from "./types";
+import type { AmoenaThemeTokens } from "./types";
 
 interface DTCGToken {
   $value: string | number;
@@ -56,7 +56,7 @@ function mapColorGroup(entries: Record<string, string>): DTCGGroup {
  * Generates a Design Tokens Community Group (DTCG) formatted object
  * suitable for Figma / design-tool sync.
  */
-export function buildDesignTokensJSON(tokens: LunariaThemeTokens): DTCGGroup {
+export function buildDesignTokensJSON(tokens: AmoenaThemeTokens): DTCGGroup {
   const output: DTCGGroup = {};
 
   // Colors (light / dark)

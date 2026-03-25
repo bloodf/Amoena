@@ -24,7 +24,7 @@ interface GroupedResults {
 	items: SpotlightResult[];
 }
 
-const RECENT_SEARCHES_KEY = "lunaria:spotlight:recent";
+const RECENT_SEARCHES_KEY = "amoena:spotlight:recent";
 const MAX_RECENT = 5;
 
 const TYPE_LABELS: Record<ResultType, string> = {

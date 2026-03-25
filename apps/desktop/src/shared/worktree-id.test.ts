@@ -8,7 +8,7 @@ describe("normalizeWorkspaceName", () => {
 	it("returns undefined for empty or default names", () => {
 		expect(normalizeWorkspaceName(undefined)).toBeUndefined();
 		expect(normalizeWorkspaceName("")).toBeUndefined();
-		expect(normalizeWorkspaceName("lunaria")).toBeUndefined();
+		expect(normalizeWorkspaceName("amoena")).toBeUndefined();
 	});
 
 	it("sanitizes and limits to 32 characters", () => {
@@ -24,7 +24,7 @@ describe("deriveWorkspaceNameFromWorktreeSegments", () => {
 	it("handles branch-style worktree paths", () => {
 		expect(
 			deriveWorkspaceNameFromWorktreeSegments([
-				"lunaria",
+				"amoena",
 				"my-branch",
 				"apps",
 				"desktop",
@@ -35,7 +35,7 @@ describe("deriveWorkspaceNameFromWorktreeSegments", () => {
 	it("uses all segments after project to reduce collisions", () => {
 		expect(
 			deriveWorkspaceNameFromWorktreeSegments([
-				"lunaria",
+				"amoena",
 				"kitenite",
 				"review",
 				"pr-1087",
@@ -47,19 +47,19 @@ describe("deriveWorkspaceNameFromWorktreeSegments", () => {
 
 	it("falls back to the remaining path when apps/desktop suffix is absent", () => {
 		expect(
-			deriveWorkspaceNameFromWorktreeSegments(["lunaria", "feature", "path"]),
+			deriveWorkspaceNameFromWorktreeSegments(["amoena", "feature", "path"]),
 		).toBe("feature-path");
 	});
 
 	it("returns undefined when no workspace segment exists", () => {
 		expect(
-			deriveWorkspaceNameFromWorktreeSegments(["lunaria", "apps", "desktop"]),
+			deriveWorkspaceNameFromWorktreeSegments(["amoena", "apps", "desktop"]),
 		).toBeUndefined();
 	});
 
 	it("keeps derived names bounded for protocol safety", () => {
 		const derived = deriveWorkspaceNameFromWorktreeSegments([
-			"lunaria",
+			"amoena",
 			"very",
 			"long",
 			"branch",
@@ -72,6 +72,6 @@ describe("deriveWorkspaceNameFromWorktreeSegments", () => {
 		]);
 		expect(derived).toBeDefined();
 		expect(derived?.length).toBeLessThanOrEqual(32);
-		expect(`lunaria-${derived}`.length).toBeLessThanOrEqual(41);
+		expect(`amoena-${derived}`.length).toBeLessThanOrEqual(41);
 	});
 });

@@ -1,6 +1,6 @@
 # Security
 
-Lunaria's security model is designed for a desktop application that exposes a local HTTP server and optionally opens that server to LAN devices. The threat model assumes an untrusted local network and requires explicit device pairing for any remote access.
+Amoena's security model is designed for a desktop application that exposes a local HTTP server and optionally opens that server to LAN devices. The threat model assumes an untrusted local network and requires explicit device pairing for any remote access.
 
 ## Authentication Model
 
@@ -23,8 +23,8 @@ Authorization: Bearer <bootstrap_token>
 The returned JWT is signed with an `HS256` key generated fresh at each runtime start (`issue_secret()` — two concatenated UUID v4 bytes = 32 bytes of entropy). The key is held only in memory; it is never persisted to disk. This means all session JWTs are invalidated when the app restarts.
 
 The JWT carries:
-- `iss`: `"lunaria-desktop"`
-- `aud`: `"lunaria-local"` (for local) / `"lunaria-remote"` (for remote devices)
+- `iss`: `"amoena-desktop"`
+- `aud`: `"amoena-local"` (for local) / `"amoena-remote"` (for remote devices)
 - `sub`: session or device ID
 - `exp`: expiry timestamp
 - `jti`: unique token ID
@@ -109,7 +109,7 @@ Device pairing is PIN-based with a maximum of 3 failed attempts before the pairi
        baseUrl, serverUrl, expiresAtUnixMs
      }
    pin = first 6 digits of SHA-256(pairingToken) mod 1_000_000
-   qrPayload = "lunaria://pair?host=...&port=...&pin=...&token=...&tls=false"
+   qrPayload = "amoena://pair?host=...&port=...&pin=...&token=...&tls=false"
 
 2. Mobile device scans QR or enters PIN
    POST /api/v1/remote/pair/complete

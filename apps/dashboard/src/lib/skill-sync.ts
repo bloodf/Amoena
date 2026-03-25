@@ -62,10 +62,10 @@ function extractDescription(content: string): string | undefined {
 function getSkillRoots(): Array<{ source: string; path: string }> {
 	const home = homedir();
 	const cwd = process.cwd();
-	const lunariaState =
-		process.env.LUNARIA_STATE_DIR ||
-		process.env.LUNARIA_HOME ||
-		join(home, ".lunaria");
+	const amoenaState =
+		process.env.AMOENA_STATE_DIR ||
+		process.env.AMOENA_HOME ||
+		join(home, ".amoena");
 	const roots: Array<{ source: string; path: string }> = [
 		{
 			source: "user-agents",
@@ -91,17 +91,17 @@ function getSkillRoots(): Array<{ source: string; path: string }> {
 				join(cwd, ".codex", "skills"),
 		},
 		{
-			source: "lunaria",
-			path: process.env.MC_SKILLS_LUNARIA_DIR || join(lunariaState, "skills"),
+			source: "amoena",
+			path: process.env.MC_SKILLS_AMOENA_DIR || join(amoenaState, "skills"),
 		},
 		{
 			source: "workspace",
 			path:
 				process.env.MC_SKILLS_WORKSPACE_DIR ||
 				join(
-					process.env.LUNARIA_WORKSPACE_DIR ||
-						process.env.LUNARIA_WORKSPACE_DIR ||
-						join(lunariaState, "workspace"),
+					process.env.AMOENA_WORKSPACE_DIR ||
+						process.env.AMOENA_WORKSPACE_DIR ||
+						join(amoenaState, "workspace"),
 					"skills",
 				),
 		},
@@ -109,17 +109,17 @@ function getSkillRoots(): Array<{ source: string; path: string }> {
 
 	// Dynamic: scan for workspace-<agent> directories
 	try {
-		const entries = readdirSync(lunariaState);
+		const entries = readdirSync(amoenaState);
 		for (const entry of entries) {
 			if (!entry.startsWith("workspace-")) continue;
-			const skillsDir = join(lunariaState, entry, "skills");
+			const skillsDir = join(amoenaState, entry, "skills");
 			if (existsSync(skillsDir)) {
 				const agentName = entry.replace("workspace-", "");
 				roots.push({ source: `workspace-${agentName}`, path: skillsDir });
 			}
 		}
 	} catch {
-		// lunariaBase may not exist
+		// amoenaBase may not exist
 	}
 
 	return roots;
@@ -190,7 +190,7 @@ export async function syncSkillsFromDisk(): Promise<{
 			"user-codex",
 			"project-agents",
 			"project-codex",
-			"lunaria",
+			"amoena",
 			"workspace",
 		];
 		// Also include any dynamic workspace-* sources from disk

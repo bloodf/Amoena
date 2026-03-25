@@ -2,7 +2,7 @@
 
 ## Principle
 
-When a subsystem is unavailable, Lunaria continues operating with reduced functionality rather than failing entirely. The user is always informed of degraded state.
+When a subsystem is unavailable, Amoena continues operating with reduced functionality rather than failing entirely. The user is always informed of degraded state.
 
 ## Degradation Matrix
 
@@ -18,7 +18,7 @@ When a subsystem is unavailable, Lunaria continues operating with reduced functi
 
 ## Subsystem Health Checks
 
-On startup, Lunaria checks:
+On startup, Amoena checks:
 1. SQLite database: open and migrate
 2. Bun daemon: spawn and verify heartbeat
 3. Git: `git --version` (optional)

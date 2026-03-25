@@ -1,11 +1,11 @@
 import path from "node:path";
 
-export type LunariaDoctorLevel = "healthy" | "warning" | "error";
-export type LunariaDoctorCategory = "config" | "state" | "security" | "general";
+export type AmoenaDoctorLevel = "healthy" | "warning" | "error";
+export type AmoenaDoctorCategory = "config" | "state" | "security" | "general";
 
-export interface LunariaDoctorStatus {
-	level: LunariaDoctorLevel;
-	category: LunariaDoctorCategory;
+export interface AmoenaDoctorStatus {
+	level: AmoenaDoctorLevel;
+	category: AmoenaDoctorCategory;
 	healthy: boolean;
 	summary: string;
 	issues: string[];
@@ -36,13 +36,13 @@ function isPositiveOrInstructionalLine(line: string): boolean {
 function isDecorativeLine(line: string): boolean {
 	return (
 		/^[▄█▀░\s]+$/.test(line) ||
-		/lunaria doctor/i.test(line) ||
-		/🦞\s*lunaria\s*🦞/i.test(line)
+		/amoena doctor/i.test(line) ||
+		/🦞\s*amoena\s*🦞/i.test(line)
 	);
 }
 
 function isStateDirectoryListLine(line: string): boolean {
-	return /^(?:\$LUNARIA_HOME(?:\/\.lunaria)?|~\/\.lunaria|\/\S+)$/.test(line);
+	return /^(?:\$AMOENA_HOME(?:\/\.amoena)?|~\/\.amoena|\/\S+)$/.test(line);
 }
 
 function normalizeFsPath(candidate: string): string {
@@ -52,8 +52,8 @@ function normalizeFsPath(candidate: string): string {
 function normalizeDisplayedPath(candidate: string, stateDir: string): string {
 	const trimmed = candidate.trim();
 	if (!trimmed) return trimmed;
-	if (trimmed === "~/.lunaria") return stateDir;
-	if (trimmed === "$LUNARIA_HOME" || trimmed === "$LUNARIA_HOME/.lunaria")
+	if (trimmed === "~/.amoena") return stateDir;
+	if (trimmed === "$AMOENA_HOME" || trimmed === "$AMOENA_HOME/.amoena")
 		return stateDir;
 	return trimmed;
 }
@@ -88,7 +88,7 @@ function stripForeignStateDirectoryWarning(
 				continue;
 			}
 			if (
-				/^(active state dir:|[-*]\s+(?:\/|~\/|\$LUNARIA_HOME)|\|)/i.test(
+				/^(active state dir:|[-*]\s+(?:\/|~\/|\$AMOENA_HOME)|\|)/i.test(
 					nextNormalized,
 				)
 			) {
@@ -121,7 +121,7 @@ function stripForeignStateDirectoryWarning(
 	return kept.join("\n");
 }
 
-function detectCategory(raw: string, issues: string[]): LunariaDoctorCategory {
+function detectCategory(raw: string, issues: string[]): AmoenaDoctorCategory {
 	const haystack = `${raw}\n${issues.join("\n")}`.toLowerCase();
 
 	if (
@@ -147,11 +147,11 @@ function detectCategory(raw: string, issues: string[]): LunariaDoctorCategory {
 	return "general";
 }
 
-export function parseLunariaDoctorOutput(
+export function parseAmoenaDoctorOutput(
 	rawOutput: string,
 	exitCode = 0,
 	options: { stateDir?: string } = {},
-): LunariaDoctorStatus {
+): AmoenaDoctorStatus {
 	const raw = stripForeignStateDirectoryWarning(
 		rawOutput.trim(),
 		options.stateDir,
@@ -182,7 +182,7 @@ export function parseLunariaDoctorOutput(
 			raw,
 		);
 
-	let level: LunariaDoctorLevel = "healthy";
+	let level: AmoenaDoctorLevel = "healthy";
 	if (exitCode !== 0 || /invalid config|failed|error/i.test(raw)) {
 		level = "error";
 	} else if (issues.length > 0 || mentionsWarnings) {
@@ -195,7 +195,7 @@ export function parseLunariaDoctorOutput(
 
 	const summary =
 		level === "healthy"
-			? "Lunaria doctor reports a healthy configuration."
+			? "Amoena doctor reports a healthy configuration."
 			: issues[0] ||
 				lines.find(
 					(line) =>
@@ -204,9 +204,9 @@ export function parseLunariaDoctorOutput(
 						!isSessionAgingLine(line) &&
 						!isDecorativeLine(line),
 				) ||
-				"Lunaria doctor reported configuration issues.";
+				"Amoena doctor reported configuration issues.";
 
-	const canFix = level !== "healthy" || /lunaria doctor --fix/i.test(raw);
+	const canFix = level !== "healthy" || /amoena doctor --fix/i.test(raw);
 
 	return {
 		level,

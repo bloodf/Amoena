@@ -51,10 +51,10 @@ export const CodexProvider: Story = {
   },
 };
 
-export const LunariaProvider: Story = {
+export const AmoenaProvider: Story = {
   args: {
-    provider: "lunaria",
-    model: "Lunaria Pro",
+    provider: "amoena",
+    model: "Amoena Pro",
     sessionName: "New Feature Development",
   },
 };

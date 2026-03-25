@@ -25,7 +25,7 @@ function resolveMetadataBase(): URL {
 		process.env.NEXT_PUBLIC_APP_URL,
 		process.env.MC_PUBLIC_BASE_URL,
 		process.env.APP_URL,
-		process.env.LUNARIA_PUBLIC_URL,
+		process.env.AMOENA_PUBLIC_URL,
 	]
 		.map((value) => String(value || "").trim())
 		.filter(Boolean);
@@ -39,7 +39,7 @@ function resolveMetadataBase(): URL {
 	}
 
 	// Prevent localhost fallback in production metadata when env is unset.
-	return new URL("https://lunaria.local");
+	return new URL("https://amoena.local");
 }
 
 const metadataBase = resolveMetadataBase();
@@ -52,7 +52,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-	title: "Lunaria — AI Agent Orchestration Dashboard",
+	title: "Amoena — AI Agent Orchestration Dashboard",
 	description:
 		"Open-source dashboard for AI agent orchestration. Manage agent fleets, dispatch tasks, track costs, and coordinate multi-agent workflows. Self-hosted, zero dependencies, SQLite-powered.",
 	metadataBase,
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
 		shortcut: ["/icon.png"],
 	},
 	openGraph: {
-		title: "Lunaria — AI Agent Orchestration Dashboard",
+		title: "Amoena — AI Agent Orchestration Dashboard",
 		description:
 			"Open-source dashboard for AI agent orchestration. Manage agent fleets, dispatch tasks, track costs, and coordinate multi-agent workflows.",
 		images: [
@@ -73,15 +73,15 @@ export const metadata: Metadata = {
 				url: "/brand/mc-logo-512.png",
 				width: 512,
 				height: 512,
-				alt: "Lunaria — open-source AI agent orchestration dashboard",
+				alt: "Amoena — open-source AI agent orchestration dashboard",
 			},
 		],
 		type: "website",
-		siteName: "Lunaria",
+		siteName: "Amoena",
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Lunaria — AI Agent Orchestration Dashboard",
+		title: "Amoena — AI Agent Orchestration Dashboard",
 		description:
 			"Open-source dashboard for AI agent orchestration. Manage agent fleets, dispatch tasks, track costs, and coordinate multi-agent workflows.",
 		images: ["/brand/mc-logo-512.png"],
@@ -89,7 +89,7 @@ export const metadata: Metadata = {
 	appleWebApp: {
 		capable: true,
 		statusBarStyle: "black-translucent",
-		title: "Lunaria",
+		title: "Amoena",
 	},
 };
 

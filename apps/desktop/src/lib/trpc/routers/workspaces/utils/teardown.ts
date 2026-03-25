@@ -6,7 +6,7 @@ import {
 	getShellEnv,
 } from "main/lib/agent-setup/shell-wrappers";
 import { buildSafeEnv, sanitizeEnv } from "main/lib/terminal/env";
-import { LUNARIA_DIR_NAME } from "shared/constants";
+import { AMOENA_DIR_NAME } from "shared/constants";
 import { removeWorktree } from "./git";
 import { loadSetupConfig } from "./setup";
 
@@ -45,12 +45,12 @@ export async function runTeardown({
 		const shell =
 			process.env.SHELL ||
 			(process.platform === "darwin" ? "/bin/zsh" : "/bin/bash");
-		const lunariaHomeDir =
-			process.env.LUNARIA_HOME_DIR || join(homedir(), LUNARIA_DIR_NAME);
+		const amoenaHomeDir =
+			process.env.AMOENA_HOME_DIR || join(homedir(), AMOENA_DIR_NAME);
 		const shellWrapperPaths = {
-			BIN_DIR: join(lunariaHomeDir, "bin"),
-			ZSH_DIR: join(lunariaHomeDir, "zsh"),
-			BASH_DIR: join(lunariaHomeDir, "bash"),
+			BIN_DIR: join(amoenaHomeDir, "bin"),
+			ZSH_DIR: join(amoenaHomeDir, "zsh"),
+			BASH_DIR: join(amoenaHomeDir, "bash"),
 		};
 
 		const baseEnv = buildSafeEnv(sanitizeEnv(process.env) || {});
@@ -65,8 +65,8 @@ export async function runTeardown({
 				env: {
 					...baseEnv,
 					...wrapperEnv,
-					LUNARIA_WORKSPACE_NAME: workspaceName,
-					LUNARIA_ROOT_PATH: mainRepoPath,
+					AMOENA_WORKSPACE_NAME: workspaceName,
+					AMOENA_ROOT_PATH: mainRepoPath,
 				},
 			});
 

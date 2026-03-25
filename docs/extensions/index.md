@@ -1,6 +1,6 @@
 # Extensions
 
-Extensions are self-contained capability bundles that integrate directly into the Lunaria desktop application. They ship as single `.luna` binary files — no zip archives, no directories to manage. Drag one into Lunaria, and it installs immediately.
+Extensions are self-contained capability bundles that integrate directly into the Amoena desktop application. They ship as single `.luna` binary files — no zip archives, no directories to manage. Drag one into Amoena, and it installs immediately.
 
 ## What Extensions Can Do
 
@@ -18,7 +18,7 @@ An extension can contribute any combination of the following:
 
 ## Extensions vs. Plugins
 
-Lunaria has two extensibility systems:
+Amoena has two extensibility systems:
 
 | | Extensions | Plugins |
 |---|---|---|
@@ -78,23 +78,23 @@ The smallest valid extension contributes one command:
 
 Package it:
 ```bash
-lunaria-pack manifest.json --out hello.luna
+amoena-pack manifest.json --out hello.luna
 ```
 
-Install it by dragging `hello.luna` into the Lunaria window, or via deeplink:
+Install it by dragging `hello.luna` into the Amoena window, or via deeplink:
 ```
-lunaria://extension/install?source=https://example.com/hello.luna
+amoena://extension/install?source=https://example.com/hello.luna
 ```
 
 ## Installation
 
 Extensions can be installed three ways:
 
-1. **Drag and drop** — Drop a `.luna` file onto the Lunaria window
+1. **Drag and drop** — Drop a `.luna` file onto the Amoena window
 2. **File path** — Via the Extensions settings panel, browse to a `.luna` file
-3. **URL / deeplink** — `lunaria://extension/install?source=<url>` triggers a review prompt before installing
+3. **URL / deeplink** — `amoena://extension/install?source=<url>` triggers a review prompt before installing
 
-Installed extensions live in `~/.lunaria/extensions/<id>.luna`.
+Installed extensions live in `~/.amoena/extensions/<id>.luna`.
 
 ## Next Steps
 

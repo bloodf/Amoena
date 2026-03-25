@@ -53,7 +53,7 @@ export function GoalInput({
     <Box flexDirection="column" paddingX={2} paddingY={1}>
       <Box marginBottom={1}>
         <Text bold color="cyan">
-          Lunaria TUI
+          Amoena TUI
         </Text>
         <Text color="gray"> — </Text>
         <Text color={mode === 'server' ? 'green' : 'yellow'}>

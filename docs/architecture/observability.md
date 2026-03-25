@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lunaria uses structured logging for debugging, performance monitoring, and audit trails. All logs are local — nothing is sent to external services without explicit user opt-in.
+Amoena uses structured logging for debugging, performance monitoring, and audit trails. All logs are local — nothing is sent to external services without explicit user opt-in.
 
 ## Log Levels
 
@@ -24,7 +24,7 @@ All logs are structured JSON (one line per entry):
 {
   "ts": "2025-03-11T19:00:00.000Z",
   "level": "INFO",
-  "target": "lunaria::session",
+  "target": "amoena::session",
   "session_id": "abc123",
   "agent_id": "primary",
   "msg": "Session created",
@@ -78,7 +78,7 @@ Security-relevant events are stored in the SQLite `audit_log` table:
 For debugging latency issues, enable TRACE level on specific targets:
 
 ```bash
-RUST_LOG=lunaria::ipc=trace,lunaria::streaming=trace
+RUST_LOG=amoena::ipc=trace,amoena::streaming=trace
 ```
 
 This captures per-event timing through the full pipeline.

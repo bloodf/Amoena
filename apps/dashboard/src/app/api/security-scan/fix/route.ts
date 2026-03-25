@@ -28,7 +28,7 @@ export interface FixResult {
 }
 
 function shouldMutateRuntimeEnv() {
-	return process.env.LUNARIA_TEST_MODE !== "1";
+	return process.env.AMOENA_TEST_MODE !== "1";
 }
 
 function normalizeHostname(raw: string): string {
@@ -313,7 +313,7 @@ export async function POST(request: NextRequest) {
 		}
 	}
 
-	// 6. Fix Lunaria config
+	// 6. Fix Amoena config
 	const ocFixIds = [
 		"config_permissions",
 		"gateway_auth",
@@ -326,7 +326,7 @@ export async function POST(request: NextRequest) {
 		"fs_workspace_only",
 		"log_redaction",
 	];
-	const configPath = config.lunariaConfigPath;
+	const configPath = config.amoenaConfigPath;
 	if (
 		ocFixIds.some((id) => shouldFix(id)) &&
 		configPath &&
@@ -351,7 +351,7 @@ export async function POST(request: NextRequest) {
 						chmodSync(configPath, 0o600);
 						results.push({
 							id: "config_permissions",
-							name: "Lunaria config permissions",
+							name: "Amoena config permissions",
 							fixed: true,
 							detail: `Changed from ${mode} to 600`,
 							fixSafety: FIX_SAFETY.config_permissions,
@@ -360,7 +360,7 @@ export async function POST(request: NextRequest) {
 				} catch (e: any) {
 					results.push({
 						id: "config_permissions",
-						name: "Lunaria config permissions",
+						name: "Amoena config permissions",
 						fixed: false,
 						detail: e.message,
 						fixSafety: FIX_SAFETY.config_permissions,
@@ -535,7 +535,7 @@ export async function POST(request: NextRequest) {
 				} catch (e: any) {
 					results.push({
 						id: "config_write",
-						name: "Write Lunaria config",
+						name: "Write Amoena config",
 						fixed: false,
 						detail: e.message,
 					});

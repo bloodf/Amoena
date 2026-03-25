@@ -131,7 +131,7 @@ Autopilot works best when the session has an associated workspace:
 ```http
 POST /api/v1/workspaces
 { "projectPath": "/Users/dev/myproject" }
-→ { "id": "ws-uuid", "clonePath": "/lunaria/workspaces/ws-uuid", ... }
+→ { "id": "ws-uuid", "clonePath": "/amoena/workspaces/ws-uuid", ... }
 
 POST /api/v1/sessions/{id}/autopilot
 { "enabled": true, "workspaceId": "ws-uuid" }

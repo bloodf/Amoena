@@ -4,7 +4,7 @@
 
 | Phase | Backends |
 |-------|----------|
-| MVP | Lunaria Native only (no wrappers) |
+| MVP | Amoena Native only (no wrappers) |
 | V1.0 | + Claude Code (via `--sdk-url`) |
 | V1.5 | + OpenCode; evaluate Codex CLI and Gemini CLI |
 
@@ -14,11 +14,11 @@ The capability matrix below documents the full target state. Refer to the [Imple
 
 ## Executive Summary
 
-This document compares Claude Code, OpenCode (anomalyco TypeScript CLI), Codex CLI, Gemini CLI, and Lunaria Native mode across integration-critical capability dimensions.
+This document compares Claude Code, OpenCode (anomalyco TypeScript CLI), Codex CLI, Gemini CLI, and Amoena Native mode across integration-critical capability dimensions.
 
 Integration mode classification used in this document:
 
-- NATIVE: Lunaria's own agentic loop — full control without external process dependency.
+- NATIVE: Amoena's own agentic loop — full control without external process dependency.
 - FULL: first-class bidirectional machine control API (request + events + session operations).
 - PARTIAL: some structured controls, but missing full lifecycle control or bidirectional parity.
 - PTY-ONLY: practical automation depends on terminal control and output parsing, not a full bidirectional control API.
@@ -478,7 +478,7 @@ Notes:
 
 ## Comparison Matrix (Y / N / PARTIAL)
 
-| Capability | Lunaria Native | Claude Code | OpenCode | Codex CLI | Gemini CLI |
+| Capability | Amoena Native | Claude Code | OpenCode | Codex CLI | Gemini CLI |
 | --- | --- | --- | --- | --- | --- |
 | Non-interactive mode | Y (API-driven) | Y (`claude -p`) | Y (`opencode run`) | Y (`codex exec`) | Y (`gemini -p`) |
 | Structured streaming output | Y (SSE) | Y (`stream-json`) | Y (JSON + SSE) | Y (`exec --json` JSONL) | Y (`--output-format stream-json`) |
@@ -500,14 +500,14 @@ Notes:
 
 ## Integration Mode Classification
 
-- NATIVE: Lunaria Native.
+- NATIVE: Amoena Native.
 - FULL: Claude Code, OpenCode.
 - PARTIAL: Codex CLI.
 - PTY-ONLY: Gemini CLI.
 
 Rationale:
 
-- Lunaria Native: built-in agentic loop via Vercel AI SDK with direct provider access, SSE streaming, full session CRUD, memory, hooks engine, and orchestration — no external process dependency.
+- Amoena Native: built-in agentic loop via Vercel AI SDK with direct provider access, SSE streaming, full session CRUD, memory, hooks engine, and orchestration — no external process dependency.
 - Claude Code: bidirectional SDK endpoint + stream-json + hooks + OTEL + persisted session artifacts.
 - OpenCode: REST/OpenAPI control plane + SSE event stream + SDK + session CRUD + persistent SQLite.
 - Codex CLI: **PARTIAL** — app-server JSON-RPC control plane + session/thread lifecycle APIs + JSONL/SQLite persistence. Classified as PARTIAL because the CLI is undergoing a Rust rewrite (from Node.js) that may substantially change the API surface, binary name, CLI flags, output format, config locations, and authentication flow. The existing APIs are functional but API stability is uncertain until the rewrite stabilizes. Codex CLI would be promoted to FULL when: the Rust rewrite is complete and released, the `codex app-server` interface is declared stable, and the `thread/*`/`turn/*` JSON-RPC methods are confirmed as a long-term supported contract.
@@ -516,7 +516,7 @@ Rationale:
 ## Programmatic Control Summary
 
 - NATIVE (full internal control):
-  - Lunaria Native (Vercel AI SDK agentic loop, Axum server, SSE streaming, built-in session/memory/orchestration)
+  - Amoena Native (Vercel AI SDK agentic loop, Axum server, SSE streaming, built-in session/memory/orchestration)
 - FULL bidirectional:
   - Claude Code (SDK endpoint and structured programmatic workflows)
   - OpenCode (REST/OpenAPI + SSE + SDK + session CRUD)

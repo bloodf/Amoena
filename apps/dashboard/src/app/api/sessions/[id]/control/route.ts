@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
 import { db_helpers } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { callLunariaGateway } from "@/lib/lunaria-gateway";
+import { callAmoenaGateway } from "@/lib/amoena-gateway";
 import { mutationLimiter } from "@/lib/rate-limit";
 
 // Only allow alphanumeric, hyphens, and underscores in session IDs
@@ -39,7 +39,7 @@ export async function POST(
 
 		let result: unknown;
 		if (action === "terminate") {
-			result = await callLunariaGateway(
+			result = await callAmoenaGateway(
 				"sessions_kill",
 				{ sessionKey: id },
 				10_000,
@@ -49,7 +49,7 @@ export async function POST(
 				action === "monitor"
 					? { type: "control", action: "monitor" }
 					: { type: "control", action: "pause" };
-			result = await callLunariaGateway(
+			result = await callAmoenaGateway(
 				"sessions_send",
 				{ sessionKey: id, message },
 				10_000,

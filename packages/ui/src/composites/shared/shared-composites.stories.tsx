@@ -225,7 +225,7 @@ export const MemoryTierCardAllCategories: Story = {
     <div style={{ width: 360 }} className="p-4 space-y-2">
       <MemoryTierCard id="m1" title="User name: Alice" type="identity" category="profile" timestamp="1h ago" l0Summary="Core profile fact" />
       <MemoryTierCard id="m2" title="Dark mode always" type="ui" category="preference" timestamp="3h ago" l0Summary="UI preference" l1Summary="User switches to dark mode in every new session." />
-      <MemoryTierCard id="m3" title="Project: lunaria" type="project" category="entity" timestamp="5h ago" l0Summary="Active workspace entity" />
+      <MemoryTierCard id="m3" title="Project: amoena" type="project" category="entity" timestamp="5h ago" l0Summary="Active workspace entity" />
       <MemoryTierCard id="m4" title="Error-first callbacks" type="node" category="pattern" timestamp="1d ago" l0Summary="Coding pattern" l1Summary="Uses error-first callback pattern in all Node.js code." />
       <MemoryTierCard id="m5" title="Uses ripgrep for search" type="cli" category="tool_usage" timestamp="2d ago" l0Summary="Tool preference" />
       <MemoryTierCard id="m6" title="Expert in Rust async" type="lang" category="skill" timestamp="3d ago" l0Summary="Skill assessment" l1Summary="Demonstrates advanced understanding of Rust async/await, pinning, and futures." />

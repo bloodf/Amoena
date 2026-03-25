@@ -14,9 +14,9 @@ Execute an external shell command.
 {
   "type": "command",
   "config": {
-    "command": "bash -c 'echo $LUNARIA_EVENT'",
+    "command": "bash -c 'echo $AMOENA_EVENT'",
     "env": {
-      "LUNARIA_EVENT": "{event}"
+      "AMOENA_EVENT": "{event}"
     }
   }
 }

@@ -1,6 +1,6 @@
-# Contributing to Lunaria
+# Contributing to Amoena
 
-Thank you for your interest in contributing to Lunaria! This guide covers everything you need to get started: development setup, project structure, testing, coding standards, and the PR process.
+Thank you for your interest in contributing to Amoena! This guide covers everything you need to get started: development setup, project structure, testing, coding standards, and the PR process.
 
 ## Prerequisites
 
@@ -17,8 +17,8 @@ Thank you for your interest in contributing to Lunaria! This guide covers everyt
 
 ```bash
 # Clone the repository
-git clone https://github.com/LunariaAi/lunaria.git
-cd lunaria
+git clone https://github.com/AmoenaAi/amoena.git
+cd amoena
 
 # Install JavaScript dependencies
 bun install
@@ -49,7 +49,7 @@ bun run desktop:dev
 ## Project Structure
 
 ```
-lunaria/
+amoena/
 +-- apps/
 |   +-- desktop/                   # Tauri desktop application
 |   |   +-- src/                   # React frontend (pages, components)
@@ -249,14 +249,14 @@ See [docs/user-guide/extensions.md](docs/user-guide/extensions.md) for the full 
 1. Create an extension manifest (JSON) with your contributions
 2. Add UI panels (HTML), commands, hooks, tools, or providers
 3. Package as a `.luna` file using the binary format
-4. Install via the Extensions panel or `lunaria extensions install`
+4. Install via the Extensions panel or `amoena extensions install`
 
 ## Reporting Issues
 
-- Use [GitHub Issues](https://github.com/LunariaAi/lunaria/issues) with the provided templates
+- Use [GitHub Issues](https://github.com/AmoenaAi/amoena/issues) with the provided templates
 - Include steps to reproduce
-- Attach relevant logs from `~/.lunaria/logs/`
-- Specify your OS, Lunaria version, and provider being used
+- Attach relevant logs from `~/.amoena/logs/`
+- Specify your OS, Amoena version, and provider being used
 
 ## Code of Conduct
 

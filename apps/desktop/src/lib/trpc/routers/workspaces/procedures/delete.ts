@@ -267,9 +267,9 @@ export const createDeleteProcedures = () => {
 					await workspaceInitManager.acquireProjectLock(project.id);
 
 					try {
-						// Only delete from disk if this worktree was created by Lunaria
+						// Only delete from disk if this worktree was created by Amoena
 						// External worktrees should only have their DB records removed
-						if (worktree.createdByLunaria) {
+						if (worktree.createdByAmoena) {
 							// Safety: Double-check it's not actually external (catches race conditions)
 							const externalWorktrees = await listExternalWorktrees(
 								project.mainRepoPath,
@@ -281,7 +281,7 @@ export const createDeleteProcedures = () => {
 
 							if (isActuallyExternal) {
 								console.warn(
-									`[workspace/delete] Worktree at ${worktree.path} marked as created by Lunaria but found in external list - preserving as safety measure`,
+									`[workspace/delete] Worktree at ${worktree.path} marked as created by Amoena but found in external list - preserving as safety measure`,
 								);
 								track("worktree_delete_safety_trigger", {
 									workspace_id: input.id,
@@ -486,8 +486,8 @@ export const createDeleteProcedures = () => {
 						worktree.path,
 					);
 
-					// Only delete from disk if this worktree was created by Lunaria
-					if (worktree.createdByLunaria) {
+					// Only delete from disk if this worktree was created by Amoena
+					if (worktree.createdByAmoena) {
 						// Safety: Double-check it's not actually external (catches race conditions)
 						const externalWorktrees = await listExternalWorktrees(
 							project.mainRepoPath,
@@ -498,7 +498,7 @@ export const createDeleteProcedures = () => {
 
 						if (isActuallyExternal) {
 							console.warn(
-								`[worktree/delete] Worktree at ${worktree.path} marked as created by Lunaria but found in external list - preserving as safety measure`,
+								`[worktree/delete] Worktree at ${worktree.path} marked as created by Amoena but found in external list - preserving as safety measure`,
 							);
 							track("worktree_delete_safety_trigger", {
 								worktree_id: input.worktreeId,

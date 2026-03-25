@@ -1,32 +1,32 @@
-# Lunaria: Superset Fork Migration Plan
+# Amoena: Superset Fork Migration Plan
 
 ## Executive Summary
 
-Migrate Lunaria from Tauri/Rust to an unbranded Superset (Electron) fork while preserving all unique Lunaria features (Memory, Remote Access, Agent Orchestration, Autopilot, Marketplace, Kanban, Visual Editor, Opinions, Mobile) and maintaining a distinct visual identity. This is a **full platform migration** — not a UI reskin.
+Migrate Amoena from Tauri/Rust to an unbranded Superset (Electron) fork while preserving all unique Amoena features (Memory, Remote Access, Agent Orchestration, Autopilot, Marketplace, Kanban, Visual Editor, Opinions, Mobile) and maintaining a distinct visual identity. This is a **full platform migration** — not a UI reskin.
 
 **Timeline:** 8 weeks (5 phases)
 **Risk Level:** High — platform migration with feature preservation
-**License:** Lunaria relicenses to Elastic-2.0 (matching Superset). No managed SaaS offering.
+**License:** Amoena relicenses to Elastic-2.0 (matching Superset). No managed SaaS offering.
 **Upstream Strategy:** Selective sync — track Superset releases, cherry-pick packages/ui and packages/host-service updates.
 
 ### Engineering Review Decisions (2026-03-19)
 
 | #   | Decision                 | Choice                                                                                                   |
 | --- | ------------------------ | -------------------------------------------------------------------------------------------------------- |
-| 1   | License                  | Accept Elastic-2.0 (relicense Lunaria)                                                                   |
+| 1   | License                  | Accept Elastic-2.0 (relicense Amoena)                                                                   |
 | 2   | Upstream tracking        | Selective sync at releases                                                                               |
 | 3   | Cloud removal data layer | tRPC subscriptions + @tanstack/react-query (replace Electric SQL)                                        |
-| 4   | Process architecture     | Separate lunaria-service daemon (Memory, Remote, Orchestration, Extensions, Autopilot, Kanban, Opinions) |
-| 5   | AI runtime               | Keep Mastra for chat, Lunaria orchestration for multi-agent/consensus                                    |
+| 4   | Process architecture     | Separate amoena-service daemon (Memory, Remote, Orchestration, Extensions, Autopilot, Kanban, Opinions) |
+| 5   | AI runtime               | Keep Mastra for chat, Amoena orchestration for multi-agent/consensus                                    |
 | 6   | Crypto port safety       | Cross-language test vectors (Rust fixtures → TypeScript must match)                                      |
-| 7   | Database                 | Single SQLite database — Lunaria tables added as migrations 0037-0043 in local-db                        |
+| 7   | Database                 | Single SQLite database — Amoena tables added as migrations 0037-0043 in local-db                        |
 | 8   | Kanban architecture      | Kanban service owns tasks, exposes API for agent claim/update                                            |
-| 9   | tRPC organization        | Namespace split — `trpc.lunaria.*` for all Lunaria routers                                               |
-| 10  | i18n scope               | Full app i18n — all screens (Superset + Lunaria)                                                         |
+| 9   | tRPC organization        | Namespace split — `trpc.amoena.*` for all Amoena routers                                               |
+| 10  | i18n scope               | Full app i18n — all screens (Superset + Amoena)                                                         |
 | 11  | Task concurrency         | Atomic SQL claim (`UPDATE WHERE claimed_by IS NULL`)                                                     |
 | 12  | Cloud removal testing    | Dedicated regression test suite                                                                          |
 | 13  | Memory graph rendering   | d3-force + Canvas 2D (Barnes-Hut approximation)                                                          |
-| 14  | lunaria-service startup  | Eager load all services                                                                                  |
+| 14  | amoena-service startup  | Eager load all services                                                                                  |
 
 ### Technical Corrections from Deep Research (2026-03-19)
 
@@ -47,14 +47,14 @@ Critical details discovered from comprehensive Superset codebase analysis:
 | Code quality       | ESLint + Prettier      | **Biome 2.4.2** (replaces both)                                        |
 | Linting/formatting | Need to add            | Already uses Biome — keep it                                           |
 | Superset mobile    | None                   | **Has apps/mobile (Expo)** — could study their approach                |
-| Per-project config | None                   | **`.superset/config.json`** → becomes `.lunaria/config.json`           |
+| Per-project config | None                   | **`.superset/config.json`** → becomes `.amoena/config.json`           |
 | Diff rendering     | Custom                 | **@pierre/diffs** library                                              |
 | Virtual lists      | None                   | **@tanstack/react-virtual**                                            |
 | File icons         | Lucide only            | **material-icon-theme** (generated at build time)                      |
 | Streams            | None                   | **@durable-streams/client** for persistent event streaming             |
 | Mastra version     | Generic                | **Private fork** (`mastracode-v0.4.0-superset.12`) via GitHub tarball  |
 
-Additional Lunaria details confirmed:
+Additional Amoena details confirmed:
 
 - Rust backend is **4,100+ lines** in `runtime.rs` with **100+ API endpoints**
 - UI library has **71 shadcn/ui primitives** + **40+ composites** + **17 screens**
@@ -71,7 +71,7 @@ Additional Lunaria details confirmed:
 ### Superset Architecture (Source)
 
 ```
-LunariaAi/superset (Electron, v1.2.1, 7.4K stars)
+AmoenaAi/superset (Electron, v1.2.1, 7.4K stars)
 ├── apps/
 │   ├── admin/          — Admin dashboard (Next.js)
 │   ├── api/            — Cloud API (Next.js, Neon, Better Auth, Stripe)
@@ -113,10 +113,10 @@ LunariaAi/superset (Electron, v1.2.1, 7.4K stars)
 - Resource monitoring (CPU, memory per workspace)
 - Auto-update system (electron-builder)
 
-### Lunaria Architecture (Current → Being Migrated)
+### Amoena Architecture (Current → Being Migrated)
 
 ```
-Lunaria/lunaria (Tauri/Rust, MIT)
+Amoena/amoena (Tauri/Rust, MIT)
 ├── apps/
 │   ├── desktop/        — Tauri app (React, React Router)
 │   │   └── src-tauri/  — Rust backend (~4,500 lines)
@@ -136,7 +136,7 @@ Lunaria/lunaria (Tauri/Rust, MIT)
 └── docs/               — VitePress documentation
 ```
 
-**Unique Lunaria features NOT in Superset (must preserve):**
+**Unique Amoena features NOT in Superset (must preserve):**
 
 1. **Memory System** — Tiered storage (L0 hot/L1 warm/L2 cold), hybrid search (BM25 + cosine via RRF), SHA-256 dedup, Jaccard near-duplicate detection, force-directed graph visualization
 2. **Remote Access** — LAN device discovery, PIN/QR code pairing, X25519 ECDH key exchange, XChaCha20-Poly1305 AEAD encryption, JWT token rotation with reuse detection, device revocation
@@ -160,7 +160,7 @@ Lunaria/lunaria (Tauri/Rust, MIT)
 
 ```
 Actions:
-1. Fork LunariaAi/superset → Lunaria/lunaria-desktop (or new branch in existing repo)
+1. Fork AmoenaAi/superset → Amoena/amoena-desktop (or new branch in existing repo)
 2. Remove cloud-only apps: apps/admin, apps/api, apps/marketing, apps/web
 3. Remove cloud packages: packages/auth, packages/db, packages/email
 4. Keep: apps/desktop, apps/docs, packages/* (all desktop-relevant)
@@ -171,56 +171,56 @@ Actions:
 
 **Comprehensive branding replacement checklist (38 items):**
 
-| Category                   | Superset             | Lunaria                          |
+| Category                   | Superset             | Amoena                          |
 | -------------------------- | -------------------- | -------------------------------- |
-| Product name               | "Superset"           | "Lunaria"                        |
+| Product name               | "Superset"           | "Amoena"                        |
 | Package scope              | `@superset/*`        | `@lunaria/*`                     |
-| Deep link protocol         | `superset://`        | `lunaria://`                     |
-| CLI command                | `superset`           | `lunaria`                        |
-| macOS bundle ID            | `sh.superset.app`    | `com.lunaria.app`                |
-| User agent                 | `Superset/x.x.x`     | `Lunaria/x.x.x`                  |
-| Auto-updater URL           | superset.sh/releases | lunaria releases URL             |
-| electron-builder appId     | `sh.superset.app`    | `com.lunaria.app`                |
-| Window title               | "Superset"           | "Lunaria"                        |
-| Tray icon/tooltip          | Superset icon        | Lunaria icon                     |
-| About dialog               | Superset branding    | Lunaria branding                 |
-| Splash screen              | Superset logo        | Lunaria logo                     |
-| .desktop file (Linux)      | superset.desktop     | lunaria.desktop                  |
-| Windows installer GUID     | Superset GUID        | New Lunaria GUID                 |
+| Deep link protocol         | `superset://`        | `amoena://`                     |
+| CLI command                | `superset`           | `amoena`                        |
+| macOS bundle ID            | `sh.superset.app`    | `com.amoena.app`                |
+| User agent                 | `Superset/x.x.x`     | `Amoena/x.x.x`                  |
+| Auto-updater URL           | superset.sh/releases | amoena releases URL             |
+| electron-builder appId     | `sh.superset.app`    | `com.amoena.app`                |
+| Window title               | "Superset"           | "Amoena"                        |
+| Tray icon/tooltip          | Superset icon        | Amoena icon                     |
+| About dialog               | Superset branding    | Amoena branding                 |
+| Splash screen              | Superset logo        | Amoena logo                     |
+| .desktop file (Linux)      | superset.desktop     | amoena.desktop                  |
+| Windows installer GUID     | Superset GUID        | New Amoena GUID                 |
 | package.json name/desc     | @superset/\*         | @lunaria/\*                      |
-| Repository URLs            | LunariaAi/superset | Lunaria/lunaria                  |
-| License headers            | Superset             | Lunaria (preserving Elastic-2.0) |
-| Onboarding copy            | Superset references  | Lunaria references               |
-| Error reporting (Sentry)   | Superset DSN         | Lunaria DSN (or remove)          |
+| Repository URLs            | AmoenaAi/superset | Amoena/amoena                  |
+| License headers            | Superset             | Amoena (preserving Elastic-2.0) |
+| Onboarding copy            | Superset references  | Amoena references               |
+| Error reporting (Sentry)   | Superset DSN         | Amoena DSN (or remove)          |
 | Analytics (PostHog/Outlit) | Superset project     | Remove or replace                |
-| Social meta tags           | Superset OG tags     | Lunaria OG tags                  |
-| Keyboard shortcuts help    | Superset references  | Lunaria references               |
-| Config directories         | `.superset/`         | `.lunaria/`                      |
+| Social meta tags           | Superset OG tags     | Amoena OG tags                  |
+| Keyboard shortcuts help    | Superset references  | Amoena references               |
+| Config directories         | `.superset/`         | `.amoena/`                      |
 | Extension format           | N/A                  | `.luna` files                    |
-| Icon assets                | `superset.svg`       | Lunaria magenta icon             |
-| Preset icons               | Keep agent icons     | Add Lunaria-specific             |
-| favicon                    | Superset favicon     | Lunaria favicon                  |
-| Dock icon (macOS)          | Superset.icns        | Lunaria.icns                     |
+| Icon assets                | `superset.svg`       | Amoena magenta icon             |
+| Preset icons               | Keep agent icons     | Add Amoena-specific             |
+| favicon                    | Superset favicon     | Amoena favicon                  |
+| Dock icon (macOS)          | Superset.icns        | Amoena.icns                     |
 
 ### 1.3 Theme System Migration
 
-**Goal:** Replace Superset's theme with Lunaria's magenta-centric design system
+**Goal:** Replace Superset's theme with Amoena's magenta-centric design system
 
 ```
-Superset uses shadcn/ui CSS variables → Lunaria tokens already map to same namespace
+Superset uses shadcn/ui CSS variables → Amoena tokens already map to same namespace
 
 Bridge approach (no component forks needed):
-1. Replace globals.css with Lunaria's color system:
+1. Replace globals.css with Amoena's color system:
    - --primary: 300 100% 36% (magenta)
    - --background: 270 10% 6% (purple-tinted dark)
    - surface-0 through surface-3 (purple-tinted depth)
    - Agent-specific colors (tui-claude, tui-codex, tui-gemini, tui-opencode)
-2. Add Lunaria keyframe animations:
+2. Add Amoena keyframe animations:
    - pulse-magenta (box-shadow glow, 0-12px blur)
    - shimmer (background-position sweep)
    - waveform (scaleY transform)
-3. Replace Inter/system fonts with Lunaria font stack
-4. Update tailwind.config.ts to bridge Lunaria tokens → shadcn namespace
+3. Replace Inter/system fonts with Amoena font stack
+4. Update tailwind.config.ts to bridge Amoena tokens → shadcn namespace
 ```
 
 ### 1.4 Remove Cloud Dependencies
@@ -248,46 +248,46 @@ Keep:
 
 ### Phase 1 Deliverable
 
-A buildable, runnable Electron app that is visually Lunaria (magenta theme, Lunaria branding) with all Superset desktop functionality intact but no cloud dependencies.
+A buildable, runnable Electron app that is visually Amoena (magenta theme, Amoena branding) with all Superset desktop functionality intact but no cloud dependencies.
 
 ---
 
 ## Phase 2: Monorepo Restructure & Package Integration (Week 2)
 
-### 2.1 Merge Lunaria Packages into Superset Structure
+### 2.1 Merge Amoena Packages into Superset Structure
 
-**Goal:** Integrate Lunaria's unique packages alongside Superset's
+**Goal:** Integrate Amoena's unique packages alongside Superset's
 
 ```
 Final packages/ structure:
 ├── chat/              — FROM SUPERSET (AI conversations, Mastra, slash commands)
 ├── desktop-mcp/       — FROM SUPERSET (MCP bridge, browser automation)
 ├── host-service/      — FROM SUPERSET (terminal, git, PR management)
-│   └── + memory/      — LUNARIA: memory service integration
-│   └── + remote/      — LUNARIA: remote access service
-│   └── + extensions/  — LUNARIA: extension lifecycle management
-│   └── + orchestration/ — LUNARIA: agent orchestration service
-├── i18n/              — FROM LUNARIA (internationalization)
+│   └── + memory/      — AMOENA: memory service integration
+│   └── + remote/      — AMOENA: remote access service
+│   └── + extensions/  — AMOENA: extension lifecycle management
+│   └── + orchestration/ — AMOENA: agent orchestration service
+├── i18n/              — FROM AMOENA (internationalization)
 ├── local-db/          — FROM SUPERSET (SQLite persistence)
-│   └── + Lunaria migrations — memory tables, extensions, remote devices, agents
+│   └── + Amoena migrations — memory tables, extensions, remote devices, agents
 ├── macos-process-metrics/ — FROM SUPERSET (native process monitoring)
 ├── mcp/               — FROM SUPERSET (MCP protocol)
 ├── scripts/           — FROM SUPERSET (build scripts)
-├── shared/            — FROM SUPERSET (types/utils) + Lunaria shared types
-├── tokens/            — FROM LUNARIA (cross-platform design tokens)
+├── shared/            — FROM SUPERSET (types/utils) + Amoena shared types
+├── tokens/            — FROM AMOENA (cross-platform design tokens)
 ├── trpc/              — FROM SUPERSET (tRPC config)
-├── ui/                — MERGED (Superset shadcn/ui + ai-elements + Lunaria composites)
+├── ui/                — MERGED (Superset shadcn/ui + ai-elements + Amoena composites)
 └── workspace-fs/      — FROM SUPERSET (filesystem abstraction)
 ```
 
 ### 2.2 Database Schema Merge
 
-**Extend Superset's local-db with Lunaria-specific tables:**
+**Extend Superset's local-db with Amoena-specific tables:**
 
 ```sql
 -- New migrations added to packages/local-db/drizzle/
 
--- 0037: Lunaria memory system
+-- 0037: Amoena memory system
 CREATE TABLE memory_entries (
   id TEXT PRIMARY KEY,
   content TEXT NOT NULL,
@@ -301,7 +301,7 @@ CREATE TABLE memory_entries (
 );
 CREATE VIRTUAL TABLE memory_fts USING fts5(content, content='memory_entries', content_rowid='rowid');
 
--- 0038: Lunaria extensions
+-- 0038: Amoena extensions
 CREATE TABLE extensions (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -312,7 +312,7 @@ CREATE TABLE extensions (
   permissions TEXT             -- JSON array of granted permissions
 );
 
--- 0039: Lunaria remote access devices
+-- 0039: Amoena remote access devices
 CREATE TABLE remote_devices (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -323,7 +323,7 @@ CREATE TABLE remote_devices (
   jwt_generation INTEGER DEFAULT 0  -- for rotation/reuse detection
 );
 
--- 0040: Lunaria agent orchestration
+-- 0040: Amoena agent orchestration
 CREATE TABLE agent_sessions (
   id TEXT PRIMARY KEY,
   parent_id TEXT REFERENCES agent_sessions(id),
@@ -334,7 +334,7 @@ CREATE TABLE agent_sessions (
   created_at TEXT DEFAULT (datetime('now'))
 );
 
--- 0041: Lunaria opinions/personas
+-- 0041: Amoena opinions/personas
 CREATE TABLE opinions (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -345,7 +345,7 @@ CREATE TABLE opinions (
   created_at TEXT DEFAULT (datetime('now'))
 );
 
--- 0042: Lunaria kanban
+-- 0042: Amoena kanban
 CREATE TABLE kanban_boards (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -364,7 +364,7 @@ CREATE TABLE kanban_tasks (
   created_at TEXT DEFAULT (datetime('now'))
 );
 
--- 0043: Lunaria autopilot
+-- 0043: Amoena autopilot
 CREATE TABLE autopilot_runs (
   id TEXT PRIMARY KEY,
   workspace_id TEXT REFERENCES workspaces(id),
@@ -378,12 +378,12 @@ CREATE TABLE autopilot_runs (
 
 ### 2.3 tRPC Router Extension
 
-**Add Lunaria-specific routers to Superset's tRPC layer:**
+**Add Amoena-specific routers to Superset's tRPC layer:**
 
 ```typescript
 // apps/desktop/src/lib/trpc/routers/index.ts — extend existing router
 
-// NEW Lunaria routers:
+// NEW Amoena routers:
 import { memoryRouter } from './memory'; // Memory CRUD, search, graph data
 import { remoteAccessRouter } from './remote-access'; // Device pairing, relay, auth
 import { orchestrationRouter } from './orchestration'; // Agent spawning, consensus
@@ -424,7 +424,7 @@ export const appRouter = router({
   workspaceFsService: workspaceFsServiceRouter,
   workspaces: workspacesRouter,
 
-  // NEW Lunaria routers:
+  // NEW Amoena routers:
   memory: memoryRouter,
   remoteAccess: remoteAccessRouter,
   orchestration: orchestrationRouter,
@@ -436,19 +436,19 @@ export const appRouter = router({
 });
 ```
 
-### 2.4 Lunaria UI Components → Superset UI Package
+### 2.4 Amoena UI Components → Superset UI Package
 
 **Merge strategy for packages/ui:**
 
 ```
 packages/ui/src/
-├── assets/             — SUPERSET (keep) + add Lunaria assets
+├── assets/             — SUPERSET (keep) + add Amoena assets
 ├── atoms/              — SUPERSET (keep all)
 ├── components/
 │   ├── ai-elements/    — SUPERSET (keep all 30+ AI components)
 │   ├── ui/             — SUPERSET shadcn/ui (keep all)
 │   ├── mesh-gradient/  — SUPERSET (keep)
-│   └── lunaria/        — NEW: Lunaria-specific composites
+│   └── amoena/        — NEW: Amoena-specific composites
 │       ├── MemoryGraphView.tsx      — Force-directed memory visualization
 │       ├── MemoryBrowser.tsx        — Memory search, browse, tier management
 │       ├── AgentManagement.tsx      — Multi-agent orchestration UI
@@ -474,7 +474,7 @@ packages/ui/src/
 
 ### Phase 2 Deliverable
 
-Restructured monorepo with all packages in place, database schema extended, tRPC routers defined, and UI component placeholders. Builds successfully but Lunaria-specific features are stubbed.
+Restructured monorepo with all packages in place, database schema extended, tRPC routers defined, and UI component placeholders. Builds successfully but Amoena-specific features are stubbed.
 
 ---
 
@@ -619,7 +619,7 @@ All core services ported to TypeScript and integrated into host-service with tRP
 
 ### 4.1 Route Structure
 
-**Extend Superset's TanStack Router with Lunaria pages:**
+**Extend Superset's TanStack Router with Amoena pages:**
 
 ```
 apps/desktop/src/renderer/routes/
@@ -627,31 +627,31 @@ apps/desktop/src/renderer/routes/
 ├── _authenticated/
 │   ├── _dashboard/                     — FROM SUPERSET (main workspace view)
 │   │   ├── components/
-│   │   │   ├── DashboardSidebar/       — EXTEND with Lunaria nav items
-│   │   │   └── LunariaSidebarItems/    — NEW: Memory, Agents, Autopilot, etc.
+│   │   │   ├── DashboardSidebar/       — EXTEND with Amoena nav items
+│   │   │   └── AmoenaSidebarItems/    — NEW: Memory, Agents, Autopilot, etc.
 │   │   ├── index.tsx                   — FROM SUPERSET (workspace view)
 │   │   └── $workspaceId.tsx            — FROM SUPERSET (workspace detail)
-│   ├── memory/                         — NEW: Lunaria Memory Browser
+│   ├── memory/                         — NEW: Amoena Memory Browser
 │   │   ├── index.tsx                   — Memory search + graph view
 │   │   └── $entryId.tsx                — Memory entry detail
-│   ├── agents/                         — NEW: Lunaria Agent Management
+│   ├── agents/                         — NEW: Amoena Agent Management
 │   │   ├── index.tsx                   — Agent list + orchestration
 │   │   └── $sessionId.tsx              — Agent session detail + consensus
-│   ├── autopilot/                      — NEW: Lunaria Autopilot
+│   ├── autopilot/                      — NEW: Amoena Autopilot
 │   │   ├── index.tsx                   — Autopilot dashboard
 │   │   └── $runId.tsx                  — Run detail with phase pipeline
-│   ├── marketplace/                    — NEW: Lunaria Extension Marketplace
+│   ├── marketplace/                    — NEW: Amoena Extension Marketplace
 │   │   ├── index.tsx                   — Extension grid
 │   │   └── $extensionId.tsx            — Extension detail + permissions
-│   ├── kanban/                         — NEW: Lunaria Kanban Board
+│   ├── kanban/                         — NEW: Amoena Kanban Board
 │   │   ├── index.tsx                   — Board view
 │   │   └── $boardId.tsx                — Board detail
-│   ├── remote/                         — NEW: Lunaria Remote Access
+│   ├── remote/                         — NEW: Amoena Remote Access
 │   │   ├── index.tsx                   — Device list + pairing
 │   │   └── pair.tsx                    — QR/PIN pairing flow
-│   ├── visual-editor/                  — NEW: Lunaria Visual Editor
+│   ├── visual-editor/                  — NEW: Amoena Visual Editor
 │   │   └── index.tsx                   — Graph/workflow canvas
-│   ├── opinions/                       — NEW: Lunaria Opinions
+│   ├── opinions/                       — NEW: Amoena Opinions
 │   │   └── index.tsx                   — Persona management
 │   └── settings/                       — EXTEND Superset settings
 │       ├── index.tsx                   — FROM SUPERSET
@@ -662,11 +662,11 @@ apps/desktop/src/renderer/routes/
 
 ### 4.2 Sidebar Navigation Enhancement
 
-**Extend Superset's DashboardSidebar with Lunaria sections:**
+**Extend Superset's DashboardSidebar with Amoena sections:**
 
 ```
 ┌──────────────────────────────┐
-│  🌙 Lunaria                 │  ← Lunaria logo + magenta accent
+│  🌙 Amoena                 │  ← Amoena logo + magenta accent
 ├──────────────────────────────┤
 │  WORKSPACES                  │  ← FROM SUPERSET (projects, sections)
 │    ├── Project A             │
@@ -674,7 +674,7 @@ apps/desktop/src/renderer/routes/
 │    │   └── workspace-2       │
 │    └── Project B             │
 ├──────────────────────────────┤
-│  LUNARIA                     │  ← NEW section (magenta indicator pip)
+│  AMOENA                     │  ← NEW section (magenta indicator pip)
 │    ├── 🧠 Memory             │  ← Memory browser + graph
 │    ├── 🤖 Agents             │  ← Agent management + orchestration
 │    ├── ⚡ Autopilot           │  ← Autopilot runs
@@ -690,7 +690,7 @@ apps/desktop/src/renderer/routes/
 
 ### 4.3 Memory Browser Screen
 
-**Hero feature — force-directed graph is Lunaria's signature:**
+**Hero feature — force-directed graph is Amoena's signature:**
 
 ```
 Layout:
@@ -800,7 +800,7 @@ Layout:
 └─────────────────────────────────────────────────────┘
 ```
 
-### 4.7 Other Lunaria Screens
+### 4.7 Other Amoena Screens
 
 - **Kanban Board**: Use @dnd-kit (already in Superset deps) for drag-and-drop columns/cards, link tasks to agent sessions
 - **Visual Editor**: Use @xyflow/react (React Flow) for node-based workflow graphs
@@ -809,7 +809,7 @@ Layout:
 
 ### 4.8 StatusBar Enhancement
 
-**Extend Superset's bottom bar with Lunaria widgets:**
+**Extend Superset's bottom bar with Amoena widgets:**
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -819,7 +819,7 @@ Layout:
 
 ### Phase 4 Deliverable
 
-All Lunaria screens implemented with real tRPC data, integrated into Superset's routing and navigation. Memory graph visualization working. Agent management functional. Autopilot pipeline displayed. Marketplace showing installed extensions. All styled with Lunaria's magenta theme.
+All Amoena screens implemented with real tRPC data, integrated into Superset's routing and navigation. Memory graph visualization working. Agent management functional. Autopilot pipeline displayed. Marketplace showing installed extensions. All styled with Amoena's magenta theme.
 
 ---
 
@@ -845,10 +845,10 @@ apps/mobile/ (Expo/React Native)
 
 ### 5.2 i18n Integration
 
-**Wire packages/i18n into all new Lunaria screens:**
+**Wire packages/i18n into all new Amoena screens:**
 
 ```
-Scope: All user-facing strings in Lunaria-specific screens
+Scope: All user-facing strings in Amoena-specific screens
 - Memory: search placeholder, tier labels, stats labels
 - Agents: permission levels, consensus UI, status labels
 - Autopilot: phase names, progress labels
@@ -860,22 +860,22 @@ Scope: All user-facing strings in Lunaria-specific screens
 
 ### 5.3 Visual Differentiation Checklist
 
-**Ensuring Lunaria is unmistakably NOT a generic Superset clone:**
+**Ensuring Amoena is unmistakably NOT a generic Superset clone:**
 
-| Element           | Superset          | Lunaria                                   |
+| Element           | Superset          | Amoena                                   |
 | ----------------- | ----------------- | ----------------------------------------- |
 | Color primary     | Blue/neutral      | Magenta (300 100% 36%)                    |
 | Surface tint      | Neutral gray      | Purple-tinted (270° hue)                  |
-| Logo              | Superset mark     | Lunaria moon mark                         |
+| Logo              | Superset mark     | Amoena moon mark                         |
 | Animations        | Standard          | pulse-magenta, shimmer, waveform          |
-| Sidebar sections  | Workspaces only   | Workspaces + Lunaria features             |
+| Sidebar sections  | Workspaces only   | Workspaces + Amoena features             |
 | Default view      | Workspace list    | Memory graph + agent status               |
 | Status bar        | Basic             | Memory/agent/autopilot widgets            |
 | Loading states    | Standard skeleton | Shimmer with magenta gradient             |
 | Active indicators | Blue dot          | Magenta glow pip                          |
 | Agent badges      | Preset icons      | Magenta-accented preset icons             |
 | Extension format  | N/A               | .luna with magenta badge                  |
-| Terminal theme    | Superset colors   | Lunaria palette                           |
+| Terminal theme    | Superset colors   | Amoena palette                           |
 | Graph viz         | N/A               | Force-directed with magenta connections   |
 | Home screen       | Project list      | Live agents + memory insights + autopilot |
 
@@ -892,7 +892,7 @@ Unit Tests (Vitest):
 Integration Tests (Vitest):
 - tRPC router end-to-end (memory, remote, orchestration, extensions)
 - SQLite migration verification
-- Host-service startup with all Lunaria services
+- Host-service startup with all Amoena services
 
 E2E Tests (Playwright):
 - Memory search and graph interaction
@@ -902,7 +902,7 @@ E2E Tests (Playwright):
 - Remote device pairing flow
 - Kanban board drag-and-drop
 
-Target: 80%+ coverage on all new Lunaria services
+Target: 80%+ coverage on all new Amoena services
 ```
 
 ### 5.5 Build & Distribution
@@ -915,7 +915,7 @@ Build pipeline:
 4. electron-builder package (DMG/NSIS/AppImage)
 
 Distribution:
-- macOS: DMG + auto-update (Lunaria update server)
+- macOS: DMG + auto-update (Amoena update server)
 - Windows: NSIS installer + auto-update
 - Linux: AppImage + .deb
 - Mobile: Expo EAS Build → TestFlight/Play Store
@@ -925,8 +925,8 @@ Distribution:
 
 ```
 apps/docs/ (from Superset, rebranded):
-- Getting Started → Lunaria installation
-- Features → All Superset features + Lunaria unique features
+- Getting Started → Amoena installation
+- Features → All Superset features + Amoena unique features
 - Memory System → Tier architecture, search, graph viz
 - Agent Orchestration → Multi-agent, permissions, consensus
 - Autopilot → Phase pipeline, configuration
@@ -937,7 +937,7 @@ apps/docs/ (from Superset, rebranded):
 
 ### Phase 5 Deliverable
 
-Production-ready Lunaria v1.0.0 with all features functional, mobile app updated, i18n wired, tests passing at 80%+, and distribution packages building for all platforms.
+Production-ready Amoena v1.0.0 with all features functional, mobile app updated, i18n wired, tests passing at 80%+, and distribution packages building for all platforms.
 
 ---
 
@@ -945,13 +945,13 @@ Production-ready Lunaria v1.0.0 with all features functional, mobile app updated
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        LUNARIA DESKTOP                           │
+│                        AMOENA DESKTOP                           │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │                    RENDERER PROCESS                       │   │
 │  │  ┌─────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐ │   │
-│  │  │TanStack │  │ shadcn/ui│  │ Lunaria  │  │ AI SDK   │ │   │
+│  │  │TanStack │  │ shadcn/ui│  │ Amoena  │  │ AI SDK   │ │   │
 │  │  │ Router  │  │ + AI elm │  │ Screens  │  │ React    │ │   │
 │  │  └────┬────┘  └──────────┘  └──────────┘  └──────────┘ │   │
 │  │       │              tRPC Client                         │   │
@@ -966,7 +966,7 @@ Production-ready Lunaria v1.0.0 with all features functional, mobile app updated
 │  │  │ Superset│  │  │System│ │ation   │ │ Access   │   │   │   │
 │  │  │ Routers │  │  └──────┘ └────────┘ └──────────┘   │   │   │
 │  │  │    +    │  │  ┌──────┐ ┌────────┐ ┌──────────┐   │   │   │
-│  │  │ Lunaria │  │  │Extens│ │Autopilot│ │Terminal  │   │   │   │
+│  │  │ Amoena │  │  │Extens│ │Autopilot│ │Terminal  │   │   │   │
 │  │  │ Routers │  │  │ions  │ │Engine  │ │ (node-pty)│   │   │   │
 │  │  └─────────┘  │  └──────┘ └────────┘ └──────────┘   │   │   │
 │  │               │  ┌──────┐ ┌────────┐ ┌──────────┐   │   │   │
@@ -999,16 +999,16 @@ Production-ready Lunaria v1.0.0 with all features functional, mobile app updated
 | Mobile app auth with host-service    | Medium      | Medium   | Reuse Superset's auth patterns, add mDNS discovery          |
 | Upstream merge conflicts             | High        | Medium   | Selective cherry-picking, not continuous rebase             |
 | Extension sandbox security           | Medium      | High     | Process isolation, capability-based permissions             |
-| Build size increase                  | Medium      | Low      | Tree-shake unused Superset code, lazy-load Lunaria features |
+| Build size increase                  | Medium      | Low      | Tree-shake unused Superset code, lazy-load Amoena features |
 
 ---
 
 ## Success Criteria
 
-1. **Functional parity**: All Superset desktop features work under Lunaria branding
-2. **Unique features**: All 10 Lunaria-specific features (Memory, Remote, Agents, Autopilot, Marketplace, Kanban, Visual Editor, Opinions, Mobile, i18n) are functional
-3. **Visual identity**: No one looking at Lunaria would mistake it for Superset — magenta theme, unique screens, custom animations
-4. **Test coverage**: 80%+ on all new Lunaria services
+1. **Functional parity**: All Superset desktop features work under Amoena branding
+2. **Unique features**: All 10 Amoena-specific features (Memory, Remote, Agents, Autopilot, Marketplace, Kanban, Visual Editor, Opinions, Mobile, i18n) are functional
+3. **Visual identity**: No one looking at Amoena would mistake it for Superset — magenta theme, unique screens, custom animations
+4. **Test coverage**: 80%+ on all new Amoena services
 5. **Build success**: DMG, NSIS, AppImage all build and install cleanly
 6. **Mobile**: Expo app connects to desktop host-service for remote operations
 7. **Performance**: App startup < 3s, memory graph renders 500+ nodes at 60fps
@@ -1029,7 +1029,7 @@ Production-ready Lunaria v1.0.0 with all features functional, mobile app updated
 
 ---
 
-## What Makes Lunaria Unique (Not a Clone)
+## What Makes Amoena Unique (Not a Clone)
 
 1. **Memory-First AI**: No other tool has tiered memory with force-directed graph visualization as a core feature
 2. **Agent Orchestration with Consensus**: Multi-agent spawning with permission hierarchies and weighted voting — beyond simple "run multiple terminals"

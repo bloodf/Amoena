@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { createClientLogger } from "@/lib/client-logger";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { type Conversation, useLunaria } from "@/store";
+import { type Conversation, useAmoena } from "@/store";
 import { SessionKindAvatar, SessionKindPill } from "./session-kind-brand";
 
 const log = createClientLogger("ConversationList");
@@ -151,7 +151,7 @@ export function ConversationList({
 		activeConversation,
 		setActiveConversation,
 		markConversationRead,
-	} = useLunaria();
+	} = useAmoena();
 	const [search, setSearch] = useState("");
 
 	// Context menu state

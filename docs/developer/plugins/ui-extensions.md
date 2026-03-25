@@ -4,7 +4,7 @@ Extensions can contribute custom UI through panels, menu items, commands, and se
 
 ## Panels
 
-Panels are custom UI views loaded in a sandboxed JavaScript context. Each panel has access to the `lunaria` API bridge.
+Panels are custom UI views loaded in a sandboxed JavaScript context. Each panel has access to the `amoena` API bridge.
 
 ### Panel Manifest
 
@@ -52,8 +52,8 @@ my-extension.luna
 ### panel.js
 
 ```javascript
-// Access the lunaria bridge API
-const api = window.lunaria;
+// Access the amoena bridge API
+const api = window.amoena;
 
 document.getElementById('btn').addEventListener('click', async () => {
   // Get current session info
@@ -86,30 +86,30 @@ api.events.subscribe('SessionStart', (payload) => {
 }
 ```
 
-## Lunaria API Bridge
+## Amoena API Bridge
 
-Panels have access to read-only operations via the `lunaria.*` API:
+Panels have access to read-only operations via the `amoena.*` API:
 
 ```javascript
 // Sessions
-await lunaria.sessions.getCurrent()
-await lunaria.sessions.list()
-await lunaria.sessions.getMessages(sessionId)
+await amoena.sessions.getCurrent()
+await amoena.sessions.list()
+await amoena.sessions.getMessages(sessionId)
 
 // Memory
-await lunaria.memory.search(query)
-await lunaria.memory.observe({ title, narrative })
+await amoena.memory.search(query)
+await amoena.memory.observe({ title, narrative })
 
 // Events
-lunaria.events.subscribe(eventName, callback)
-lunaria.events.unsubscribe(eventName)
+amoena.events.subscribe(eventName, callback)
+amoena.events.unsubscribe(eventName)
 
 // Settings
-await lunaria.settings.get(key)
-await lunaria.settings.set(key, value)
+await amoena.settings.get(key)
+await amoena.settings.set(key, value)
 
 // Notifications
-lunaria.notify({ title, message, level })
+amoena.notify({ title, message, level })
 ```
 
 ## Commands
@@ -238,7 +238,7 @@ Setting types: `boolean`, `string`, `number`, `select`, `textarea`
 ### Sandboxing
 
 - Panels run in an iframe with limited scope
-- `lunaria.*` API is the only bridge to the host
+- `amoena.*` API is the only bridge to the host
 - DOM access is restricted to the panel's container
 - Network requests must be explicit and logged
 
@@ -251,7 +251,7 @@ Setting types: `boolean`, `string`, `number`, `select`, `textarea`
 
 ### Best Practices
 
-- **Use the lunaria API** — Don't try to bypass it
+- **Use the amoena API** — Don't try to bypass it
 - **Respect permissions** — Only access what you declared
 - **Keep panels lightweight** — Load async resources only when needed
 - **Log errors** — Use console.error for debugging

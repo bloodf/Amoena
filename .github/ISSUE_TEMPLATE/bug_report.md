@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Report a bug to help us improve Lunaria
+about: Report a bug to help us improve Amoena
 title: '[Bug] '
 labels: bug
 assignees: ''
@@ -27,7 +27,7 @@ What actually happened.
 ## Environment
 
 - **OS**: [e.g., macOS 15.3, Windows 11, Ubuntu 24.04]
-- **Lunaria Version**: [e.g., 1.0.0]
+- **Amoena Version**: [e.g., 1.0.0]
 - **Interface**: [e.g., Desktop, TUI, Mobile]
 - **Provider**: [e.g., Claude, Codex, Gemini]
 - **Node.js Version**: [e.g., 20.11.0]
@@ -38,7 +38,7 @@ What actually happened.
 <summary>Runtime logs</summary>
 
 ```
-Paste logs from ~/.lunaria/logs/ here
+Paste logs from ~/.amoena/logs/ here
 ```
 
 </details>

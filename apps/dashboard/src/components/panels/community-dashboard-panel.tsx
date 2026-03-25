@@ -38,7 +38,7 @@ interface SkillsResponse {
 	total: number;
 }
 
-const REPO = "Lunaria-AI/lunaria";
+const REPO = "Amoena-AI/amoena";
 const GITHUB_BASE = "https://api.github.com";
 const REVALIDATE = { next: { revalidate: 3600 } };
 
@@ -173,7 +173,7 @@ export function CommunityDashboardPanel() {
 			<div>
 				<h2 className="text-lg font-semibold text-foreground">Community</h2>
 				<p className="text-xs text-muted-foreground mt-0.5">
-					Lunaria project health, marketplace activity, and contribution
+					Amoena project health, marketplace activity, and contribution
 					opportunities
 				</p>
 			</div>
@@ -379,7 +379,7 @@ export function CommunityDashboardPanel() {
 				<div className="px-4 py-3 border-b border-primary/20 flex items-center gap-2">
 					<GlobeIcon />
 					<h3 className="text-sm font-medium text-foreground">
-						Contribute to Lunaria
+						Contribute to Amoena
 					</h3>
 				</div>
 				<div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -396,16 +396,16 @@ export function CommunityDashboardPanel() {
 						description="Guides, architecture docs, and API references"
 					/>
 					<CtaLink
-						href="https://discord.gg/lunaria"
+						href="https://discord.gg/amoena"
 						icon={<DiscordIcon />}
 						title="Community Discord"
-						description="Chat with the team and other Lunaria users"
+						description="Chat with the team and other Amoena users"
 					/>
 					<CtaLink
 						href={`https://github.com/${REPO}/blob/main/docs/extensions.md`}
 						icon={<PuzzleIcon />}
 						title="Create an Extension"
-						description="Learn how to build and publish Lunaria extensions"
+						description="Learn how to build and publish Amoena extensions"
 					/>
 				</div>
 				<div className="px-4 pb-4 flex gap-2">

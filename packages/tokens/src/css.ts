@@ -1,4 +1,4 @@
-import { lunariaThemeTokens } from "./lunaria-theme";
+import { amoenaThemeTokens } from "./amoena-theme";
 import type { CssVariableOptions, ThemeMode, TokenScale } from "./types";
 
 export function toCssVariables(tokens: TokenScale, options: CssVariableOptions = {}): string {
@@ -14,5 +14,5 @@ export function themeModeSelector(mode: ThemeMode): string {
 
 export function themeCssBlock(mode: ThemeMode, options: CssVariableOptions = {}): string {
   const selector = themeModeSelector(mode);
-  return `${selector} {\n${toCssVariables(lunariaThemeTokens[mode], options)}\n}`;
+  return `${selector} {\n${toCssVariables(amoenaThemeTokens[mode], options)}\n}`;
 }

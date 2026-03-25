@@ -71,16 +71,16 @@ export function runCommand(
 	});
 }
 
-export function runLunaria(args: string[], options: CommandOptions = {}) {
-	return runCommand(config.lunariaBin, args, {
+export function runAmoena(args: string[], options: CommandOptions = {}) {
+	return runCommand(config.amoenaBin, args, {
 		...options,
-		cwd: options.cwd || config.lunariaStateDir || process.cwd(),
+		cwd: options.cwd || config.amoenaStateDir || process.cwd(),
 	});
 }
 
 export function runClawdbot(args: string[], options: CommandOptions = {}) {
 	return runCommand(config.clawdbotBin, args, {
 		...options,
-		cwd: options.cwd || config.lunariaStateDir || process.cwd(),
+		cwd: options.cwd || config.amoenaStateDir || process.cwd(),
 	});
 }

@@ -253,14 +253,14 @@ describe("useComposerInteractions", () => {
     expect(result.current.isDragOver).toBe(true);
   });
 
-  test("handleDrop with lunaria/file JSON adds folder attachment", () => {
+  test("handleDrop with amoena/file JSON adds folder attachment", () => {
     const { result, setAttachments } = makeHook();
     act(() => {
       result.current.handleDrop({
         preventDefault: mock(() => {}),
         dataTransfer: {
           getData: (type: string) =>
-            type === "lunaria/file"
+            type === "amoena/file"
               ? JSON.stringify({ type: "folder", name: "src/auth", path: "src/auth", itemCount: 7 })
               : "",
           files: [],

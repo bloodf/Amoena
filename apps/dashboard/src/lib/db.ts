@@ -14,7 +14,7 @@ const DB_PATH = config.dbPath;
 // Global database instance
 let db: Database.Database | null = null;
 const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
-const isTestMode = process.env.LUNARIA_TEST_MODE === "1";
+const isTestMode = process.env.AMOENA_TEST_MODE === "1";
 
 /**
  * Get or create database connection
@@ -292,7 +292,7 @@ export interface Tenant {
 	linux_user: string;
 	plan_tier: string;
 	status: "pending" | "provisioning" | "active" | "suspended" | "error";
-	lunaria_home: string;
+	amoena_home: string;
 	workspace_root: string;
 	gateway_port?: number;
 	dashboard_port?: number;

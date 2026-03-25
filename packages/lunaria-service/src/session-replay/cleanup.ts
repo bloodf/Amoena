@@ -1,7 +1,7 @@
 /**
  * Session replay storage cleanup.
  *
- * Recordings are stored as gzip-compressed files in `~/.lunaria/recordings/`.
+ * Recordings are stored as gzip-compressed files in `~/.amoena/recordings/`.
  * This module prunes files older than a configurable retention period.
  * It is designed to be called once on service startup.
  */
@@ -31,7 +31,7 @@ export interface CleanupResult {
 export interface CleanupOptions {
   /**
    * Directory that contains recording files.
-   * Defaults to `~/.lunaria/recordings/`.
+   * Defaults to `~/.amoena/recordings/`.
    */
   recordingsDir?: string;
   /**
@@ -47,10 +47,10 @@ export interface CleanupOptions {
 }
 
 /**
- * Returns the default recordings directory: `~/.lunaria/recordings/`.
+ * Returns the default recordings directory: `~/.amoena/recordings/`.
  */
 export function defaultRecordingsDir(): string {
-  return path.join(os.homedir(), ".lunaria", "recordings");
+  return path.join(os.homedir(), ".amoena", "recordings");
 }
 
 /**

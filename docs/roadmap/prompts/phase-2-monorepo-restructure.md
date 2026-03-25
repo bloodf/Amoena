@@ -2,21 +2,21 @@
 
 ## Mission
 
-Integrate Lunaria's unique packages into the Superset-forked monorepo. Extend the database schema, define tRPC routers, and merge UI components. The app should build with all package placeholders in place.
+Integrate Amoena's unique packages into the Superset-forked monorepo. Extend the database schema, define tRPC routers, and merge UI components. The app should build with all package placeholders in place.
 
 **Duration:** 1 week
 **Prerequisite:** Phase 1 complete (fork is rebranded, builds, no cloud deps)
-**Deliverable:** Restructured monorepo that builds with Lunaria DB migrations, tRPC router stubs, and UI component placeholders
+**Deliverable:** Restructured monorepo that builds with Amoena DB migrations, tRPC router stubs, and UI component placeholders
 
 ## Context
 
-The fork from Phase 1 is a working Lunaria-branded Electron app with Superset's desktop functionality. Now we add Lunaria's unique infrastructure.
+The fork from Phase 1 is a working Amoena-branded Electron app with Superset's desktop functionality. Now we add Amoena's unique infrastructure.
 
 ### Architecture Decisions (from eng review)
 
-- Single SQLite database — Lunaria tables as migrations 0037-0043 in packages/local-db
-- tRPC namespace split — all Lunaria routers under `trpc.lunaria.*`
-- Separate lunaria-service daemon process (Memory, Remote, Orchestration, Extensions, Autopilot, Kanban, Opinions)
+- Single SQLite database — Amoena tables as migrations 0037-0043 in packages/local-db
+- tRPC namespace split — all Amoena routers under `trpc.amoena.*`
+- Separate amoena-service daemon process (Memory, Remote, Orchestration, Extensions, Autopilot, Kanban, Opinions)
 - Kanban service owns tasks, exposes API for agent claim/update (atomic SQL: UPDATE WHERE claimed_by IS NULL)
 - Cross-daemon communication via WebSocket subscription
 
@@ -30,22 +30,22 @@ The existing Superset local-db has these tables (your new migrations extend this
 - `workspace_sections` — organizational groups within a project
 - `settings` — singleton settings row (JSON fields for presets, hotkeys, etc.)
 
-Your new Lunaria migrations (0037-0043) add tables that reference `workspaces(id)` via foreign keys.
+Your new Amoena migrations (0037-0043) add tables that reference `workspaces(id)` via foreign keys.
 The `workspace_id` column in memory_entries, kanban_boards, and autopilot_runs uses this FK.
 
 ## Execution Rules
 
 1. **Commit after every completed step** — never batch multiple steps into one commit
-2. **Use conventional commits**: `feat(lunaria): <step description>`
+2. **Use conventional commits**: `feat(amoena): <step description>`
 3. **Run `bun run build` before each commit** — never commit broken code
 4. **If a step fails, fix it before moving on** — don't skip and come back later
 5. **Inspect files before editing them** — use Codex GUI tools and shell reads to understand existing code before changing it
 
 ## Step-by-Step Instructions
 
-### 2.1 Add Lunaria Packages
+### 2.1 Add Amoena Packages
 
-Copy from the original Lunaria repo into the fork:
+Copy from the original Amoena repo into the fork:
 
 - `packages/i18n/` — Internationalization (5 languages)
 - `packages/tokens/` — Cross-platform design tokens
@@ -64,20 +64,20 @@ Add 7 new Drizzle migrations to `packages/local-db/drizzle/`:
 
 Add corresponding Drizzle schema types in `packages/local-db/src/schema/`:
 
-- lunaria.ts — all Lunaria table definitions
-- Update index.ts to export Lunaria schemas
+- amoena.ts — all Amoena table definitions
+- Update index.ts to export Amoena schemas
 - Update relations.ts with foreign key relationships
 
-### 2.3 Create lunaria-service Scaffold
+### 2.3 Create amoena-service Scaffold
 
-The lunaria-service runs as a Hono HTTP server on a dynamic port. The desktop main process
+The amoena-service runs as a Hono HTTP server on a dynamic port. The desktop main process
 spawns it as a child process (similar to how Superset spawns host-service).
 
-package.json for @lunaria/lunaria-service:
+package.json for @lunaria/amoena-service:
 
 ```json
 {
-  "name": "@lunaria/lunaria-service",
+  "name": "@lunaria/amoena-service",
   "version": "0.0.1",
   "type": "module",
   "main": "src/index.ts",
@@ -90,11 +90,11 @@ package.json for @lunaria/lunaria-service:
 }
 ```
 
-Create `packages/lunaria-service/` as a new package:
+Create `packages/amoena-service/` as a new package:
 
 ```
-packages/lunaria-service/
-├── package.json         — @lunaria/lunaria-service
+packages/amoena-service/
+├── package.json         — @lunaria/amoena-service
 ├── tsconfig.json
 ├── src/
 │   ├── index.ts         — Service entry point (Hono HTTP server)
@@ -114,11 +114,11 @@ Each stub exports a service class with empty methods matching the tRPC router en
 
 ### 2.4 tRPC Router Extension
 
-In `apps/desktop/src/lib/trpc/routers/`, create a `lunaria/` namespace directory:
+In `apps/desktop/src/lib/trpc/routers/`, create a `amoena/` namespace directory:
 
 ```
-routers/lunaria/
-├── index.ts          — lunaria sub-router aggregating all below
+routers/amoena/
+├── index.ts          — amoena sub-router aggregating all below
 ├── memory.ts         — Memory CRUD, search, graph data (stub procedures)
 ├── remote-access.ts  — Device pairing, relay, auth (stub)
 ├── orchestration.ts  — Agent spawning, consensus (stub)
@@ -133,11 +133,11 @@ routers/lunaria/
 └── workflow-templates.ts — Autopilot templates (stub)
 ```
 
-Wire into main router as `lunaria: lunariaRouter`.
+Wire into main router as `amoena: amoenaRouter`.
 
 ### 2.5 UI Components Directory
 
-Create `packages/ui/src/components/lunaria/` with placeholder files for all Lunaria composites:
+Create `packages/ui/src/components/amoena/` with placeholder files for all Amoena composites:
 
 - MemoryGraphView.tsx, MemoryBrowser.tsx
 - AgentManagement.tsx, AgentConsensusView.tsx
@@ -155,7 +155,7 @@ Each exports a placeholder component that renders its name.
 
 ### 2.6 Route Placeholders
 
-Add TanStack Router route files for all Lunaria screens:
+Add TanStack Router route files for all Amoena screens:
 
 ```
 apps/desktop/src/renderer/routes/_authenticated/
@@ -175,7 +175,7 @@ Each renders the placeholder UI component.
 
 ### 2.7 Sidebar Navigation
 
-Extend DashboardSidebar to include Lunaria navigation section with links to all new routes.
+Extend DashboardSidebar to include Amoena navigation section with links to all new routes.
 
 ## Troubleshooting
 
@@ -194,19 +194,19 @@ Extend DashboardSidebar to include Lunaria navigation section with links to all 
 ### Commit Safety
 
 - Commit after EVERY completed step (not at the end)
-- Use conventional commits: `feat(lunaria): <description>`
+- Use conventional commits: `feat(amoena): <description>`
 - Run `bun run build` before committing to avoid broken commits
 - If build breaks, fix before committing — never commit broken code
 
 ## Acceptance Criteria
 
 - [ ] packages/i18n and packages/tokens integrated
-- [ ] packages/lunaria-service scaffold created with all service stubs
+- [ ] packages/amoena-service scaffold created with all service stubs
 - [ ] 7 new DB migrations run successfully
 - [ ] Drizzle schema types generated
-- [ ] tRPC lunaria namespace wired with all stub routers
+- [ ] tRPC amoena namespace wired with all stub routers
 - [ ] UI component placeholders exist and render
 - [ ] Route placeholders navigate correctly
-- [ ] Sidebar shows Lunaria navigation section
+- [ ] Sidebar shows Amoena navigation section
 - [ ] Full monorepo builds with `bun run build`
 - [ ] No TypeScript errors

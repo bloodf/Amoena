@@ -4,7 +4,7 @@ export function TitleBar() {
   return (
     <div className="flex h-9 items-center border-b border-border bg-surface-0 select-none flex-shrink-0" style={{ WebkitAppRegion: 'drag' } as any}>
       <div className="flex items-center gap-2 px-3 flex-1">
-        <span className="text-[13px] font-medium text-foreground">lunaria-frontend</span>
+        <span className="text-[13px] font-medium text-foreground">amoena-frontend</span>
         <span className="text-[13px] text-muted-foreground">on</span>
         <span className="text-[13px] font-mono text-muted-foreground">feature/redesign</span>
       </div>

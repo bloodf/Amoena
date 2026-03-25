@@ -9,7 +9,7 @@ export function SetupWizardWelcomeStep() {
         <Sparkles size={28} className="text-primary" />
       </div>
       <div>
-        <h1 className="mb-2 text-2xl font-semibold text-foreground">Welcome to Lunaria</h1>
+        <h1 className="mb-2 text-2xl font-semibold text-foreground">Welcome to Amoena</h1>
         <p className="mx-auto max-w-md text-sm leading-relaxed text-muted-foreground">
           Your AI-native development environment. Let&apos;s configure the essentials to get you productive in minutes.
         </p>

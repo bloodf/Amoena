@@ -91,12 +91,12 @@ export async function POST(request: NextRequest) {
 	const session = typeof body?.session === "string" ? body.session : "";
 
 	const webUrl = new URL(getFlightDeckBaseUrl());
-	webUrl.searchParams.set("source", "lunaria");
+	webUrl.searchParams.set("source", "amoena");
 	if (agent) webUrl.searchParams.set("agent", agent);
 	if (session) webUrl.searchParams.set("session", session);
 
 	const launchUrl = new URL(getFlightDeckLaunchUrl());
-	launchUrl.searchParams.set("source", "lunaria");
+	launchUrl.searchParams.set("source", "amoena");
 	if (agent) launchUrl.searchParams.set("agent", agent);
 	if (session) launchUrl.searchParams.set("session", session);
 

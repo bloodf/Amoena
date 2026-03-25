@@ -2,25 +2,25 @@
 
 ## Overview
 
-This document defines the plugin framework for Lunaria, including manifest schema, lifecycle, API surface, permissions, security posture, extension points, and marketplace workflow. The framework is capability-based: every plugin declares what it needs in the manifest, and the host app grants access explicitly.
+This document defines the plugin framework for Amoena, including manifest schema, lifecycle, API surface, permissions, security posture, extension points, and marketplace workflow. The framework is capability-based: every plugin declares what it needs in the manifest, and the host app grants access explicitly.
 
 ## Installation Deep Links
 
-Lunaria supports **plugin and extension deep links** so users can install resources directly from a README, marketplace page, documentation site, or third-party website by clicking a link.
+Amoena supports **plugin and extension deep links** so users can install resources directly from a README, marketplace page, documentation site, or third-party website by clicking a link.
 
 ### Product Decision
 
-Plugin deep-link install is a first-class extension workflow. A plugin README should be able to include a link that opens Lunaria and pre-fills the install flow.
+Plugin deep-link install is a first-class extension workflow. A plugin README should be able to include a link that opens Amoena and pre-fills the install flow.
 
 ### Supported Deep-Link Families
 
-- `lunaria://plugin/install?...`
-- `lunaria://extension/install?...`
-- `lunaria://marketplace/install?...`
+- `amoena://plugin/install?...`
+- `amoena://extension/install?...`
+- `amoena://marketplace/install?...`
 
 ### Required Query Payload
 
-At minimum, the deep link must carry enough information for Lunaria to resolve a resource and present an install review:
+At minimum, the deep link must carry enough information for Amoena to resolve a resource and present an install review:
 
 - `id`
 - `source`
@@ -34,7 +34,7 @@ At minimum, the deep link must carry enough information for Lunaria to resolve a
 
 When a deep link is opened:
 
-1. Lunaria resolves the resource metadata
+1. Amoena resolves the resource metadata
 2. validates the manifest and signature when available
 3. shows an install review sheet
 4. displays permissions, publisher, source, version, and install method
@@ -53,7 +53,7 @@ Deep links must **never** silently install a plugin.
 
 Deep links may target:
 
-- Lunaria-native plugins
+- Amoena-native plugins
 - marketplace listings
 - MCP server bundles
 - extension-style resources imported from compatible ecosystems
@@ -69,8 +69,8 @@ The plugin manifest is `manifest.json` at the plugin root. Example schema (Draft
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://lunaria.app/schemas/plugin-manifest.schema.json",
-  "title": "Lunaria Plugin Manifest",
+  "$id": "https://amoena.app/schemas/plugin-manifest.schema.json",
+  "title": "Amoena Plugin Manifest",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -259,7 +259,7 @@ The plugin manifest is `manifest.json` at the plugin root. Example schema (Draft
 
 ### TUI Manifest Extensions (Additive)
 
-TUI integrations are plugin-first in Lunaria. Built-in adapters and community adapters use the same manifest model and host runtime APIs. The existing manifest structure remains unchanged; TUI support is added by extending `contributes`.
+TUI integrations are plugin-first in Amoena. Built-in adapters and community adapters use the same manifest model and host runtime APIs. The existing manifest structure remains unchanged; TUI support is added by extending `contributes`.
 
 Additive contribution types:
 
@@ -372,7 +372,7 @@ Minimal TUI plugin manifest example:
 
 ## Lifecycle Hooks
 
-Lifecycle hooks are registered through the plugin main module and orchestrated by the host runtime. Lunaria exposes a Claude-compatible core event set plus a small number of Lunaria-specific extensions. Existing Claude Code hook configurations can be imported directly, while Lunaria-native events extend that model for workspaces, memory, and autopilot.
+Lifecycle hooks are registered through the plugin main module and orchestrated by the host runtime. Amoena exposes a Claude-compatible core event set plus a small number of Amoena-specific extensions. Existing Claude Code hook configurations can be imported directly, while Amoena-native events extend that model for workspaces, memory, and autopilot.
 
 ### Hook Events
 
@@ -445,34 +445,34 @@ Handler registration in the plugin manifest:
 
 ### Claude Code Hook Compatibility
 
-Lunaria's hooks fire with the same JSON format as Claude Code hooks. The event payload structure, field names, and lifecycle semantics are identical. This means:
+Amoena's hooks fire with the same JSON format as Claude Code hooks. The event payload structure, field names, and lifecycle semantics are identical. This means:
 
-- Existing Claude Code `.claude/hooks.json` configurations work unchanged when imported into Lunaria.
-- Plugins written for Claude Code's hook system require zero modification to run as Lunaria plugins.
+- Existing Claude Code `.claude/hooks.json` configurations work unchanged when imported into Amoena.
+- Plugins written for Claude Code's hook system require zero modification to run as Amoena plugins.
 - The `command` handler type is a direct equivalent of Claude Code's shell-command hooks.
 - Hook event payloads include the same fields: `event`, `session_id`, `tool_name` (for tool hooks), `timestamp`, and `metadata`.
 
-The compatibility layer translates between Claude Code's flat hook configuration and Lunaria's plugin manifest format during the ecosystem compat scan (see `setup-wizard.md` Step 7).
+The compatibility layer translates between Claude Code's flat hook configuration and Amoena's plugin manifest format during the ecosystem compat scan (see `setup-wizard.md` Step 7).
 
 ### OpenCode Hook Compatibility
 
-OpenCode's event hooks (session lifecycle, tool execution, approval/guardrail events) are normalized to Lunaria's Hook Engine event format:
+OpenCode's event hooks (session lifecycle, tool execution, approval/guardrail events) are normalized to Amoena's Hook Engine event format:
 
-- OpenCode approval/guardrail events map to Lunaria's `PermissionRequest` event.
-- OpenCode session lifecycle events map to the corresponding Lunaria `session.*` events.
+- OpenCode approval/guardrail events map to Amoena's `PermissionRequest` event.
+- OpenCode session lifecycle events map to the corresponding Amoena `session.*` events.
 - OpenCode tool execution events map to `PreToolUse` and `PostToolUse` events.
-- OpenCode agent definitions (build, plan, general, explore, etc.) are imported as Lunaria agent profiles, available as tab-switchable agents in the SessionComposer.
+- OpenCode agent definitions (build, plan, general, explore, etc.) are imported as Amoena agent profiles, available as tab-switchable agents in the SessionComposer.
 
 ### Dual-Ecosystem Plugin Manager
 
-Lunaria is the **only AI tool that can run plugins from both Claude Code and OpenCode ecosystems simultaneously**. The Plugin Ecosystem Manager provides:
+Amoena is the **only AI tool that can run plugins from both Claude Code and OpenCode ecosystems simultaneously**. The Plugin Ecosystem Manager provides:
 
 - **Auto-discovery**: Scans `~/.claude/` for Claude Code plugins (oh-my-claudecode, claude-mem, etc.) and `~/.opencode/` plus `opencode.json` for OpenCode plugins (oh-my-opencode, etc.).
 - **Per-plugin enable/disable**: Each plugin individually toggleable via Settings > Plugins.
 - **Ecosystem-level toggle**: Enable/disable all plugins from a given ecosystem as a group.
 - **Conflict resolution**: When plugins from different ecosystems register handlers for the same event, both fire in declared priority order (configurable via drag-and-drop in Settings).
 - **Plugin isolation**: Each plugin's hooks run in their own context. Failures are logged and do not block other plugins or the agent loop.
-- **100% capability access**: Plugins get full access to Lunaria's tool execution, memory, agent spawning, and hook events — identical to their native ecosystem behavior.
+- **100% capability access**: Plugins get full access to Amoena's tool execution, memory, agent spawning, and hook events — identical to their native ecosystem behavior.
 
 ### Plugin Hook Context
 
@@ -557,7 +557,7 @@ TUI lifecycle mapping:
 
 ## Plugin Contributions
 
-Beyond commands, views, settings, hooks, and menus, plugins can contribute the following extension types to the Lunaria runtime:
+Beyond commands, views, settings, hooks, and menus, plugins can contribute the following extension types to the Amoena runtime:
 
 ### Custom Tools
 
@@ -583,7 +583,7 @@ Custom tools appear in the agent's tool palette alongside built-in tools. Permis
 
 ### Observation Types
 
-Plugins can define custom observation types that extend Lunaria's memory system. Observations are structured data units stored in the SQLite database and indexed for semantic retrieval.
+Plugins can define custom observation types that extend Amoena's memory system. Observations are structured data units stored in the SQLite database and indexed for semantic retrieval.
 
 ```json
 {
@@ -721,11 +721,11 @@ export interface PluginApi {
 
 ## Security Model
 
-Lunaria uses an **Obsidian-style same-process model**: plugins are JavaScript loaded and executed directly in the main renderer webview. There is no process isolation between plugins and the host application.
+Amoena uses an **Obsidian-style same-process model**: plugins are JavaScript loaded and executed directly in the main renderer webview. There is no process isolation between plugins and the host application.
 
 ### What this means in practice
 
-- Plugins run in the same JS context as the Lunaria UI and have access to the full Tauri IPC bridge.
+- Plugins run in the same JS context as the Amoena UI and have access to the full Tauri IPC bridge.
 - A plugin can call `@tauri-apps/api/core invoke()` directly, bypassing the scoped Plugin Host API entirely.
 - CSP cannot prevent this: `invoke()` is a JavaScript function call, not a network request, so `script-src` and `connect-src` directives do not intercept it.
 - Any plugin that requests `shell.execute`, `fs.write`, or `network` capabilities — or that calls IPC directly — can perform those operations once loaded.
@@ -739,7 +739,7 @@ The security boundary is **user consent at install time**, not process separatio
 - Grants are stored per-plugin and can be revoked from settings.
 - Runtime checks in the Plugin Host API enforce permissions for calls that go through the API surface.
 
-**Trust model**: third-party plugins should be treated like browser extensions — the user installs them at their own risk. Lunaria's marketplace mitigates this through plugin signing, verified publisher badges, and permission summaries visible before install.
+**Trust model**: third-party plugins should be treated like browser extensions — the user installs them at their own risk. Amoena's marketplace mitigates this through plugin signing, verified publisher badges, and permission summaries visible before install.
 
 ### Defence-in-depth layers
 
@@ -791,7 +791,7 @@ Capabilities are declarative and must align with `docs/architecture/tui-capabili
 
 All categories share the same manifest/lifecycle contract:
 
-- Core plugins (built-in): shipped with app and versioned with Lunaria.
+- Core plugins (built-in): shipped with app and versioned with Amoena.
   - `builtin.claude-code`
   - `builtin.opencode`
   - `builtin.codex`
@@ -822,7 +822,7 @@ Example extension flow:
 
 1) Scaffold plugin
 
-- Run `lunaria plugin init` and choose "TUI Adapter Plugin" template.
+- Run `amoena plugin init` and choose "TUI Adapter Plugin" template.
 - Keep base manifest fields unchanged and add `contributes.tuiAdapter`.
 - Add optional `contributes.tuiAuthProvider` and `contributes.tuiMcpBridge` when needed.
 
@@ -877,8 +877,8 @@ export default plugin
 
 3) Test locally
 
-- Run `lunaria plugin build`.
-- Install local package in dev mode: `lunaria plugin install --local ./my-tui-plugin`.
+- Run `amoena plugin build`.
+- Install local package in dev mode: `amoena plugin install --local ./my-tui-plugin`.
 - Validate lifecycle and capabilities:
   - install -> `onTuiInstall`
   - auth flow -> `onTuiAuth`
@@ -894,7 +894,7 @@ export default plugin
 
 ### 1) Create
 
-- Scaffold with `lunaria plugin init`.
+- Scaffold with `amoena plugin init`.
 - Fill `manifest.json` with id, permissions, contributes, and activationEvents.
 - Implement lifecycle hooks in `src/index.ts` and export default plugin object.
 
@@ -907,7 +907,7 @@ export default plugin
 
 ### 3) Publish
 
-- Bundle with `lunaria plugin build`.
+- Bundle with `amoena plugin build`.
 - Include changelog and compatibility metadata (`minAppVersion`).
 - Submit signed package and manifest to the marketplace registry.
 
@@ -965,7 +965,7 @@ Per-plugin isolation can be relaxed in a future version without changing the plu
 
 Plugins that install MCP servers or modify TUI configuration must follow the same safety constraints as the Marketplace Client (see `marketplace-discovery.md`). These rules apply to any plugin using `mcp-config-inject` or writing to TUI config files:
 
-- **No direct config file writes**: Plugins MUST NOT write directly to TUI config files via `fs.write` or Tauri IPC. Config changes must go through Lunaria's managed config layer in the Rust backend.
+- **No direct config file writes**: Plugins MUST NOT write directly to TUI config files via `fs.write` or Tauri IPC. Config changes must go through Amoena's managed config layer in the Rust backend.
 - **User diff review**: Any config change (add, modify, or remove an MCP entry) must be presented to the user as a before/after diff before being applied. No silent writes.
 - **Allowlist schema validation**: All config values written by plugins are validated against the same allowlist schema used by the Marketplace Client:
   - MCP server `command`: absolute path or safe binary name; no shell metacharacters.
@@ -984,7 +984,7 @@ Plugins that attempt to bypass these controls (e.g., by calling `invoke('write_f
 
 ## Competitive Reference: Osaurus Plugin Architecture
 
-Osaurus is a macOS-native AI environment with a mature plugin system worth studying. Its model diverges from Lunaria's hook-based approach in several important ways.
+Osaurus is a macOS-native AI environment with a mature plugin system worth studying. Its model diverges from Amoena's hook-based approach in several important ways.
 
 ### Native Plugin Library
 
@@ -1018,9 +1018,9 @@ Osaurus provides a dedicated CLI for plugin management:
 
 The `dev` command watches the plugin directory and live-reloads on change, giving plugin authors a tight feedback loop without restarting the host application.
 
-### Key Differences from Lunaria
+### Key Differences from Amoena
 
-| Dimension | Osaurus | Lunaria |
+| Dimension | Osaurus | Amoena |
 | --- | --- | --- |
 | **Plugin runtime** | Native Swift dylibs (v2) or JSON recipes (v1) | JavaScript in renderer webview (same-process, Obsidian-style) |
 | **Extension model** | ABI contract — plugin links against host SDK | Hook-based — plugin subscribes to lifecycle events |
@@ -1030,11 +1030,11 @@ The `dev` command watches the plugin directory and live-reloads on change, givin
 | **Isolation** | Process-level (dylib boundary) | Same JS context; V2 isolation via Web Workers planned |
 | **Platform** | macOS-only (Swift ABI) | Cross-platform (Tauri 2 + Rust + React 19) |
 
-The ABI model trades platform portability for runtime safety: a native dylib boundary enforces isolation by default. Lunaria's same-process JS model prioritizes developer ergonomics and cross-platform reach, with isolation deferred to the V2 Web Worker path.
+The ABI model trades platform portability for runtime safety: a native dylib boundary enforces isolation by default. Amoena's same-process JS model prioritizes developer ergonomics and cross-platform reach, with isolation deferred to the V2 Web Worker path.
 
 ## Plugin Capabilities Roadmap (Osaurus-Inspired)
 
-The following enhancements are proposed to close capability gaps identified through the Osaurus competitive analysis, while preserving Lunaria's cross-platform, hook-based architecture.
+The following enhancements are proposed to close capability gaps identified through the Osaurus competitive analysis, while preserving Amoena's cross-platform, hook-based architecture.
 
 ### Two-Tier Plugin Model
 
@@ -1071,7 +1071,7 @@ Advanced-tier plugins receive an extended `api` object with additional surfaces:
 ```ts
 export interface AdvancedPluginApi extends PluginApi {
   routes: {
-    /** Register an HTTP route on the Lunaria backend (Axum). */
+    /** Register an HTTP route on the Amoena backend (Axum). */
     register(def: {
       method: 'GET' | 'POST' | 'PUT' | 'DELETE'
       path: string
@@ -1112,7 +1112,7 @@ Support zero-build-tool plugin definitions for simple tool integrations:
 
 ```json
 {
-  "$schema": "https://lunaria.app/schemas/plugin-manifest.schema.json",
+  "$schema": "https://amoena.app/schemas/plugin-manifest.schema.json",
   "id": "com.acme.url-fetch",
   "name": "URL Fetch",
   "version": "0.1.0",
@@ -1150,52 +1150,52 @@ Recipe plugins declare tool behavior declaratively in the manifest itself. No se
 
 ### Plugin CLI Commands
 
-Introduce a `lunaria plugins` CLI subcommand set for plugin management and development:
+Introduce a `amoena plugins` CLI subcommand set for plugin management and development:
 
 | Command | Description |
 | --- | --- |
-| `lunaria plugins install <id>` | Install a plugin from the marketplace or a local path |
-| `lunaria plugins list` | List installed plugins with status, tier, and version |
-| `lunaria plugins create <name> [--tier basic\|advanced] [--recipe]` | Scaffold a new plugin project |
-| `lunaria plugins dev [path]` | Start hot-reload development mode for a plugin directory |
-| `lunaria plugins validate [path]` | Validate a plugin manifest against the schema |
-| `lunaria plugins publish` | Package and publish to the Lunaria marketplace |
+| `amoena plugins install <id>` | Install a plugin from the marketplace or a local path |
+| `amoena plugins list` | List installed plugins with status, tier, and version |
+| `amoena plugins create <name> [--tier basic\|advanced] [--recipe]` | Scaffold a new plugin project |
+| `amoena plugins dev [path]` | Start hot-reload development mode for a plugin directory |
+| `amoena plugins validate [path]` | Validate a plugin manifest against the schema |
+| `amoena plugins publish` | Package and publish to the Amoena marketplace |
 
-The `dev` command watches the plugin directory for changes, reloads the plugin without restarting Lunaria, and streams plugin logs to the terminal. This matches the developer experience provided by Osaurus's `osaurus tools dev`.
+The `dev` command watches the plugin directory for changes, reloads the plugin without restarting Amoena, and streams plugin logs to the terminal. This matches the developer experience provided by Osaurus's `osaurus tools dev`.
 
 ### Hot-Reload Development Mode
 
-The `lunaria plugins dev` workflow:
+The `amoena plugins dev` workflow:
 
 1. Watches the plugin directory for file changes (via `notify` crate on the Rust side).
 2. On change: validates the manifest, re-bundles if needed, unloads the previous plugin instance, and loads the updated version.
 3. Preserves plugin state across reloads when the plugin opts in via `"hotReload": { "preserveState": true }` in the manifest.
-4. Streams structured logs (`info`, `warn`, `error`) from the plugin to the terminal and to Lunaria's developer console panel.
+4. Streams structured logs (`info`, `warn`, `error`) from the plugin to the terminal and to Amoena's developer console panel.
 5. Displays a development badge in the UI for plugins loaded in dev mode.
 
 ### Priority Native Plugins
 
-The following first-party plugins should be built to match the most impactful entries in Osaurus's plugin library, adapted for Lunaria's cross-platform architecture:
+The following first-party plugins should be built to match the most impactful entries in Osaurus's plugin library, adapted for Amoena's cross-platform architecture:
 
 | Plugin ID | Description | Tier | Priority |
 | --- | --- | --- | --- |
-| `lunaria.filesystem` | Scoped file read/write/glob/watch operations | Basic | P0 |
-| `lunaria.git` | Git operations: status, diff, commit, branch, log | Basic | P0 |
-| `lunaria.browser` | Headless browser automation via Playwright or similar | Advanced | P0 |
-| `lunaria.search` | Full-text and semantic search across workspace files | Basic | P1 |
-| `lunaria.fetch` | HTTP client for external API calls with auth support | Basic | P1 |
-| `lunaria.terminal` | Terminal session management and command execution | Advanced | P1 |
-| `lunaria.sqlite` | SQLite database inspection and query tool | Basic | P2 |
-| `lunaria.mail` | Email integration (read/send via IMAP/SMTP or platform APIs) | Advanced | P2 |
-| `lunaria.calendar` | Calendar integration (read/create events via CalDAV or platform APIs) | Advanced | P2 |
+| `amoena.filesystem` | Scoped file read/write/glob/watch operations | Basic | P0 |
+| `amoena.git` | Git operations: status, diff, commit, branch, log | Basic | P0 |
+| `amoena.browser` | Headless browser automation via Playwright or similar | Advanced | P0 |
+| `amoena.search` | Full-text and semantic search across workspace files | Basic | P1 |
+| `amoena.fetch` | HTTP client for external API calls with auth support | Basic | P1 |
+| `amoena.terminal` | Terminal session management and command execution | Advanced | P1 |
+| `amoena.sqlite` | SQLite database inspection and query tool | Basic | P2 |
+| `amoena.mail` | Email integration (read/send via IMAP/SMTP or platform APIs) | Advanced | P2 |
+| `amoena.calendar` | Calendar integration (read/create events via CalDAV or platform APIs) | Advanced | P2 |
 
 P0 plugins should ship with the initial plugin framework release. P1 plugins follow in the next cycle. P2 plugins are community-contribution targets with first-party scaffold support.
 
 ### Hook-Based vs ABI-Based: Architectural Comparison
 
-Lunaria's hook-based model and Osaurus's ABI model represent different trade-offs:
+Amoena's hook-based model and Osaurus's ABI model represent different trade-offs:
 
-**Hook-based model (Lunaria)**
+**Hook-based model (Amoena)**
 
 - Plugins subscribe to named lifecycle events and react to them. The host drives execution.
 - Advantages: loose coupling, easy to compose multiple plugins on the same event, natural fit for the existing `command`/`http`/`prompt`/`agent` handler types.
@@ -1209,4 +1209,4 @@ Lunaria's hook-based model and Osaurus's ABI model represent different trade-off
 - Limitations: platform-specific (Swift dylibs), tighter coupling to host internals, harder to compose multiple plugins on the same surface.
 - Best for: self-contained feature modules (mail client, browser automation) that need deep host integration.
 
-**Lunaria's path forward** combines both: the hook system remains the primary composition mechanism for event-driven plugins, while the Advanced tier introduces ABI-like capabilities (route registration, SQLite access, inference calls) through the extended `PluginApi`. This preserves the benefits of reactive composition while enabling the deep integration patterns that make Osaurus's v2 plugins powerful.
+**Amoena's path forward** combines both: the hook system remains the primary composition mechanism for event-driven plugins, while the Advanced tier introduces ABI-like capabilities (route registration, SQLite access, inference calls) through the extended `PluginApi`. This preserves the benefits of reactive composition while enabling the deep integration patterns that make Osaurus's v2 plugins powerful.

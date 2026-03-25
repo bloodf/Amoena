@@ -1,6 +1,6 @@
 # Plugin Lifecycle
 
-This page describes the full lifecycle of a Lunaria plugin, from installation through uninstallation, including health monitoring and error handling.
+This page describes the full lifecycle of a Amoena plugin, from installation through uninstallation, including health monitoring and error handling.
 
 ## Lifecycle Stages
 
@@ -14,8 +14,8 @@ Install → Discover → Enable → Execute (per event) → Disable → Uninstal
 ### 1. Install
 
 Installation occurs when:
-- The user copies a plugin directory to `~/.lunaria/plugins/`
-- A deeplink (`lunaria://plugin/install?...`) is confirmed
+- The user copies a plugin directory to `~/.amoena/plugins/`
+- A deeplink (`amoena://plugin/install?...`) is confirmed
 - The API endpoint `POST /api/v1/plugins/install` is called
 
 During install, `PluginRegistryService.discover()` reads the plugin directory, parses `manifest.json`, and creates a `PluginRecord` in the database with:
@@ -30,7 +30,7 @@ The plugin directory path is stored as `source_path`. The `id` from the manifest
 
 ### 2. Discover
 
-On every Lunaria startup, the plugin registry scans `~/.lunaria/plugins/` for subdirectories containing `manifest.json`. This re-discovers any plugins installed while Lunaria was not running.
+On every Amoena startup, the plugin registry scans `~/.amoena/plugins/` for subdirectories containing `manifest.json`. This re-discovers any plugins installed while Amoena was not running.
 
 Plugins already in the database are updated (upserted); their `enabled` state and health data are preserved.
 
@@ -53,7 +53,7 @@ When a plugin is **re-enabled**:
 
 ### 4. Activation
 
-Before executing a plugin for a given hook event, Lunaria checks two conditions:
+Before executing a plugin for a given hook event, Amoena checks two conditions:
 
 1. **Plugin is enabled** — disabled plugins are never invoked
 2. **Activation event matches** — the hook name must appear in `activationEvents`
@@ -74,7 +74,7 @@ plugin com.example.my-plugin lacks required permission sessions.write
 
 ### 5. Execute
 
-For each invocation, Lunaria:
+For each invocation, Amoena:
 
 1. Reads the plugin manifest from disk (from `source_path/manifest.json`)
 2. Resolves the entry point: `source_path/<manifest.main>`
@@ -100,7 +100,7 @@ Each invocation is independent — no shared memory, no persistent connection. P
 **What happens if the entry point is missing?**
 
 ```
-plugin com.example.my-plugin entry point missing at /home/user/.lunaria/plugins/my-plugin/main.js
+plugin com.example.my-plugin entry point missing at /home/user/.amoena/plugins/my-plugin/main.js
 ```
 
 The error is returned as an `anyhow` result, which the caller logs. Health status is degraded.
@@ -133,7 +133,7 @@ The `PluginRecord` in the database tracks health state:
 | `last_event_at` | datetime? | Timestamp of the last invocation |
 | `latency_ms_avg` | float? | Rolling average execution latency |
 
-These fields are updated after each execution. Lunaria's UI reflects the current health status in Settings → Plugins.
+These fields are updated after each execution. Amoena's UI reflects the current health status in Settings → Plugins.
 
 ### 7. Uninstall
 
@@ -144,7 +144,7 @@ Uninstall removes the plugin directory from disk and deletes the database record
 curl -X DELETE http://localhost:8080/api/v1/plugins/com.example.my-plugin
 
 # Or: remove the directory and rescan
-rm -rf ~/.lunaria/plugins/my-plugin
+rm -rf ~/.amoena/plugins/my-plugin
 ```
 
 If the directory removal fails (e.g. permission error), the error is returned and the database record is not deleted — so the plugin remains registered but will fail at execution.
@@ -153,10 +153,10 @@ If the directory removal fails (e.g. permission error), the error is returned an
 
 ### In the Plugin Process
 
-Errors thrown inside your entry point that are not caught will cause the process to exit with a non-zero code and write to stderr. Lunaria reads the response line from stdout before waiting for exit, so:
+Errors thrown inside your entry point that are not caught will cause the process to exit with a non-zero code and write to stderr. Amoena reads the response line from stdout before waiting for exit, so:
 
 - If your process exits before writing a response: `plugin produced no response`
-- If your process writes an error response: Lunaria propagates the error code and message
+- If your process writes an error response: Amoena propagates the error code and message
 
 Always catch errors and write a proper error response:
 
@@ -193,7 +193,7 @@ If two events fire simultaneously (e.g. rapid tool calls), two separate Bun proc
 
 ## Plugin Records
 
-Plugin records are persisted in Lunaria's SQLite database. You can inspect them (for debugging) via the API:
+Plugin records are persisted in Amoena's SQLite database. You can inspect them (for debugging) via the API:
 
 ```bash
 curl http://localhost:8080/api/v1/plugins
@@ -204,7 +204,7 @@ curl http://localhost:8080/api/v1/plugins
   {
     "id": "com.example.my-plugin",
     "name": "My Plugin",
-    "ecosystem": "lunaria",
+    "ecosystem": "amoena",
     "version": "1.0.0",
     "enabled": true,
     "healthStatus": "Healthy",

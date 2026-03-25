@@ -4,7 +4,7 @@
 
 ## Overview
 
-Lunaria's remote control architecture enables the paired React Native mobile app to connect to the desktop runtime for session management, agent monitoring, and terminal access. The design prioritizes simplicity: remote clients connect via REST + SSE (Server-Sent Events) over HTTP.
+Amoena's remote control architecture enables the paired React Native mobile app to connect to the desktop runtime for session management, agent monitoring, and terminal access. The design prioritizes simplicity: remote clients connect via REST + SSE (Server-Sent Events) over HTTP.
 
 For non-LAN access, an E2E encrypted relay eliminates the need for VPNs or port forwarding.
 
@@ -31,7 +31,7 @@ Remote clients connect directly to the Axum HTTP server running on the local mac
 
 ```
 ┌─────────────┐     REST + SSE      ┌──────────────────┐
-│  Mobile App  │◀──────────────────▶│  Lunaria Axum    │
+│  Mobile App  │◀──────────────────▶│  Amoena Axum    │
 │             │   (HTTP/HTTPS)      │  Server           │
 └─────────────┘                     │  (desktop)        │
                                     └──────────────────┘
@@ -49,8 +49,8 @@ When clients cannot reach the local server directly (different networks, NAT, fi
 
 ```
 ┌─────────────┐       ┌──────────────────┐       ┌──────────────────┐
-│  Remote      │◀─────▶│  Relay Server     │◀─────▶│  Lunaria Axum    │
-│  Client      │  E2E  │  (relay.lunaria   │  E2E  │  Server           │
+│  Remote      │◀─────▶│  Relay Server     │◀─────▶│  Amoena Axum    │
+│  Client      │  E2E  │  (relay.amoena   │  E2E  │  Server           │
 │              │  enc  │   .app)           │  enc  │  (local)          │
 └─────────────┘       └──────────────────┘       └──────────────────┘
 ```
@@ -113,7 +113,7 @@ sequenceDiagram
 The QR code encodes a JSON payload as a URL:
 
 ```
-lunaria://pair?host=192.168.1.42&port=47821&pin=847291&token=f8a3...&tls=true
+amoena://pair?host=192.168.1.42&port=47821&pin=847291&token=f8a3...&tls=true
 ```
 
 | Field | Description |
@@ -127,7 +127,7 @@ lunaria://pair?host=192.168.1.42&port=47821&pin=847291&token=f8a3...&tls=true
 For relay connections, the QR code includes the relay endpoint:
 
 ```
-lunaria://pair?relay=relay.lunaria.app&room=abc123&pin=847291&token=f8a3...
+amoena://pair?relay=relay.amoena.app&room=abc123&pin=847291&token=f8a3...
 ```
 
 ### PIN Authentication
@@ -141,7 +141,7 @@ lunaria://pair?relay=relay.lunaria.app&room=abc123&pin=847291&token=f8a3...
 
 After successful pairing:
 
-- **Access token**: Short-lived JWT (default 15 minutes). Claims: `iss`, `sub` (device_id), `aud` (lunaria-remote), `exp`, `iat`, `jti`, `scp` (scopes), `role`.
+- **Access token**: Short-lived JWT (default 15 minutes). Claims: `iss`, `sub` (device_id), `aud` (amoena-remote), `exp`, `iat`, `jti`, `scp` (scopes), `role`.
 - **Refresh token**: Longer-lived JWT (default 30 days), bound to `device_id` and `token_family_id`.
 - Token rotation on every refresh. Refresh token reuse detection invalidates the entire token family.
 - Revocation by device, by token family, or global emergency revocation.
@@ -447,9 +447,9 @@ interface AgentToolActivityEvent {
 
 Config file locations:
 
-- Linux: `/etc/lunaria/server.toml`
-- macOS: `/usr/local/etc/lunaria/server.toml`
-- User mode: `~/.config/lunaria/server.toml`
+- Linux: `/etc/amoena/server.toml`
+- macOS: `/usr/local/etc/amoena/server.toml`
+- User mode: `~/.config/amoena/server.toml`
 
 Precedence: CLI flags > environment variables > config file > defaults.
 
@@ -468,19 +468,19 @@ Key settings:
 | `auth.jwt_refresh_ttl` | `30d` | Refresh token lifetime |
 | `auth.pairing_pin_ttl` | `120s` | PIN expiration |
 | `relay.enabled` | `false` | Enable relay connections |
-| `relay.endpoint` | `relay.lunaria.app` | Relay server URL |
+| `relay.endpoint` | `relay.amoena.app` | Relay server URL |
 | `terminal.idle_timeout` | `30m` | Terminal session idle timeout |
 | `terminal.max_sessions` | `3` | Max concurrent terminal sessions per device |
 
 Environment variable examples:
 
-- `LUNARIA_REMOTE_ACCESS_ENABLED=true`
-- `LUNARIA_REMOTE_LAN_ENABLED=true`
-- `LUNARIA_REMOTE_LAN_BIND=0.0.0.0`
-- `LUNARIA_SERVER_PORT=47821`
-- `LUNARIA_TLS_CERT=/run/secrets/tls.crt`
-- `LUNARIA_TLS_KEY=/run/secrets/tls.key`
-- `LUNARIA_RELAY_ENABLED=true`
+- `AMOENA_REMOTE_ACCESS_ENABLED=true`
+- `AMOENA_REMOTE_LAN_ENABLED=true`
+- `AMOENA_REMOTE_LAN_BIND=0.0.0.0`
+- `AMOENA_SERVER_PORT=47821`
+- `AMOENA_TLS_CERT=/run/secrets/tls.crt`
+- `AMOENA_TLS_KEY=/run/secrets/tls.key`
+- `AMOENA_RELAY_ENABLED=true`
 
 ## Deployment Scenarios
 
@@ -492,7 +492,7 @@ Environment variable examples:
 
 ### Headless Server
 
-- `lunaria-server` runs as a background daemon.
+- `amoena-server` runs as a background daemon.
 - All control is via REST API + SSE from remote clients.
 - No GUI dependencies.
 
@@ -500,15 +500,15 @@ Environment variable examples:
 
 ```bash
 docker run -d \
-  --name lunaria-server \
+  --name amoena-server \
   -p 47821:47821 \
-  -v /opt/lunaria/config:/etc/lunaria \
-  -v /opt/lunaria/data:/var/lib/lunaria \
-  -v /opt/lunaria/certs:/run/secrets \
-  -e LUNARIA_SERVER_PORT=47821 \
-  -e LUNARIA_TLS_CERT=/run/secrets/tls.crt \
-  -e LUNARIA_TLS_KEY=/run/secrets/tls.key \
-  ghcr.io/lunaria/lunaria-server:latest
+  -v /opt/amoena/config:/etc/amoena \
+  -v /opt/amoena/data:/var/lib/amoena \
+  -v /opt/amoena/certs:/run/secrets \
+  -e AMOENA_SERVER_PORT=47821 \
+  -e AMOENA_TLS_CERT=/run/secrets/tls.crt \
+  -e AMOENA_TLS_KEY=/run/secrets/tls.key \
+  ghcr.io/amoena/amoena-server:latest
 ```
 
 ### Cloud VPS

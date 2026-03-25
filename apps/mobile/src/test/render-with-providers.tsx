@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { render, type RenderOptions } from "@testing-library/react";
 
-import { LunariaI18nProvider } from "@lunaria/i18n";
+import { AmoenaI18nProvider } from "@lunaria/i18n";
 import { RuntimeProvider } from "@/runtime/provider";
 import type { RuntimeSessionStorage } from "@/runtime/storage";
 
@@ -18,11 +18,11 @@ type ProviderOptions = {
 
 function AllProviders({ children, options }: { children: ReactNode; options?: ProviderOptions }) {
   return (
-    <LunariaI18nProvider locale={options?.locale ?? "en"}>
+    <AmoenaI18nProvider locale={options?.locale ?? "en"}>
       <RuntimeProvider storage={options?.storage ?? noopStorage}>
         {children}
       </RuntimeProvider>
-    </LunariaI18nProvider>
+    </AmoenaI18nProvider>
   );
 }
 

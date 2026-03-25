@@ -106,8 +106,8 @@ RALPH BLOCKED
 
 > Replace this section with relevant context for the task.
 
-**Project:** Lunaria — Multi-agent orchestration platform
+**Project:** Amoena — Multi-agent orchestration platform
 **Tech Stack:** TypeScript, Electron, Next.js, better-sqlite3, Vitest
 **Codebase location:** [relevant paths]
-**Design doc:** ~/.gstack/projects/LunariaAi-lunaria/heitor-main-design-20260323-110212.md
-**CEO plan:** ~/.gstack/projects/LunariaAi-lunaria/ceo-plans/2026-03-23-mission-control-platform.md
+**Design doc:** ~/.gstack/projects/AmoenaAi-amoena/heitor-main-design-20260323-110212.md
+**CEO plan:** ~/.gstack/projects/AmoenaAi-amoena/ceo-plans/2026-03-23-mission-control-platform.md

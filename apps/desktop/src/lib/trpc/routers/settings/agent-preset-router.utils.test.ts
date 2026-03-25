@@ -43,7 +43,7 @@ describe("normalizeAgentPresetPatch", () => {
 
 	test("normalizes empty chat model to null", () => {
 		const patch = normalizeAgentPresetPatch({
-			definition: getBuiltinAgentDefinition("lunaria-chat"),
+			definition: getBuiltinAgentDefinition("amoena-chat"),
 			patch: {
 				model: "   ",
 			},
@@ -57,7 +57,7 @@ describe("normalizeAgentPresetPatch", () => {
 	test("rejects unknown task template variables", () => {
 		expect(() =>
 			normalizeAgentPresetPatch({
-				definition: getBuiltinAgentDefinition("lunaria-chat"),
+				definition: getBuiltinAgentDefinition("amoena-chat"),
 				patch: {
 					taskPromptTemplate: "Hello {{unknown}}",
 				},
@@ -68,7 +68,7 @@ describe("normalizeAgentPresetPatch", () => {
 	test("rejects patches that do not apply to the agent kind", () => {
 		expect(() =>
 			normalizeAgentPresetPatch({
-				definition: getBuiltinAgentDefinition("lunaria-chat"),
+				definition: getBuiltinAgentDefinition("amoena-chat"),
 				patch: {
 					command: "codex",
 				},

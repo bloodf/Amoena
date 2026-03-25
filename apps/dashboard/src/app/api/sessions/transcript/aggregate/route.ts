@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
 	);
 	const since = parseInt(searchParams.get("since") || "0", 10) || 0;
 
-	const stateDir = config.lunariaStateDir;
+	const stateDir = config.amoenaStateDir;
 	if (!stateDir) {
 		return NextResponse.json({ events: [], sessionCount: 0 });
 	}

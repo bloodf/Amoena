@@ -18,7 +18,7 @@ export async function createWorktree(
 ): Promise<WorktreeInfo> {
   const worktreePath = path.join(
     repoRoot,
-    ".lunaria-worktrees",
+    ".amoena-worktrees",
     goalId,
     taskId,
   );
@@ -62,8 +62,8 @@ export async function listStaleWorktrees(
     // Skip the main worktree
     if (wt.path === repoRoot) continue;
 
-    // Only include worktrees under .lunaria-worktrees/
-    if (!wt.path.includes(".lunaria-worktrees")) continue;
+    // Only include worktrees under .amoena-worktrees/
+    if (!wt.path.includes(".amoena-worktrees")) continue;
 
     try {
       const stats = await stat(wt.path);

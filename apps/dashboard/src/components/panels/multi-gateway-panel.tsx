@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useWebSocket } from "@/lib/websocket";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface Gateway {
 	id: number;
@@ -87,7 +87,7 @@ export function MultiGatewayPanel() {
 	const [historyByGatewayId, setHistoryByGatewayId] = useState<
 		Record<number, GatewayHistory>
 	>({});
-	const { connection } = useLunaria();
+	const { connection } = useAmoena();
 	const { connect } = useWebSocket();
 
 	const fetchGateways = useCallback(async () => {

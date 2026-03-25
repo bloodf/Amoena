@@ -2,13 +2,13 @@
 
 ## Scope
 
-This document defines background automation triggers for agent tasks in Lunaria. Two mechanisms exist: **time-based schedules** (cron-like recurring execution) and **event-based watchers** (filesystem monitoring). Both integrate with the Agent Orchestrator to spawn autonomous agent sessions without user intervention.
+This document defines background automation triggers for agent tasks in Amoena. Two mechanisms exist: **time-based schedules** (cron-like recurring execution) and **event-based watchers** (filesystem monitoring). Both integrate with the Agent Orchestrator to spawn autonomous agent sessions without user intervention.
 
 **Priority**: V2.0
 
 ## Overview
 
-Automation enables Lunaria to perform agent-driven work in the background. Instead of waiting for a user prompt, the system triggers agent sessions based on recurring time intervals or filesystem events. Each automation rule defines a target agent, an objective prompt, and execution constraints. The Tauri main process owns all automation state and scheduling logic.
+Automation enables Amoena to perform agent-driven work in the background. Instead of waiting for a user prompt, the system triggers agent sessions based on recurring time intervals or filesystem events. Each automation rule defines a target agent, an objective prompt, and execution constraints. The Tauri main process owns all automation state and scheduling logic.
 
 ```mermaid
 graph TB

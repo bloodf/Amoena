@@ -5,7 +5,7 @@ import { scanCodexSessions } from "@/lib/codex-sessions";
 import { db_helpers, getDatabase } from "@/lib/db";
 import { scanHermesSessions } from "@/lib/hermes-sessions";
 import { logger } from "@/lib/logger";
-import { callLunariaGateway } from "@/lib/lunaria-gateway";
+import { callAmoenaGateway } from "@/lib/amoena-gateway";
 import { mutationLimiter } from "@/lib/rate-limit";
 import { getAllGatewaySessions } from "@/lib/sessions";
 
@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
 				);
 		}
 
-		const result = await callLunariaGateway(rpcMethod, rpcParams, 10_000);
+		const result = await callAmoenaGateway(rpcMethod, rpcParams, 10_000);
 
 		db_helpers.logActivity(
 			"session_control",
@@ -192,7 +192,7 @@ export async function DELETE(request: NextRequest) {
 			);
 		}
 
-		const result = await callLunariaGateway(
+		const result = await callAmoenaGateway(
 			"session_delete",
 			{ sessionKey },
 			10_000,
@@ -220,7 +220,7 @@ export async function DELETE(request: NextRequest) {
 function mapGatewaySessions(
 	gatewaySessions: ReturnType<typeof getAllGatewaySessions>,
 ) {
-	// Deduplicate by sessionId — Lunaria tracks cron runs under the same
+	// Deduplicate by sessionId — Amoena tracks cron runs under the same
 	// session ID as the parent session, causing duplicate React keys (#80).
 	// Keep the most recently updated entry when duplicates exist.
 	const sessionMap = new Map<string, (typeof gatewaySessions)[0]>();

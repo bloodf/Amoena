@@ -31,7 +31,7 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported via GitHub Issues at https://github.com/LunariaAi/lunaria/issues or through GitHub's private reporting features.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported via GitHub Issues at https://github.com/AmoenaAi/amoena/issues or through GitHub's private reporting features.
 
 All complaints will be reviewed and investigated promptly and fairly. Community leaders are obligated to respect the privacy and security of the reporter of any incident.
 

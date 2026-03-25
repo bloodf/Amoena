@@ -18,7 +18,7 @@ export function GeneralSettingsSection() {
       </SettingsRow>
 
       <SettingsSectionTitle title="Behavior" />
-      <SettingsRow label="Startup behavior" description="What happens when Lunaria launches">
+      <SettingsRow label="Startup behavior" description="What happens when Amoena launches">
         <SettingsSelect options={["Resume last session", "Show home screen", "Open new session", "Show setup wizard"]} />
       </SettingsRow>
       <SettingsRow label="Default landing screen" description="Primary screen on startup">
@@ -95,7 +95,7 @@ export function TerminalSettingsSection() {
         <SettingsSelect options={["Block", "Underline", "Bar"]} />
       </SettingsRow>
       <SettingsRow label="ANSI color theme">
-        <SettingsSelect options={["Lunaria Dark", "One Dark", "Solarized", "Dracula", "Nord"]} />
+        <SettingsSelect options={["Amoena Dark", "One Dark", "Solarized", "Dracula", "Nord"]} />
       </SettingsRow>
 
       <SettingsSectionTitle title="Behavior" />

@@ -83,9 +83,9 @@ export const updateTaskSchema = createTaskSchema.partial();
 
 export const createAgentSchema = z.object({
 	name: z.string().min(1, "Name is required").max(100),
-	lunaria_id: z
+	amoena_id: z
 		.string()
-		.regex(/^[a-z0-9][a-z0-9-]*$/, "lunaria_id must be kebab-case")
+		.regex(/^[a-z0-9][a-z0-9-]*$/, "amoena_id must be kebab-case")
 		.max(100)
 		.optional(),
 	role: z.string().min(1, "Role is required").max(100).optional(),
@@ -100,8 +100,8 @@ export const createAgentSchema = z.object({
 	template: z.string().max(100).optional(),
 	gateway_config: z.record(z.string(), z.unknown()).optional(),
 	write_to_gateway: z.boolean().optional(),
-	provision_lunaria_workspace: z.boolean().optional(),
-	lunaria_workspace_path: z.string().min(1).max(500).optional(),
+	provision_amoena_workspace: z.boolean().optional(),
+	amoena_workspace_path: z.string().min(1).max(500).optional(),
 });
 
 export const bulkUpdateTaskStatusSchema = z.object({

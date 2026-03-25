@@ -1,13 +1,13 @@
 /**
  * Framework-Agnostic Template System
  *
- * Extends the existing Lunaria templates with framework-neutral archetypes
+ * Extends the existing Amoena templates with framework-neutral archetypes
  * that any adapter can use. Each framework template defines:
  *   - What the agent does (role, capabilities)
  *   - How it connects (framework-specific connection config)
  *   - What permissions it needs (tool scopes)
  *
- * The existing AGENT_TEMPLATES in agent-templates.ts remain for Lunaria-native
+ * The existing AGENT_TEMPLATES in agent-templates.ts remain for Amoena-native
  * use. This module wraps them with a framework-aware registry.
  */
 
@@ -37,22 +37,22 @@ export interface FrameworkInfo {
 // ─── Framework Registry ─────────────────────────────────────────────────────
 
 export const FRAMEWORK_REGISTRY: Record<string, FrameworkInfo> = {
-	lunaria: {
-		id: "lunaria",
-		label: "Lunaria",
+	amoena: {
+		id: "amoena",
+		label: "Amoena",
 		description: "Native gateway-managed agents with full lifecycle control",
-		docsUrl: "https://github.com/lunaria/lunaria",
+		docsUrl: "https://github.com/amoena/amoena",
 		connection: {
 			connectionMode: "websocket",
 			heartbeatInterval: 30,
 			setupHints: [
-				"Agents are managed via the Lunaria gateway",
-				"Config syncs bidirectionally via lunaria.json",
-				'Use "pnpm lunaria agents add" to provision',
+				"Agents are managed via the Amoena gateway",
+				"Config syncs bidirectionally via amoena.json",
+				'Use "pnpm amoena agents add" to provision',
 			],
-			exampleSnippet: `# Lunaria agents are auto-managed by the gateway.
+			exampleSnippet: `# Amoena agents are auto-managed by the gateway.
 # No manual registration needed — sync happens automatically.
-# See: lunaria.json in your state directory.`,
+# See: amoena.json in your state directory.`,
 		},
 	},
 	generic: {
@@ -171,7 +171,7 @@ MC_URL = "http://localhost:3000"
 HEADERS = {"Content-Type": "application/json", "x-api-key": "YOUR_API_KEY"}
 
 def register_crew_agent(agent: Agent):
-    """Register a CrewAI agent with Lunaria."""
+    """Register a CrewAI agent with Amoena."""
     requests.post(f"{MC_URL}/api/adapters", headers=HEADERS, json={
         "framework": "crewai",
         "action": "register",
@@ -187,7 +187,7 @@ def register_crew_agent(agent: Agent):
     })
 
 def report_task_complete(agent_id: str, task_id: str, output: str):
-    """Report task completion to Lunaria."""
+    """Report task completion to Amoena."""
     requests.post(f"{MC_URL}/api/adapters", headers=HEADERS, json={
         "framework": "crewai",
         "action": "report",
@@ -222,7 +222,7 @@ MC_URL = "http://localhost:3000"
 HEADERS = {"Content-Type": "application/json", "x-api-key": "YOUR_API_KEY"}
 
 def register_autogen_agent(agent_name: str, system_message: str):
-    """Register an AutoGen agent with Lunaria."""
+    """Register an AutoGen agent with Amoena."""
     requests.post(f"{MC_URL}/api/adapters", headers=HEADERS, json={
         "framework": "autogen",
         "action": "register",
@@ -309,8 +309,8 @@ export interface UniversalTemplate {
 	frameworks: string[];
 	/** Role-based capabilities (framework-agnostic) */
 	capabilities: string[];
-	/** The Lunaria template to use when framework is lunaria */
-	lunariaTemplateType?: string;
+	/** The Amoena template to use when framework is amoena */
+	amoenaTemplateType?: string;
 }
 
 /**
@@ -326,7 +326,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 			"Coordinates other agents, routes tasks, and manages workflows. Full access.",
 		emoji: "\ud83e\udded",
 		frameworks: [
-			"lunaria",
+			"amoena",
 			"generic",
 			"langgraph",
 			"crewai",
@@ -339,7 +339,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 			"workflow_control",
 			"full_access",
 		],
-		lunariaTemplateType: "orchestrator",
+		amoenaTemplateType: "orchestrator",
 	},
 	{
 		type: "developer",
@@ -348,7 +348,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 			"Writes and edits code, runs builds and tests. Read-write workspace access.",
 		emoji: "\ud83d\udee0\ufe0f",
 		frameworks: [
-			"lunaria",
+			"amoena",
 			"generic",
 			"langgraph",
 			"crewai",
@@ -356,7 +356,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 			"claude-sdk",
 		],
 		capabilities: ["code_write", "code_execute", "testing", "debugging"],
-		lunariaTemplateType: "developer",
+		amoenaTemplateType: "developer",
 	},
 	{
 		type: "reviewer",
@@ -365,7 +365,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 			"Reviews code and validates quality. Read-only access, lightweight model.",
 		emoji: "\ud83d\udd2c",
 		frameworks: [
-			"lunaria",
+			"amoena",
 			"generic",
 			"langgraph",
 			"crewai",
@@ -373,7 +373,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 			"claude-sdk",
 		],
 		capabilities: ["code_read", "quality_review", "security_audit"],
-		lunariaTemplateType: "reviewer",
+		amoenaTemplateType: "reviewer",
 	},
 	{
 		type: "researcher",
@@ -381,7 +381,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 		description: "Browses the web and gathers information. No code execution.",
 		emoji: "\ud83d\udd0d",
 		frameworks: [
-			"lunaria",
+			"amoena",
 			"generic",
 			"langgraph",
 			"crewai",
@@ -389,7 +389,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 			"claude-sdk",
 		],
 		capabilities: ["web_browse", "data_gathering", "summarization"],
-		lunariaTemplateType: "researcher",
+		amoenaTemplateType: "researcher",
 	},
 	{
 		type: "content-creator",
@@ -398,7 +398,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 			"Generates and edits written content. No code execution or browsing.",
 		emoji: "\u270f\ufe0f",
 		frameworks: [
-			"lunaria",
+			"amoena",
 			"generic",
 			"langgraph",
 			"crewai",
@@ -406,7 +406,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 			"claude-sdk",
 		],
 		capabilities: ["content_write", "content_edit"],
-		lunariaTemplateType: "content-creator",
+		amoenaTemplateType: "content-creator",
 	},
 	{
 		type: "security-auditor",
@@ -415,7 +415,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 			"Scans for vulnerabilities. Read-only with shell access for scanning tools.",
 		emoji: "\ud83d\udee1\ufe0f",
 		frameworks: [
-			"lunaria",
+			"amoena",
 			"generic",
 			"langgraph",
 			"crewai",
@@ -423,7 +423,7 @@ export const UNIVERSAL_TEMPLATES: UniversalTemplate[] = [
 			"claude-sdk",
 		],
 		capabilities: ["code_read", "shell_execute", "security_scan"],
-		lunariaTemplateType: "security-auditor",
+		amoenaTemplateType: "security-auditor",
 	},
 ];
 
@@ -462,8 +462,8 @@ export function listFrameworks(): FrameworkInfo[] {
 }
 
 /**
- * Resolve a universal template to its Lunaria-specific config (if applicable).
- * For non-Lunaria frameworks, returns the universal template metadata
+ * Resolve a universal template to its Amoena-specific config (if applicable).
+ * For non-Amoena frameworks, returns the universal template metadata
  * since config is managed externally by the framework.
  */
 export function resolveTemplateConfig(
@@ -474,9 +474,9 @@ export function resolveTemplateConfig(
 	if (!universal) return undefined;
 	if (!universal.frameworks.includes(framework)) return undefined;
 
-	if (framework === "lunaria" && universal.lunariaTemplateType) {
+	if (framework === "amoena" && universal.amoenaTemplateType) {
 		const template = AGENT_TEMPLATES.find(
-			(t) => t.type === universal.lunariaTemplateType,
+			(t) => t.type === universal.amoenaTemplateType,
 		);
 		return { template, universal };
 	}

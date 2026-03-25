@@ -12,7 +12,7 @@ export function SetupWizardMemoryStep({
       <div className="mb-6 text-center">
         <h2 className="mb-1 text-lg font-semibold text-foreground">Memory System</h2>
         <p className="text-sm text-muted-foreground">
-          Configure how Lunaria captures and injects memory into future sessions.
+          Configure how Amoena captures and injects memory into future sessions.
         </p>
       </div>
 

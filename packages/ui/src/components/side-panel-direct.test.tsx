@@ -4,7 +4,7 @@ import { AgentsTab } from "@/composites/side-panel/AgentsTab";
 import { MemoryTab } from "@/composites/side-panel/MemoryTab";
 import { TimelineTab } from "@/composites/side-panel/TimelineTab";
 
-describe("Lunaria side panel direct tabs", () => {
+describe("Amoena side panel direct tabs", () => {
   test("agents tab collapses and expands hierarchy", () => {
     render(<AgentsTab />);
 

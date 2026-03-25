@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { createClientLogger } from "@/lib/client-logger";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 const log = createClientLogger("SSE");
 
@@ -38,7 +38,7 @@ export function useServerEvents() {
 		addChatMessage,
 		addNotification,
 		addActivity,
-	} = useLunaria();
+	} = useAmoena();
 
 	useEffect(() => {
 		let mounted = true;

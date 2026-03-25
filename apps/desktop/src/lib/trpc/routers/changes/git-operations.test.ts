@@ -120,7 +120,7 @@ describe("existing PR push target resolution", () => {
 				remotes: [
 					{
 						name: "origin",
-						fetchUrl: "git@github.com:Lunaria/lunaria.git",
+						fetchUrl: "git@github.com:Amoena/amoena.git",
 					},
 				],
 				pr: {
@@ -137,17 +137,17 @@ describe("existing PR push target resolution", () => {
 				remotes: [
 					{
 						name: "origin",
-						fetchUrl: "git@github.com:Lunaria/lunaria.git",
+						fetchUrl: "git@github.com:Amoena/amoena.git",
 					},
 					{
 						name: "kitenite",
-						fetchUrl: "git@github.com:kitenite/lunaria.git",
-						pushUrl: "git@github.com:kitenite/lunaria.git",
+						fetchUrl: "git@github.com:kitenite/amoena.git",
+						pushUrl: "git@github.com:kitenite/amoena.git",
 					},
 				],
 				pr: {
 					headRepositoryOwner: "kitenite",
-					headRepositoryName: "lunaria",
+					headRepositoryName: "amoena",
 					isCrossRepository: true,
 				},
 				fallbackRemote: "origin",
@@ -161,12 +161,12 @@ describe("existing PR push target resolution", () => {
 				remotes: [
 					{
 						name: "origin",
-						fetchUrl: "git@github.com:Lunaria/lunaria.git",
+						fetchUrl: "git@github.com:Amoena/amoena.git",
 					},
 				],
 				pr: {
 					headRepositoryOwner: "kitenite",
-					headRepositoryName: "lunaria",
+					headRepositoryName: "amoena",
 					isCrossRepository: true,
 				},
 				fallbackRemote: "origin",
@@ -178,9 +178,9 @@ describe("existing PR push target resolution", () => {
 		expect(
 			getExistingPRHeadRepoUrl({
 				headRepositoryOwner: "kitenite",
-				headRepositoryName: "lunaria",
+				headRepositoryName: "amoena",
 				isCrossRepository: true,
 			}),
-		).toBe("https://github.com/kitenite/lunaria");
+		).toBe("https://github.com/kitenite/amoena");
 	});
 });

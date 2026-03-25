@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -924,7 +924,7 @@ interface PlatformCardProps {
 
 export function ChannelsPanel() {
 	const t = useTranslations("channels");
-	const { connection } = useLunaria();
+	const { connection } = useAmoena();
 	const [snapshot, setSnapshot] = useState<ChannelsSnapshot | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);

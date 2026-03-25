@@ -23,15 +23,22 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Sessions",
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>⚡</Text>,
+          title: "Home",
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20, fontFamily: "monospace" }}>{`>`}</Text>,
+        }}
+      />
+      <Tabs.Screen
+        name="history"
+        options={{
+          title: "History",
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20, fontFamily: "monospace" }}>#</Text>,
         }}
       />
       <Tabs.Screen
         name="permissions"
         options={{
-          title: "Permissions",
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>🔐</Text>,
+          title: "Approvals",
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20, fontFamily: "monospace" }}>!</Text>,
           tabBarBadge: badgeCount > 0 ? badgeCount : undefined,
         }}
       />
@@ -39,7 +46,7 @@ export default function TabLayout() {
         name="more"
         options={{
           title: "More",
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>⋯</Text>,
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20, fontFamily: "monospace" }}>...</Text>,
         }}
       />
     </Tabs>

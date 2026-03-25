@@ -117,7 +117,7 @@ export async function POST(
 		const { content: rawContent, parent_id } = result.data;
 		const author = auth.user.display_name || auth.user.username || "system";
 
-		// Normalize agent payload JSON — extract text from Lunaria result format
+		// Normalize agent payload JSON — extract text from Amoena result format
 		let content = rawContent;
 		try {
 			const stripped = rawContent

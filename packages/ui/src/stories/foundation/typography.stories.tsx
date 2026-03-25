@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { lunariaTypographyTokens } from "@lunaria/tokens";
+import { amoenaTypographyTokens } from "@lunaria/tokens";
 
 const meta = {
   title: "Foundation/Typography",
@@ -12,7 +12,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const { fontFamily, fontWeight, fontSize } = lunariaTypographyTokens;
+const { fontFamily, fontWeight, fontSize } = amoenaTypographyTokens;
 
 const pangram = "The quick brown fox jumps over the lazy dog";
 

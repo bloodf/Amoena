@@ -1,6 +1,6 @@
 # UI Development
 
-Lunaria's frontend is built with **React 19**, **TypeScript**, and **Tailwind CSS**. The component library lives in `packages/ui/` and is developed with **Storybook**.
+Amoena's frontend is built with **React 19**, **TypeScript**, and **Tailwind CSS**. The component library lives in `packages/ui/` and is developed with **Storybook**.
 
 ## Architecture
 
@@ -69,7 +69,7 @@ source.addEventListener('message', (event) => {
 
 ## Styling
 
-Lunaria uses Tailwind CSS with CSS custom properties for theming:
+Amoena uses Tailwind CSS with CSS custom properties for theming:
 
 ```css
 /* globals.css */

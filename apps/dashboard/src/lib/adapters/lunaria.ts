@@ -8,8 +8,8 @@ import type {
 } from "./adapter";
 import { queryPendingAssignments } from "./adapter";
 
-export class LunariaAdapter implements FrameworkAdapter {
-	readonly framework = "lunaria";
+export class AmoenaAdapter implements FrameworkAdapter {
+	readonly framework = "amoena";
 
 	async register(agent: AgentRegistration): Promise<void> {
 		eventBus.broadcast("agent.created", {

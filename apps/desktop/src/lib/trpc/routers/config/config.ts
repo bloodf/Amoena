@@ -339,17 +339,17 @@ async function detectSetupDefaults(
 }
 
 function getConfigPath(mainRepoPath: string): string {
-	return join(mainRepoPath, ".lunaria", "config.json");
+	return join(mainRepoPath, ".amoena", "config.json");
 }
 
 function ensureConfigExists(mainRepoPath: string): string {
 	const configPath = getConfigPath(mainRepoPath);
-	const lunariaDir = join(mainRepoPath, ".lunaria");
+	const amoenaDir = join(mainRepoPath, ".amoena");
 
 	if (!existsSync(configPath)) {
-		// Create .lunaria directory if it doesn't exist
-		if (!existsSync(lunariaDir)) {
-			mkdirSync(lunariaDir, { recursive: true });
+		// Create .amoena directory if it doesn't exist
+		if (!existsSync(amoenaDir)) {
+			mkdirSync(amoenaDir, { recursive: true });
 		}
 		// Create config.json with template
 		writeFileSync(configPath, CONFIG_TEMPLATE, "utf-8");

@@ -1,6 +1,6 @@
 /**
- * GitHub API client for Lunaria issue sync.
- * Resolves GITHUB_TOKEN from the Lunaria integration env file first,
+ * GitHub API client for Amoena issue sync.
+ * Resolves GITHUB_TOKEN from the Amoena integration env file first,
  * then falls back to process.env for deployments that export it directly.
  */
 import { getEffectiveEnvValue } from "@/lib/runtime-env";
@@ -50,7 +50,7 @@ export async function githubFetch(
 	const headers: Record<string, string> = {
 		Authorization: `Bearer ${token}`,
 		Accept: "application/vnd.github.v3+json",
-		"User-Agent": "Lunaria/1.0",
+		"User-Agent": "Amoena/1.0",
 		...((options.headers as Record<string, string>) || {}),
 	};
 

@@ -99,7 +99,7 @@ describe("exportReport", () => {
 
 	it("filename follows expected pattern", () => {
 		const result = exportReport(baseReport, { format: "html" });
-		expect(result.filename).toMatch(/^lunaria-report-a1b2c3d4-\d{4}-\d{2}-\d{2}\.html$/);
+		expect(result.filename).toMatch(/^amoena-report-a1b2c3d4-\d{4}-\d{2}-\d{2}\.html$/);
 	});
 
 	it("mimeType is correct per format", () => {

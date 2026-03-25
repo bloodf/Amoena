@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import { useNavigateToPanel } from "@/lib/navigation";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 import { WidgetGrid } from "./widget-grid";
 import type {
 	ClaudeStats,
@@ -30,7 +30,7 @@ export function Dashboard() {
 		agents,
 		tasks,
 		setActiveConversation,
-	} = useLunaria();
+	} = useAmoena();
 
 	const navigateToPanel = useNavigateToPanel();
 	const isLocal = dashboardMode === "local";

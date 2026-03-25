@@ -14,7 +14,7 @@ export function PromoBanner() {
 
 			<div className="flex flex-wrap items-center gap-2 md:ml-auto">
 				<a
-					href="https://x.com/nyk_lunaria"
+					href="https://x.com/nyk_amoena"
 					target="_blank"
 					rel="noopener noreferrer"
 					className="text-2xs font-medium text-amber-100 hover:text-white px-2 py-1 rounded border border-amber-300/30 hover:border-amber-200/50 transition-colors"
@@ -38,7 +38,7 @@ export function PromoBanner() {
 					DictX (Upcoming)
 				</a>
 				<a
-					href="https://x.com/nyk_lunaria/status/2029007663011643498?s=20"
+					href="https://x.com/nyk_amoena/status/2029007663011643498?s=20"
 					target="_blank"
 					rel="noopener noreferrer"
 					className="text-2xs font-medium text-amber-200 hover:text-amber-100 px-2 py-1 rounded border border-amber-500/20 hover:border-amber-400/40 transition-colors"

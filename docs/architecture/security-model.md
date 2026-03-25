@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines Lunaria's security architecture, threat model, and trust boundaries. Lunaria executes arbitrary code via AI agents on the user's machine — security is not optional.
+This document defines Amoena's security architecture, threat model, and trust boundaries. Amoena executes arbitrary code via AI agents on the user's machine — security is not optional.
 
 ## Trust Boundaries
 
@@ -198,7 +198,7 @@ Osaurus implements a cryptographic identity system worth studying. Key design de
 
 ### Observations
 
-| Aspect | Osaurus | Lunaria (Current) |
+| Aspect | Osaurus | Amoena (Current) |
 |--------|---------|-------------------|
 | Identity model | Cryptographic key pairs | Session-scoped JWTs |
 | Key storage | iCloud Keychain (Apple-only) | OS keychain (cross-platform) |
@@ -206,13 +206,13 @@ Osaurus implements a cryptographic identity system worth studying. Key design de
 | Platform support | macOS-only | macOS, Windows, Linux |
 | Remote auth | Scoped portable keys | QR + PIN pairing |
 
-Osaurus's cryptographic identity model is stronger than Lunaria's current session-scoped approach, but its reliance on Apple-only infrastructure (iCloud Keychain, Apple Containerization) limits portability. Lunaria's cross-platform constraint requires a different implementation path.
+Osaurus's cryptographic identity model is stronger than Amoena's current session-scoped approach, but its reliance on Apple-only infrastructure (iCloud Keychain, Apple Containerization) limits portability. Amoena's cross-platform constraint requires a different implementation path.
 
 ## Cryptographic Agent Identity (Future)
 
 > **Status:** Proposed. Not yet implemented.
 
-This section outlines a cryptographic identity system for Lunaria agents, informed by the Osaurus model but designed for cross-platform operation.
+This section outlines a cryptographic identity system for Amoena agents, informed by the Osaurus model but designed for cross-platform operation.
 
 ### Design Goals
 
@@ -260,7 +260,7 @@ This section outlines a cryptographic identity system for Lunaria agents, inform
 | Windows | Credential Manager (DPAPI) | `windows-credentials` or `keyring` |
 | Linux | Secret Service (GNOME Keyring / KDE Wallet) | `secret-service` or `keyring` |
 
-Unlike Osaurus's iCloud Keychain approach, Lunaria must abstract over platform-specific backends. The Rust `keyring` crate provides a unified API but may need to be supplemented for advanced operations (key derivation, hardware key support).
+Unlike Osaurus's iCloud Keychain approach, Amoena must abstract over platform-specific backends. The Rust `keyring` crate provides a unified API but may need to be supplemented for advanced operations (key derivation, hardware key support).
 
 **Fallback:** If no OS keychain is available (headless Linux, CI environments), support an encrypted file-based store with a passphrase-derived key (Argon2id).
 
@@ -306,7 +306,7 @@ Token payload:
 
 ## Sandboxed Execution and the Security Model
 
-Lunaria currently isolates agent work through CoW (copy-on-write) workspace clones — agents operate on copies of the user's working tree, and changes are only applied after review. This provides data isolation but not process isolation.
+Amoena currently isolates agent work through CoW (copy-on-write) workspace clones — agents operate on copies of the user's working tree, and changes are only applied after review. This provides data isolation but not process isolation.
 
 Full process-level sandboxing (comparable to Osaurus's Linux VM approach) would strengthen the security model by containing:
 

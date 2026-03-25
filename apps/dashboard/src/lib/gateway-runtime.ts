@@ -2,7 +2,7 @@ import fs from "node:fs";
 import { config } from "@/lib/config";
 import { logger } from "@/lib/logger";
 
-interface LunariaGatewayConfig {
+interface AmoenaGatewayConfig {
 	gateway?: {
 		auth?: {
 			mode?: "token" | "password";
@@ -16,12 +16,12 @@ interface LunariaGatewayConfig {
 	};
 }
 
-function readLunariaConfig(): LunariaGatewayConfig | null {
-	const configPath = config.lunariaConfigPath;
+function readAmoenaConfig(): AmoenaGatewayConfig | null {
+	const configPath = config.amoenaConfigPath;
 	if (!configPath || !fs.existsSync(configPath)) return null;
 	try {
 		const raw = fs.readFileSync(configPath, "utf8");
-		return JSON.parse(raw) as LunariaGatewayConfig;
+		return JSON.parse(raw) as AmoenaGatewayConfig;
 	} catch {
 		return null;
 	}
@@ -31,7 +31,7 @@ export function registerMcAsDashboard(mcUrl: string): {
 	registered: boolean;
 	alreadySet: boolean;
 } {
-	const configPath = config.lunariaConfigPath;
+	const configPath = config.amoenaConfigPath;
 	if (!configPath || !fs.existsSync(configPath)) {
 		return { registered: false, alreadySet: false };
 	}
@@ -54,7 +54,7 @@ export function registerMcAsDashboard(mcUrl: string): {
 
 		// Add MC origin to allowedOrigins only — do NOT touch dangerouslyDisableDeviceAuth.
 		// MC authenticates via gateway token, but forcing device auth off is a security
-		// downgrade that the operator should control, not Lunaria.
+		// downgrade that the operator should control, not Amoena.
 		origins.push(origin);
 		parsed.gateway.controlUi.allowedOrigins = origins;
 
@@ -72,7 +72,7 @@ export function registerMcAsDashboard(mcUrl: string): {
 			logger.warn(
 				{ err, configPath },
 				"Gateway config is read-only — skipping MC origin registration. " +
-					"To enable auto-registration, mount lunaria.json with write access or " +
+					"To enable auto-registration, mount amoena.json with write access or " +
 					"add the MC origin to gateway.controlUi.allowedOrigins manually.",
 			);
 			return { registered: false, alreadySet: false };
@@ -84,25 +84,25 @@ export function registerMcAsDashboard(mcUrl: string): {
 
 /**
  * Returns the gateway auth credential (token or password) for Bearer/WS auth.
- * Env overrides: LUNARIA_GATEWAY_TOKEN, GATEWAY_TOKEN, LUNARIA_GATEWAY_PASSWORD, GATEWAY_PASSWORD.
+ * Env overrides: AMOENA_GATEWAY_TOKEN, GATEWAY_TOKEN, AMOENA_GATEWAY_PASSWORD, GATEWAY_PASSWORD.
  * From config: uses gateway.auth.token when mode is "token", gateway.auth.password when mode is "password".
  */
 export function getDetectedGatewayToken(): string {
 	const envToken = (
-		process.env.LUNARIA_GATEWAY_TOKEN ||
+		process.env.AMOENA_GATEWAY_TOKEN ||
 		process.env.GATEWAY_TOKEN ||
 		""
 	).trim();
 	if (envToken) return envToken;
 
 	const envPassword = (
-		process.env.LUNARIA_GATEWAY_PASSWORD ||
+		process.env.AMOENA_GATEWAY_PASSWORD ||
 		process.env.GATEWAY_PASSWORD ||
 		""
 	).trim();
 	if (envPassword) return envPassword;
 
-	const parsed = readLunariaConfig();
+	const parsed = readAmoenaConfig();
 	const auth = parsed?.gateway?.auth;
 	const mode = auth?.mode === "password" ? "password" : "token";
 	const credential =
@@ -114,11 +114,11 @@ export function getDetectedGatewayToken(): string {
 
 export function getDetectedGatewayPort(): number | null {
 	const envPort = Number(
-		process.env.LUNARIA_GATEWAY_PORT || process.env.GATEWAY_PORT || "",
+		process.env.AMOENA_GATEWAY_PORT || process.env.GATEWAY_PORT || "",
 	);
 	if (Number.isFinite(envPort) && envPort > 0) return envPort;
 
-	const parsed = readLunariaConfig();
+	const parsed = readAmoenaConfig();
 	const cfgPort = Number(parsed?.gateway?.port || 0);
 	return Number.isFinite(cfgPort) && cfgPort > 0 ? cfgPort : null;
 }

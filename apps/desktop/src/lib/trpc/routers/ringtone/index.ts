@@ -155,7 +155,7 @@ export const createRingtoneRouter = (getWindow: () => BrowserWindow | null) => {
 		}),
 
 		/**
-		 * Imports a custom ringtone file from disk and stores it in the Lunaria home assets directory.
+		 * Imports a custom ringtone file from disk and stores it in the Amoena home assets directory.
 		 */
 		importCustom: publicProcedure.mutation(async () => {
 			const window = getWindow();

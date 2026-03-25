@@ -1,12 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 import { resolveCoordinatorDeliveryTarget } from "@/lib/coordinator-routing";
 import { db_helpers, getDatabase, type Message } from "@/lib/db";
 import { eventBus } from "@/lib/event-bus";
 import { scanForInjection } from "@/lib/injection-guard";
 import { logger } from "@/lib/logger";
-import { callLunariaGateway } from "@/lib/lunaria-gateway";
+import { callAmoenaGateway } from "@/lib/amoena-gateway";
 import { getAllGatewaySessions } from "@/lib/sessions";
 
 type ForwardInfo = {
@@ -532,17 +532,17 @@ export async function POST(request: NextRequest) {
 								coordinatorResolution.deliveryName.toLowerCase() ||
 							s.agent.toLowerCase() ===
 								String(
-									coordinatorResolution.lunariaAgentId || "",
+									coordinatorResolution.amoenaAgentId || "",
 								).toLowerCase(),
 					);
 					sessionKey = match?.key || match?.sessionId || null;
 				}
 
-				// Prefer configured lunariaId when present, fallback to normalized name
-				const lunariaAgentId: string | null =
-					coordinatorResolution.lunariaAgentId;
+				// Prefer configured amoenaId when present, fallback to normalized name
+				const amoenaAgentId: string | null =
+					coordinatorResolution.amoenaAgentId;
 
-				if (!sessionKey && !lunariaAgentId) {
+				if (!sessionKey && !amoenaAgentId) {
 					forwardInfo.reason = "no_active_session";
 
 					// For coordinator messages, emit an immediate visible status reply
@@ -570,7 +570,7 @@ export async function POST(request: NextRequest) {
 						const idempotencyKey = `mc-${messageId}-${Date.now()}`;
 
 						if (sessionKey) {
-							const acceptedPayload = await callLunariaGateway<any>(
+							const acceptedPayload = await callAmoenaGateway<any>(
 								"chat.send",
 								{
 									sessionKey,
@@ -601,9 +601,9 @@ export async function POST(request: NextRequest) {
 								idempotencyKey,
 								deliver: false,
 							};
-							invokeParams.agentId = lunariaAgentId;
+							invokeParams.agentId = amoenaAgentId;
 
-							const invokeResult = await runLunaria(
+							const invokeResult = await runAmoena(
 								[
 									"gateway",
 									"call",
@@ -618,7 +618,7 @@ export async function POST(request: NextRequest) {
 							);
 							const acceptedPayload = parseGatewayJson(invokeResult.stdout);
 							forwardInfo.delivered = true;
-							forwardInfo.session = lunariaAgentId || undefined;
+							forwardInfo.session = amoenaAgentId || undefined;
 							if (
 								typeof acceptedPayload?.runId === "string" &&
 								acceptedPayload.runId
@@ -627,7 +627,7 @@ export async function POST(request: NextRequest) {
 							}
 						}
 					} catch (err) {
-						// Lunaria may return accepted JSON on stdout but still emit a late stderr warning.
+						// Amoena may return accepted JSON on stdout but still emit a late stderr warning.
 						// Treat accepted runs as successful delivery.
 						const maybeStdout = String((err as any)?.stdout || "");
 						const acceptedPayload = parseGatewayJson(maybeStdout);
@@ -636,7 +636,7 @@ export async function POST(request: NextRequest) {
 							maybeStdout.includes('"status":"accepted"')
 						) {
 							forwardInfo.delivered = true;
-							forwardInfo.session = sessionKey || lunariaAgentId || undefined;
+							forwardInfo.session = sessionKey || amoenaAgentId || undefined;
 							if (
 								typeof acceptedPayload?.runId === "string" &&
 								acceptedPayload.runId
@@ -703,7 +703,7 @@ export async function POST(request: NextRequest) {
 						// Best effort: wait briefly and surface completion/error feedback.
 						if (forwardInfo.runId) {
 							try {
-								const waitResult = await runLunaria(
+								const waitResult = await runAmoena(
 									[
 										"gateway",
 										"call",

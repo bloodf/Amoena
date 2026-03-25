@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 import { useNavigateToPanel } from "@/lib/navigation";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface AuthEvent {
 	id: number;
@@ -245,7 +245,7 @@ function ScanCategoryRow({
 
 export function SecurityAuditPanel() {
 	const t = useTranslations("securityAudit");
-	const { setSecurityPosture } = useLunaria();
+	const { setSecurityPosture } = useAmoena();
 	const _navigateToPanel = useNavigateToPanel();
 
 	const [selectedTimeframe, setSelectedTimeframe] = useState<
@@ -513,7 +513,7 @@ export function SecurityAuditPanel() {
 									const scanCategoryLabels: Record<string, string> = {
 										credentials: t("scanCredentials"),
 										network: t("scanNetwork"),
-										lunaria: t("scanLunaria"),
+										amoena: t("scanAmoena"),
 										runtime: t("scanRuntime"),
 										os: t("scanOs"),
 									};
@@ -522,7 +522,7 @@ export function SecurityAuditPanel() {
 										{
 											credentials: "K",
 											network: "N",
-											lunaria: "O",
+											amoena: "O",
 											runtime: "R",
 											os: "S",
 										}[key] || key[0].toUpperCase();

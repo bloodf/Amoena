@@ -125,7 +125,7 @@ export function buildPromptAgentLaunchRequest({
 				}
 
 				usedFilenames.add(filename);
-				return `- .lunaria/attachments/${filename}`;
+				return `- .amoena/attachments/${filename}`;
 			})
 			.join("\n");
 		// If prompt exists, prepend it; otherwise just use file list
@@ -202,7 +202,7 @@ export function buildTaskAgentLaunchRequest({
 	);
 	const taskPromptFileName = `task-${task.slug}.md`;
 	const command = buildFileCommandFromAgentConfig({
-		filePath: `.lunaria/${taskPromptFileName}`,
+		filePath: `.amoena/${taskPromptFileName}`,
 		config: terminalConfig,
 	});
 

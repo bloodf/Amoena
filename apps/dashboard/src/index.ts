@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 
-// Enhanced types for Lunaria
+// Enhanced types for Amoena
 export interface Session {
 	id: string;
 	key: string;
@@ -82,7 +82,7 @@ export interface ModelConfig {
 	costPer1k: number;
 }
 
-// Lunaria Phase 2 Types
+// Amoena Phase 2 Types
 export interface Task {
 	id: number;
 	title: string;
@@ -268,14 +268,14 @@ export interface ConnectionStatus {
 	sseConnected?: boolean;
 }
 
-interface LunariaStore {
+interface AmoenaStore {
 	// WebSocket & Connection
 	connection: ConnectionStatus;
 	lastMessage: any;
 	setConnection: (connection: Partial<ConnectionStatus>) => void;
 	setLastMessage: (message: any) => void;
 
-	// Lunaria Phase 2 - Tasks
+	// Amoena Phase 2 - Tasks
 	tasks: Task[];
 	selectedTask: Task | null;
 	setTasks: (tasks: Task[]) => void;
@@ -284,7 +284,7 @@ interface LunariaStore {
 	updateTask: (taskId: number, updates: Partial<Task>) => void;
 	deleteTask: (taskId: number) => void;
 
-	// Lunaria Phase 2 - Agents
+	// Amoena Phase 2 - Agents
 	agents: Agent[];
 	selectedAgent: Agent | null;
 	setAgents: (agents: Agent[]) => void;
@@ -293,12 +293,12 @@ interface LunariaStore {
 	updateAgent: (agentId: number, updates: Partial<Agent>) => void;
 	deleteAgent: (agentId: number) => void;
 
-	// Lunaria Phase 2 - Activities
+	// Amoena Phase 2 - Activities
 	activities: Activity[];
 	setActivities: (activities: Activity[]) => void;
 	addActivity: (activity: Activity) => void;
 
-	// Lunaria Phase 2 - Notifications
+	// Amoena Phase 2 - Notifications
 	notifications: Notification[];
 	unreadNotificationCount: number;
 	setNotifications: (notifications: Notification[]) => void;
@@ -306,12 +306,12 @@ interface LunariaStore {
 	markNotificationRead: (notificationId: number) => void;
 	markAllNotificationsRead: () => void;
 
-	// Lunaria Phase 2 - Comments
+	// Amoena Phase 2 - Comments
 	taskComments: Record<number, Comment[]>;
 	setTaskComments: (taskId: number, comments: Comment[]) => void;
 	addTaskComment: (taskId: number, comment: Comment) => void;
 
-	// Lunaria Phase 2 - Standup
+	// Amoena Phase 2 - Standup
 	standupReports: StandupReport[];
 	currentStandupReport: StandupReport | null;
 	setStandupReports: (reports: StandupReport[]) => void;
@@ -408,7 +408,7 @@ interface LunariaStore {
 	toggleLiveFeed: () => void;
 }
 
-export const useLunaria = create<LunariaStore>()(
+export const useAmoena = create<AmoenaStore>()(
 	subscribeWithSelector((set, get) => ({
 		// Connection state
 		connection: {
@@ -677,7 +677,7 @@ export const useLunaria = create<LunariaStore>()(
 				return { liveFeedOpen: next };
 			}),
 
-		// Lunaria Phase 2 - Tasks
+		// Amoena Phase 2 - Tasks
 		tasks: [],
 		selectedTask: null,
 		setTasks: (tasks) => set({ tasks }),
@@ -703,7 +703,7 @@ export const useLunaria = create<LunariaStore>()(
 					state.selectedTask?.id === taskId ? null : state.selectedTask,
 			})),
 
-		// Lunaria Phase 2 - Agents
+		// Amoena Phase 2 - Agents
 		agents: [],
 		selectedAgent: null,
 		setAgents: (agents) => set({ agents }),
@@ -729,7 +729,7 @@ export const useLunaria = create<LunariaStore>()(
 					state.selectedAgent?.id === agentId ? null : state.selectedAgent,
 			})),
 
-		// Lunaria Phase 2 - Activities
+		// Amoena Phase 2 - Activities
 		activities: [],
 		setActivities: (activities) => set({ activities }),
 		addActivity: (activity) =>
@@ -737,7 +737,7 @@ export const useLunaria = create<LunariaStore>()(
 				activities: [activity, ...state.activities].slice(0, 1000), // Keep last 1000
 			})),
 
-		// Lunaria Phase 2 - Notifications
+		// Amoena Phase 2 - Notifications
 		notifications: [],
 		unreadNotificationCount: 0,
 		setNotifications: (notifications) =>
@@ -769,7 +769,7 @@ export const useLunaria = create<LunariaStore>()(
 				unreadNotificationCount: 0,
 			})),
 
-		// Lunaria Phase 2 - Comments
+		// Amoena Phase 2 - Comments
 		taskComments: {},
 		setTaskComments: (taskId, comments) =>
 			set((state) => ({
@@ -842,7 +842,7 @@ export const useLunaria = create<LunariaStore>()(
 				),
 			})),
 
-		// Lunaria Phase 2 - Standup
+		// Amoena Phase 2 - Standup
 		standupReports: [],
 		currentStandupReport: null,
 		setStandupReports: (reports) => set({ standupReports: reports }),

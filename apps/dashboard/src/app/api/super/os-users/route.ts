@@ -18,8 +18,8 @@ export interface OsUser {
 	has_claude: boolean;
 	/** Whether codex CLI is installed/accessible for this user */
 	has_codex: boolean;
-	/** Whether lunaria is installed for this user */
-	has_lunaria: boolean;
+	/** Whether amoena is installed for this user */
+	has_amoena: boolean;
 	/** Whether this OS user is the one running the MC process (i.e. "Default" org) */
 	is_process_owner: boolean;
 }
@@ -85,7 +85,7 @@ function checkToolExists(homeDir: string, tool: string): boolean {
 	const candidates = [
 		path.join(homeDir, ".local", "bin", tool),
 		path.join(homeDir, ".npm-global", "bin", tool),
-		path.join(homeDir, `.${tool}`), // e.g. ~/.claude, ~/.lunaria config dir = installed
+		path.join(homeDir, `.${tool}`), // e.g. ~/.claude, ~/.amoena config dir = installed
 	];
 	for (const p of candidates) {
 		try {
@@ -104,18 +104,18 @@ function checkToolExists(homeDir: string, tool: string): boolean {
 	return false;
 }
 
-/** Install a tool (lunaria, claude, codex) for a given OS user. Non-fatal — returns success/error. */
+/** Install a tool (amoena, claude, codex) for a given OS user. Non-fatal — returns success/error. */
 function installToolForUser(
 	homeDir: string,
 	username: string,
-	tool: "lunaria" | "claude" | "codex",
+	tool: "amoena" | "claude" | "codex",
 ): { success: boolean; error?: string } {
 	try {
-		if (tool === "lunaria") {
-			// lunaria is managed by MC — create dir structure + install latest from npm
-			const lunariaDir = path.join(homeDir, ".lunaria");
+		if (tool === "amoena") {
+			// amoena is managed by MC — create dir structure + install latest from npm
+			const amoenaDir = path.join(homeDir, ".amoena");
 			const workspaceDir = path.join(homeDir, "workspace");
-			for (const dir of [lunariaDir, workspaceDir]) {
+			for (const dir of [amoenaDir, workspaceDir]) {
 				try {
 					execFileSync(
 						"/usr/bin/sudo",
@@ -127,11 +127,11 @@ function installToolForUser(
 					fs.mkdirSync(dir, { recursive: true });
 				}
 			}
-			// Install latest lunaria from GitHub (always latest) with npm fallback
+			// Install latest amoena from GitHub (always latest) with npm fallback
 			try {
 				execFileSync(
 					"/usr/bin/sudo",
-					["-n", "-u", username, "npm", "install", "-g", "lunaria/lunaria"],
+					["-n", "-u", username, "npm", "install", "-g", "amoena/amoena"],
 					{
 						timeout: 120000,
 						stdio: "pipe",
@@ -146,7 +146,7 @@ function installToolForUser(
 					"npm install failed";
 				logger.warn(
 					{ tool, username, err: msg },
-					"lunaria npm install failed, dir structure created",
+					"amoena npm install failed, dir structure created",
 				);
 				return {
 					success: true,
@@ -301,7 +301,7 @@ function discoverOsUsers(): OsUser[] {
 
 				const hasClaude = checkToolExists(homeDir, "claude");
 				const hasCodex = checkToolExists(homeDir, "codex");
-				const hasLunaria = checkToolExists(homeDir, "lunaria");
+				const hasAmoena = checkToolExists(homeDir, "amoena");
 				users.push({
 					username,
 					uid,
@@ -310,7 +310,7 @@ function discoverOsUsers(): OsUser[] {
 					linked_tenant_id: null,
 					has_claude: hasClaude,
 					has_codex: hasCodex,
-					has_lunaria: hasLunaria,
+					has_amoena: hasAmoena,
 					is_process_owner: false,
 				});
 			}
@@ -334,7 +334,7 @@ function discoverOsUsers(): OsUser[] {
 
 				const hasClaude = checkToolExists(homeDir, "claude");
 				const hasCodex = checkToolExists(homeDir, "codex");
-				const hasLunaria = checkToolExists(homeDir, "lunaria");
+				const hasAmoena = checkToolExists(homeDir, "amoena");
 				users.push({
 					username,
 					uid,
@@ -343,7 +343,7 @@ function discoverOsUsers(): OsUser[] {
 					linked_tenant_id: null,
 					has_claude: hasClaude,
 					has_codex: hasCodex,
-					has_lunaria: hasLunaria,
+					has_amoena: hasAmoena,
 					is_process_owner: false,
 				});
 			}
@@ -393,7 +393,7 @@ export async function GET(request: NextRequest) {
  * POST /api/super/os-users - Create a new OS-level user and register as tenant (admin only)
  *
  * Local mode: creates OS user + home dir, registers in tenants table as active
- * Gateway mode: creates OS user + delegates to full bootstrap pipeline (lunaria + workspace + agents)
+ * Gateway mode: creates OS user + delegates to full bootstrap pipeline (amoena + workspace + agents)
  *
  * Body: { username, display_name, password?, gateway_mode?: boolean, gateway_port?, owner_gateway? }
  */
@@ -421,7 +421,7 @@ export async function POST(request: NextRequest) {
 	const displayName = String(body.display_name || "").trim();
 	const password = body.password ? String(body.password) : undefined;
 	const gatewayMode = !!body.gateway_mode;
-	const installLunaria = !!body.install_lunaria;
+	const installAmoena = !!body.install_amoena;
 	const installClaude = !!body.install_claude;
 	const installCodex = !!body.install_codex;
 
@@ -481,7 +481,7 @@ export async function POST(request: NextRequest) {
 					owner_gateway: body.owner_gateway || undefined,
 					dry_run: body.dry_run !== false,
 					config: {
-						install_lunaria: installLunaria,
+						install_amoena: installAmoena,
 						install_claude: installClaude,
 						install_codex: installCodex,
 					},
@@ -537,7 +537,7 @@ export async function POST(request: NextRequest) {
 						return NextResponse.json(
 							{
 								error: `Failed to create OS user. This requires admin privileges. ${msg}`,
-								hint: "Run Lunaria with sudo or grant the current user admin rights.",
+								hint: "Run Amoena with sudo or grant the current user admin rights.",
 							},
 							{ status: 500 },
 						);
@@ -587,16 +587,16 @@ export async function POST(request: NextRequest) {
 		// Determine home directory for the new user
 		const homeDir =
 			platform === "darwin" ? `/Users/${username}` : `/home/${username}`;
-		const lunariaHome = path.posix.join(homeDir, ".lunaria");
+		const amoenaHome = path.posix.join(homeDir, ".amoena");
 		const workspaceRoot = path.posix.join(homeDir, "workspace");
 
 		// Register as tenant in DB
 		const tenantRes = db
 			.prepare(`
-      INSERT INTO tenants (slug, display_name, linux_user, plan_tier, status, lunaria_home, workspace_root, gateway_port, dashboard_port, config, created_by, owner_gateway)
+      INSERT INTO tenants (slug, display_name, linux_user, plan_tier, status, amoena_home, workspace_root, gateway_port, dashboard_port, config, created_by, owner_gateway)
       VALUES (?, ?, ?, 'local', 'active', ?, ?, NULL, NULL, '{}', ?, 'local')
     `)
-			.run(username, displayName, username, lunariaHome, workspaceRoot, actor);
+			.run(username, displayName, username, amoenaHome, workspaceRoot, actor);
 
 		const tenantId = Number(tenantRes.lastInsertRowid);
 
@@ -620,11 +620,11 @@ export async function POST(request: NextRequest) {
 		// Install requested tools (non-fatal)
 		const installResults: Record<string, { success: boolean; error?: string }> =
 			{};
-		const toolsToInstall: Array<"lunaria" | "claude" | "codex"> = [];
-		if (installLunaria) toolsToInstall.push("lunaria");
-		// When lunaria is selected, claude+codex are bundled — skip separate installs
-		if (installClaude && !installLunaria) toolsToInstall.push("claude");
-		if (installCodex && !installLunaria) toolsToInstall.push("codex");
+		const toolsToInstall: Array<"amoena" | "claude" | "codex"> = [];
+		if (installAmoena) toolsToInstall.push("amoena");
+		// When amoena is selected, claude+codex are bundled — skip separate installs
+		if (installClaude && !installAmoena) toolsToInstall.push("claude");
+		if (installCodex && !installAmoena) toolsToInstall.push("codex");
 
 		for (const tool of toolsToInstall) {
 			installResults[tool] = installToolForUser(homeDir, username, tool);

@@ -50,7 +50,7 @@ void applyShellEnvToProcess().catch((error) => {
 if (IS_DEV) {
 	const workspaceName = resolveDevWorkspaceName();
 	if (workspaceName) {
-		app.setName(`Lunaria (${workspaceName})`);
+		app.setName(`Amoena (${workspaceName})`);
 	}
 }
 
@@ -80,7 +80,7 @@ async function processDeepLink(url: string): Promise<void> {
 	}
 
 	// Non-auth deep links: extract path and navigate in renderer
-	// e.g. lunaria://tasks/my-slug -> /tasks/my-slug
+	// e.g. amoena://tasks/my-slug -> /tasks/my-slug
 	const path = `/${url.split("://")[1]}`;
 	focusMainWindow();
 
@@ -184,7 +184,7 @@ app.on("before-quit", async (event) => {
 				buttons: ["Quit", "Cancel"],
 				defaultId: 0,
 				cancelId: 1,
-				title: "Quit Lunaria",
+				title: "Quit Amoena",
 				message: "Are you sure you want to quit?",
 			});
 
@@ -254,7 +254,7 @@ if (process.env.NODE_ENV === "development") {
 
 protocol.registerSchemesAsPrivileged([
 	{
-		scheme: "lunaria-icon",
+		scheme: "amoena-icon",
 		privileges: {
 			standard: true,
 			secure: true,
@@ -263,7 +263,7 @@ protocol.registerSchemesAsPrivileged([
 		},
 	},
 	{
-		scheme: "lunaria-font",
+		scheme: "amoena-font",
 		privileges: {
 			standard: true,
 			secure: true,
@@ -302,10 +302,10 @@ if (!gotTheLock) {
 			}
 			return net.fetch(pathToFileURL(iconPath).toString());
 		};
-		protocol.handle("lunaria-icon", iconProtocolHandler);
+		protocol.handle("amoena-icon", iconProtocolHandler);
 		session
-			.fromPartition("persist:lunaria")
-			.protocol.handle("lunaria-icon", iconProtocolHandler);
+			.fromPartition("persist:amoena")
+			.protocol.handle("amoena-icon", iconProtocolHandler);
 
 		// Serve system fonts (e.g. SF Mono on macOS) via custom protocol
 		// so the renderer can use @font-face with font-src 'self' CSP
@@ -331,10 +331,10 @@ if (!gotTheLock) {
 				}
 				return new Response("Not found", { status: 404 });
 			};
-			protocol.handle("lunaria-font", fontProtocolHandler);
+			protocol.handle("amoena-font", fontProtocolHandler);
 			session
-				.fromPartition("persist:lunaria")
-				.protocol.handle("lunaria-font", fontProtocolHandler);
+				.fromPartition("persist:amoena")
+				.protocol.handle("amoena-font", fontProtocolHandler);
 		}
 
 		ensureProjectIconsDir();

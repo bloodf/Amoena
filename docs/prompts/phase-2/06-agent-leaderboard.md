@@ -20,7 +20,7 @@ Build the Agent Leaderboard — a ranked view of all AI agents (claude-code, cod
 
 ## Repository Context
 
-- **Monorepo root:** `/Users/heitor/Developer/github.com/Lunaria/lunaria`
+- **Monorepo root:** `/Users/heitor/Developer/github.com/Amoena/amoena`
 - **Telemetry module (Phase 1):** `apps/dashboard/src/lib/mission-control-telemetry.ts` — exports `AgentPerformanceRow`, `getAgentPerformance()`, `getAgentPerformanceByType()`
 - **Run reporter (Phase 1):** `apps/dashboard/src/lib/run-reporter.ts` — exports `AgentRunSummary`
 - **Mission Control UI (Phase 1):** `apps/dashboard/src/components/panels/mission-control/`

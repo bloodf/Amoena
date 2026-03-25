@@ -1,5 +1,5 @@
 /**
- * Lunaria CLI entry point.
+ * Amoena CLI entry point.
  *
  * Handles --version and --help flags, then delegates to the TUI renderer.
  */
@@ -7,20 +7,20 @@
 const VERSION = '0.1.0';
 
 function printVersion(): void {
-  console.log(`lunaria ${VERSION}`);
+  console.log(`amoena ${VERSION}`);
 }
 
 function printHelp(): void {
-  console.log(`lunaria ${VERSION}
+  console.log(`amoena ${VERSION}
 
-Usage: lunaria [options] [command]
+Usage: amoena [options] [command]
 
 Options:
   --version, -v    Show version number
   --help, -h       Show this help message
 
 Commands:
-  start            Start the Lunaria TUI (default)
+  start            Start the Amoena TUI (default)
   agents           List available agents
   run <task>       Run a task with the orchestrator
 `);

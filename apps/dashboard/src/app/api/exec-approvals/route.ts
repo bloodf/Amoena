@@ -10,7 +10,7 @@ function gatewayUrl(p: string): string {
 }
 
 function execApprovalsPath(): string {
-	return path.join(config.lunariaHome, "exec-approvals.json");
+	return path.join(config.amoenaHome, "exec-approvals.json");
 }
 
 function computeHash(raw: string): string {

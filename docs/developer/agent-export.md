@@ -1,6 +1,6 @@
 # Agent Export
 
-Lunaria ships a persona export pipeline in `scripts/export-agents.ts`. It converts built-in agent personas from `apps/desktop/resources/agent-personas/` into formats consumed by external coding tools.
+Amoena ships a persona export pipeline in `scripts/export-agents.ts`. It converts built-in agent personas from `apps/desktop/resources/agent-personas/` into formats consumed by external coding tools.
 
 ## Purpose
 

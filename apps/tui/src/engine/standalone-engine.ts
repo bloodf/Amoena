@@ -1,10 +1,10 @@
 /**
  * Standalone engine: embeds a minimal orchestration loop directly in the TUI.
- * When no Lunaria server is reachable, this runs agent tasks in-process.
+ * When no Amoena server is reachable, this runs agent tasks in-process.
  *
  * In this phase the engine is a lightweight simulation that emits MCServerEvent
  * compatible events. A full DAG scheduler integration is deferred until
- * @lunaria/lunaria-service is published to the workspace.
+ * @lunaria/amoena-service is published to the workspace.
  */
 
 import { EventEmitter } from 'events';
@@ -120,7 +120,7 @@ export class StandaloneEngine extends EventEmitter {
         });
       } else {
         // Real execution: delegate to the appropriate adapter CLI.
-        // Full implementation will import from @lunaria/lunaria-service.
+        // Full implementation will import from @lunaria/amoena-service.
         const started = Date.now();
         this.send({
           type: 'task.output',

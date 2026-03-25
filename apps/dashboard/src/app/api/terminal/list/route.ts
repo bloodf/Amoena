@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const TERMINAL_HOST_URL = `http://localhost:${process.env.LUNARIA_TERMINAL_HOST_PORT ?? 4879}`;
+const TERMINAL_HOST_URL = `http://localhost:${process.env.AMOENA_TERMINAL_HOST_PORT ?? 4879}`;
 
 export async function GET() {
 	try {

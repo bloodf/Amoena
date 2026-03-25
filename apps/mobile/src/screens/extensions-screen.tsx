@@ -1,12 +1,12 @@
 import { Alert, Pressable, RefreshControl, ScrollView, Switch, Text, View } from "react-native";
 
-import { useLunariaTranslation } from "@lunaria/i18n";
+import { useAmoenaTranslation } from "@lunaria/i18n";
 import { useExtensions } from "@/runtime/hooks/use-extensions";
 import { styles } from "@/theme/styles";
 import { tokens } from "@/theme/tokens";
 
 export function ExtensionsScreen() {
-  const { t } = useLunariaTranslation();
+  const { t } = useAmoenaTranslation();
   const { data: extensions, isLoading, refresh, toggle, uninstall } = useExtensions();
 
   const handleUninstall = (id: string, name: string) => {

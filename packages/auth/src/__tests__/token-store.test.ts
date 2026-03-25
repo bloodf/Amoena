@@ -5,7 +5,7 @@ import { tmpdir } from 'os';
 import { TokenStorage } from '../oauth/token-store';
 import type { OAuthTokens } from '../oauth/types';
 
-const TEST_DIR = join(tmpdir(), `lunaria-token-test-${process.pid}`);
+const TEST_DIR = join(tmpdir(), `amoena-token-test-${process.pid}`);
 const TEST_FILE = join(TEST_DIR, 'tokens.json');
 
 describe('TokenStorage', () => {

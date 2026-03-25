@@ -32,7 +32,7 @@ Offset  Size   Type      Description
 
 ### Magic (bytes 0–3)
 
-Always the ASCII string `LUNA`. Lunaria validates these 4 bytes first. A file with any other prefix is rejected with:
+Always the ASCII string `LUNA`. Amoena validates these 4 bytes first. A file with any other prefix is rejected with:
 
 ```
 invalid .luna file: bad magic bytes
@@ -73,14 +73,14 @@ Asset names are arbitrary UTF-8 strings. By convention they use forward slashes 
 
 ## Creating .luna Files
 
-### Using lunaria-pack (recommended)
+### Using amoena-pack (recommended)
 
 ```bash
 # Install once
 bun install -g @lunaria/pack
 
 # Package a project directory
-lunaria-pack manifest.json \
+amoena-pack manifest.json \
   --asset panel.html \
   --asset main.js \
   --asset icon.png \
@@ -169,10 +169,10 @@ def write_luna_bundle(manifest: dict, assets: dict[str, bytes], out_path: str) -
 
 ## Inspecting .luna Files
 
-### Using lunaria-pack
+### Using amoena-pack
 
 ```bash
-lunaria-pack inspect my-extension.luna
+amoena-pack inspect my-extension.luna
 ```
 
 Output:
@@ -251,11 +251,11 @@ There are no hard size limits enforced by the parser, but practical constraints 
 
 - Manifest JSON: keep under 64 KB (large manifests indicate a design issue)
 - Individual assets: the `u32` length field caps each at ~4 GB, but panels should be lightweight
-- Total bundle size: no enforced limit; Lunaria reads the entire file into memory on load
+- Total bundle size: no enforced limit; Amoena reads the entire file into memory on load
 
 ## Validation on Load
 
-When Lunaria loads a `.luna` file it performs these checks in order:
+When Amoena loads a `.luna` file it performs these checks in order:
 
 1. File exists and is readable
 2. First 4 bytes are `LUNA`

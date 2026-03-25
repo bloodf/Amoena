@@ -4,7 +4,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
 import { config } from "@/lib/config";
 import { logger } from "@/lib/logger";
-import { callLunariaGateway } from "@/lib/lunaria-gateway";
+import { callAmoenaGateway } from "@/lib/amoena-gateway";
 import {
 	parseGatewayHistoryTranscript,
 	parseJsonlTranscript,
@@ -14,8 +14,8 @@ import {
  * GET /api/sessions/transcript/gateway?key=<session-key>&limit=50
  *
  * Reads the JSONL transcript file for a gateway session directly from disk.
- * Lunaria stores session transcripts at:
- *   {LUNARIA_STATE_DIR}/agents/{agent}/sessions/{sessionId}.jsonl
+ * Amoena stores session transcripts at:
+ *   {AMOENA_STATE_DIR}/agents/{agent}/sessions/{sessionId}.jsonl
  *
  * The session key (e.g. "agent:jarv:cron:task-name") is used to look up
  * the sessionId from the agent's sessions.json, then the JSONL file is read.
@@ -33,18 +33,18 @@ export async function GET(request: NextRequest) {
 		return NextResponse.json({ error: "key is required" }, { status: 400 });
 	}
 
-	const stateDir = config.lunariaStateDir;
+	const stateDir = config.amoenaStateDir;
 	if (!stateDir) {
 		return NextResponse.json({
 			messages: [],
 			source: "gateway",
-			error: "LUNARIA_STATE_DIR not configured",
+			error: "AMOENA_STATE_DIR not configured",
 		});
 	}
 
 	try {
 		try {
-			const history = await callLunariaGateway<{ messages?: unknown[] }>(
+			const history = await callAmoenaGateway<{ messages?: unknown[] }>(
 				"chat.history",
 				{ sessionKey, limit },
 				15000,

@@ -1,8 +1,18 @@
+/**
+ * Home screen — Active runs overview with quick stats and recent activity.
+ *
+ * Shows: active agent count, total cost today, recent activity feed,
+ * and a list of active sessions with their current state.
+ */
+
 import { useState } from "react";
 import { Link } from "expo-router";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Pressable, RefreshControl, ScrollView, Text, TextInput, View } from "react-native";
 
 import { useRuntime } from "@/runtime/provider";
+import { CostBadge } from "@/components/CostBadge";
+import { styles } from "@/theme/styles";
+import { tokens } from "@/theme/tokens";
 
 export function MobileHomeScreen() {
   const {
@@ -12,202 +22,256 @@ export function MobileHomeScreen() {
     pairWithDesktop,
     sessions,
     clearPairing,
+    refreshSessions,
+    error,
   } = useRuntime();
+
   const [baseUrl, setBaseUrl] = useState("http://127.0.0.1:47821");
   const [pairingToken, setPairingToken] = useState("");
   const [pin, setPin] = useState("");
-  const [deviceName, setDeviceName] = useState("Lunaria Phone");
+  const [deviceName, setDeviceName] = useState("Amoena Phone");
+  const [refreshing, setRefreshing] = useState(false);
+
+  const activeSessions = sessions.filter((s) => s.status === "active" || s.status === "running");
+  const activeAgentCount = activeSessions.length;
+  const todayCost = 0; // Cost tracking will come from relay events
+
+  async function handleRefresh() {
+    setRefreshing(true);
+    await refreshSessions();
+    setRefreshing(false);
+  }
+
+  if (!isHydrated) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: tokens.colorBackground }}>
+        <Text style={styles.mutedText}>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (!auth) {
+    return <PairingForm
+      baseUrl={baseUrl}
+      pairingToken={pairingToken}
+      pin={pin}
+      deviceName={deviceName}
+      onBaseUrlChange={setBaseUrl}
+      onPairingTokenChange={setPairingToken}
+      onPinChange={setPin}
+      onDeviceNameChange={setDeviceName}
+      onPair={() => void pairWithDesktop({ baseUrl, pairingToken, pin, deviceName })}
+      error={error}
+    />;
+  }
 
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={{ padding: 20, gap: 16 }}
+      contentContainerStyle={styles.scrollContent}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={tokens.colorTextSecondary} />
+      }
     >
-      <Text selectable style={{ fontSize: 28, fontWeight: "700" }}>
-        Remote control
-      </Text>
-      <Text selectable style={{ color: "#64748B", fontSize: 15, lineHeight: 22 }}>
-        Pair this phone to a desktop runtime. Desktop remains the execution host; mobile stays focused on session summaries and approvals.
-      </Text>
+      {/* Quick Stats Row */}
+      <View style={quickStatsRow}>
+        <View style={[styles.card, { flex: 1, alignItems: "center" }]}>
+          <Text style={statValue}>{activeAgentCount}</Text>
+          <Text style={styles.mutedText}>Active</Text>
+        </View>
+        <View style={[styles.card, { flex: 1, alignItems: "center" }]}>
+          <Text style={statValue}>{sessions.length}</Text>
+          <Text style={styles.mutedText}>Sessions</Text>
+        </View>
+        <View style={[styles.card, { flex: 1, alignItems: "center" }]}>
+          {todayCost > 0 ? (
+            <CostBadge costUsd={todayCost} />
+          ) : (
+            <Text style={statValue}>--</Text>
+          )}
+          <Text style={styles.mutedText}>Today</Text>
+        </View>
+      </View>
 
-      {!isHydrated ? (
-        <Text selectable>Loading remote session…</Text>
-      ) : null}
+      {/* Pending Permissions Banner */}
+      {pendingPermissions.length > 0 && (
+        <Link href="/permissions" asChild>
+          <Pressable style={permissionBanner} accessibilityRole="button">
+            <Text style={permissionBannerText}>
+              {pendingPermissions.length} approval{pendingPermissions.length !== 1 ? "s" : ""} waiting
+            </Text>
+          </Pressable>
+        </Link>
+      )}
 
-      {!auth ? (
-        <View style={{ gap: 12, padding: 16, borderRadius: 20, backgroundColor: "#0F172A", borderWidth: 1, borderColor: "#1E293B" }}>
-          <Text selectable style={{ color: "white", fontSize: 18, fontWeight: "600" }}>
-            Pair this phone
-          </Text>
-          <TextInput
-            value={baseUrl}
-            onChangeText={setBaseUrl}
-            placeholder="Desktop base URL"
-            autoCapitalize="none"
-            style={inputStyle}
-          />
-          <TextInput
-            value={pairingToken}
-            onChangeText={setPairingToken}
-            placeholder="Pairing token"
-            autoCapitalize="none"
-            style={inputStyle}
-          />
-          <TextInput
-            value={pin}
-            onChangeText={setPin}
-            placeholder="PIN"
-            autoCapitalize="none"
-            style={inputStyle}
-          />
-          <TextInput
-            value={deviceName}
-            onChangeText={setDeviceName}
-            placeholder="Device name"
-            style={inputStyle}
-          />
-          <Pressable
-            onPress={() => void pairWithDesktop({ baseUrl, pairingToken, pin, deviceName })}
-            style={primaryButton}
-          >
-            <Text style={primaryButtonText}>Complete pairing</Text>
+      {/* Connected Device Info */}
+      <View style={styles.card}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.cardTitle}>Connected</Text>
+            <Text style={styles.mutedText} numberOfLines={1}>{auth.baseUrl}</Text>
+          </View>
+          <Pressable onPress={() => void clearPairing()} style={styles.secondaryButton} accessibilityRole="button">
+            <Text style={styles.secondaryButtonText}>Unpair</Text>
           </Pressable>
         </View>
+      </View>
+
+      {/* Active Sessions */}
+      <Text style={styles.sectionTitle}>Sessions</Text>
+      {sessions.length === 0 ? (
+        <View style={styles.card}>
+          <Text style={styles.mutedText}>No active sessions. Start a run on desktop to monitor it here.</Text>
+        </View>
       ) : (
-        <>
-          <View style={cardStyle}>
-            <Text selectable style={cardTitle}>
-              Connected device
-            </Text>
-            <Text selectable style={mutedText}>
-              {auth.deviceId}
-            </Text>
-            <Text selectable style={mutedText}>
-              {auth.baseUrl}
-            </Text>
-            <Text selectable style={mutedText}>
-              Permissions waiting: {pendingPermissions.length}
-            </Text>
-            <Pressable onPress={() => void clearPairing()} style={secondaryButton}>
-              <Text style={secondaryButtonText}>Forget this pairing</Text>
-            </Pressable>
-          </View>
-
-          <View style={cardStyle}>
-            <Text selectable style={cardTitle}>
-              Sessions
-            </Text>
-            {sessions.map((session) => (
-              <Link key={session.id} href={`/session/${session.id}`} asChild>
-                <Pressable style={sessionRow}>
-                  <View style={{ flex: 1 }}>
-                    <Text selectable style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
-                      {session.workingDir.split("/").pop() || session.id}
-                    </Text>
-                    <Text selectable style={mutedText}>
-                      {session.status} · {session.tuiType}
-                    </Text>
+        sessions.map((session) => (
+          <Link key={session.id} href={`/session/${session.id}`} asChild>
+            <Pressable style={styles.card} accessibilityRole="button">
+              <View style={styles.sessionRow}>
+                <View style={statusDot(session.status === "active" || session.status === "running")} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.sessionName} numberOfLines={1}>
+                    {session.workingDir.split("/").pop() || session.id}
+                  </Text>
+                  <Text style={styles.mutedText}>
+                    {session.status} {session.tuiType ? `\u00B7 ${session.tuiType}` : ""}
+                  </Text>
+                </View>
+                {session.metadata?.autopilot ? (
+                  <View style={styles.tag}>
+                    <Text style={styles.tagText}>Autopilot</Text>
                   </View>
-                  {session.metadata?.autopilot ? (
-                    <View style={tagStyle}>
-                      <Text style={tagText}>Autopilot</Text>
-                    </View>
-                  ) : null}
-                </Pressable>
-              </Link>
-            ))}
-          </View>
-
-          <Link href="/permissions" asChild>
-            <Pressable style={cardStyle}>
-              <Text selectable style={cardTitle}>
-                Permission queue
-              </Text>
-              <Text selectable style={mutedText}>
-                {pendingPermissions.length === 0
-                  ? "No approvals are waiting."
-                  : `${pendingPermissions.length} desktop actions need a decision.`}
-              </Text>
+                ) : null}
+              </View>
             </Pressable>
           </Link>
-        </>
+        ))
       )}
     </ScrollView>
   );
 }
 
-const inputStyle = {
-  backgroundColor: "#111827",
-  color: "white",
-  borderRadius: 14,
-  paddingHorizontal: 14,
-  paddingVertical: 12,
-  borderWidth: 1,
-  borderColor: "#374151",
-} as const;
+// ─── Pairing Form (shown when not yet paired) ───────────────────────────────
 
-const cardStyle = {
-  gap: 10,
-  padding: 16,
-  borderRadius: 20,
-  backgroundColor: "#0F172A",
-  borderWidth: 1,
-  borderColor: "#1E293B",
-} as const;
+function PairingForm({
+  baseUrl,
+  pairingToken,
+  pin,
+  deviceName,
+  onBaseUrlChange,
+  onPairingTokenChange,
+  onPinChange,
+  onDeviceNameChange,
+  onPair,
+  error,
+}: {
+  baseUrl: string;
+  pairingToken: string;
+  pin: string;
+  deviceName: string;
+  onBaseUrlChange: (v: string) => void;
+  onPairingTokenChange: (v: string) => void;
+  onPinChange: (v: string) => void;
+  onDeviceNameChange: (v: string) => void;
+  onPair: () => void;
+  error: string | null;
+}) {
+  return (
+    <ScrollView
+      contentInsetAdjustmentBehavior="automatic"
+      contentContainerStyle={styles.scrollContent}
+    >
+      <Text style={styles.screenTitle}>Amoena Remote</Text>
+      <Text style={styles.descriptionText}>
+        Pair this phone with your desktop Amoena instance to monitor runs, approve permissions, and track costs remotely.
+      </Text>
 
-const primaryButton = {
-  backgroundColor: "#38BDF8",
-  paddingVertical: 12,
-  borderRadius: 14,
-  alignItems: "center",
-} as const;
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Pair with Desktop</Text>
+        {error && (
+          <Text style={{ color: tokens.colorDestructive, fontSize: tokens.fontSizeSm }}>{error}</Text>
+        )}
+        <TextInput
+          value={baseUrl}
+          onChangeText={onBaseUrlChange}
+          placeholder="Desktop base URL"
+          placeholderTextColor={tokens.colorTextTertiary}
+          autoCapitalize="none"
+          autoCorrect={false}
+          style={styles.input}
+        />
+        <TextInput
+          value={pairingToken}
+          onChangeText={onPairingTokenChange}
+          placeholder="Pairing token"
+          placeholderTextColor={tokens.colorTextTertiary}
+          autoCapitalize="none"
+          autoCorrect={false}
+          style={styles.input}
+        />
+        <TextInput
+          value={pin}
+          onChangeText={onPinChange}
+          placeholder="PIN"
+          placeholderTextColor={tokens.colorTextTertiary}
+          autoCapitalize="none"
+          keyboardType="number-pad"
+          style={styles.input}
+        />
+        <TextInput
+          value={deviceName}
+          onChangeText={onDeviceNameChange}
+          placeholder="Device name"
+          placeholderTextColor={tokens.colorTextTertiary}
+          style={styles.input}
+        />
+        <Pressable onPress={onPair} style={styles.primaryButton} accessibilityRole="button">
+          <Text style={styles.primaryButtonText}>Complete pairing</Text>
+        </Pressable>
+      </View>
 
-const primaryButtonText = {
-  color: "#082F49",
-  fontWeight: "700",
-  fontSize: 15,
-} as const;
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>QR Scan</Text>
+        <Text style={styles.mutedText}>
+          QR code scanning will be available in a future update. For now, enter the pairing details manually from your desktop.
+        </Text>
+      </View>
+    </ScrollView>
+  );
+}
 
-const secondaryButton = {
-  paddingVertical: 10,
-  borderRadius: 12,
-  alignItems: "center",
-  borderWidth: 1,
-  borderColor: "#334155",
-} as const;
+// ─── Local styles ────────────────────────────────────────────────────────────
 
-const secondaryButtonText = {
-  color: "#E2E8F0",
-  fontWeight: "600",
-} as const;
+const quickStatsRow = {
+  flexDirection: "row" as const,
+  gap: tokens.spacing3,
+};
 
-const cardTitle = {
-  color: "white",
-  fontSize: 18,
-  fontWeight: "600",
-} as const;
+const statValue = {
+  color: tokens.colorTextPrimary,
+  fontSize: tokens.fontSize2xl,
+  fontWeight: "700" as const,
+};
 
-const mutedText = {
-  color: "#94A3B8",
-  fontSize: 14,
-} as const;
+const permissionBanner = {
+  backgroundColor: tokens.colorWarning ?? "#F59E0B",
+  paddingVertical: tokens.spacing3,
+  paddingHorizontal: tokens.spacing4,
+  borderRadius: tokens.radius2xl,
+  alignItems: "center" as const,
+};
 
-const sessionRow = {
-  flexDirection: "row",
-  alignItems: "center",
-  gap: 12,
-  paddingVertical: 8,
-} as const;
+const permissionBannerText = {
+  color: "#422006",
+  fontWeight: "700" as const,
+  fontSize: tokens.fontSizeSm,
+};
 
-const tagStyle = {
-  paddingHorizontal: 10,
-  paddingVertical: 6,
-  borderRadius: 999,
-  backgroundColor: "#172554",
-} as const;
-
-const tagText = {
-  color: "#BFDBFE",
-  fontSize: 12,
-  fontWeight: "700",
-} as const;
+function statusDot(isActive: boolean) {
+  return {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: isActive ? tokens.colorSuccess : tokens.colorTextTertiary,
+  } as const;
+}

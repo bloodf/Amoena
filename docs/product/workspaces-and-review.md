@@ -1,6 +1,6 @@
 # Workspaces And Review
 
-Lunaria uses isolated workspaces for parallel and autonomous work.
+Amoena uses isolated workspaces for parallel and autonomous work.
 
 ## Workspace Types
 

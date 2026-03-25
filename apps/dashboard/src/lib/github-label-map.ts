@@ -1,5 +1,5 @@
 /**
- * Bidirectional mapping between Lunaria statuses/priorities and GitHub labels.
+ * Bidirectional mapping between Amoena statuses/priorities and GitHub labels.
  * Labels use `mc:` prefix to avoid collisions with existing repo labels.
  */
 
@@ -21,28 +21,28 @@ interface LabelDef {
 // ── Status ↔ Label mapping ──────────────────────────────────────
 
 const STATUS_LABEL_MAP: Record<TaskStatus, LabelDef> = {
-	inbox: { name: "mc:inbox", color: "6b7280", description: "Lunaria: inbox" },
+	inbox: { name: "mc:inbox", color: "6b7280", description: "Amoena: inbox" },
 	assigned: {
 		name: "mc:assigned",
 		color: "3b82f6",
-		description: "Lunaria: assigned",
+		description: "Amoena: assigned",
 	},
 	in_progress: {
 		name: "mc:in-progress",
 		color: "eab308",
-		description: "Lunaria: in progress",
+		description: "Amoena: in progress",
 	},
 	review: {
 		name: "mc:review",
 		color: "a855f7",
-		description: "Lunaria: review",
+		description: "Amoena: review",
 	},
 	quality_review: {
 		name: "mc:quality-review",
 		color: "6366f1",
-		description: "Lunaria: quality review",
+		description: "Amoena: quality review",
 	},
-	done: { name: "mc:done", color: "22c55e", description: "Lunaria: done" },
+	done: { name: "mc:done", color: "22c55e", description: "Amoena: done" },
 };
 
 const LABEL_STATUS_MAP: Record<string, TaskStatus> = Object.fromEntries(

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lunaria uses a hybrid persistence model:
+Amoena uses a hybrid persistence model:
 - SQLite stores relational and time-series operational data (sessions, messages, usage, devices, notifications, grouping, providers, agents, observations, tools, hooks, workspaces, and autopilot state).
 - JSON files store user-editable configuration, extension metadata, provider auth configs, and agent definitions.
 - TypeScript interfaces define the canonical contracts shared by the desktop UI, Rust/Tauri bridge payloads, adapters, plugins, and the paired mobile client.
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS plugins (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   ecosystem TEXT NOT NULL
-    CHECK (ecosystem IN ('claude-code', 'opencode', 'lunaria', 'custom')),
+    CHECK (ecosystem IN ('claude-code', 'opencode', 'amoena', 'custom')),
   version TEXT,
   description TEXT,
   source_path TEXT NOT NULL,        -- filesystem path where plugin was discovered
@@ -310,7 +310,7 @@ CREATE TABLE IF NOT EXISTS session_group_membership (
 
 ### Table: providers
 
-Registered AI providers sourced from [models.dev](https://models.dev). Each row represents a provider whose SDK or API can be used by Lunaria's native mode to call models directly without a TUI wrapper.
+Registered AI providers sourced from [models.dev](https://models.dev). Each row represents a provider whose SDK or API can be used by Amoena's native mode to call models directly without a TUI wrapper.
 
 ```sql
 CREATE TABLE IF NOT EXISTS providers (
@@ -375,7 +375,7 @@ CREATE TABLE IF NOT EXISTS provider_credentials (
 
 ### Table: model_routing
 
-Maps task types to specific models, enabling local models for lightweight system tasks while reserving cloud models for complex reasoning. Users configure this via Settings > Providers > Model Routing or `lunaria.json`.
+Maps task types to specific models, enabling local models for lightweight system tasks while reserving cloud models for complex reasoning. Users configure this via Settings > Providers > Model Routing or `amoena.json`.
 
 ```sql
 CREATE TABLE IF NOT EXISTS model_routing (
@@ -1074,12 +1074,12 @@ workspaces
 
 ## JSON Config Schemas
 
-### Global settings (`~/.lunaria/config.json`)
+### Global settings (`~/.amoena/config.json`)
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://lunaria.app/schemas/config.global.json",
+  "$id": "https://amoena.app/schemas/config.global.json",
   "type": "object",
   "required": ["version", "ui", "notifications", "telemetry"],
   "properties": {
@@ -1120,7 +1120,7 @@ workspaces
         "lanEnabled": { "type": "boolean", "default": false },
         "lanBindAddress": { "type": "string", "default": "0.0.0.0" },
         "relayEnabled": { "type": "boolean", "default": false },
-        "relayEndpoint": { "type": "string", "default": "relay.lunaria.app" },
+        "relayEndpoint": { "type": "string", "default": "relay.amoena.app" },
         "pairingPinTtlSeconds": { "type": "integer", "minimum": 30, "maximum": 3600, "default": 120 }
       },
       "additionalProperties": false
@@ -1147,14 +1147,14 @@ The `settings` table is used for settings that are scoped more finely than the g
 | `notifications.muted` | `per-session` | `boolean` | Session-level mute |
 | `notifications.mutedTypes` | `per-session` | `string[]` | Session-level notification suppression |
 
-### Per-TUI settings (`~/.lunaria/tui/{tui-name}/config.json`)
+### Per-TUI settings (`~/.amoena/tui/{tui-name}/config.json`)
 
-Lunaria-native config uses the canonical permission modes from [`agent-backend-interface.md`](./agent-backend-interface.md). Imported legacy values (`manual`, `auto-safe`, `yolo`) are normalized during ecosystem import and are not persisted back in that form.
+Amoena-native config uses the canonical permission modes from [`agent-backend-interface.md`](./agent-backend-interface.md). Imported legacy values (`manual`, `auto-safe`, `yolo`) are normalized during ecosystem import and are not persisted back in that form.
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://lunaria.app/schemas/config.per-tui.json",
+  "$id": "https://amoena.app/schemas/config.per-tui.json",
   "type": "object",
   "required": ["tui", "enabled", "adapterMode", "binaryPath", "permissionPolicy"],
   "properties": {
@@ -1182,12 +1182,12 @@ Lunaria-native config uses the canonical permission modes from [`agent-backend-i
 }
 ```
 
-### Theme config (`~/.lunaria/themes/{theme-name}.json`)
+### Theme config (`~/.amoena/themes/{theme-name}.json`)
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://lunaria.app/schemas/theme.json",
+  "$id": "https://amoena.app/schemas/theme.json",
   "type": "object",
   "required": ["id", "name", "mode", "tokens"],
   "properties": {
@@ -1212,12 +1212,12 @@ Lunaria-native config uses the canonical permission modes from [`agent-backend-i
 }
 ```
 
-### Plugin manifest (`~/.lunaria/plugins/{plugin-id}/manifest.json`)
+### Plugin manifest (`~/.amoena/plugins/{plugin-id}/manifest.json`)
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://lunaria.app/schemas/plugin.manifest.json",
+  "$id": "https://amoena.app/schemas/plugin.manifest.json",
   "type": "object",
   "required": ["id", "name", "version", "main", "permissions", "activationEvents", "contributes"],
   "properties": {
@@ -1275,14 +1275,14 @@ Lunaria-native config uses the canonical permission modes from [`agent-backend-i
 }
 ```
 
-### Project config (`lunaria.json`)
+### Project config (`amoena.json`)
 
-Project-level configuration file placed at the repository root. Equivalent in purpose to `opencode.json` — it controls provider overrides, model selection, agent profiles, and tool permissions scoped to a specific project. Lunaria merges this with user-level config, with project values taking precedence.
+Project-level configuration file placed at the repository root. Equivalent in purpose to `opencode.json` — it controls provider overrides, model selection, agent profiles, and tool permissions scoped to a specific project. Amoena merges this with user-level config, with project values taking precedence.
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://lunaria.app/schemas/lunaria.project.json",
+  "$id": "https://amoena.app/schemas/amoena.project.json",
   "type": "object",
   "properties": {
     "version": { "type": "integer", "minimum": 1 },
@@ -1374,14 +1374,14 @@ Project-level configuration file placed at the repository root. Equivalent in pu
 }
 ```
 
-### Provider auth config (`~/.lunaria/providers/{provider-id}.json`)
+### Provider auth config (`~/.amoena/providers/{provider-id}.json`)
 
-Per-provider authentication configuration stored at the user level. Controls how Lunaria obtains credentials for a given provider. Secrets themselves live in the OS keychain — this file only stores the auth strategy and non-sensitive metadata.
+Per-provider authentication configuration stored at the user level. Controls how Amoena obtains credentials for a given provider. Secrets themselves live in the OS keychain — this file only stores the auth strategy and non-sensitive metadata.
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://lunaria.app/schemas/provider.auth.json",
+  "$id": "https://amoena.app/schemas/provider.auth.json",
   "type": "object",
   "required": ["providerId", "authType"],
   "properties": {
@@ -1424,14 +1424,14 @@ Per-provider authentication configuration stored at the user level. Controls how
 }
 ```
 
-### Custom agent definition (`~/.lunaria/agents/{agent-name}.json`)
+### Custom agent definition (`~/.amoena/agents/{agent-name}.json`)
 
-User-level custom agent definitions. These extend the built-in agent catalog with user-defined agents that can be referenced in `lunaria.json` or spawned via the UI.
+User-level custom agent definitions. These extend the built-in agent catalog with user-defined agents that can be referenced in `amoena.json` or spawned via the UI.
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://lunaria.app/schemas/agent.definition.json",
+  "$id": "https://amoena.app/schemas/agent.definition.json",
   "type": "object",
   "required": ["id", "name", "model", "systemPrompt"],
   "properties": {
@@ -1819,7 +1819,7 @@ export interface LinkedWorkspaceRecord {
   created_at: ISODateString;
 }
 
-export interface LunariaProjectConfig {
+export interface AmoenaProjectConfig {
   version?: number;
   providers?: Record<string, {
     enabled?: boolean;
@@ -2000,7 +2000,7 @@ export interface PluginManifest {
 
 ## Migration Strategy
 
-Lunaria uses sequential integer versions and an explicit upgrade path compatible with Tauri SQL plugin migration behavior.
+Amoena uses sequential integer versions and an explicit upgrade path compatible with Tauri SQL plugin migration behavior.
 
 - Version format: `1, 2, 3, ...` (strictly increasing, no branching versions).
 - Source of truth: `schema_migrations.version`.

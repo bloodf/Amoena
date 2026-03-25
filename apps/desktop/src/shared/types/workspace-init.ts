@@ -9,7 +9,7 @@ export type WorkspaceInitStep =
 	| "verifying" // Verifying base branch exists
 	| "fetching" // Fetching latest changes
 	| "creating_worktree" // Creating git worktree
-	| "copying_config" // Copying .lunaria configuration
+	| "copying_config" // Copying .amoena configuration
 	| "finalizing" // Final DB operations
 	| "ready"
 	| "failed";

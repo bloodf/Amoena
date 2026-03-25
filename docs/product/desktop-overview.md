@@ -1,6 +1,6 @@
 # Desktop Overview
 
-Lunaria’s desktop app is the primary product surface.
+Amoena’s desktop app is the primary product surface.
 
 ## Core Ideas
 

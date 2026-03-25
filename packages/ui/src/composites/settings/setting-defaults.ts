@@ -24,7 +24,7 @@ export const settingDefaults: Record<string, unknown> = {
   "terminal.fontFamily": "JetBrains Mono",
   "terminal.fontSize": 13,
   "terminal.cursorStyle": "Block",
-  "terminal.ansiColorTheme": "Lunaria Dark",
+  "terminal.ansiColorTheme": "Amoena Dark",
   "terminal.scrollbackLines": 10000,
   "terminal.copyOnSelect": false,
   "terminal.rightClickPaste": false,
@@ -82,7 +82,7 @@ export const settingDefaults: Record<string, unknown> = {
 
   "keybindings.preset": "Default",
 
-  "workspace.defaultWorktreeLocation": "~/.lunaria/worktrees",
+  "workspace.defaultWorktreeLocation": "~/.amoena/worktrees",
   "workspace.autoCreateWorktree": false,
   "workspace.cloneStrategy": "Full clone",
   "workspace.defaultBranch": "main",

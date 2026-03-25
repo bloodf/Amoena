@@ -5,7 +5,7 @@ import { MessageQueue } from "./MessageQueue";
 import { ProviderSetupScreen } from "@/screens/ProviderSetupScreen";
 import { TerminalPanel } from "./TerminalPanel";
 
-describe("Lunaria operations panels", () => {
+describe("Amoena operations panels", () => {
   test("message queue can collapse and remove an item", async () => {
     const user = userEvent.setup();
     render(<MessageQueue />);

@@ -1,5 +1,5 @@
 /**
- * Theme type definitions for the Lunaria desktop app
+ * Theme type definitions for the Amoena desktop app
  *
  * Themes control UI colors, terminal colors, and editor/diff colors.
  */

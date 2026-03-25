@@ -8,7 +8,7 @@ import { mutationLimiter } from "@/lib/rate-limit";
 import { gatewayConfigUpdateSchema, validateBody } from "@/lib/validation";
 
 function getConfigPath(): string | null {
-	return config.lunariaConfigPath || null;
+	return config.amoenaConfigPath || null;
 }
 
 function gatewayUrl(path: string): string {
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
 	const configPath = getConfigPath();
 	if (!configPath) {
 		return NextResponse.json(
-			{ error: "LUNARIA_CONFIG_PATH not configured" },
+			{ error: "AMOENA_CONFIG_PATH not configured" },
 			{ status: 404 },
 		);
 	}
@@ -137,7 +137,7 @@ export async function PUT(request: NextRequest) {
 	const configPath = getConfigPath();
 	if (!configPath) {
 		return NextResponse.json(
-			{ error: "LUNARIA_CONFIG_PATH not configured" },
+			{ error: "AMOENA_CONFIG_PATH not configured" },
 			{ status: 404 },
 		);
 	}

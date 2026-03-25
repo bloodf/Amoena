@@ -63,7 +63,7 @@ const INTEGRATIONS: IntegrationDef[] = [
 		name: "Anthropic",
 		category: "ai",
 		envVars: ["ANTHROPIC_API_KEY"],
-		vaultItem: "lunaria-anthropic-api-key",
+		vaultItem: "amoena-anthropic-api-key",
 		testable: true,
 	},
 	{
@@ -71,7 +71,7 @@ const INTEGRATIONS: IntegrationDef[] = [
 		name: "OpenAI",
 		category: "ai",
 		envVars: ["OPENAI_API_KEY"],
-		vaultItem: "lunaria-openai-api-key",
+		vaultItem: "amoena-openai-api-key",
 		testable: true,
 	},
 	{
@@ -79,7 +79,7 @@ const INTEGRATIONS: IntegrationDef[] = [
 		name: "OpenRouter",
 		category: "ai",
 		envVars: ["OPENROUTER_API_KEY"],
-		vaultItem: "lunaria-openrouter-api-key",
+		vaultItem: "amoena-openrouter-api-key",
 		testable: true,
 	},
 	{
@@ -87,7 +87,7 @@ const INTEGRATIONS: IntegrationDef[] = [
 		name: "Venice AI",
 		category: "ai",
 		envVars: ["VENICE_API_KEY"],
-		vaultItem: "lunaria-venice-api-key",
+		vaultItem: "amoena-venice-api-key",
 		testable: true,
 	},
 	{
@@ -95,21 +95,21 @@ const INTEGRATIONS: IntegrationDef[] = [
 		name: "NVIDIA",
 		category: "ai",
 		envVars: ["NVIDIA_API_KEY"],
-		vaultItem: "lunaria-nvidia-api-key",
+		vaultItem: "amoena-nvidia-api-key",
 	},
 	{
 		id: "moonshot",
 		name: "Moonshot / Kimi",
 		category: "ai",
 		envVars: ["MOONSHOT_API_KEY"],
-		vaultItem: "lunaria-moonshot-api-key",
+		vaultItem: "amoena-moonshot-api-key",
 	},
 	{
 		id: "ollama",
 		name: "Ollama (Local)",
 		category: "ai",
 		envVars: ["OLLAMA_API_KEY"],
-		vaultItem: "lunaria-ollama-api-key",
+		vaultItem: "amoena-ollama-api-key",
 	},
 
 	// Search
@@ -118,7 +118,7 @@ const INTEGRATIONS: IntegrationDef[] = [
 		name: "Brave Search",
 		category: "search",
 		envVars: ["BRAVE_API_KEY"],
-		vaultItem: "lunaria-brave-api-key",
+		vaultItem: "amoena-brave-api-key",
 	},
 
 	// Social
@@ -143,7 +143,7 @@ const INTEGRATIONS: IntegrationDef[] = [
 		name: "Telegram",
 		category: "messaging",
 		envVars: ["TELEGRAM_BOT_TOKEN"],
-		vaultItem: "lunaria-telegram-bot-token",
+		vaultItem: "amoena-telegram-bot-token",
 		testable: true,
 	},
 
@@ -153,7 +153,7 @@ const INTEGRATIONS: IntegrationDef[] = [
 		name: "GitHub",
 		category: "devtools",
 		envVars: ["GITHUB_TOKEN"],
-		vaultItem: "lunaria-github-token",
+		vaultItem: "amoena-github-token",
 		testable: true,
 	},
 
@@ -181,8 +181,8 @@ const INTEGRATIONS: IntegrationDef[] = [
 		id: "gateway",
 		name: "Gateway Auth",
 		category: "infra",
-		envVars: ["LUNARIA_GATEWAY_TOKEN"],
-		vaultItem: "lunaria-lunaria-gateway-token",
+		envVars: ["AMOENA_GATEWAY_TOKEN"],
+		vaultItem: "amoena-amoena-gateway-token",
 	},
 
 	// Browser Automation
@@ -267,8 +267,8 @@ function serializeEnv(lines: EnvLine[]): string {
 }
 
 function getEnvPath(): string | null {
-	if (!config.lunariaStateDir) return null;
-	return join(config.lunariaStateDir, ".env");
+	if (!config.amoenaStateDir) return null;
+	return join(config.amoenaStateDir, ".env");
 }
 
 async function readEnvFile(): Promise<{
@@ -418,14 +418,14 @@ function checkOpAvailable(): boolean {
 
 /**
  * Build env for op CLI. The OP_SERVICE_ACCOUNT_TOKEN may live in the
- * Lunaria .env (not the MC .env that systemd loads). Read it at
+ * Amoena .env (not the MC .env that systemd loads). Read it at
  * runtime so the op CLI can authenticate.
  */
 async function getOpEnv(): Promise<NodeJS.ProcessEnv> {
 	const base: NodeJS.ProcessEnv = { ...process.env };
 	// Already in process env? Use it.
 	if (base.OP_SERVICE_ACCOUNT_TOKEN) return base;
-	// Try reading from the Lunaria .env
+	// Try reading from the Amoena .env
 	const envData = await readEnvFile();
 	if (envData) {
 		for (const line of envData.lines) {
@@ -454,7 +454,7 @@ export async function GET(request: NextRequest) {
 	const envData = await readEnvFile();
 	if (!envData) {
 		return NextResponse.json(
-			{ error: "LUNARIA_STATE_DIR not configured" },
+			{ error: "AMOENA_STATE_DIR not configured" },
 			{ status: 404 },
 		);
 	}
@@ -650,7 +650,7 @@ export async function PUT(request: NextRequest) {
 	const envData = await readEnvFile();
 	if (!envData) {
 		return NextResponse.json(
-			{ error: "LUNARIA_STATE_DIR not configured" },
+			{ error: "AMOENA_STATE_DIR not configured" },
 			{ status: 404 },
 		);
 	}
@@ -746,7 +746,7 @@ export async function DELETE(request: NextRequest) {
 	const envData = await readEnvFile();
 	if (!envData) {
 		return NextResponse.json(
-			{ error: "LUNARIA_STATE_DIR not configured" },
+			{ error: "AMOENA_STATE_DIR not configured" },
 			{ status: 404 },
 		);
 	}
@@ -866,7 +866,7 @@ async function handleTest(
 	const envData = await readEnvFile();
 	if (!envData) {
 		return NextResponse.json(
-			{ error: "LUNARIA_STATE_DIR not configured" },
+			{ error: "AMOENA_STATE_DIR not configured" },
 			{ status: 404 },
 		);
 	}
@@ -902,7 +902,7 @@ async function handleTest(
 				const res = await fetch("https://api.github.com/user", {
 					headers: {
 						Authorization: `Bearer ${token}`,
-						"User-Agent": "Lunaria/1.0",
+						"User-Agent": "Amoena/1.0",
 					},
 					signal: AbortSignal.timeout(5000),
 				});
@@ -1052,7 +1052,7 @@ async function handleTest(
 					brave: "https://api.search.brave.com",
 					linkedin: "https://api.linkedin.com",
 					ollama: resolveOllamaBaseUrl(),
-					gateway: String(process.env.LUNARIA_GATEWAY_URL || "").trim() || "",
+					gateway: String(process.env.AMOENA_GATEWAY_URL || "").trim() || "",
 				};
 				const url = baseUrls[integration.id];
 				if (url) {
@@ -1169,7 +1169,7 @@ async function handlePull(
 		const envData = await readEnvFile();
 		if (!envData) {
 			return NextResponse.json(
-				{ error: "LUNARIA_STATE_DIR not configured" },
+				{ error: "AMOENA_STATE_DIR not configured" },
 				{ status: 404 },
 			);
 		}
@@ -1261,7 +1261,7 @@ async function handlePullAll(
 	const envData = await readEnvFile();
 	if (!envData) {
 		return NextResponse.json(
-			{ error: "LUNARIA_STATE_DIR not configured" },
+			{ error: "AMOENA_STATE_DIR not configured" },
 			{ status: 404 },
 		);
 	}

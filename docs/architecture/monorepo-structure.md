@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lunaria uses a **single bun-workspace monorepo**.
+Amoena uses a **single bun-workspace monorepo**.
 
 - The current primary application is `apps/desktop`.
 - The future secondary application is `apps/mobile`.
@@ -22,7 +22,7 @@ This document describes the structure we should build against in this repo now. 
 ## Target Repository Layout
 
 ```text
-lunaria/
+amoena/
 ├── package.json
 ├── bun.lock
 ├── tsconfig.json

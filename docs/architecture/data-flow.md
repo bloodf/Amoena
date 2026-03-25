@@ -1,6 +1,6 @@
 # Data Flow
 
-This page traces the complete lifecycle of a user prompt through the Lunaria runtime, from submission to SSE delivery, including the tool call approval loop, memory capture, and hook invocations.
+This page traces the complete lifecycle of a user prompt through the Amoena runtime, from submission to SSE delivery, including the tool call approval loop, memory capture, and hook invocations.
 
 ## Native Mode: Full Turn Flow
 

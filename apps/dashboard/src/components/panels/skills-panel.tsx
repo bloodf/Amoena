@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface SkillSummary {
 	id: string;
@@ -63,8 +63,8 @@ const SOURCE_LABELS: Record<string, string> = {
 	"user-codex": "~/.codex/skills (global)",
 	"project-agents": ".agents/skills (project)",
 	"project-codex": ".codex/skills (project)",
-	lunaria: "~/.lunaria/skills (gateway)",
-	workspace: "~/.lunaria/workspace/skills",
+	amoena: "~/.amoena/skills (gateway)",
+	workspace: "~/.amoena/workspace/skills",
 };
 
 function getSourceLabel(source: string): string {
@@ -79,7 +79,7 @@ function getSourceLabel(source: string): string {
 export function SkillsPanel() {
 	const t = useTranslations("skills");
 	const { dashboardMode, skillsList, skillGroups, skillsTotal, setSkillsData } =
-		useLunaria();
+		useAmoena();
 	const [loading, setLoading] = useState(skillsList === null);
 	const [saving, setSaving] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -92,7 +92,7 @@ export function SkillsPanel() {
 	const [drawerLoading, setDrawerLoading] = useState(false);
 	const [drawerError, setDrawerError] = useState<string | null>(null);
 	const [createSource, setCreateSource] = useState(
-		dashboardMode === "full" ? "lunaria" : "user-codex",
+		dashboardMode === "full" ? "amoena" : "user-codex",
 	);
 	const [createName, setCreateName] = useState("");
 	const [createContent, setCreateContent] = useState(
@@ -102,15 +102,15 @@ export function SkillsPanel() {
 	const [isMounted, setIsMounted] = useState(false);
 	const [activeTab, setActiveTab] = useState<PanelTab>("installed");
 	const [registrySource, setRegistrySource] = useState<
-		"clawhub" | "skills-sh" | "awesome-lunaria"
-	>("awesome-lunaria");
+		"clawhub" | "skills-sh" | "awesome-amoena"
+	>("awesome-amoena");
 	const [registryQuery, setRegistryQuery] = useState("");
 	const [registryResults, setRegistryResults] = useState<RegistrySkill[]>([]);
 	const [registryLoading, setRegistryLoading] = useState(false);
 	const [registryError, setRegistryError] = useState<string | null>(null);
 	const [registrySearched, setRegistrySearched] = useState(false);
 	const [installTarget, setInstallTarget] = useState(
-		dashboardMode === "full" ? "lunaria" : "user-agents",
+		dashboardMode === "full" ? "amoena" : "user-agents",
 	);
 	const [installing, setInstalling] = useState<string | null>(null);
 	const [installMessage, setInstallMessage] = useState<string | null>(null);
@@ -686,7 +686,7 @@ export function SkillsPanel() {
 									{SOURCE_LABELS["project-codex"]}
 								</option>
 								{dashboardMode === "full" && (
-									<option value="lunaria">{SOURCE_LABELS.lunaria}</option>
+									<option value="amoena">{SOURCE_LABELS.amoena}</option>
 								)}
 								<option value="workspace">{SOURCE_LABELS.workspace}</option>
 							</select>
@@ -742,7 +742,7 @@ export function SkillsPanel() {
 											[
 												"user-agents",
 												"user-codex",
-												"lunaria",
+												"amoena",
 												"workspace",
 											].includes(g.source) ||
 											g.source.startsWith("workspace-"),
@@ -758,7 +758,7 @@ export function SkillsPanel() {
 											className={`rounded-lg border bg-card p-3 text-left transition-colors ${
 												activeRoot === group.source
 													? "border-primary ring-1 ring-primary/30"
-													: group.source === "lunaria"
+													: group.source === "amoena"
 														? "border-cyan-500/30 hover:border-cyan-500/50"
 														: group.source.startsWith("workspace-")
 															? "border-violet-500/30 hover:border-violet-500/50"
@@ -808,7 +808,7 @@ export function SkillsPanel() {
 														{securityBadge(skill.security_status)}
 														<span
 															className={`text-2xs rounded-full border px-2 py-0.5 ${
-																skill.source === "lunaria"
+																skill.source === "amoena"
 																	? "bg-cyan-500/10 text-cyan-400 border-cyan-500/30"
 																	: skill.source.startsWith("workspace-")
 																		? "bg-violet-500/10 text-violet-400 border-violet-500/30"
@@ -864,7 +864,7 @@ export function SkillsPanel() {
 										e.target.value as
 											| "clawhub"
 											| "skills-sh"
-											| "awesome-lunaria",
+											| "awesome-amoena",
 									);
 									setRegistryResults([]);
 									setRegistrySearched(false);
@@ -873,7 +873,7 @@ export function SkillsPanel() {
 							>
 								<option value="clawhub">ClawdHub</option>
 								<option value="skills-sh">skills.sh</option>
-								<option value="awesome-lunaria">Awesome Lunaria</option>
+								<option value="awesome-amoena">Awesome Amoena</option>
 							</select>
 							<input
 								value={registryQuery}
@@ -913,7 +913,7 @@ export function SkillsPanel() {
 									{SOURCE_LABELS["project-codex"]}
 								</option>
 								{dashboardMode === "full" && (
-									<option value="lunaria">{SOURCE_LABELS.lunaria}</option>
+									<option value="amoena">{SOURCE_LABELS.amoena}</option>
 								)}
 								<option value="workspace">{SOURCE_LABELS.workspace}</option>
 							</select>
@@ -934,7 +934,7 @@ export function SkillsPanel() {
 									{
 										clawhub: "ClawdHub",
 										"skills-sh": "skills.sh",
-										"awesome-lunaria": "Awesome Lunaria",
+										"awesome-amoena": "Awesome Amoena",
 									}[registrySource]
 								}
 							</div>
@@ -995,7 +995,7 @@ export function SkillsPanel() {
 								registry: {
 									clawhub: "ClawdHub",
 									"skills-sh": "skills.sh",
-									"awesome-lunaria": "Awesome Lunaria",
+									"awesome-amoena": "Awesome Amoena",
 								}[registrySource],
 							})}
 						</div>

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap turns the architecture set into a phased delivery plan for Lunaria as a dual-mode AI controller running inside a **Tauri 2 desktop application** — both a standalone native agent and a wrapper for existing AI coding TUIs. It is scope-bounded by architecture invariants in `docs/architecture/system-architecture.md` and by backend capability asymmetry in `docs/architecture/tui-capability-matrix.md`.
+This roadmap turns the architecture set into a phased delivery plan for Amoena as a dual-mode AI controller running inside a **Tauri 2 desktop application** — both a standalone native agent and a wrapper for existing AI coding TUIs. It is scope-bounded by architecture invariants in `docs/architecture/system-architecture.md` and by backend capability asymmetry in `docs/architecture/tui-capability-matrix.md`.
 
 The roadmap is structured as five sequential phases with explicit dependency chains, go/no-go gates, and success criteria. Each phase builds on the stability guarantees of the previous one.
 
@@ -19,7 +19,7 @@ The detailed implementation prompts for each phase are maintained in [`docs/prom
 ## Phase Dependency Chain
 
 1. Phase 0 validates feasibility of core technology choices before committing to production build-out.
-2. MVP establishes the core agentic loop with Lunaria Native mode only — single agent, single provider, essential workspace and memory features.
+2. MVP establishes the core agentic loop with Amoena Native mode only — single agent, single provider, essential workspace and memory features.
 3. V1.0 layers multi-provider support, first wrapper backend, ecosystem compatibility, vector memory, basic subagent spawning, MCP protocol support, and an API compatibility layer.
 4. V1.5 adds full agent orchestration (teams, mailbox), remaining wrappers, autopilot, plugin ecosystem, local model routing, sandbox execution, knowledge graph memory, and MCP client mode.
 5. V2.0 delivers remote access, mobile app, visual workflows, marketplace, linked workspaces, automation primitives, voice input, cryptographic agent identity, and advanced plugin ABI.
@@ -101,7 +101,7 @@ The detailed implementation prompts for each phase are maintained in [`docs/prom
 
 ## MVP — Core Loop
 
-**Goal:** ship a usable desktop experience with Lunaria Native mode only -- single agent, single provider, essential session management.
+**Goal:** ship a usable desktop experience with Amoena Native mode only -- single agent, single provider, essential session management.
 
 **Estimated duration:** 6--8 weeks
 
@@ -186,7 +186,7 @@ The detailed implementation prompts for each phase are maintained in [`docs/prom
 | Subagent spawning | Depth-2 subagent support for native mode |
 | Setup wizard | First-run detection, installation, auth, and default selection |
 | MCP protocol support *(Osaurus-inspired)* | MCP server mode (stdio + SSE transports) enabling ecosystem integration with Cursor, Claude Desktop, and VS Code. See [`docs/architecture/mcp-protocol.md`](mcp-protocol.md) |
-| API compatibility layer *(Osaurus-inspired)* | Drop-in OpenAI, Anthropic, and Ollama-compatible HTTP endpoints making Lunaria a local AI gateway. See [`docs/architecture/api-compatibility.md`](api-compatibility.md) |
+| API compatibility layer *(Osaurus-inspired)* | Drop-in OpenAI, Anthropic, and Ollama-compatible HTTP endpoints making Amoena a local AI gateway. See [`docs/architecture/api-compatibility.md`](api-compatibility.md) |
 | Agent persona library *(agency-agents inspired)* | 130+ bundled agent personas organized by division (engineering, design, QA, product, security, devops, AI) with visual identity fields (color, emoji, vibe) |
 | L0/L1/L2 memory tiers *(OpenViking inspired)* | Three-tier progressive context loading with precomputed summaries, intent-scoped retrieval, and 6-category observation taxonomy |
 | Extended agent state machine *(MiroFish inspired)* | 10-state agent lifecycle (`created → preparing → active → running ⇄ paused → stopped → completed → failed`) with collaboration metadata |
@@ -201,7 +201,7 @@ The detailed implementation prompts for each phase are maintained in [`docs/prom
 - Hooks fire on documented lifecycle events; custom handlers execute within timeout bounds.
 - Subagent trees execute at depth 2 with parent permission inheritance enforced.
 - Setup wizard can onboard a new machine to first session without manual config editing.
-- MCP server mode accepts connections over stdio and SSE; Cursor and Claude Desktop can discover and invoke Lunaria-exposed tools.
+- MCP server mode accepts connections over stdio and SSE; Cursor and Claude Desktop can discover and invoke Amoena-exposed tools.
 - API compatibility endpoints pass provider-specific test suites (OpenAI chat completions, Anthropic messages, Ollama generate).
 
 ### Risks
@@ -250,8 +250,8 @@ The detailed implementation prompts for each phase are maintained in [`docs/prom
 | Multi-model opinions | Committee queries across providers |
 | Sandbox execution *(Osaurus-inspired)* | Docker/OCI-based isolated execution environments for agent-generated code with resource limits and network policies. See [`docs/architecture/sandbox-execution.md`](sandbox-execution.md) |
 | Knowledge graph memory *(Osaurus-inspired)* | 4th memory layer with entity extraction, relationship tracking, and contradiction detection on top of existing FTS5 + vector store. See [`docs/architecture/memory-system.md`](memory-system.md) (Knowledge Graph section) |
-| MCP client mode *(Osaurus-inspired)* | Aggregate and invoke tools from external MCP servers, enabling Lunaria as an MCP tool hub. See [`docs/architecture/mcp-protocol.md`](mcp-protocol.md) |
-| Multi-format persona export *(agency-agents inspired)* | Export Lunaria agent profiles to Claude Code, Cursor, Aider, Windsurf, Gemini CLI, and OpenCode formats — define once, use everywhere |
+| MCP client mode *(Osaurus-inspired)* | Aggregate and invoke tools from external MCP servers, enabling Amoena as an MCP tool hub. See [`docs/architecture/mcp-protocol.md`](mcp-protocol.md) |
+| Multi-format persona export *(agency-agents inspired)* | Export Amoena agent profiles to Claude Code, Cursor, Aider, Windsurf, Gemini CLI, and OpenCode formats — define once, use everywhere |
 | Design steering agent *(impeccable inspired)* | Bundled "Design Auditor" agent with 18 steering skills (`/audit`, `/animate`, `/bolder`, `/clarify`, `/colorize`, `/critique`, `/delight`, `/distill`, `/extract`, `/harden`, `/normalize`, `/onboard`, `/optimize`, `/polish`, `/quieter`, `/adapt`) |
 | LLM memory deduplication *(OpenViking inspired)* | Semantic dedup using LLM comparison when embedding similarity > 0.90, with merge/distinct resolution |
 | MCP tool-to-skill converter *(OpenViking inspired)* | Pipeline that converts MCP tool definitions into reusable agent skills with pre/post-conditions and usage examples |
@@ -370,7 +370,7 @@ The detailed implementation prompts for each phase are maintained in [`docs/prom
 ## Exit Criteria for This Roadmap
 
 - Every phase has explicit goals, key deliverables, success criteria, risks, and dependencies.
-- MVP scope is clearly bounded to Lunaria Native mode only with single-agent sessions.
+- MVP scope is clearly bounded to Amoena Native mode only with single-agent sessions.
 - Phase 0 validates the streaming pipeline, type generation, and critical technology choices before committing to MVP.
 - Phase sequencing preserves desktop authority and the Dual IPC architecture invariant (Tauri `invoke` for local, Axum for remote only).
 - V1.0 introduces multi-provider and the first wrapper backend after MVP stability.

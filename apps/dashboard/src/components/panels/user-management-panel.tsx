@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface UserRecord {
 	id: number;
@@ -44,7 +44,7 @@ const roleColors: Record<string, string> = {
 
 export function UserManagementPanel() {
 	const t = useTranslations("userManagement");
-	const { currentUser } = useLunaria();
+	const { currentUser } = useAmoena();
 	const [users, setUsers] = useState<UserRecord[]>([]);
 	const [requests, setRequests] = useState<AccessRequest[]>([]);
 	const [loading, setLoading] = useState(true);

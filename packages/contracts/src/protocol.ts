@@ -2,7 +2,7 @@
  * WebSocket protocol helpers for Mission Control.
  */
 
-/** Default port on which the lunaria-service MC WebSocket listens. */
+/** Default port on which the amoena-service MC WebSocket listens. */
 export const MC_WS_DEFAULT_PORT = 7779;
 
 /**

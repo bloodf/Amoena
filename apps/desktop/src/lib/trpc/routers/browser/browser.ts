@@ -164,7 +164,7 @@ export const createBrowserRouter = () => {
 				}),
 			)
 			.mutation(async ({ input }) => {
-				const ses = session.fromPartition("persist:lunaria");
+				const ses = session.fromPartition("persist:amoena");
 				switch (input.type) {
 					case "cookies":
 						await ses.clearStorageData({ storages: ["cookies"] });

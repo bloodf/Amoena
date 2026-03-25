@@ -1,6 +1,6 @@
-# Lunaria Mobile Companion
+# Amoena Mobile Companion
 
-React Native (Expo) companion app for remote-controlling Lunaria desktop sessions from iOS and Android devices.
+React Native (Expo) companion app for remote-controlling Amoena desktop sessions from iOS and Android devices.
 
 ## Prerequisites
 
@@ -72,7 +72,7 @@ The app includes 12 screens:
 
 ### Real-time Updates
 
-Runtime hooks connect to Lunaria desktop sessions via Server-Sent Events (SSE) through `@lunaria/runtime-client`, enabling live task updates, terminal streaming, and session state changes without polling.
+Runtime hooks connect to Amoena desktop sessions via Server-Sent Events (SSE) through `@lunaria/runtime-client`, enabling live task updates, terminal streaming, and session state changes without polling.
 
 ### Design System
 

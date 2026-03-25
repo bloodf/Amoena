@@ -2,12 +2,12 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { archiveOrphanTranscriptsForStateDir } from "@/lib/lunaria-doctor-fix";
+import { archiveOrphanTranscriptsForStateDir } from "@/lib/amoena-doctor-fix";
 
 const tempDirs: string[] = [];
 
 function makeStateDir(): string {
-	const dir = fs.mkdtempSync(path.join(os.tmpdir(), "mc-lunaria-fix-"));
+	const dir = fs.mkdtempSync(path.join(os.tmpdir(), "mc-amoena-fix-"));
 	tempDirs.push(dir);
 	return dir;
 }

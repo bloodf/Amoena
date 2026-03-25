@@ -1,19 +1,19 @@
 # Mission Control Platform — Orchestration Playbook
 
-> Master document for implementing the Lunaria Mission Control Platform using Codex GUI
+> Master document for implementing the Amoena Mission Control Platform using Codex GUI
 > with multiple agents, teams, and Ralph loop continuous execution.
 
 ## Overview
 
-This playbook orchestrates the implementation of Lunaria's Mission Control Platform across
+This playbook orchestrates the implementation of Amoena's Mission Control Platform across
 2 implementation phases (plus a deferred Phase 3) using parallel Codex GUI agents. Each agent
 gets a self-contained prompt with Ralph loop instructions so it keeps working until its
 acceptance criteria are met.
 
 **Source of truth:**
-- Design doc: `~/.gstack/projects/LunariaAi-lunaria/heitor-main-design-20260323-110212.md`
-- CEO plan: `~/.gstack/projects/LunariaAi-lunaria/ceo-plans/2026-03-23-mission-control-platform.md`
-- Test plan: `~/.gstack/projects/LunariaAi-lunaria/heitor-main-eng-review-test-plan-20260323-114535.md`
+- Design doc: `~/.gstack/projects/AmoenaAi-amoena/heitor-main-design-20260323-110212.md`
+- CEO plan: `~/.gstack/projects/AmoenaAi-amoena/ceo-plans/2026-03-23-mission-control-platform.md`
+- Test plan: `~/.gstack/projects/AmoenaAi-amoena/heitor-main-eng-review-test-plan-20260323-114535.md`
 
 ## Agent Roles
 

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 
 const GITHUB_RELEASES_URL =
-	"https://api.github.com/repos/lunaria/lunaria/releases/latest";
+	"https://api.github.com/repos/amoena/amoena/releases/latest";
 
 function compareSemver(a: string, b: string): number {
 	const pa = a.replace(/^v/, "").split(".").map(Number);
@@ -22,11 +22,11 @@ export async function GET() {
 	let installed: string | null = null;
 
 	try {
-		const result = await runLunaria(["--version"], { timeoutMs: 3000 });
+		const result = await runAmoena(["--version"], { timeoutMs: 3000 });
 		const match = result.stdout.match(/(\d+\.\d+\.\d+)/);
 		if (match) installed = match[1];
 	} catch {
-		// Lunaria not installed or not reachable
+		// Amoena not installed or not reachable
 		return NextResponse.json(
 			{ installed: null, latest: null, updateAvailable: false },
 			{ headers },
@@ -64,7 +64,7 @@ export async function GET() {
 				updateAvailable,
 				releaseUrl: release.html_url ?? "",
 				releaseNotes: release.body ?? "",
-				updateCommand: "lunaria update --channel stable",
+				updateCommand: "amoena update --channel stable",
 			},
 			{ headers },
 		);

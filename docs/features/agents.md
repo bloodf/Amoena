@@ -1,6 +1,6 @@
 # Multi-Agent Orchestration
 
-Lunaria's orchestration system enables AI agents to spawn subagents, form teams, communicate via a structured mailbox, and reach weighted consensus decisions. `OrchestrationService` manages the full lifecycle of agents and teams backed by the SQLite persistence layer.
+Amoena's orchestration system enables AI agents to spawn subagents, form teams, communicate via a structured mailbox, and reach weighted consensus decisions. `OrchestrationService` manages the full lifecycle of agents and teams backed by the SQLite persistence layer.
 
 ## Architecture
 

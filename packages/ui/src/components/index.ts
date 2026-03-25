@@ -1,5 +1,5 @@
 export * from './AppShell';
-export { Breadcrumb as LunariaBreadcrumb } from './Breadcrumb';
+export { Breadcrumb as AmoenaBreadcrumb } from './Breadcrumb';
 export * from './CommandPalette';
 export * from './control-bar';
 export * from './EmptySessionState';
@@ -14,7 +14,7 @@ export * from './SessionComposer';
 export * from './SessionSidePanel';
 export * from './SessionTimeline';
 export * from './settings-controls';
-export { SidebarRail as LunariaSidebarRail } from './SidebarRail';
+export { SidebarRail as AmoenaSidebarRail } from './SidebarRail';
 export * from './KeyboardShortcutsModal';
 export * from './StatusBar';
 export * from './TerminalPanel';

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { createClientLogger } from "@/lib/client-logger";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { type ChatAttachment, type Conversation, useLunaria } from "@/store";
+import { type ChatAttachment, type Conversation, useAmoena } from "@/store";
 import { ChatInput } from "./chat-input";
 import { ConversationList } from "./conversation-list";
 import { MessageList } from "./message-list";
@@ -44,7 +44,7 @@ export function ChatWorkspace({
 		conversations,
 		setAgents,
 		notifications,
-	} = useLunaria();
+	} = useAmoena();
 
 	const pendingIdRef = useRef(-1);
 

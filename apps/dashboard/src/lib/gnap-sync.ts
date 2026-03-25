@@ -293,7 +293,7 @@ export function syncGnap(repoPath: string): SyncResult {
 			git(repoPath, [
 				"commit",
 				"-m",
-				`Sync from Lunaria at ${result.lastSync}`,
+				`Sync from Amoena at ${result.lastSync}`,
 			]);
 			git(repoPath, ["push"]);
 		} catch (err: any) {

@@ -181,7 +181,7 @@ export async function POST(request: NextRequest) {
 		gateway.is_primary === 1 ? getDetectedGatewayToken() : "";
 	const token = detectedToken || dbToken;
 
-	// Keep runtime DB aligned with detected Lunaria gateway token for primary gateway.
+	// Keep runtime DB aligned with detected Amoena gateway token for primary gateway.
 	if (gateway.is_primary === 1 && detectedToken && detectedToken !== dbToken) {
 		try {
 			db.prepare(

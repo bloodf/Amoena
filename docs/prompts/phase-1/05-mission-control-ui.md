@@ -14,7 +14,7 @@ You are running in an autonomous loop. These rules are non-negotiable:
 
 ## Component Overview
 
-Build the Mission Control panel — the primary user interface for submitting goals, watching agents execute tasks in real time, and reviewing post-run reports. This is a React panel added to the existing Lunaria dashboard.
+Build the Mission Control panel — the primary user interface for submitting goals, watching agents execute tasks in real time, and reviewing post-run reports. This is a React panel added to the existing Amoena dashboard.
 
 The component lives at:
 
@@ -357,7 +357,7 @@ interface AudioSettings {
 }
 ```
 
-- Store `AudioSettings` in `localStorage` under `"lunaria.missionControl.audio"`
+- Store `AudioSettings` in `localStorage` under `"amoena.missionControl.audio"`
 - Terminal click: use `AudioContext` to generate a 2ms, 440Hz sine burst at 0.02 gain
 - Completion chime: use `AudioContext` to play a short ascending 3-note sequence (440→554→659Hz, 80ms each, 0.1 gain)
 - Wrap all `AudioContext` calls in try/catch — audio must never crash the UI

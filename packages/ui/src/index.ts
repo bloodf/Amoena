@@ -3,7 +3,7 @@ import './globals.css';
 export * from './lib/utils';
 export * from './hooks/use-mobile';
 export * from './hooks/use-theme';
-export { useToast as useLunariaToast, lunariaToast } from './hooks/use-toast';
+export { useToast as useAmoenaToast, amoenaToast } from './hooks/use-toast';
 
 // Atoms — all shadcn/ui primitives
 export * from './primitives/accordion';
@@ -62,7 +62,7 @@ export * from './components/screen';
 export * from './components/settings-controls';
 export * from './components/patterns';
 export * from './components/AppShell';
-export { Breadcrumb as LunariaBreadcrumb } from './components/Breadcrumb';
+export { Breadcrumb as AmoenaBreadcrumb } from './components/Breadcrumb';
 export * from './components/CommandPalette';
 export * from './components/EmptySessionState';
 export * from './components/FileEditorTab';
@@ -73,7 +73,7 @@ export * from './components/NewSessionModal';
 export * from './components/SessionComposer';
 export * from './components/SessionSidePanel';
 export * from './components/SessionTimeline';
-export { SidebarRail as LunariaSidebarRail } from './components/SidebarRail';
+export { SidebarRail as AmoenaSidebarRail } from './components/SidebarRail';
 export * from './components/StatusBar';
 export * from './components/TerminalPanel';
 export * from './components/AgentStatusDot';

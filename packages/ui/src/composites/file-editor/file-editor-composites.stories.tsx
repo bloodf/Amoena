@@ -96,7 +96,7 @@ export const UserSchema = z.object({
 export type User = z.infer<typeof UserSchema>;`;
 
 const sampleJsonCode = `{
-  "name": "lunaria",
+  "name": "amoena",
   "version": "0.8.1",
   "dependencies": {
     "jsonwebtoken": "^9.2.0",

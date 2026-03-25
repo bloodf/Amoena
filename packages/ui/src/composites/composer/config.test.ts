@@ -67,7 +67,7 @@ describe('composerFiles', () => {
 
 describe('composerProviderModels', () => {
   const providers: ComposerProvider[] = [
-    'lunaria',
+    'amoena',
     'claude',
     'opencode',
     'codex',
@@ -95,7 +95,7 @@ describe('composerProviderModels', () => {
 
 describe('composerProviderAgents', () => {
   const providers: ComposerProvider[] = [
-    'lunaria',
+    'amoena',
     'claude',
     'opencode',
     'codex',

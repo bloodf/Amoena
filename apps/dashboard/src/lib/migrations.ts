@@ -290,7 +290,7 @@ const migrations: Migration[] = [
           linux_user TEXT NOT NULL UNIQUE,
           plan_tier TEXT NOT NULL DEFAULT 'standard',
           status TEXT NOT NULL DEFAULT 'pending',
-          lunaria_home TEXT NOT NULL,
+          amoena_home TEXT NOT NULL,
           workspace_root TEXT NOT NULL,
           gateway_port INTEGER,
           dashboard_port INTEGER,
@@ -1145,14 +1145,14 @@ const migrations: Migration[] = [
 				const home = String(process.env.HOME || "/tmp").trim() || "/tmp";
 				const insert = db
 					.prepare(`
-          INSERT INTO tenants (slug, display_name, linux_user, plan_tier, status, lunaria_home, workspace_root, config, created_by, owner_gateway)
+          INSERT INTO tenants (slug, display_name, linux_user, plan_tier, status, amoena_home, workspace_root, config, created_by, owner_gateway)
           VALUES (?, ?, ?, 'standard', 'active', ?, ?, '{}', 'system', ?)
         `)
 					.run(
 						slug,
 						"Local Owner",
 						linuxUser,
-						`${home}/.lunaria`,
+						`${home}/.amoena`,
 						`${home}/workspace`,
 						process.env.MC_DEFAULT_OWNER_GATEWAY ||
 							process.env.MC_DEFAULT_GATEWAY_NAME ||

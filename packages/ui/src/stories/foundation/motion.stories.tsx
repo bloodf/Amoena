@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  lunariaMotionTokens,
-  lunariaTransitionTokens,
+  amoenaMotionTokens,
+  amoenaTransitionTokens,
 } from "@lunaria/tokens";
 
 const meta = {
@@ -16,7 +16,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const { duration, easing } = lunariaMotionTokens;
+const { duration, easing } = amoenaMotionTokens;
 
 function DurationDemo() {
   const [active, setActive] = useState(false);
@@ -195,7 +195,7 @@ export const Easings: Story = {
 export const TransitionPresets: Story = {
   name: "Transition Presets",
   render: () => {
-    const presets = Object.entries(lunariaTransitionTokens) as [
+    const presets = Object.entries(amoenaTransitionTokens) as [
       string,
       string,
     ][];
@@ -257,7 +257,7 @@ export const TransitionPresets: Story = {
               </thead>
               <tbody>
                 {(
-                  Object.entries(lunariaMotionTokens.keyframes) as [
+                  Object.entries(amoenaMotionTokens.keyframes) as [
                     string,
                     string,
                   ][]

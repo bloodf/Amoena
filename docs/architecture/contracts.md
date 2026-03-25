@@ -1,6 +1,6 @@
 # Runtime Client & Type System
 
-The `@lunaria/runtime-client` package provides a typed HTTP client for communicating with the Lunaria runtime server. It defines the complete type system shared between the frontend and the API.
+The `@lunaria/runtime-client` package provides a typed HTTP client for communicating with the Amoena runtime server. It defines the complete type system shared between the frontend and the API.
 
 Source: `packages/runtime-client/src/`
 

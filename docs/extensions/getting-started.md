@@ -1,11 +1,11 @@
 # Getting Started with Extensions
 
-This guide walks through creating a Lunaria extension from scratch: writing the manifest, adding a panel, packaging as `.luna`, and installing it.
+This guide walks through creating a Amoena extension from scratch: writing the manifest, adding a panel, packaging as `.luna`, and installing it.
 
 ## Prerequisites
 
 - [Bun](https://bun.sh) installed (for backend entry points and the packaging tool)
-- Lunaria desktop app installed
+- Amoena desktop app installed
 - Basic familiarity with JSON and HTML
 
 ## Step 1: Create the Project Directory
@@ -35,7 +35,7 @@ Create `manifest.json`:
   "name": "My Extension",
   "version": "1.0.0",
   "publisher": "Your Name",
-  "description": "My first Lunaria extension",
+  "description": "My first Amoena extension",
   "icon": "icon.png",
   "permissions": ["sessions.read"],
   "activationEvents": ["onSession"],
@@ -134,7 +134,7 @@ If your extension needs to run backend logic (process data, call APIs, handle co
 Create `main.js`:
 
 ```js
-// Lunaria calls your backend via JSON-RPC on stdin/stdout
+// Amoena calls your backend via JSON-RPC on stdin/stdout
 process.stdin.setEncoding('utf8');
 
 let buffer = '';
@@ -169,17 +169,17 @@ function handleRequest(request) {
 
 ## Step 5: Package as .luna
 
-Use the `lunaria-pack` CLI to bundle your project into a `.luna` file:
+Use the `amoena-pack` CLI to bundle your project into a `.luna` file:
 
 ```bash
 # Install the packaging tool (once)
 bun install -g @lunaria/pack
 
 # Package from the project directory
-lunaria-pack manifest.json --out my-extension.luna
+amoena-pack manifest.json --out my-extension.luna
 
 # Or specify assets explicitly
-lunaria-pack manifest.json \
+amoena-pack manifest.json \
   --asset panel.html \
   --asset main.js \
   --asset icon.png \
@@ -190,7 +190,7 @@ The tool reads your manifest, embeds all referenced assets, and writes the binar
 
 **Verify the bundle:**
 ```bash
-lunaria-pack inspect my-extension.luna
+amoena-pack inspect my-extension.luna
 ```
 
 Output:
@@ -206,22 +206,22 @@ Output:
     icon.png     (2.8 KB)
 ```
 
-## Step 6: Install in Lunaria
+## Step 6: Install in Amoena
 
 **Option A — Drag and drop:**
-Drag `my-extension.luna` onto the Lunaria window. A confirmation dialog appears, then the extension installs and activates.
+Drag `my-extension.luna` onto the Amoena window. A confirmation dialog appears, then the extension installs and activates.
 
 **Option B — Settings panel:**
 Go to Settings → Extensions → Install Extension, then browse to your `.luna` file.
 
 **Option C — Deeplink:**
 ```
-lunaria://extension/install?source=file:///path/to/my-extension.luna
+amoena://extension/install?source=file:///path/to/my-extension.luna
 ```
 
 Or from a URL (useful for distribution):
 ```
-lunaria://extension/install?source=https://example.com/my-extension.luna
+amoena://extension/install?source=https://example.com/my-extension.luna
 ```
 
 ## Verification
@@ -236,8 +236,8 @@ After installing, verify the extension is active:
 
 To update your extension:
 1. Edit your source files
-2. Re-run `lunaria-pack`
-3. Reinstall — Lunaria replaces the existing extension with the same `id`
+2. Re-run `amoena-pack`
+3. Reinstall — Amoena replaces the existing extension with the same `id`
 
 ## Next Steps
 

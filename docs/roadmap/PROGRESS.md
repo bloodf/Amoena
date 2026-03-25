@@ -1,11 +1,11 @@
-# Lunaria Multi-Fork Integration Progress
+# Amoena Multi-Fork Integration Progress
 
 ## Status: PHASE 6 (POLISH) IN PROGRESS
 
 **Architecture:** Multi-fork integration of 3 open-source projects
 **Plan reviewed:** 2026-03-22 (CEO: CLEAR, Eng: CLEAR, Design: CLEAR)
-**Total features:** 33 (from Superset + Mission Control + claude-mem + Lunaria originals)
-**CEO plan:** `~/.gstack/projects/LunariaAi-lunaria/ceo-plans/2026-03-22-multi-fork-integration.md`
+**Total features:** 33 (from Superset + Mission Control + claude-mem + Amoena originals)
+**CEO plan:** `~/.gstack/projects/AmoenaAi-amoena/ceo-plans/2026-03-22-multi-fork-integration.md`
 
 ### Source Projects
 
@@ -35,7 +35,7 @@ Electron Main → spawns 3 services in parallel:
   ├── Terminal Host (Hono :4879)    — PTY, git worktrees, WebSocket
   └── Memory       (:37777)         — SQLite FTS5, vector search
 
-+ Lunaria Service (packages/lunaria-service):
++ Amoena Service (packages/amoena-service):
   ├── Orchestration (multi-agent, permission ceiling)
   ├── Consensus voting (weighted, abstention-safe)
   ├── Autopilot (6-phase pipeline)
@@ -51,14 +51,14 @@ Electron Main → spawns 3 services in parallel:
 | --- | --- | --- | --- |
 | @lunaria/dashboard | app | 431 | Mission Control |
 | @lunaria/desktop | app | 355 | Superset |
-| @lunaria/mobile | app | — | Lunaria (preserved) |
-| @lunaria/ui | package | 598 | Lunaria (preserved) |
+| @lunaria/mobile | app | — | Amoena (preserved) |
+| @lunaria/ui | package | 598 | Amoena (preserved) |
 | @lunaria/memory | package | 154 | claude-mem |
 | @lunaria/terminal-host | package | 78 | Superset |
 | @lunaria/workspace-fs | package | 21 | Superset |
-| @lunaria/lunaria-service | package | 9 | New (Lunaria) |
-| @lunaria/tokens | package | — | Lunaria (preserved) |
-| @lunaria/i18n | package | — | Lunaria (preserved) |
+| @lunaria/amoena-service | package | 9 | New (Amoena) |
+| @lunaria/tokens | package | — | Amoena (preserved) |
+| @lunaria/i18n | package | — | Amoena (preserved) |
 | + 7 stub packages | stubs | — | Pending Phase 6 |
 
 ## Test Results
@@ -67,7 +67,7 @@ Electron Main → spawns 3 services in parallel:
 | --- | --- | --- | --- |
 | MC unit tests (ported) | PENDING | 282 | — |
 | MC E2E tests (ported) | PENDING | 295 | — |
-| lunaria-service unit | IN PROGRESS | ~25 | 2026-03-22 |
+| amoena-service unit | IN PROGRESS | ~25 | 2026-03-22 |
 | @lunaria/ui unit | PASS | ~50 | 2026-03-20 |
 
 ## Build Status

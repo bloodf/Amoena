@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 export function LiveFeed() {
 	const {
@@ -13,7 +13,7 @@ export function LiveFeed() {
 		connection,
 		dashboardMode,
 		toggleLiveFeed,
-	} = useLunaria();
+	} = useAmoena();
 	const t = useTranslations("liveFeed");
 	const isLocal = dashboardMode === "local";
 	const [expanded, setExpanded] = useState(false);

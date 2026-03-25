@@ -19,9 +19,9 @@ import { resolveWithin } from "@/lib/paths";
 
 function _resolveAgentWorkspacePath(workspace: string): string {
 	if (isAbsolute(workspace)) return resolve(workspace);
-	if (!config.lunariaStateDir)
-		throw new Error("LUNARIA_STATE_DIR not configured");
-	return resolveWithin(config.lunariaStateDir, workspace);
+	if (!config.amoenaStateDir)
+		throw new Error("AMOENA_STATE_DIR not configured");
+	return resolveWithin(config.amoenaStateDir, workspace);
 }
 
 /**

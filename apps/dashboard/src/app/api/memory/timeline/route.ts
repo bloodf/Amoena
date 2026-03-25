@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const MEMORY_URL = `http://localhost:${process.env.LUNARIA_MEMORY_PORT ?? 37777}`;
+const MEMORY_URL = `http://localhost:${process.env.AMOENA_MEMORY_PORT ?? 37777}`;
 
 export async function GET(request: Request) {
 	try {

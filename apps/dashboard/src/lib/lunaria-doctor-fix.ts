@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export interface LunariaDoctorFixResult {
+export interface AmoenaDoctorFixResult {
 	archivedOrphans: number;
 	storesScanned: number;
 }
@@ -40,7 +40,7 @@ function collectReferencedTranscriptNames(
 
 export function archiveOrphanTranscriptsForStateDir(
 	stateDir: string,
-): LunariaDoctorFixResult {
+): AmoenaDoctorFixResult {
 	const agentsDir = path.join(stateDir, "agents");
 	if (!fs.existsSync(agentsDir)) {
 		return { archivedOrphans: 0, storesScanned: 0 };

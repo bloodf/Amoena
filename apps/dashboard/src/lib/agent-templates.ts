@@ -2,7 +2,7 @@
  * Agent Templates Library
  *
  * Defines agent archetypes that can be used as starting points for new deployments.
- * Each template provides a full Lunaria agent config structure that
+ * Each template provides a full Amoena agent config structure that
  * can be customized before creating an agent.
  */
 
@@ -43,7 +43,7 @@ export interface AgentMemorySearchConfig {
 	};
 }
 
-export interface LunariaAgentConfig {
+export interface AmoenaAgentConfig {
 	id: string;
 	name?: string;
 	workspace?: string;
@@ -63,7 +63,7 @@ export interface AgentTemplate {
 	emoji: string;
 	modelTier: "opus" | "sonnet" | "haiku";
 	toolCount: number;
-	config: Omit<LunariaAgentConfig, "id" | "workspace" | "agentDir">;
+	config: Omit<AmoenaAgentConfig, "id" | "workspace" | "agentDir">;
 }
 
 import { getPluginToolProviders } from "@/lib/plugins";
@@ -495,7 +495,7 @@ export function getTemplate(type: string): AgentTemplate | undefined {
 	return AGENT_TEMPLATES.find((t) => t.type === type);
 }
 
-/** Build a full Lunaria agent config from a template + overrides */
+/** Build a full Amoena agent config from a template + overrides */
 export function buildAgentConfig(
 	template: AgentTemplate,
 	overrides: {
@@ -511,7 +511,7 @@ export function buildAgentConfig(
 		dockerNetwork?: "none" | "bridge";
 		subagentAllowAgents?: string[];
 	},
-): LunariaAgentConfig {
+): AmoenaAgentConfig {
 	const config = structuredClone(template.config);
 
 	config.identity.name = overrides.name;

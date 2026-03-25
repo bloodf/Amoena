@@ -210,7 +210,7 @@ async function deliverWebhook(
 
 	const headers: Record<string, string> = {
 		"Content-Type": "application/json",
-		"User-Agent": "Lunaria-Webhook/1.0",
+		"User-Agent": "Amoena-Webhook/1.0",
 		"X-MC-Event": eventType,
 	};
 

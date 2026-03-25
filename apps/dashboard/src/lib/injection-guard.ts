@@ -1,5 +1,5 @@
 /**
- * Injection Guard — prompt injection and command injection detection for Lunaria.
+ * Injection Guard — prompt injection and command injection detection for Amoena.
  *
  * Scans user input destined for AI agents, shell commands, or rendered UI.
  * Provides both a detection function and a Zod refinement for validation schemas.

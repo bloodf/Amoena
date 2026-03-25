@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 import { getDatabase } from "@/lib/db";
 import { logger } from "@/lib/logger";
 
@@ -13,25 +13,25 @@ export async function POST(request: Request) {
 	let installedBefore: string | null = null;
 
 	try {
-		const vResult = await runLunaria(["--version"], { timeoutMs: 3000 });
+		const vResult = await runAmoena(["--version"], { timeoutMs: 3000 });
 		const match = vResult.stdout.match(/(\d+\.\d+\.\d+)/);
 		if (match) installedBefore = match[1];
 	} catch {
 		return NextResponse.json(
-			{ error: "Lunaria is not installed or not reachable" },
+			{ error: "Amoena is not installed or not reachable" },
 			{ status: 400 },
 		);
 	}
 
 	try {
-		const result = await runLunaria(["update", "--channel", "stable"], {
+		const result = await runAmoena(["update", "--channel", "stable"], {
 			timeoutMs: 5 * 60 * 1000,
 		});
 
 		// Read new version after update
 		let installedAfter: string | null = null;
 		try {
-			const vResult = await runLunaria(["--version"], { timeoutMs: 3000 });
+			const vResult = await runAmoena(["--version"], { timeoutMs: 3000 });
 			const match = vResult.stdout.match(/(\d+\.\d+\.\d+)/);
 			if (match) installedAfter = match[1];
 		} catch {
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 			db.prepare(
 				"INSERT INTO audit_log (action, actor, detail) VALUES (?, ?, ?)",
 			).run(
-				"lunaria.update",
+				"amoena.update",
 				auth.user.username,
 				JSON.stringify({
 					previousVersion: installedBefore,
@@ -66,12 +66,12 @@ export async function POST(request: Request) {
 			err?.stderr?.toString?.()?.trim() ||
 			err?.stdout?.toString?.()?.trim() ||
 			err?.message ||
-			"Unknown error during Lunaria update";
+			"Unknown error during Amoena update";
 
-		logger.error({ err }, "Lunaria update failed");
+		logger.error({ err }, "Amoena update failed");
 
 		return NextResponse.json(
-			{ error: "Lunaria update failed", detail },
+			{ error: "Amoena update failed", detail },
 			{ status: 500 },
 		);
 	}

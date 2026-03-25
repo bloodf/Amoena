@@ -72,15 +72,15 @@ const settingDefinitions: Record<
 	"chat.coordinator_target_agent": {
 		category: "chat",
 		description:
-			"Optional coordinator routing target (agent name or lunariaId). When set, coordinator inbox messages are forwarded to this agent before default/main-session fallback.",
+			"Optional coordinator routing target (agent name or amoenaId). When set, coordinator inbox messages are forwarded to this agent before default/main-session fallback.",
 		default: "",
 	},
 
 	// General
 	"general.site_name": {
 		category: "general",
-		description: "Lunaria display name",
-		default: "Lunaria",
+		description: "Amoena display name",
+		default: "Amoena",
 	},
 	"general.auto_cleanup": {
 		category: "general",

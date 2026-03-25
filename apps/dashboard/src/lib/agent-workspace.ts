@@ -5,9 +5,9 @@ import { resolveWithin } from "@/lib/paths";
 
 function resolvePath(candidate: string): string {
 	if (isAbsolute(candidate)) return resolve(candidate);
-	if (!config.lunariaStateDir)
-		throw new Error("LUNARIA_STATE_DIR not configured");
-	return resolveWithin(config.lunariaStateDir, candidate);
+	if (!config.amoenaStateDir)
+		throw new Error("AMOENA_STATE_DIR not configured");
+	return resolveWithin(config.amoenaStateDir, candidate);
 }
 
 export function getAgentWorkspaceCandidates(
@@ -32,15 +32,15 @@ export function getAgentWorkspaceCandidates(
 		typeof agentConfig?.workspace === "string"
 			? agentConfig.workspace.trim()
 			: "";
-	const lunariaIdRaw =
-		typeof agentConfig?.lunariaId === "string" && agentConfig.lunariaId.trim()
-			? agentConfig.lunariaId.trim()
+	const amoenaIdRaw =
+		typeof agentConfig?.amoenaId === "string" && agentConfig.amoenaId.trim()
+			? agentConfig.amoenaId.trim()
 			: agentName;
-	const lunariaId = lunariaIdRaw.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
+	const amoenaId = amoenaIdRaw.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
 
 	push(rawWorkspace || null);
-	push(`workspace-${lunariaId}`);
-	push(`agents/${lunariaId}`);
+	push(`workspace-${amoenaId}`);
+	push(`agents/${amoenaId}`);
 	push("workspace");
 
 	return out.filter((value) => existsSync(value));

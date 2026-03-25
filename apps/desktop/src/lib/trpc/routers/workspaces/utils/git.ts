@@ -650,7 +650,7 @@ export async function removeWorktree(
 		// then `git worktree prune` to clean metadata, then delete in background.
 		const tempPath = join(
 			dirname(worktreePath),
-			`.lunaria-delete-${randomUUID()}`,
+			`.amoena-delete-${randomUUID()}`,
 		);
 		await rename(worktreePath, tempPath);
 

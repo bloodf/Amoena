@@ -4,15 +4,15 @@ import path from "node:path";
 import {
 	buildWrapperScript,
 	createWrapper,
-	isLunariaManagedHookCommand,
+	isAmoenaManagedHookCommand,
 	writeFileIfChanged,
 } from "./agent-wrappers-common";
 import { getNotifyScriptPath, NOTIFY_SCRIPT_NAME } from "./notify-hook";
 import { OPENCODE_CONFIG_DIR, OPENCODE_PLUGIN_DIR } from "./paths";
 
-export const OPENCODE_PLUGIN_FILE = "lunaria-notify.js";
+export const OPENCODE_PLUGIN_FILE = "amoena-notify.js";
 
-const OPENCODE_PLUGIN_SIGNATURE = "// Lunaria opencode plugin";
+const OPENCODE_PLUGIN_SIGNATURE = "// Amoena opencode plugin";
 const OPENCODE_PLUGIN_VERSION = "v8";
 export const OPENCODE_PLUGIN_MARKER = `${OPENCODE_PLUGIN_SIGNATURE} ${OPENCODE_PLUGIN_VERSION}`;
 
@@ -28,7 +28,7 @@ const CODEX_WRAPPER_EXEC_TEMPLATE_PATH = path.join(
 );
 
 /**
- * Returns the environment-scoped OpenCode plugin path under Lunaria home.
+ * Returns the environment-scoped OpenCode plugin path under Amoena home.
  */
 export function getOpenCodePluginPath(): string {
 	return path.join(OPENCODE_PLUGIN_DIR, OPENCODE_PLUGIN_FILE);
@@ -66,7 +66,7 @@ interface ClaudeSettingsJson {
 }
 
 const CLAUDE_DYNAMIC_NOTIFY_RELATIVE_PATH = `hooks/${NOTIFY_SCRIPT_NAME}`;
-const CLAUDE_DYNAMIC_NOTIFY_PATH_MARKER = `$LUNARIA_HOME_DIR/${CLAUDE_DYNAMIC_NOTIFY_RELATIVE_PATH}`;
+const CLAUDE_DYNAMIC_NOTIFY_PATH_MARKER = `$AMOENA_HOME_DIR/${CLAUDE_DYNAMIC_NOTIFY_RELATIVE_PATH}`;
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -74,11 +74,11 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 
 /**
  * Returns the shell command written into Claude's global hook config.
- * The notify path is resolved at runtime from LUNARIA_HOME_DIR so one
+ * The notify path is resolved at runtime from AMOENA_HOME_DIR so one
  * shared ~/.claude/settings.json works for both dev and prod installs.
  */
 export function getClaudeManagedHookCommand(): string {
-	return `[ -n "$LUNARIA_HOME_DIR" ] && [ -x "$LUNARIA_HOME_DIR/${CLAUDE_DYNAMIC_NOTIFY_RELATIVE_PATH}" ] && "$LUNARIA_HOME_DIR/${CLAUDE_DYNAMIC_NOTIFY_RELATIVE_PATH}" || true`;
+	return `[ -n "$AMOENA_HOME_DIR" ] && [ -x "$AMOENA_HOME_DIR/${CLAUDE_DYNAMIC_NOTIFY_RELATIVE_PATH}" ] && "$AMOENA_HOME_DIR/${CLAUDE_DYNAMIC_NOTIFY_RELATIVE_PATH}" || true`;
 }
 
 function isManagedClaudeHookCommand(
@@ -88,7 +88,7 @@ function isManagedClaudeHookCommand(
 	return (
 		command?.includes(notifyScriptPath) ||
 		command?.includes(CLAUDE_DYNAMIC_NOTIFY_PATH_MARKER) ||
-		isLunariaManagedHookCommand(command, NOTIFY_SCRIPT_NAME)
+		isAmoenaManagedHookCommand(command, NOTIFY_SCRIPT_NAME)
 	);
 }
 
@@ -235,7 +235,7 @@ export function getClaudeGlobalSettingsJsonContent(
 }
 
 /**
- * Writes Lunaria hook definitions directly into ~/.claude/settings.json.
+ * Writes Amoena hook definitions directly into ~/.claude/settings.json.
  * This ensures hooks work regardless of whether the binary wrapper is in PATH,
  * matching the approach used for Cursor, Gemini, Droid, and Mastra.
  */
@@ -264,19 +264,19 @@ export function getOpenCodePluginContent(notifyPath: string): string {
 }
 
 /**
- * Creates the Claude wrapper that forwards LUNARIA_* env vars into the agent.
+ * Creates the Claude wrapper that forwards AMOENA_* env vars into the agent.
  */
 export function createClaudeWrapper(): void {
 	// Hooks are now written directly to ~/.claude/settings.json via
 	// createClaudeSettingsJson(), so the wrapper is a plain pass-through.
-	// We still create the wrapper so LUNARIA_* env vars flow through
-	// and the notify script can identify the Lunaria terminal context.
+	// We still create the wrapper so AMOENA_* env vars flow through
+	// and the notify script can identify the Amoena terminal context.
 	const script = buildWrapperScript("claude", `exec "$REAL_BIN" "$@"`);
 	createWrapper("claude", script);
 }
 
 /**
- * Creates the Codex wrapper that injects Lunaria's notify/session-log logic.
+ * Creates the Codex wrapper that injects Amoena's notify/session-log logic.
  */
 export function createCodexWrapper(): void {
 	const notifyPath = getNotifyScriptPath();
@@ -339,9 +339,9 @@ export function getCodexGlobalHooksJsonPath(): string {
  * Codex hooks.json uses the same nested structure as Claude/Droid:
  *   { hooks: { EventName: [{ matcher?, hooks: [{ type, command }] }] } }
  *
- * Lunaria intentionally keeps this native Codex hook registration narrow.
+ * Amoena intentionally keeps this native Codex hook registration narrow.
  * The primary integration path is still the wrapper + notify/session-log
- * watcher, which works inside Lunaria-managed terminal sessions and covers
+ * watcher, which works inside Amoena-managed terminal sessions and covers
  * richer lifecycle events like per-turn Start and PermissionRequest.
  *
  * This hooks.json merge is only a fallback for cases where the wrapper is
@@ -398,12 +398,12 @@ export function getCodexGlobalHooksJsonContent(
 }
 
 /**
- * Writes Lunaria hook definitions directly into ~/.codex/hooks.json.
+ * Writes Amoena hook definitions directly into ~/.codex/hooks.json.
  * This provides a fallback notification path that works even when the
  * binary wrapper is not in PATH (e.g. user runs codex from outside
- * a Lunaria terminal).
+ * a Amoena terminal).
  *
- * The wrapper remains the primary integration path for Lunaria-managed
+ * The wrapper remains the primary integration path for Amoena-managed
  * terminals because it can synthesize richer lifecycle events from Codex's
  * notify callback and session log (task_started, approval_request,
  * exec_command_begin) without mutating project-local CODEX_HOME state.

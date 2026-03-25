@@ -59,7 +59,7 @@ describe('ExtensionRegistry', () => {
   const registry = new ExtensionRegistry();
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lunaria-registry-test-'));
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'amoena-registry-test-'));
   });
 
   afterEach(() => {
@@ -72,7 +72,7 @@ describe('ExtensionRegistry', () => {
     });
 
     it('returns empty array for a non-existent directory', () => {
-      expect(registry.scan('/tmp/does-not-exist-lunaria-test')).toEqual([]);
+      expect(registry.scan('/tmp/does-not-exist-amoena-test')).toEqual([]);
     });
 
     it('discovers .luna files in directory', () => {

@@ -110,7 +110,7 @@ export const AllTypes: Story = {
       <Button
         variant="outline"
         onClick={() => {
-          const promise = () => new Promise<{ name: string }>((resolve) => setTimeout(() => resolve({ name: "Lunaria" }), 2000));
+          const promise = () => new Promise<{ name: string }>((resolve) => setTimeout(() => resolve({ name: "Amoena" }), 2000));
           toast.promise(promise(), {
             loading: "Loading…",
             success: (data) => `${data.name} is ready`,

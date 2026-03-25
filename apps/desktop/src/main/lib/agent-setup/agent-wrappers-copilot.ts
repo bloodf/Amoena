@@ -10,7 +10,7 @@ import { HOOKS_DIR } from "./paths";
 
 export const COPILOT_HOOK_SCRIPT_NAME = "copilot-hook.sh";
 
-const COPILOT_HOOK_SIGNATURE = "# Lunaria copilot hook";
+const COPILOT_HOOK_SIGNATURE = "# Amoena copilot hook";
 const COPILOT_HOOK_VERSION = "v1";
 export const COPILOT_HOOK_MARKER = `${COPILOT_HOOK_SIGNATURE} ${COPILOT_HOOK_VERSION}`;
 
@@ -83,10 +83,10 @@ export function buildCopilotWrapperExecLine(): string {
 	const escapedJson = hooksJson.replace(/'/g, "'\\''");
 
 	return `# Copilot CLI only supports project-level hooks (.github/hooks/*.json in CWD).
-# Auto-inject Lunaria notification hooks when running inside a Lunaria terminal.
-if [ -n "$LUNARIA_TAB_ID" ] && [ -f "${hookScriptPath}" ]; then
+# Auto-inject Amoena notification hooks when running inside a Amoena terminal.
+if [ -n "$AMOENA_TAB_ID" ] && [ -f "${hookScriptPath}" ]; then
   COPILOT_HOOKS_DIR=".github/hooks"
-  COPILOT_HOOK_FILE="$COPILOT_HOOKS_DIR/lunaria-notify.json"
+  COPILOT_HOOK_FILE="$COPILOT_HOOKS_DIR/amoena-notify.json"
 
   # Always refresh our dedicated hook file so stale absolute hook paths from
   # older installs/workspaces cannot silently break notifications.
@@ -94,8 +94,8 @@ if [ -n "$LUNARIA_TAB_ID" ] && [ -f "${hookScriptPath}" ]; then
   printf '%s\\n' '${escapedJson}' > "$COPILOT_HOOK_FILE" 2>/dev/null
 
   if [ -d ".git/info" ]; then
-    grep -qF ".github/hooks/lunaria-notify.json" ".git/info/exclude" 2>/dev/null || \\
-      printf '%s\\n' ".github/hooks/lunaria-notify.json" >> ".git/info/exclude" 2>/dev/null
+    grep -qF ".github/hooks/amoena-notify.json" ".git/info/exclude" 2>/dev/null || \\
+      printf '%s\\n' ".github/hooks/amoena-notify.json" >> ".git/info/exclude" 2>/dev/null
   fi
 fi
 

@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { parseLunariaDoctorOutput } from "@/lib/lunaria-doctor";
+import { parseAmoenaDoctorOutput } from "@/lib/amoena-doctor";
 
-describe("parseLunariaDoctorOutput", () => {
+describe("parseAmoenaDoctorOutput", () => {
 	it("marks warning output as fixable and extracts bullet issues", () => {
-		const result = parseLunariaDoctorOutput(
+		const result = parseAmoenaDoctorOutput(
 			`
 Config warnings
 - tools.exec.safeBins includes interpreter/runtime 'bun' without profile
 - tools.exec.safeBins includes interpreter/runtime 'python3' without profile
-Run: lunaria doctor --fix
+Run: amoena doctor --fix
 `,
 			0,
 		);
@@ -24,15 +24,15 @@ Run: lunaria doctor --fix
 	});
 
 	it("marks invalid config output as an error", () => {
-		const result = parseLunariaDoctorOutput(
+		const result = parseAmoenaDoctorOutput(
 			`
-Invalid config at /home/lunaria/.lunaria/lunaria.json:
+Invalid config at /home/amoena/.amoena/amoena.json:
 - <root>: Unrecognized key: "test"
 Config invalid
-File: $LUNARIA_HOME/lunaria.json
+File: $AMOENA_HOME/amoena.json
 Problem:
 - <root>: Unrecognized key: "test"
-Run: lunaria doctor --fix
+Run: amoena doctor --fix
 `,
 			1,
 		);
@@ -44,12 +44,12 @@ Run: lunaria doctor --fix
 	});
 
 	it("classifies state integrity warnings separately from config drift", () => {
-		const result = parseLunariaDoctorOutput(
+		const result = parseAmoenaDoctorOutput(
 			`
 ◇  State integrity
 - Multiple state directories detected. This can split session history.
-- Found 1 orphan transcript file(s) in ~/.lunaria/agents/jarv/sessions.
-Run "lunaria doctor --fix" to apply changes.
+- Found 1 orphan transcript file(s) in ~/.amoena/agents/jarv/sessions.
+Run "amoena doctor --fix" to apply changes.
 `,
 			0,
 		);
@@ -61,79 +61,79 @@ Run "lunaria doctor --fix" to apply changes.
 	});
 
 	it("suppresses foreign state-directory warnings for the active instance", () => {
-		const result = parseLunariaDoctorOutput(
+		const result = parseAmoenaDoctorOutput(
 			`
 ◇  State integrity
 - Multiple state directories detected. This can split session history.
-  - /home/nefes/.lunaria
-  Active state dir: ~/.lunaria
-- Found 1 orphan transcript file(s) in ~/.lunaria/agents/jarv/sessions.
-Run "lunaria doctor --fix" to apply changes.
+  - /home/nefes/.amoena
+  Active state dir: ~/.amoena
+- Found 1 orphan transcript file(s) in ~/.amoena/agents/jarv/sessions.
+Run "amoena doctor --fix" to apply changes.
 `,
 			0,
-			{ stateDir: "/home/lunaria/.lunaria" },
+			{ stateDir: "/home/amoena/.amoena" },
 		);
 
 		expect(result.healthy).toBe(false);
 		expect(result.level).toBe("warning");
 		expect(result.category).toBe("state");
 		expect(result.issues).toEqual([
-			"Found 1 orphan transcript file(s) in ~/.lunaria/agents/jarv/sessions.",
+			"Found 1 orphan transcript file(s) in ~/.amoena/agents/jarv/sessions.",
 		]);
-		expect(result.raw).not.toContain("/home/nefes/.lunaria");
+		expect(result.raw).not.toContain("/home/nefes/.amoena");
 	});
 
-	it("suppresses foreign state-directory warnings when the active dir is shown via LUNARIA_HOME alias", () => {
-		const result = parseLunariaDoctorOutput(
+	it("suppresses foreign state-directory warnings when the active dir is shown via AMOENA_HOME alias", () => {
+		const result = parseAmoenaDoctorOutput(
 			`
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-┌  Lunaria doctor
+┌  Amoena doctor
 │
 ◇  State integrity
 - Multiple state directories detected. This can split session history.
-  - $LUNARIA_HOME/.lunaria
-  - /home/nefes/.lunaria
-  Active state dir: $LUNARIA_HOME
-- Found 11 orphan transcript file(s) in $LUNARIA_HOME/agents/jarv/sessions.
-Run "lunaria doctor --fix" to apply changes.
+  - $AMOENA_HOME/.amoena
+  - /home/nefes/.amoena
+  Active state dir: $AMOENA_HOME
+- Found 11 orphan transcript file(s) in $AMOENA_HOME/agents/jarv/sessions.
+Run "amoena doctor --fix" to apply changes.
 `,
 			0,
-			{ stateDir: "/home/lunaria/.lunaria" },
+			{ stateDir: "/home/amoena/.amoena" },
 		);
 
 		expect(result.summary).toContain("Found 11 orphan transcript file(s)");
-		expect(result.raw).not.toContain("/home/nefes/.lunaria");
+		expect(result.raw).not.toContain("/home/nefes/.amoena");
 		expect(result.raw).not.toContain("Multiple state directories detected");
 	});
 
 	it("parses state integrity blocks when lines are prefixed by box-drawing gutters", () => {
-		const result = parseLunariaDoctorOutput(
+		const result = parseAmoenaDoctorOutput(
 			`
-┌  Lunaria doctor
+┌  Amoena doctor
 │
 ◇  State integrity
 │  - Multiple state directories detected. This can split session history.
-│    - $LUNARIA_HOME/.lunaria
-│    - /home/nefes/.lunaria
-│    Active state dir: $LUNARIA_HOME
-│  - Found 11 orphan transcript file(s) in $LUNARIA_HOME/agents/jarv/sessions.
-Run "lunaria doctor --fix" to apply changes.
+│    - $AMOENA_HOME/.amoena
+│    - /home/nefes/.amoena
+│    Active state dir: $AMOENA_HOME
+│  - Found 11 orphan transcript file(s) in $AMOENA_HOME/agents/jarv/sessions.
+Run "amoena doctor --fix" to apply changes.
 `,
 			0,
-			{ stateDir: "/home/lunaria/.lunaria" },
+			{ stateDir: "/home/amoena/.amoena" },
 		);
 
 		expect(result.level).toBe("warning");
 		expect(result.category).toBe("state");
 		expect(result.issues).toEqual([
-			"Found 11 orphan transcript file(s) in $LUNARIA_HOME/agents/jarv/sessions.",
+			"Found 11 orphan transcript file(s) in $AMOENA_HOME/agents/jarv/sessions.",
 		]);
-		expect(result.raw).not.toContain("/home/nefes/.lunaria");
+		expect(result.raw).not.toContain("/home/nefes/.amoena");
 		expect(result.raw).not.toContain("Multiple state directories detected");
 	});
 
 	it("marks clean output as healthy", () => {
-		const result = parseLunariaDoctorOutput("OK: configuration valid", 0);
+		const result = parseAmoenaDoctorOutput("OK: configuration valid", 0);
 
 		expect(result.healthy).toBe(true);
 		expect(result.level).toBe("healthy");
@@ -142,11 +142,11 @@ Run "lunaria doctor --fix" to apply changes.
 	});
 
 	it("treats positive security lines as healthy, not warnings (#331)", () => {
-		const result = parseLunariaDoctorOutput(
+		const result = parseAmoenaDoctorOutput(
 			`
 ? Security
 - No channel security warnings detected.
-- Run: lunaria security audit --deep
+- Run: amoena security audit --deep
 `,
 			0,
 		);
@@ -157,12 +157,12 @@ Run "lunaria doctor --fix" to apply changes.
 	});
 
 	it("still detects real security warnings alongside positive lines", () => {
-		const result = parseLunariaDoctorOutput(
+		const result = parseAmoenaDoctorOutput(
 			`
 ? Security
 - Channel "public" has no auth configured.
 - No channel security warnings detected.
-- Run: lunaria security audit --deep
+- Run: amoena security audit --deep
 `,
 			0,
 		);

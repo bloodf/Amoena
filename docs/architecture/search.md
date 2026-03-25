@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lunaria provides search across multiple domains: sessions, memory observations, files, and settings. Search is local-first with optional semantic enhancement.
+Amoena provides search across multiple domains: sessions, memory observations, files, and settings. Search is local-first with optional semantic enhancement.
 
 ## Search Domains
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines how Lunaria models, stores, resolves, and surfaces reasoning-capable model behavior.
+This document defines how Amoena models, stores, resolves, and surfaces reasoning-capable model behavior.
 
 ## Goals
 
@@ -35,7 +35,7 @@ Effort resolves in this order:
 
 1. per-turn effort override
 2. per-model effort default
-3. provider/model default selected by Lunaria
+3. provider/model default selected by Amoena
 
 ## Adaptive Auto-Policy
 

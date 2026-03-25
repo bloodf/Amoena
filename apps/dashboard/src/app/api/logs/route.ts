@@ -19,11 +19,11 @@ interface LogEntry {
 }
 
 /**
- * Parse a log line from various Lunaria log formats:
+ * Parse a log line from various Amoena log formats:
  * - Pipe-delimited: "2026-02-09T17:00:01+01:00|MONITOR|Consistency check completed"
- * - Simple text: "done report=/path/to/.lunaria/workspace-<agent>/reports/..."
+ * - Simple text: "done report=/path/to/.amoena/workspace-<agent>/reports/..."
  * - JSON structured: { timestamp, level, message, ... }
- * - Gateway journal: "2026-02-09T18:05:49+01:00 host lunaria[1737454]: ..."
+ * - Gateway journal: "2026-02-09T18:05:49+01:00 host amoena[1737454]: ..."
  */
 function parseLogLine(line: string, source: string): LogEntry | null {
 	if (!line.trim()) return null;
@@ -70,7 +70,7 @@ function parseLogLine(line: string, source: string): LogEntry | null {
 			};
 		}
 
-		// Gateway journal format: "TIMESTAMP HOSTNAME lunaria[PID]: MESSAGE"
+		// Gateway journal format: "TIMESTAMP HOSTNAME amoena[PID]: MESSAGE"
 		const journalMatch = line.match(
 			/^(\d{4}-\d{2}-\d{2}T[\d:]+[^\s]*)\s+\S+\s+\S+:\s+(.+)$/,
 		);
@@ -134,7 +134,7 @@ function parseLogLine(line: string, source: string): LogEntry | null {
 }
 
 /**
- * Discover all log files in the Lunaria logs directory.
+ * Discover all log files in the Amoena logs directory.
  * Scans both top-level and automation/ subdirectory.
  */
 async function discoverLogFiles(): Promise<
@@ -311,7 +311,7 @@ export async function POST(request: NextRequest) {
 				id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
 				timestamp: Date.now(),
 				level: level || "info",
-				source: customSource || "lunaria",
+				source: customSource || "amoena",
 				session,
 				message,
 				data: null,

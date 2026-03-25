@@ -19,13 +19,13 @@ describe("useTheme", () => {
   });
 
   it("reads stored theme from localStorage", () => {
-    localStorage.setItem("lunaria-theme", "light");
+    localStorage.setItem("amoena-theme", "light");
     const { result } = renderHook(() => useTheme());
     expect(result.current.theme).toBe("light");
   });
 
   it("adds light class to documentElement when theme is light", () => {
-    localStorage.setItem("lunaria-theme", "light");
+    localStorage.setItem("amoena-theme", "light");
     renderHook(() => useTheme());
     expect(document.documentElement.classList.contains("light")).toBe(true);
   });
@@ -44,7 +44,7 @@ describe("useTheme", () => {
   });
 
   it("toggleTheme switches from light to dark", () => {
-    localStorage.setItem("lunaria-theme", "light");
+    localStorage.setItem("amoena-theme", "light");
     const { result } = renderHook(() => useTheme());
     act(() => result.current.toggleTheme());
     expect(result.current.theme).toBe("dark");
@@ -59,6 +59,6 @@ describe("useTheme", () => {
   it("persists theme to localStorage on change", () => {
     const { result } = renderHook(() => useTheme());
     act(() => result.current.setTheme("light"));
-    expect(localStorage.getItem("lunaria-theme")).toBe("light");
+    expect(localStorage.getItem("amoena-theme")).toBe("light");
   });
 });

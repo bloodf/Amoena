@@ -1,7 +1,7 @@
 export const ptBR = {
   app: {
     runtimeEyebrow: "Runtime Desktop",
-    title: "Lunaria",
+    title: "Amoena",
     connecting:
       "Estabelecendo o runtime localhost confiavel e hidratando a shell desktop.",
     bootstrapFailed: "Falha na Inicializacao",

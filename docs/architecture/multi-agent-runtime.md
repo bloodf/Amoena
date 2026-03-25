@@ -97,7 +97,7 @@ Osaurus implements an autonomous agent execution model worth studying:
 
 > **Phase Scope:** This feature builds on the V1.5 multi-agent runtime. It requires subagents, teams, and mailbox messaging to be in place before implementation.
 
-Lunaria's autonomous work mode adapts the decompose-execute-track pattern to our desktop-first architecture and existing runtime primitives.
+Amoena's autonomous work mode adapts the decompose-execute-track pattern to our desktop-first architecture and existing runtime primitives.
 
 ### Structured Task Decomposition
 

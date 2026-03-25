@@ -34,7 +34,7 @@ describe("runtime-ready workspace surfaces", () => {
       preventDefault: () => {},
       dataTransfer: {
         getData: (type: string) =>
-          type === "lunaria/file"
+          type === "amoena/file"
             ? JSON.stringify({
                 type: "folder",
                 name: "src/auth",

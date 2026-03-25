@@ -1,5 +1,5 @@
 /**
- * Canonical status types shared across the Lunaria stack.
+ * Canonical status types shared across the Amoena stack.
  *
  * These definitions are the source of truth — UI and service code should
  * import from here rather than defining their own copies.

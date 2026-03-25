@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 import { db_helpers, getDatabase, type Notification } from "@/lib/db";
 import { logger } from "@/lib/logger";
 
@@ -8,7 +8,7 @@ import { logger } from "@/lib/logger";
  * POST /api/notifications/deliver - Notification delivery daemon endpoint
  *
  * Polls undelivered notifications and sends them to agents
- * via Lunaria gateway call agent command
+ * via Amoena gateway call agent command
  */
 export async function POST(request: NextRequest) {
 	const auth = requireRole(request, "operator");
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
 				const message = formatNotificationMessage(notification);
 
 				if (!dry_run) {
-					// Send notification via Lunaria gateway call agent
+					// Send notification via Amoena gateway call agent
 					try {
 						const invokeParams = {
 							message,
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
 							idempotencyKey: `notification-${notification.id}-${Date.now()}`,
 							deliver: false,
 						};
-						const { stdout, stderr } = await runLunaria(
+						const { stdout, stderr } = await runAmoena(
 							[
 								"gateway",
 								"call",
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
 						);
 
 						if (stderr?.includes("error")) {
-							throw new Error(`Lunaria error: ${stderr}`);
+							throw new Error(`Amoena error: ${stderr}`);
 						}
 
 						// Mark as delivered

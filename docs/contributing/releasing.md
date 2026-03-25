@@ -2,11 +2,11 @@
 
 ## Overview
 
-Lunaria uses a tag-driven release process. Maintainers tag a release commit, and CI builds and publishes platform bundles automatically.
+Amoena uses a tag-driven release process. Maintainers tag a release commit, and CI builds and publishes platform bundles automatically.
 
 ## Versioning
 
-Lunaria follows [Semantic Versioning](https://semver.org/):
+Amoena follows [Semantic Versioning](https://semver.org/):
 
 - `MAJOR` — breaking changes to the API, extension manifest format, or database schema requiring migration
 - `MINOR` — new features, new API endpoints, new extension contribution types

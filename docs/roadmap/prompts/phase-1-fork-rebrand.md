@@ -2,23 +2,23 @@
 
 ## Mission
 
-Fork LunariaAi/superset and transform it into Lunaria. Strip all Superset branding, remove cloud dependencies, apply Lunaria's magenta design system, and produce a buildable Electron app that is visually and functionally Lunaria.
+Fork AmoenaAi/superset and transform it into Amoena. Strip all Superset branding, remove cloud dependencies, apply Amoena's magenta design system, and produce a buildable Electron app that is visually and functionally Amoena.
 
 **Duration:** 1 week
 **Prerequisite:** None (first phase)
-**Deliverable:** Buildable, runnable Electron app with Lunaria branding and zero cloud dependencies
+**Deliverable:** Buildable, runnable Electron app with Amoena branding and zero cloud dependencies
 
 ---
 
 ## Context
 
-Lunaria is migrating from Tauri/Rust to Electron by forking Superset (LunariaAi/superset, Electron v40.2.1, 7.4K stars). This is a strategic fork — Superset becomes Lunaria. There is no side-by-side operation.
+Amoena is migrating from Tauri/Rust to Electron by forking Superset (AmoenaAi/superset, Electron v40.2.1, 7.4K stars). This is a strategic fork — Superset becomes Amoena. There is no side-by-side operation.
 
 ### Key Technical Facts
 
 - Superset uses: Bun 1.3.6, Turbo, Biome 2.4.2, electron-vite 4.0, TanStack Router v1, tRPC v11 via trpc-electron, TailwindCSS v4, Zustand v5, TanStack Query v5
 - Superset has cloud deps: Electric SQL, Better Auth, Stripe, PostHog, Sentry, Neon PostgreSQL, Upstash, Vercel Blob/KV, Resend
-- License: Lunaria adopts Elastic-2.0 (matching Superset)
+- License: Amoena adopts Elastic-2.0 (matching Superset)
 - Data layer decision: Replace Electric SQL with tRPC subscriptions + @tanstack/react-query
 
 ---
@@ -29,32 +29,32 @@ This migration creates a NEW repository from a Superset fork. The relationship:
 
 ```
 EXISTING (read-only source):
-  /Users/heitor/Developer/github.com/Lunaria/lunaria/
+  /Users/heitor/Developer/github.com/Amoena/amoena/
   ├── apps/desktop/src-tauri/src/  ← Rust source (to be ported in Phase 3)
   ├── packages/i18n/               ← Copy to new repo in Phase 2
   ├── packages/tokens/             ← Copy to new repo in Phase 2
-  └── packages/ui/                 ← Reference for Lunaria components
+  └── packages/ui/                 ← Reference for Amoena components
 
 NEW (your working directory after clone):
-  lunaria-desktop/ (cloned from LunariaAi/superset)
+  amoena-desktop/ (cloned from AmoenaAi/superset)
   ├── apps/desktop/                ← Electron app (being rebranded)
   ├── packages/                    ← Superset packages (being extended)
   └── ...
 ```
 
-After Phase 1 completes, ALL subsequent phases operate inside the NEW repo (lunaria-desktop/).
-The old Lunaria repo is only used as a read-only source for copying assets and reading Rust code.
+After Phase 1 completes, ALL subsequent phases operate inside the NEW repo (amoena-desktop/).
+The old Amoena repo is only used as a read-only source for copying assets and reading Rust code.
 
 ---
 
 ## Execution Rules
 
 1. **Commit after every completed step** — never batch multiple steps into one commit
-2. **Use conventional commits**: `feat(lunaria): <step description>`
+2. **Use conventional commits**: `feat(amoena): <step description>`
 3. **Run `bun run build` before each commit** — never commit broken code
 4. **If a step fails, fix it before moving on** — don't skip and come back later
 5. **Inspect files before editing them** — use Codex GUI tools and shell reads to understand existing code before changing it
-6. **Run this phase in the sibling migration repo** — keep `/Users/heitor/Developer/github.com/Lunaria/lunaria` read-only except for roadmap updates
+6. **Run this phase in the sibling migration repo** — keep `/Users/heitor/Developer/github.com/Amoena/amoena` read-only except for roadmap updates
 
 ---
 
@@ -64,8 +64,8 @@ The old Lunaria repo is only used as a read-only source for copying assets and r
 
 ```bash
 # Clone Superset into a new directory
-git clone https://github.com/LunariaAi/superset.git lunaria-desktop
-cd lunaria-desktop
+git clone https://github.com/AmoenaAi/superset.git amoena-desktop
+cd amoena-desktop
 
 # Remove cloud-only apps
 rm -rf apps/admin apps/api apps/marketing apps/web apps/streams apps/electric-proxy
@@ -89,16 +89,16 @@ Perform global find-and-replace across the entire codebase. This is a comprehens
 
 | Find                             | Replace With             |
 | -------------------------------- | ------------------------ |
-| `"Superset"` (product name)      | `"Lunaria"`              |
-| `"superset"` (lowercase)         | `"lunaria"`              |
+| `"Superset"` (product name)      | `"Amoena"`              |
+| `"superset"` (lowercase)         | `"amoena"`              |
 | `@superset/` (package scope)     | `@lunaria/`              |
-| `superset://` (deep link)        | `lunaria://`             |
-| `sh.superset.app` (macOS bundle) | `com.lunaria.app`        |
-| `com.superset.desktop` (app ID)  | `com.lunaria.desktop`    |
-| `superset.sh` (domain)           | Update to Lunaria domain |
-| `.superset/` (config dir)        | `.lunaria/`              |
-| `Superset/x.x.x` (user agent)    | `Lunaria/x.x.x`          |
-| `LunariaAi/superset` (repo)    | `Lunaria/lunaria`        |
+| `superset://` (deep link)        | `amoena://`             |
+| `sh.superset.app` (macOS bundle) | `com.amoena.app`        |
+| `com.superset.desktop` (app ID)  | `com.amoena.desktop`    |
+| `superset.sh` (domain)           | Update to Amoena domain |
+| `.superset/` (config dir)        | `.amoena/`              |
+| `Superset/x.x.x` (user agent)    | `Amoena/x.x.x`          |
+| `AmoenaAi/superset` (repo)    | `Amoena/amoena`        |
 
 **Additional branding files to update:**
 
@@ -108,7 +108,7 @@ Perform global find-and-replace across the entire codebase. This is a comprehens
 - `apps/desktop/src/main/` — window titles, tray tooltips, about dialog
 - `apps/desktop/src/renderer/` — all UI references to "Superset"
 - `.desktop` file (Linux), installer GUID (Windows)
-- Icon assets: replace with Lunaria magenta moon icon (`.icns`, `.ico`, `.svg`, `.png`). For icon assets: generate a simple placeholder magenta moon SVG icon. Use a circle with a crescent cutout in magenta (#B800B8). Convert to .icns (macOS), .ico (Windows), and .png (various sizes: 16, 32, 64, 128, 256, 512, 1024) using the `png2icons` npm package or similar. The exact icon design will be refined later — the goal is a recognizable placeholder that is clearly NOT the Superset icon.
+- Icon assets: replace with Amoena magenta moon icon (`.icns`, `.ico`, `.svg`, `.png`). For icon assets: generate a simple placeholder magenta moon SVG icon. Use a circle with a crescent cutout in magenta (#B800B8). Convert to .icns (macOS), .ico (Windows), and .png (various sizes: 16, 32, 64, 128, 256, 512, 1024) using the `png2icons` npm package or similar. The exact icon design will be refined later — the goal is a recognizable placeholder that is clearly NOT the Superset icon.
 - Favicon, splash screen, dock icon
 
 ### 1.3 Remove Cloud Dependencies
@@ -135,7 +135,7 @@ better-auth
 2. Replace with `@tanstack/react-query` hooks (`useQuery`, `useMutation`, `useQueryClient`)
 3. Components that used Electric SQL subscriptions now call tRPC queries with polling or subscriptions
 4. Remove Better Auth flows — replace with local API key storage for AI providers
-5. Remove Sentry initialization — replace with structured logging to `~/.lunaria/logs/`
+5. Remove Sentry initialization — replace with structured logging to `~/.amoena/logs/`
 6. Remove PostHog/Outlit analytics calls
 7. Remove Stripe billing checks/paywalls
 
@@ -158,7 +158,7 @@ import { useElectricQuery } from '@electric-sql/react';
 const { data } = useElectricQuery(workspacesCollection.find());
 ```
 
-AFTER (Lunaria with React Query):
+AFTER (Amoena with React Query):
 
 ```tsx
 import { trpc } from '@/lib/trpc';
@@ -179,7 +179,7 @@ Steps:
 
 ### 1.4 Theme System Migration
 
-**Replace Superset's theme with Lunaria's magenta system:**
+**Replace Superset's theme with Amoena's magenta system:**
 
 Create/update `apps/desktop/src/renderer/styles/globals.css`:
 
@@ -198,7 +198,7 @@ Create/update `apps/desktop/src/renderer/styles/globals.css`:
   --border: 270 8% 20%;
   --ring: 300 100% 36%; /* magenta focus ring */
 
-  /* Lunaria-specific tokens */
+  /* Amoena-specific tokens */
   --surface-0: 270 8% 10%;
   --surface-1: 270 8% 14%;
   --surface-2: 270 8% 18%;
@@ -256,24 +256,24 @@ Create `DESIGN.md` at the project root documenting the design system:
 bun install
 bun run build
 # Should produce dist/ with runnable Electron app
-# Verify: opens with Lunaria branding, no cloud errors in console
+# Verify: opens with Amoena branding, no cloud errors in console
 ```
 
 ---
 
 ## Acceptance Criteria
 
-- [ ] All references to "Superset" replaced with "Lunaria"
+- [ ] All references to "Superset" replaced with "Amoena"
 - [ ] Package scope is `@lunaria/*`
-- [ ] Deep link protocol is `lunaria://`
-- [ ] Config directory is `.lunaria/`
+- [ ] Deep link protocol is `amoena://`
+- [ ] Config directory is `.amoena/`
 - [ ] All cloud dependencies removed (no Electric SQL, Better Auth, Stripe, etc.)
 - [ ] Components that used Electric SQL now use tRPC + react-query
 - [ ] Magenta theme applied (primary color, surfaces, animations)
-- [ ] Lunaria icon assets in place (icns, ico, svg, png)
+- [ ] Amoena icon assets in place (icns, ico, svg, png)
 - [ ] DESIGN.md created
 - [ ] App builds successfully with `bun run build`
-- [ ] App launches and displays Lunaria branding
+- [ ] App launches and displays Amoena branding
 - [ ] No cloud connection errors in console
 - [ ] No references to superset.sh, PostHog, Sentry, Stripe in built output
 
@@ -289,10 +289,10 @@ When you encounter these decisions during execution, use these pre-decided answe
 
 | Decision Point                              | Answer                                                                       |
 | ------------------------------------------- | ---------------------------------------------------------------------------- |
-| Keep or remove onboarding flow?             | Remove — Lunaria has its own setup wizard                                    |
+| Keep or remove onboarding flow?             | Remove — Amoena has its own setup wizard                                    |
 | Keep or remove auth guard routes?           | Simplify to local-only (no cloud auth, just check API key exists)            |
-| What about Stripe paywall components?       | Delete entirely — no billing in Lunaria                                      |
-| Keep Superset's theme system (next-themes)? | Replace with Lunaria theme (CSS variables only, no next-themes)              |
+| What about Stripe paywall components?       | Delete entirely — no billing in Amoena                                      |
+| Keep Superset's theme system (next-themes)? | Replace with Amoena theme (CSS variables only, no next-themes)              |
 | What font to use?                           | System font stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif |
 | Keep or remove the marketing/docs sites?    | Already removed in step 1.1                                                  |
 
@@ -313,7 +313,7 @@ When you encounter these decisions during execution, use these pre-decided answe
 ### Commit Safety
 
 - Commit after EVERY completed step (not at the end)
-- Use conventional commits: `feat(lunaria): <description>`
+- Use conventional commits: `feat(amoena): <description>`
 - Run `bun run build` before committing to avoid broken commits
 - If build breaks, fix before committing — never commit broken code
 

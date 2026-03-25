@@ -16,7 +16,7 @@ import {
 	clearOnboardingReplayFromStart,
 } from "@/lib/onboarding-session";
 import type { GatewaySession } from "@/lib/sessions";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface Setting {
 	key: string;
@@ -37,7 +37,7 @@ interface ApiKeyInfo {
 
 interface CoordinatorTargetAgent {
 	name: string;
-	lunariaId: string;
+	amoenaId: string;
 	isDefault: boolean;
 	sessionKey: string | null;
 	configRaw: string;
@@ -58,14 +58,14 @@ function parseCoordinatorTargetAgents(
 		if (!name) continue;
 		const config =
 			raw?.config && typeof raw.config === "object" ? raw.config : {};
-		const lunariaIdRaw =
-			typeof config.lunariaId === "string" && config.lunariaId.trim()
-				? config.lunariaId.trim()
+		const amoenaIdRaw =
+			typeof config.amoenaId === "string" && config.amoenaId.trim()
+				? config.amoenaId.trim()
 				: name;
-		const lunariaId = lunariaIdRaw.toLowerCase().replace(/\s+/g, "-");
+		const amoenaId = amoenaIdRaw.toLowerCase().replace(/\s+/g, "-");
 		out.push({
 			name,
-			lunariaId,
+			amoenaId,
 			isDefault: config.isDefault === true,
 			sessionKey:
 				typeof raw?.session_key === "string" && raw.session_key.trim()
@@ -77,7 +77,7 @@ function parseCoordinatorTargetAgents(
 
 	const unique = new Map<string, CoordinatorTargetAgent>();
 	for (const agent of out) {
-		const key = agent.lunariaId || agent.name.toLowerCase();
+		const key = agent.amoenaId || agent.name.toLowerCase();
 		if (!unique.has(key)) unique.set(key, agent);
 	}
 
@@ -94,7 +94,7 @@ const categoryLabels: Record<
 	general: {
 		label: "General",
 		icon: "⚙",
-		description: "Core Lunaria settings",
+		description: "Core Amoena settings",
 	},
 	security: {
 		label: "Security",
@@ -114,7 +114,7 @@ const categoryLabels: Record<
 	gateway: {
 		label: "Gateway",
 		icon: "🔌",
-		description: "Lunaria gateway connection settings",
+		description: "Amoena gateway connection settings",
 	},
 	profiles: {
 		label: "Security Profiles",
@@ -158,7 +158,7 @@ const subscriptionDropdowns: Record<
 
 export function SettingsPanel() {
 	const t = useTranslations("settings");
-	const { currentUser, setShowOnboarding } = useLunaria();
+	const { currentUser, setShowOnboarding } = useAmoena();
 	const navigateToPanel = useNavigateToPanel();
 	const [settings, setSettings] = useState<Setting[]>([]);
 	const [grouped, setGrouped] = useState<Record<string, Setting[]>>({});
@@ -249,7 +249,7 @@ export function SettingsPanel() {
 				fallback: "fallback",
 			};
 
-			const targetLabel = `${resolved.deliveryName}${resolved.lunariaAgentId ? ` (${resolved.lunariaAgentId})` : ""}`;
+			const targetLabel = `${resolved.deliveryName}${resolved.amoenaAgentId ? ` (${resolved.amoenaAgentId})` : ""}`;
 			return `Resolves now to ${targetLabel} via ${viaLabel[resolved.resolvedBy] || resolved.resolvedBy}.`;
 		},
 		[coordinatorTargetAgents, coordinatorSessions],
@@ -1053,8 +1053,8 @@ export function SettingsPanel() {
 											value: "",
 										},
 										...coordinatorTargetAgents.map((agent) => ({
-											label: `${agent.name}${agent.isDefault ? " (default)" : ""} — ${agent.lunariaId}`,
-											value: agent.lunariaId,
+											label: `${agent.name}${agent.isDefault ? " (default)" : ""} — ${agent.amoenaId}`,
+											value: agent.amoenaId,
 										})),
 									]
 								: null;
@@ -1236,7 +1236,7 @@ export function SettingsPanel() {
 }
 
 function InterfaceModeSelector() {
-	const { interfaceMode, setInterfaceMode } = useLunaria();
+	const { interfaceMode, setInterfaceMode } = useAmoena();
 	const [saving, setSaving] = useState(false);
 	const navigateToPanel = useNavigateToPanel();
 
@@ -1260,7 +1260,7 @@ function InterfaceModeSelector() {
 					"logs",
 					"settings",
 				]);
-				const store = useLunaria.getState();
+				const store = useAmoena.getState();
 				if (!essentialIds.has(store.activeTab)) {
 					navigateToPanel("overview");
 				}
@@ -1356,7 +1356,7 @@ function formatLabel(key: string): string {
 // ---------------------------------------------------------------------------
 
 function AccountOAuthSection() {
-	const { currentUser } = useLunaria();
+	const { currentUser } = useAmoena();
 	const [disconnecting, setDisconnecting] = useState(false);
 	const [feedback, setFeedback] = useState<{
 		ok: boolean;

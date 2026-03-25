@@ -1,6 +1,6 @@
 # Mission Control
 
-Mission Control is Lunaria's orchestration layer for managing AI agents, teams, and autonomous workflows. It provides visibility into agent activity, team consensus, and task progress.
+Mission Control is Amoena's orchestration layer for managing AI agents, teams, and autonomous workflows. It provides visibility into agent activity, team consensus, and task progress.
 
 ## Overview
 
@@ -32,7 +32,7 @@ Agents are created within a session. Each agent has a **persona** that defines i
 
 ```bash
 # Spawn a sub-agent in an existing session
-lunaria sessions agents spawn <session-id> \
+amoena sessions agents spawn <session-id> \
   --agent-type code-reviewer \
   --model claude-sonnet-4-20250514 \
   --division qa
@@ -81,7 +81,7 @@ Teams group multiple agents for collaborative work. Each team has a **consensus 
 ### Creating a Team
 
 ```bash
-lunaria teams create \
+amoena teams create \
   --name "Architecture Review" \
   --threshold 0.7
 ```
@@ -96,12 +96,12 @@ Agents communicate through a team mailbox. Messages can be:
 
 ```bash
 # Send a message to the team
-lunaria teams mailbox send <team-id> \
+amoena teams mailbox send <team-id> \
   --from <agent-id> \
   --content "I recommend extracting this into a separate module"
 
 # View mailbox
-lunaria teams mailbox list <team-id>
+amoena teams mailbox list <team-id>
 ```
 
 ### Consensus Evaluation
@@ -147,13 +147,13 @@ From the UI, the Autopilot page shows:
 
 ```bash
 # Check autopilot status
-lunaria sessions autopilot <session-id>
+amoena sessions autopilot <session-id>
 
 # Enable autopilot
-lunaria sessions autopilot <session-id> --enable
+amoena sessions autopilot <session-id> --enable
 
 # Disable autopilot
-lunaria sessions autopilot <session-id> --disable
+amoena sessions autopilot <session-id> --disable
 ```
 
 ## Task Board
@@ -162,13 +162,13 @@ The Kanban-style task board tracks work items within sessions:
 
 ```bash
 # Create a task
-lunaria tasks create <session-id> --title "Refactor auth module"
+amoena tasks create <session-id> --title "Refactor auth module"
 
 # Move task to in-progress
-lunaria tasks update <session-id> <task-id> --status in_progress
+amoena tasks update <session-id> <task-id> --status in_progress
 
 # List all tasks
-lunaria tasks list <session-id>
+amoena tasks list <session-id>
 ```
 
 Tasks support:
@@ -195,7 +195,7 @@ The **Provider Routing Service** selects the optimal provider and model for each
 When reasoning is enabled and the model supports it, effort can be `low`, `medium`, or `high`. The default is `medium`. Override per-turn:
 
 ```bash
-lunaria sessions message <session-id> "Review this PR" \
+amoena sessions message <session-id> "Review this PR" \
   --reasoning-mode on \
   --reasoning-effort high
 ```
@@ -206,13 +206,13 @@ Track token consumption and cost across all providers:
 
 ```bash
 # Refresh usage data from provider APIs
-lunaria usage refresh
+amoena usage refresh
 
 # View daily aggregates
-lunaria usage daily --range 30
+amoena usage daily --range 30
 
 # View per-provider summary
-lunaria usage summary
+amoena usage summary
 ```
 
 The Usage page in the desktop UI shows charts for daily token consumption, cost breakdown by provider, and per-session drill-down.
@@ -223,13 +223,13 @@ Workspaces provide Git-integrated isolated environments for agent work:
 
 ```bash
 # Create a workspace
-lunaria workspaces create --name "feature-auth" --root-path /path/to/project
+amoena workspaces create --name "feature-auth" --root-path /path/to/project
 
 # Inspect workspace (see changed files)
-lunaria workspaces inspect <workspace-id>
+amoena workspaces inspect <workspace-id>
 
 # Request merge review
-lunaria workspaces review <workspace-id>
+amoena workspaces review <workspace-id>
 ```
 
 Workspace merge reviews track:

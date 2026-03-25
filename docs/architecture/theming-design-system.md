@@ -1,8 +1,8 @@
-# Lunaria Theming & Design System Specification
+# Amoena Theming & Design System Specification
 
 ## Scope
 
-This document defines Lunaria's complete design system: design tokens, Tailwind v4 CSS-first configuration, light/dark mode switching, custom theme JSON format, theme editor UI, community sharing, component library, cross-platform considerations, Monaco Editor theming integration, terminal theming, responsive session workspace behavior, and the full catalog of Lunaria-specific component specifications.
+This document defines Amoena's complete design system: design tokens, Tailwind v4 CSS-first configuration, light/dark mode switching, custom theme JSON format, theme editor UI, community sharing, component library, cross-platform considerations, Monaco Editor theming integration, terminal theming, responsive session workspace behavior, and the full catalog of Amoena-specific component specifications.
 
 **Package home**: `packages/ui/src/theme/` inside this monorepo (`@lunaria/ui`).
 **Consumers**: Desktop app (Tauri 2 + React 19) and the future React Native mobile app (via packages/ui-native).
@@ -12,7 +12,7 @@ This document defines Lunaria's complete design system: design tokens, Tailwind 
 
 ## 1. Design Tokens
 
-Design tokens are the atomic values that define Lunaria's visual language. They follow a three-tier hierarchy:
+Design tokens are the atomic values that define Amoena's visual language. They follow a three-tier hierarchy:
 
 ```
 Brand Tokens (abstract, platform-agnostic)
@@ -237,7 +237,7 @@ Strict z-index scale prevents stacking context conflicts. All z-index values are
 
 ## 2. Tailwind v4 @theme Configuration
 
-Lunaria uses Tailwind CSS v4's **CSS-first configuration** via the `@theme` directive. No `tailwind.config.ts` file is used.
+Amoena uses Tailwind CSS v4's **CSS-first configuration** via the `@theme` directive. No `tailwind.config.ts` file is used.
 
 ### 2.1 Main CSS Entry Point
 
@@ -247,7 +247,7 @@ Lunaria uses Tailwind CSS v4's **CSS-first configuration** via the `@theme` dire
 @import "tailwindcss";
 
 /* ============================================
-   LUNARIA DESIGN SYSTEM — @theme Configuration
+   AMOENA DESIGN SYSTEM — @theme Configuration
    ============================================ */
 
 @theme {
@@ -476,7 +476,7 @@ Lunaria uses Tailwind CSS v4's **CSS-first configuration** via the `@theme` dire
 
 ### 3.1 Switching Mechanism
 
-Lunaria uses a `data-theme` attribute on the `<html>` element rather than a CSS class. This approach:
+Amoena uses a `data-theme` attribute on the `<html>` element rather than a CSS class. This approach:
 
 - Avoids specificity conflicts with utility classes
 - Works with Tailwind v4's `@custom-variant` directive
@@ -563,7 +563,7 @@ To prevent a flash of incorrect theme on app startup:
 <script>
   (function() {
     try {
-      const stored = localStorage.getItem('lunaria-theme-mode');
+      const stored = localStorage.getItem('amoena-theme-mode');
       const mode = stored || 'system';
       const resolved = mode === 'system'
         ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
@@ -587,7 +587,7 @@ Custom themes are stored as JSON files that can be imported, exported, and share
 ```typescript
 // ui/src/types/theme.ts
 
-interface LunariaTheme {
+interface AmoenaTheme {
   /** Unique identifier (UUID v4) */
   id: string;
 
@@ -733,7 +733,7 @@ const TOKEN_MAP: Record<string, string> = {
   'shadows.xl': '--shadow-xl',
 };
 
-function applyTheme(theme: LunariaTheme): void {
+function applyTheme(theme: AmoenaTheme): void {
   const root = document.documentElement;
 
   // Set base mode
@@ -777,7 +777,7 @@ const cssLength = z.string().regex(
   'Must be valid CSS length'
 );
 
-export const LunariaThemeSchema = z.object({
+export const AmoenaThemeSchema = z.object({
   id: z.string().uuid(),
   schemaVersion: z.literal(1),
   name: z.string().min(1).max(64),
@@ -837,7 +837,7 @@ export const LunariaThemeSchema = z.object({
   updatedAt: z.string().datetime(),
 });
 
-export type ValidatedTheme = z.infer<typeof LunariaThemeSchema>;
+export type ValidatedTheme = z.infer<typeof AmoenaThemeSchema>;
 ```
 
 ### 4.4 Example Theme JSON
@@ -848,7 +848,7 @@ export type ValidatedTheme = z.infer<typeof LunariaThemeSchema>;
   "schemaVersion": 1,
   "name": "Moonlight Purple",
   "description": "A deep purple theme inspired by moonlit nights",
-  "author": "Lunaria Community",
+  "author": "Amoena Community",
   "version": "1.0.0",
   "tags": ["dark", "purple", "minimal"],
   "base": "dark",
@@ -866,7 +866,7 @@ export type ValidatedTheme = z.infer<typeof LunariaThemeSchema>;
   "radius": {
     "lg": "0.75rem"
   },
-  "monacoTheme": "lunaria-moonlight-purple",
+  "monacoTheme": "amoena-moonlight-purple",
   "createdAt": "2026-01-15T10:00:00.000Z",
   "updatedAt": "2026-01-15T10:00:00.000Z"
 }
@@ -889,7 +889,7 @@ The Theme Editor is a dedicated settings panel that allows users to create, modi
 │  ─────────────       │         ────────────                 │
 │  Name: [________]    │  ┌──────────────────────────────┐   │
 │  Base: [Light ▼]     │  │  Preview of a typical         │   │
-│  Description: [___]  │  │  Lunaria screen with the      │   │
+│  Description: [___]  │  │  Amoena screen with the      │   │
 │                      │  │  current token values applied  │   │
 │  Color Tokens        │  │                                │   │
 │  ────────────        │  │  ┌─────────┐ ┌─────────┐     │   │
@@ -953,8 +953,8 @@ Changes are applied instantly via CSS custom property updates — no re-render r
 | Button | Action |
 |--------|--------|
 | **Reset to Default** | Removes all custom overrides, reverts to base light/dark theme |
-| **Import JSON** | Opens file picker for `.lunaria-theme.json` files, validates with Zod schema, applies |
-| **Export JSON** | Generates theme JSON from current state, triggers download as `{theme-name}.lunaria-theme.json` |
+| **Import JSON** | Opens file picker for `.amoena-theme.json` files, validates with Zod schema, applies |
+| **Export JSON** | Generates theme JSON from current state, triggers download as `{theme-name}.amoena-theme.json` |
 | **Save** | Persists theme to SQLite `themes` table and applies as active theme |
 
 ### 5.5 Theme Management
@@ -970,24 +970,24 @@ Changes are applied instantly via CSS custom property updates — no re-render r
 
 ### 6.1 Theme Packaging
 
-Themes are packaged as single JSON files with the `.lunaria-theme.json` extension:
+Themes are packaged as single JSON files with the `.amoena-theme.json` extension:
 
 ```
-moonlight-purple.lunaria-theme.json
+moonlight-purple.amoena-theme.json
 ```
 
-The file contains the complete `LunariaTheme` object (Section 4.1). The `preview` field can contain a base64-encoded PNG screenshot (max 200KB) for visual browsing.
+The file contains the complete `AmoenaTheme` object (Section 4.1). The `preview` field can contain a base64-encoded PNG screenshot (max 200KB) for visual browsing.
 
 ### 6.2 Sharing Mechanism
 
 **Phase 1 (MVP)**: File-based sharing
-- Export theme as `.lunaria-theme.json` file
+- Export theme as `.amoena-theme.json` file
 - Share via any file transfer method (email, Discord, GitHub Gist, etc.)
 - Import via Theme Editor's "Import JSON" button
-- Drag-and-drop `.lunaria-theme.json` files onto the app window
+- Drag-and-drop `.amoena-theme.json` files onto the app window
 
 **Phase 2 (V1)**: GitHub-based sharing
-- Themes stored in a community GitHub repository (`lunaria-themes`)
+- Themes stored in a community GitHub repository (`amoena-themes`)
 - Users submit themes via Pull Request
 - App fetches theme index from GitHub API
 - Browse and install themes from within the app
@@ -1008,10 +1008,10 @@ interface ThemeRegistryEntry {
   version: string;
   tags: string[];
   preview: string;        // URL to screenshot
-  downloadUrl: string;    // URL to .lunaria-theme.json
+  downloadUrl: string;    // URL to .amoena-theme.json
   downloads: number;
   rating: number;         // 1-5 stars
-  compatibility: string;  // Minimum Lunaria version
+  compatibility: string;  // Minimum Amoena version
 }
 ```
 
@@ -1026,7 +1026,7 @@ interface ThemeRegistryEntry {
 
 ### 7.1 shadcn/ui Components
 
-Lunaria uses [shadcn/ui](https://ui.shadcn.com/) as the component foundation. Components are copied into the project (not installed as a dependency), allowing full customization.
+Amoena uses [shadcn/ui](https://ui.shadcn.com/) as the component foundation. Components are copied into the project (not installed as a dependency), allowing full customization.
 
 #### MVP Components (Desktop App)
 
@@ -1310,7 +1310,7 @@ tokens.ts (source of truth)
 
 ### 9.1 Overview
 
-Monaco Editor is used for code diffs, file editing, and code preview within Lunaria. Its theme must stay synchronized with the app's active theme.
+Monaco Editor is used for code diffs, file editing, and code preview within Amoena. Its theme must stay synchronized with the app's active theme.
 
 ### 9.2 VS Code Theme → Monaco Theme Mapping
 
@@ -1331,10 +1331,10 @@ interface MonacoThemeDefinition {
   colors: Record<string, string>;
 }
 
-// Map Lunaria tokens to Monaco editor colors
+// Map Amoena tokens to Monaco editor colors
 function generateMonacoTheme(
   mode: 'light' | 'dark',
-  colors: LunariaTheme['colors']
+  colors: AmoenaTheme['colors']
 ): MonacoThemeDefinition {
   const base = mode === 'dark' ? 'vs-dark' : 'vs';
 
@@ -1384,23 +1384,23 @@ function generateMonacoTheme(
 ```typescript
 import * as monaco from 'monaco-editor';
 
-// Register Lunaria themes with Monaco
-function registerLunariaMonacoThemes(): void {
+// Register Amoena themes with Monaco
+function registerAmoenaMonacoThemes(): void {
   const lightTheme = generateMonacoTheme('light', defaultLightColors);
   const darkTheme = generateMonacoTheme('dark', defaultDarkColors);
 
-  monaco.editor.defineTheme('lunaria-light', lightTheme);
-  monaco.editor.defineTheme('lunaria-dark', darkTheme);
+  monaco.editor.defineTheme('amoena-light', lightTheme);
+  monaco.editor.defineTheme('amoena-dark', darkTheme);
 }
 
 // Switch Monaco theme when app theme changes
-function syncMonacoTheme(mode: 'light' | 'dark', customColors?: LunariaTheme['colors']): void {
+function syncMonacoTheme(mode: 'light' | 'dark', customColors?: AmoenaTheme['colors']): void {
   if (customColors) {
     const customTheme = generateMonacoTheme(mode, customColors);
-    monaco.editor.defineTheme('lunaria-custom', customTheme);
-    monaco.editor.setTheme('lunaria-custom');
+    monaco.editor.defineTheme('amoena-custom', customTheme);
+    monaco.editor.setTheme('amoena-custom');
   } else {
-    monaco.editor.setTheme(mode === 'dark' ? 'lunaria-dark' : 'lunaria-light');
+    monaco.editor.setTheme(mode === 'dark' ? 'amoena-dark' : 'amoena-light');
   }
 }
 ```
@@ -1469,7 +1469,7 @@ const diffColors = {
 
 ### 10.1 Overview
 
-Lunaria embeds xterm.js for PTY terminal rendering within session workspaces. The xterm.js color palette must align with the Lunaria design system, using the same OKLCH palette anchored to the brand magenta `#B800B8`.
+Amoena embeds xterm.js for PTY terminal rendering within session workspaces. The xterm.js color palette must align with the Amoena design system, using the same OKLCH palette anchored to the brand magenta `#B800B8`.
 
 ### 10.2 xterm.js Token Mapping
 
@@ -1650,7 +1650,7 @@ The command palette (`⌘K`) floats above all content at `--z-command` (80):
 
 ---
 
-## 12. Lunaria-Specific Component Specifications
+## 12. Amoena-Specific Component Specifications
 
 Each component below follows the same structure: description, visual states, design tokens, responsive behavior, and accessibility notes.
 
@@ -1729,7 +1729,7 @@ Each component below follows the same structure: description, visual states, des
 
 ### 12.3 diff-changes
 
-**Description**: A Monaco-based file diff viewer surfaced inline within session turns (for file edits) or in a dedicated diff panel. Shows added/removed lines with syntax highlighting aligned to the active Lunaria theme.
+**Description**: A Monaco-based file diff viewer surfaced inline within session turns (for file edits) or in a dedicated diff panel. Shows added/removed lines with syntax highlighting aligned to the active Amoena theme.
 
 **Visual States**:
 - `inline`: Compact single-file diff embedded in a session turn, max 20 lines visible, "Show more" if truncated
@@ -2181,7 +2181,7 @@ Each component below follows the same structure: description, visual states, des
 
 ### 12.16 remote-qr-code
 
-**Description**: A QR code display for pairing a mobile device to the current Lunaria session. Used in the remote control / remote pairing flow.
+**Description**: A QR code display for pairing a mobile device to the current Amoena session. Used in the remote control / remote pairing flow.
 
 **Visual States**:
 - `generating`: Spinner placeholder while QR code URL generates
@@ -2253,7 +2253,7 @@ Each component below follows the same structure: description, visual states, des
 
 ### 12.18 mode-selector
 
-**Description**: A toggle control for switching between Lunaria operating modes — wrapper mode (GUI wrapping an existing TUI) vs. native mode (Lunaria's own agent runtime). Shown in session creation and settings.
+**Description**: A toggle control for switching between Amoena operating modes — wrapper mode (GUI wrapping an existing TUI) vs. native mode (Amoena's own agent runtime). Shown in session creation and settings.
 
 **Visual States**:
 - `wrapper-active`: Left option highlighted with `--color-primary`, native option muted
@@ -2302,12 +2302,12 @@ Each component below follows the same structure: description, visual states, des
 
 ## Appendix A: Built-in Themes
 
-Lunaria ships with the following built-in themes:
+Amoena ships with the following built-in themes:
 
 | Theme | Base | Description |
 |-------|------|-------------|
-| **Lunaria Light** | light | Default light theme — clean, professional |
-| **Lunaria Dark** | dark | Default dark theme — easy on the eyes |
+| **Amoena Light** | light | Default light theme — clean, professional |
+| **Amoena Dark** | dark | Default dark theme — easy on the eyes |
 | **High Contrast Light** | light | WCAG AAA compliant, maximum contrast |
 | **High Contrast Dark** | dark | WCAG AAA compliant, maximum contrast |
 

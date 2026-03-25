@@ -10,14 +10,14 @@ import { app } from "electron";
 import { validate as uuidValidate, version as uuidVersion } from "uuid";
 import { env } from "../../env.main";
 import {
-	ensureLunariaHomeDirExists,
-	LUNARIA_HOME_DIR,
-	LUNARIA_SENSITIVE_FILE_MODE,
+	ensureAmoenaHomeDirExists,
+	AMOENA_HOME_DIR,
+	AMOENA_SENSITIVE_FILE_MODE,
 } from "../app-environment";
 
-const DB_PATH = join(LUNARIA_HOME_DIR, "local.db");
+const DB_PATH = join(AMOENA_HOME_DIR, "local.db");
 
-ensureLunariaHomeDirExists();
+ensureAmoenaHomeDirExists();
 
 /**
  * Gets the migrations directory path.
@@ -77,7 +77,7 @@ const migrationsFolder = getMigrationsDirectory();
 
 const sqlite = new Database(DB_PATH);
 try {
-	chmodSync(DB_PATH, LUNARIA_SENSITIVE_FILE_MODE);
+	chmodSync(DB_PATH, AMOENA_SENSITIVE_FILE_MODE);
 } catch {
 	// Best-effort; directory permissions should still protect the DB.
 }

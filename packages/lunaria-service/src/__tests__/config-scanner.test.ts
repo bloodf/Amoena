@@ -19,7 +19,7 @@ describe('ConfigScanner', () => {
   let scanner: ConfigScanner;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lunaria-cfg-test-'));
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'amoena-cfg-test-'));
     scanner = new ConfigScanner();
   });
 

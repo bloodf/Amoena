@@ -13,7 +13,7 @@ import { getHermesTasks } from "@/lib/hermes-tasks";
 import { logger } from "@/lib/logger";
 
 const HERMES_HOME = join(config.homeDir, ".hermes");
-const HOOK_DIR = join(HERMES_HOME, "hooks", "lunaria");
+const HOOK_DIR = join(HERMES_HOME, "hooks", "amoena");
 
 export async function GET(request: NextRequest) {
 	const auth = requireRole(request, "viewer");
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
 			// Write handler.py
 			writeFileSync(join(HOOK_DIR, "handler.py"), HANDLER_PY, "utf8");
 
-			logger.info("Installed Lunaria hook for Hermes Agent");
+			logger.info("Installed Amoena hook for Hermes Agent");
 			return NextResponse.json({
 				success: true,
 				message: "Hook installed",
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
 				rmSync(HOOK_DIR, { recursive: true, force: true });
 			}
 
-			logger.info("Uninstalled Lunaria hook for Hermes Agent");
+			logger.info("Uninstalled Amoena hook for Hermes Agent");
 			return NextResponse.json({ success: true, message: "Hook uninstalled" });
 		}
 
@@ -108,8 +108,8 @@ export async function POST(request: NextRequest) {
 // Hook file contents
 // ---------------------------------------------------------------------------
 
-const HOOK_YAML = `name: lunaria
-description: Reports agent telemetry to Lunaria
+const HOOK_YAML = `name: amoena
+description: Reports agent telemetry to Amoena
 version: "1.0"
 events:
   - agent:start
@@ -118,11 +118,11 @@ events:
 `;
 
 const HANDLER_PY = `"""
-Lunaria hook for Hermes Agent.
+Amoena hook for Hermes Agent.
 Reports session telemetry to the MC /api/sessions endpoint.
 
 Configuration (via ~/.hermes/.env or environment):
-  MC_URL      - Lunaria base URL (default: http://localhost:3000)
+  MC_URL      - Amoena base URL (default: http://localhost:3000)
   MC_API_KEY  - API key for authentication (optional)
 """
 
@@ -130,7 +130,7 @@ import os
 import logging
 from datetime import datetime, timezone
 
-logger = logging.getLogger("hooks.lunaria")
+logger = logging.getLogger("hooks.amoena")
 
 MC_URL = os.environ.get("MC_URL", "http://localhost:3000")
 MC_API_KEY = os.environ.get("MC_API_KEY", "")

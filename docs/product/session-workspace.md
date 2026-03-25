@@ -1,6 +1,6 @@
 # Session Workspace
 
-The Session Workspace is Lunaria’s main working view.
+The Session Workspace is Amoena’s main working view.
 
 ## Main Areas
 
@@ -33,7 +33,7 @@ Sessions can be exported and imported for backup, sharing, and migration.
 
 ### Export Format
 
-Exports use a single `.lunaria-session.zip` archive containing:
+Exports use a single `.amoena-session.zip` archive containing:
 
 | File | Contents |
 |------|----------|
@@ -46,11 +46,11 @@ Exports use a single `.lunaria-session.zip` archive containing:
 
 - Manual: Session context menu > "Export session"
 - Keyboard: platform shortcut from Session Workspace
-- CLI: `lunaria session export <session-id> [--output path]`
+- CLI: `amoena session export <session-id> [--output path]`
 
 ### Import Validation
 
-On import, Lunaria validates:
+On import, Amoena validates:
 1. Archive structure matches expected layout
 2. `session.json` schema version is compatible
 3. No file path traversal in `files/` entries

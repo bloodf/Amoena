@@ -1,8 +1,8 @@
 /**
  * Mission Control WebSocket event discriminated unions.
  *
- * MCServerEvent — emitted by the lunaria-service, consumed by the dashboard UI.
- * MCClientEvent — sent by the dashboard UI, consumed by the lunaria-service.
+ * MCServerEvent — emitted by the amoena-service, consumed by the dashboard UI.
+ * MCClientEvent — sent by the dashboard UI, consumed by the amoena-service.
  */
 
 import type { TaskStatus, GoalRunStatus } from "./status.js";
@@ -10,7 +10,7 @@ import type { TaskRunRow, RunReport } from "./models.js";
 import type { GoalOptions } from "./options.js";
 
 /**
- * Events pushed from the server (lunaria-service) to the client (dashboard).
+ * Events pushed from the server (amoena-service) to the client (dashboard).
  */
 export type MCServerEvent =
   | {
@@ -53,7 +53,7 @@ export type MCServerEvent =
     };
 
 /**
- * Events sent from the client (dashboard) to the server (lunaria-service).
+ * Events sent from the client (dashboard) to the server (amoena-service).
  */
 export type MCClientEvent =
   | { type: "goal:submit"; description: string; options?: GoalOptions }

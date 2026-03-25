@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Post-build smoke tests for Lunaria artifacts.
+# Post-build smoke tests for Amoena artifacts.
 #
 # Verifies:
 #   1. Tauri desktop binary exists (dev build)
@@ -17,7 +17,7 @@ FAILURES=0
 pass() { echo "  [PASS] $1"; }
 fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
 
-echo "==> Running Lunaria smoke tests..."
+echo "==> Running Amoena smoke tests..."
 
 # ─── 1. Tauri desktop binary ────────────────────────────────────────────────────
 
@@ -27,7 +27,7 @@ echo "--- Desktop (Tauri) ---"
 TAURI_TARGET_DIR="$ROOT_DIR/apps/desktop/src-tauri/target"
 
 # Check for debug or release binary (platform-dependent name)
-BINARY_NAME="lunaria-desktop"
+BINARY_NAME="amoena-desktop"
 if [ "$(uname)" = "Darwin" ]; then
   DESKTOP_BIN=$(find "$TAURI_TARGET_DIR" -name "$BINARY_NAME" -type f 2>/dev/null | head -1)
 elif [ "$(uname)" = "Linux" ]; then
@@ -49,7 +49,7 @@ fi
 echo ""
 echo "--- CLI (TUI) ---"
 
-CLI_BIN="$ROOT_DIR/apps/tui/bin/lunaria.js"
+CLI_BIN="$ROOT_DIR/apps/tui/bin/amoena.js"
 
 if [ ! -f "$CLI_BIN" ]; then
   fail "CLI binary not found at $CLI_BIN"
@@ -65,10 +65,10 @@ else
 
   # Verify --version outputs something reasonable
   CLI_VERSION_OUTPUT=$(node "$CLI_BIN" --version 2>&1) || true
-  if echo "$CLI_VERSION_OUTPUT" | grep -q "lunaria"; then
+  if echo "$CLI_VERSION_OUTPUT" | grep -q "amoena"; then
     pass "CLI --version output: $CLI_VERSION_OUTPUT"
   else
-    fail "CLI --version did not contain 'lunaria': $CLI_VERSION_OUTPUT"
+    fail "CLI --version did not contain 'amoena': $CLI_VERSION_OUTPUT"
   fi
 fi
 

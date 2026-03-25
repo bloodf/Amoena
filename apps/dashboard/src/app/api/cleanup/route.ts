@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
 			table: "Gateway Session Store",
 			retention_days: ret.gatewaySessions,
 			stale_count: countStaleGatewaySessions(ret.gatewaySessions),
-			note: "Stored under ~/.lunaria/agents/*/sessions/sessions.json",
+			note: "Stored under ~/.amoena/agents/*/sessions/sessions.json",
 		});
 	} else {
 		preview.push({

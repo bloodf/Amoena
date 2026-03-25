@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 import { db_helpers, getDatabase } from "@/lib/db";
 import { logger } from "@/lib/logger";
 
@@ -63,7 +63,7 @@ export async function POST(
 		const results = await Promise.allSettled(
 			agents.map(async (agent) => {
 				if (!agent.session_key) return "skipped";
-				await runLunaria(
+				await runAmoena(
 					[
 						"gateway",
 						"sessions_send",

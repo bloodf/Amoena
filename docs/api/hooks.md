@@ -85,7 +85,7 @@ Content-Type: application/json
 
 ```json
 {
-  "command": "echo $LUNARIA_EVENT_PAYLOAD"
+  "command": "echo $AMOENA_EVENT_PAYLOAD"
 }
 ```
 
@@ -93,7 +93,7 @@ Content-Type: application/json
 
 ```json
 {
-  "url": "https://webhook.example.com/lunaria",
+  "url": "https://webhook.example.com/amoena",
   "method": "POST",
   "headers": { "X-Secret": "abc123" }
 }

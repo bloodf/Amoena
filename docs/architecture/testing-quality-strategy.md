@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the minimum verification strategy for Lunaria across runtime, UI, mobile, docs, and extension surfaces.
+This document defines the minimum verification strategy for Amoena across runtime, UI, mobile, docs, and extension surfaces.
 
 ## Test Layers
 

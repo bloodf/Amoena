@@ -1060,7 +1060,7 @@ export function CreateAgentModal({
 		dockerNetwork: "none" as "none" | "bridge",
 		session_key: "",
 		write_to_gateway: true,
-		provision_lunaria_workspace: true,
+		provision_amoena_workspace: true,
 	});
 	const [isCreating, setIsCreating] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -1148,7 +1148,7 @@ export function CreateAgentModal({
 		if (formData.write_to_gateway) {
 			steps.push({ label: t("stepWritingGateway"), status: "pending" });
 		}
-		if (formData.provision_lunaria_workspace) {
+		if (formData.provision_amoena_workspace) {
 			steps.push({ label: t("stepProvisioningWorkspace"), status: "pending" });
 		}
 		setProgressSteps([...steps]);
@@ -1174,12 +1174,12 @@ export function CreateAgentModal({
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({
 						name: formData.name,
-						lunaria_id: formData.id || undefined,
+						amoena_id: formData.id || undefined,
 						role: formData.role,
 						session_key: formData.session_key || undefined,
 						template: selectedTemplate || undefined,
 						write_to_gateway: formData.write_to_gateway,
-						provision_lunaria_workspace: formData.provision_lunaria_workspace,
+						provision_amoena_workspace: formData.provision_amoena_workspace,
 						gateway_config: {
 							model: { primary: primaryModel },
 							identity: {
@@ -1205,7 +1205,7 @@ export function CreateAgentModal({
 				const data = await response.json();
 				const errMsg = data.error || "Failed to create agent";
 				// Determine which step failed based on error message
-				const failIdx = /provision|lunaria/i.test(errMsg)
+				const failIdx = /provision|amoena/i.test(errMsg)
 					? steps.findIndex((s) => s.label.includes("Provisioning"))
 					: /gateway/i.test(errMsg)
 						? steps.findIndex((s) => s.label.includes("gateway"))
@@ -1728,11 +1728,11 @@ export function CreateAgentModal({
 									<label className="flex items-center gap-2 cursor-pointer">
 										<input
 											type="checkbox"
-											checked={formData.provision_lunaria_workspace}
+											checked={formData.provision_amoena_workspace}
 											onChange={(e) =>
 												setFormData((prev) => ({
 													...prev,
-													provision_lunaria_workspace: e.target.checked,
+													provision_amoena_workspace: e.target.checked,
 												}))
 											}
 											className="w-4 h-4 rounded border-border"
@@ -2063,7 +2063,7 @@ export function ConfigTab({
 		<div className="p-6 space-y-4">
 			<div className="flex justify-between items-center">
 				<h4 className="text-lg font-medium text-foreground">
-					{t("lunariaConfig")}
+					{t("amoenaConfig")}
 				</h4>
 				<div className="flex gap-2">
 					<Button
@@ -2087,10 +2087,10 @@ export function ConfigTab({
 				</div>
 			)}
 
-			{config.lunariaId && (
+			{config.amoenaId && (
 				<div className="text-xs text-muted-foreground">
-					Lunaria ID:{" "}
-					<span className="font-mono text-foreground">{config.lunariaId}</span>
+					Amoena ID:{" "}
+					<span className="font-mono text-foreground">{config.amoenaId}</span>
 					{config.isDefault && (
 						<span className="ml-2 px-1.5 py-0.5 bg-primary/20 text-primary rounded text-xs">
 							{t("default")}

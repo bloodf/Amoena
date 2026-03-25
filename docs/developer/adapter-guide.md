@@ -2,19 +2,19 @@
 
 ## Overview
 
-Lunaria supports wrapping external CLI coding agents (Claude Code, OpenCode, Codex CLI, Gemini CLI) through a unified adapter interface. This guide explains how to implement a new wrapper adapter.
+Amoena supports wrapping external CLI coding agents (Claude Code, OpenCode, Codex CLI, Gemini CLI) through a unified adapter interface. This guide explains how to implement a new wrapper adapter.
 
 ## Architecture
 
 ```
-User ←→ Lunaria UI ←→ Adapter ←→ External CLI Tool
+User ←→ Amoena UI ←→ Adapter ←→ External CLI Tool
                          │
-                    Translates between Lunaria's
+                    Translates between Amoena's
                     session/event model and the
                     CLI tool's native interface
 ```
 
-Each adapter implements the `BackendAdapter` trait, translating between Lunaria's unified session contract and the external tool's communication protocol.
+Each adapter implements the `BackendAdapter` trait, translating between Amoena's unified session contract and the external tool's communication protocol.
 
 ## Adapter Interface
 
@@ -124,10 +124,10 @@ let pty = PtyProcess::spawn("my-tool", &["--no-color"])?;
 
 ### 5. Map Events to StreamEvent
 
-All adapters must translate their tool's output into Lunaria's `StreamEvent` enum:
+All adapters must translate their tool's output into Amoena's `StreamEvent` enum:
 
 ```rust
-// Map tool-specific events to Lunaria events
+// Map tool-specific events to Amoena events
 match tool_event {
     ToolEvent::Text(text) => StreamEvent::Token { text },
     ToolEvent::ToolUse { name, args } => StreamEvent::ToolCall { id, name, args },

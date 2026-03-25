@@ -61,7 +61,7 @@ function playCompletionChime(ctx: AudioContext | null, notes: number[]): void {
 	});
 }
 
-const AUDIO_STORAGE_KEY = "lunaria.missionControl.audio";
+const AUDIO_STORAGE_KEY = "amoena.missionControl.audio";
 
 function loadAudioSettings() {
 	try {

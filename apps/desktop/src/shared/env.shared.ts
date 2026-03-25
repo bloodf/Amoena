@@ -22,7 +22,7 @@ const envSchema = z.object({
 	ELECTRIC_PORT: z.coerce.number().default(5133),
 	DESKTOP_AUTOMATION_PORT: z.coerce.number().default(41729),
 	// Workspace name for instance isolation
-	LUNARIA_WORKSPACE_NAME: z.string().default("lunaria"),
+	AMOENA_WORKSPACE_NAME: z.string().default("amoena"),
 });
 
 /**
@@ -38,12 +38,12 @@ export const env = envSchema.parse({
 	DESKTOP_NOTIFICATIONS_PORT: process.env.DESKTOP_NOTIFICATIONS_PORT,
 	ELECTRIC_PORT: process.env.ELECTRIC_PORT,
 	DESKTOP_AUTOMATION_PORT: process.env.DESKTOP_AUTOMATION_PORT,
-	LUNARIA_WORKSPACE_NAME: process.env.LUNARIA_WORKSPACE_NAME,
+	AMOENA_WORKSPACE_NAME: process.env.AMOENA_WORKSPACE_NAME,
 });
 
 export function getWorkspaceName(): string | undefined {
-	const name = env.LUNARIA_WORKSPACE_NAME;
-	if (name === "lunaria") return undefined;
+	const name = env.AMOENA_WORKSPACE_NAME;
+	if (name === "amoena") return undefined;
 	return name
 		.toLowerCase()
 		.replace(/[^a-z0-9-]/g, "-")

@@ -2,9 +2,9 @@
 
 ## Overview
 
-Lunaria's MVP notification system delivers notifications via the OS native notification center using Tauri's notification API. The desktop app is the sole execution host, so all notification routing happens locally — no cloud services, push credentials, or external accounts are required.
+Amoena's MVP notification system delivers notifications via the OS native notification center using Tauri's notification API. The desktop app is the sole execution host, so all notification routing happens locally — no cloud services, push credentials, or external accounts are required.
 
-For MVP, notifications route based on a simple two-state presence model: **app focused** (user is actively interacting with the Lunaria window) vs **app in background** (window is not focused or minimized). Focused state prefers in-app toasts, while background state delivers OS-native notifications and queues matching in-app toasts for when the user returns.
+For MVP, notifications route based on a simple two-state presence model: **app focused** (user is actively interacting with the Amoena window) vs **app in background** (window is not focused or minimized). Focused state prefers in-app toasts, while background state delivers OS-native notifications and queues matching in-app toasts for when the user returns.
 
 The Notification Dispatcher is a Rust-side component in the Tauri main process. It classifies incoming events, evaluates presence state, applies urgency and preference rules, and dispatches notifications via `tauri-plugin-notification`. All dispatch decisions are logged to the `notification_log` SQLite table for audit and delivery tracking.
 
@@ -26,8 +26,8 @@ For MVP, presence is a simple boolean derived from Tauri window focus events:
 
 | State | Meaning | Detection |
 | --- | --- | --- |
-| `focused` | User is interacting with the Lunaria window | `window.on_focus_changed` → focused |
-| `background` | Lunaria window is not focused or is minimized | `window.on_focus_changed` → blurred / minimized |
+| `focused` | User is interacting with the Amoena window | `window.on_focus_changed` → focused |
+| `background` | Amoena window is not focused or is minimized | `window.on_focus_changed` → blurred / minimized |
 
 **Implementation approach:**
 
@@ -117,7 +117,7 @@ Users configure notification behavior at three levels, resolved with cascading p
 Per-Session Override  >  Per-TUI Config  >  Global Config
 ```
 
-**Global notification settings** (`~/.lunaria/config.json`):
+**Global notification settings** (`~/.amoena/config.json`):
 
 ```json
 {
@@ -194,7 +194,7 @@ In addition to OS-native notifications, the webview displays in-app toasts via t
 | Actions | Approve, Deny, View Details |
 | Auto-dismiss | Never (requires explicit user action) |
 
-**Background behavior (MVP):** When the user is away from the window, the OS notification carries the permission request. The user must return to the Lunaria window to approve or deny it. If no response within a configurable timeout (default: 5 minutes), the permission is auto-denied for safety.
+**Background behavior (MVP):** When the user is away from the window, the OS notification carries the permission request. The user must return to the Amoena window to approve or deny it. If no response within a configurable timeout (default: 5 minutes), the permission is auto-denied for safety.
 
 > **Post-MVP**: Push-based permission approval from paired mobile devices requires the cloud relay push architecture.
 
@@ -694,7 +694,7 @@ When a cloud relay is available, push delivery extends the existing Notification
 
 ```
 ┌──────────────┐     ┌──────────────────┐     ┌──────────────┐
-│   Lunaria    │     │  Push Relay      │     │  Mobile App  │
+│   Amoena    │     │  Push Relay      │     │  Mobile App  │
 │   Desktop    │────▶│  (Cloud Service) │────▶│              │
 │  (Rust)      │     │  FCM / APNs      │     │              │
 └──────────────┘     └──────────────────┘     └──────────────┘

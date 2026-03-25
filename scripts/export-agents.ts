@@ -2,7 +2,7 @@
 /**
  * export-agents.ts — Multi-format agent persona export pipeline
  *
- * Reads Lunaria agent persona definitions from apps/desktop/resources/agent-personas/
+ * Reads Amoena agent persona definitions from apps/desktop/resources/agent-personas/
  * and exports them to formats consumable by other AI coding tools.
  *
  * Inspired by agency-agents' convert.sh conversion pipeline.

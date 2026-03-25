@@ -9,8 +9,8 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { HeaderBar } from "@/components/layout/header-bar";
 import { LiveFeed } from "@/components/layout/live-feed";
 import { LocalModeBanner } from "@/components/layout/local-mode-banner";
-import { LunariaDoctorBanner } from "@/components/layout/lunaria-doctor-banner";
-import { LunariaUpdateBanner } from "@/components/layout/lunaria-update-banner";
+import { AmoenaDoctorBanner } from "@/components/layout/amoena-doctor-banner";
+import { AmoenaUpdateBanner } from "@/components/layout/amoena-update-banner";
 import { NavRail } from "@/components/layout/nav-rail";
 import { UpdateBanner } from "@/components/layout/update-banner";
 import { useGlobalKeyboard } from "@/components/layout/useGlobalKeyboard";
@@ -64,7 +64,7 @@ import {
 import { getPluginPanel } from "@/lib/plugins";
 import { useServerEvents } from "@/lib/use-server-events";
 import { useWebSocket } from "@/lib/websocket";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface GatewaySummary {
 	id: number;
@@ -117,7 +117,7 @@ export default function Home() {
 		setSubscription,
 		setDefaultOrgName,
 		setUpdateAvailable,
-		setLunariaUpdate,
+		setAmoenaUpdate,
 		showOnboarding,
 		setShowOnboarding,
 		liveFeedOpen,
@@ -134,7 +134,7 @@ export default function Home() {
 		setInterfaceMode,
 		setMemoryGraphAgents,
 		setSkillsData,
-	} = useLunaria();
+	} = useAmoena();
 
 	const [spotlightOpen, setSpotlightOpen] = useState(false);
 	const toggleSpotlight = useCallback(() => setSpotlightOpen((v) => !v), []);
@@ -310,12 +310,12 @@ export default function Home() {
 			})
 			.catch(() => {});
 
-		// Check for Lunaria updates
-		fetch("/api/lunaria/version")
+		// Check for Amoena updates
+		fetch("/api/amoena/version")
 			.then((res) => (res.ok ? res.json() : null))
 			.then((data) => {
 				if (data?.updateAvailable) {
-					setLunariaUpdate({
+					setAmoenaUpdate({
 						installed: data.installed,
 						latest: data.latest,
 						releaseUrl: data.releaseUrl,
@@ -323,7 +323,7 @@ export default function Home() {
 						updateCommand: data.updateCommand,
 					});
 				} else {
-					setLunariaUpdate(null);
+					setAmoenaUpdate(null);
 				}
 			})
 			.catch(() => {});
@@ -475,7 +475,7 @@ export default function Home() {
 		markStep,
 		pathname,
 		setDefaultOrgName,
-		setLunariaUpdate,
+		setAmoenaUpdate,
 	]);
 
 	if (!isClient || !bootComplete) {
@@ -501,8 +501,8 @@ export default function Home() {
 						<HeaderBar />
 						<LocalModeBanner />
 						<UpdateBanner />
-						<LunariaUpdateBanner />
-						<LunariaDoctorBanner />
+						<AmoenaUpdateBanner />
+						<AmoenaDoctorBanner />
 					</>
 				)}
 				<main
@@ -519,7 +519,7 @@ export default function Home() {
 						<p className="text-2xs text-muted-foreground/50 text-center">
 							{tc("builtWithCareBy")}{" "}
 							<a
-								href="https://x.com/nyk_lunaria"
+								href="https://x.com/nyk_amoena"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="text-muted-foreground/70 hover:text-primary transition-colors duration-200"
@@ -601,7 +601,7 @@ const ESSENTIAL_PANELS = new Set([
 
 function ContentRouter({ tab }: { tab: string }) {
 	const tp = useTranslations("page");
-	const { dashboardMode, interfaceMode, setInterfaceMode } = useLunaria();
+	const { dashboardMode, interfaceMode, setInterfaceMode } = useAmoena();
 	const navigateToPanel = useNavigateToPanel();
 	const isLocal = dashboardMode === "local";
 	const panelName = tab.replace(/-/g, " ");

@@ -1,22 +1,17 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-import { LunariaI18nProvider, resolveNativeLocale } from "@lunaria/i18n/native";
+import { AmoenaI18nProvider, resolveNativeLocale } from "@lunaria/i18n/native";
 import { RuntimeProvider } from "@/runtime/provider";
+import { ROOT_STACK_OPTIONS } from "@/navigation/RootNavigator";
 
 export default function RootLayout() {
   return (
-    <LunariaI18nProvider locale={resolveNativeLocale()}>
+    <AmoenaI18nProvider locale={resolveNativeLocale()}>
       <RuntimeProvider>
         <StatusBar style="light" />
-        <Stack
-          screenOptions={{
-            headerStyle: { backgroundColor: "#020617" },
-            headerTintColor: "#F8FAFC",
-            contentStyle: { backgroundColor: "#020617" },
-          }}
-        />
+        <Stack screenOptions={ROOT_STACK_OPTIONS} />
       </RuntimeProvider>
-    </LunariaI18nProvider>
+    </AmoenaI18nProvider>
   );
 }

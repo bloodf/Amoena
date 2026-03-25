@@ -1,4 +1,4 @@
-import type { LunariaThemeTokens } from "./types";
+import type { AmoenaThemeTokens } from "./types";
 
 function varLine(prefix: string, key: string, value: string): string {
   let name: string;
@@ -28,7 +28,7 @@ function section(
  * Generates a CSS string of custom properties from all token groups.
  * Dark mode colors are the `:root` default; light mode overrides live under `.light`.
  */
-export function buildWebCSS(tokens: LunariaThemeTokens): string {
+export function buildWebCSS(tokens: AmoenaThemeTokens): string {
   const rootLines: string[] = [];
   const lightLines: string[] = [];
 

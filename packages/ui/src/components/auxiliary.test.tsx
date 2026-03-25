@@ -14,7 +14,7 @@ import type { MarketplaceItem } from "@/composites/marketplace/types";
 const marketplaceItem: MarketplaceItem = {
   id: "git-pro",
   name: "Git Integration Pro",
-  author: "lunaria-team",
+  author: "amoena-team",
   desc: "Advanced git workflow tools",
   version: "1.2.4",
   installs: "12.4k",
@@ -31,7 +31,7 @@ const marketplaceItem: MarketplaceItem = {
   lastUpdated: "2d ago",
 };
 
-describe("Lunaria auxiliary surfaces", () => {
+describe("Amoena auxiliary surfaces", () => {
   test("renders empty session suggestions", () => {
     render(
       <EmptySessionState

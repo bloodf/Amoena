@@ -1,6 +1,6 @@
 # UI Screen Inventory
 
-This document provides a comprehensive inventory of all UI screens, overlays, and sub-panels for the Lunaria desktop application (Tauri 2 + React 19). It serves as the authoritative reference for frontend layout, state management, navigation flows, and responsive behavior across all 15 screens.
+This document provides a comprehensive inventory of all UI screens, overlays, and sub-panels for the Amoena desktop application (Tauri 2 + React 19). It serves as the authoritative reference for frontend layout, state management, navigation flows, and responsive behavior across all 15 screens.
 
 ---
 
@@ -635,7 +635,7 @@ These defaults are persisted per provider/model and are applied unless the user 
 
 - **Entry**: Settings Providers tab, sidebar rail (if pinned), Setup Wizard step, Command Palette.
 - **Exit**: Back to Settings or sidebar rail navigation.
-- **OAuth flow**: Opens system browser for OAuth, returns via deep link (`lunaria://oauth/callback`).
+- **OAuth flow**: Opens system browser for OAuth, returns via deep link (`amoena://oauth/callback`).
 
 #### Responsive Behavior
 
@@ -712,7 +712,7 @@ These defaults are persisted per provider/model and are applied unless the user 
 ```text
 +------------------------------------------------------------------+
 |                                                                    |
-|                    Lunaria Setup  (Step 2 of 7)                    |
+|                    Amoena Setup  (Step 2 of 7)                    |
 |                    ████████░░░░░░░░                                 |
 |                                                                    |
 |    ┌──────────────────────────────────────────────────────────┐    |

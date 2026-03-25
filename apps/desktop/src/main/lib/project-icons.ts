@@ -2,9 +2,9 @@ import { randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, unlinkSync } from "node:fs";
 import { copyFile, writeFile } from "node:fs/promises";
 import { extname, join } from "node:path";
-import { LUNARIA_HOME_DIR } from "./app-environment";
+import { AMOENA_HOME_DIR } from "./app-environment";
 
-export const PROJECT_ICONS_DIR = join(LUNARIA_HOME_DIR, "project-icons");
+export const PROJECT_ICONS_DIR = join(AMOENA_HOME_DIR, "project-icons");
 
 /** Max icon file size: 512KB */
 const MAX_ICON_SIZE = 512 * 1024;
@@ -49,7 +49,7 @@ function removeExistingIcon(projectId: string): void {
  * Returns the protocol URL for a project icon with a cache-busting query param.
  */
 export function getProjectIconProtocolUrl(projectId: string): string {
-	return `lunaria-icon://projects/${projectId}?v=${encodeURIComponent(randomUUID())}`;
+	return `amoena-icon://projects/${projectId}?v=${encodeURIComponent(randomUUID())}`;
 }
 
 /**

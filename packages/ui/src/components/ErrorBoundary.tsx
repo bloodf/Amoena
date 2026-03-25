@@ -22,7 +22,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("[Lunaria] Uncaught render error:", error, errorInfo.componentStack);
+    console.error("[Amoena] Uncaught render error:", error, errorInfo.componentStack);
   }
 
   handleReset = () => {

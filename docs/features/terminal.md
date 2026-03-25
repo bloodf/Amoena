@@ -1,6 +1,6 @@
 # Terminal Multiplexing
 
-Lunaria provides full PTY terminal sessions via `RemoteTerminalManager`. Each session is a real pseudo-terminal process — not a command runner — supporting interactive programs, shell prompts, colours, and resize events. Sessions are accessible both locally and from paired remote devices.
+Amoena provides full PTY terminal sessions via `RemoteTerminalManager`. Each session is a real pseudo-terminal process — not a command runner — supporting interactive programs, shell prompts, colours, and resize events. Sessions are accessible both locally and from paired remote devices.
 
 ## Architecture
 

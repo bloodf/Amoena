@@ -2,7 +2,7 @@
 
 ## System Architecture
 
-Lunaria is a desktop-first AI development environment built as a Tauri 2 application.
+Amoena is a desktop-first AI development environment built as a Tauri 2 application.
 
 ```
 ┌─────────────────────────────────────────────────┐

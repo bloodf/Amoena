@@ -142,7 +142,7 @@ export function WorkspaceSettingsSection() {
     <div>
       <SettingsSectionTitle title="Worktree" />
       <SettingsRow label="Default worktree location" description="Where new worktrees are created">
-        <input defaultValue="~/.lunaria/worktrees" className="w-48 rounded border border-border bg-surface-2 px-2 py-1 font-mono text-[12px] text-foreground" />
+        <input defaultValue="~/.amoena/worktrees" className="w-48 rounded border border-border bg-surface-2 px-2 py-1 font-mono text-[12px] text-foreground" />
       </SettingsRow>
       <SettingsRow label="Auto-create worktree" description="Create worktree automatically for new branches">
         <SettingsToggle />

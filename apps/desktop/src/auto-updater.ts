@@ -1,5 +1,5 @@
 /**
- * Auto-updater module for the Lunaria desktop app.
+ * Auto-updater module for the Amoena desktop app.
  *
  * Uses @tauri-apps/plugin-updater to check for, download, and install updates.
  * The Tauri updater plugin is already registered on the Rust side (lib.rs).

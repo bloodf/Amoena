@@ -20,7 +20,7 @@ Build the Goal Templates system — pre-built and user-created templates that le
 
 ## Repository Context
 
-- **Monorepo root:** `/Users/heitor/Developer/github.com/Lunaria/lunaria`
+- **Monorepo root:** `/Users/heitor/Developer/github.com/Amoena/amoena`
 - **Database:** `apps/dashboard/src/lib/db.ts`
 - **Migrations:** `apps/dashboard/src/lib/migrations.ts` — Phase 1 added `006_mission_control`. Your migration should be the next sequential number.
 - **Telemetry (Phase 1):** `apps/dashboard/src/lib/mission-control-telemetry.ts`
@@ -276,7 +276,7 @@ interface TemplateLauncherProps {
 - Extracts placeholders from `goalText` via `extractPlaceholders()`
 - Renders a text input for each placeholder variable
 - Live preview of the filled goal text
-- "Launch" button fires `lunaria:load-template` event on the event bus and calls `onLaunch`
+- "Launch" button fires `amoena:load-template` event on the event bus and calls `onLaunch`
 - "Cancel" returns to template list
 
 ### TemplateEditor
@@ -307,7 +307,7 @@ interface TemplateEditorProps {
 When a template is launched, emit on the event bus:
 
 ```typescript
-eventBus.broadcast("lunaria:load-template", {
+eventBus.broadcast("amoena:load-template", {
   templateId: template.id,
   goalText: filledGoalText,
   options: template.options,
@@ -352,7 +352,7 @@ Add under `missionControl.templates` namespace:
 1. **Migration runs cleanly:** The `goal_templates` table is created with correct schema.
 2. **Seed idempotent:** Calling `seedBuiltInTemplates()` twice does not create duplicates.
 3. **5 built-in templates:** `listTemplates(db, { category: "built-in" })` returns exactly 5 templates.
-4. **Template launch event:** Clicking "Launch" on a template fires `lunaria:load-template` event. Verify in DevTools or test.
+4. **Template launch event:** Clicking "Launch" on a template fires `amoena:load-template` event. Verify in DevTools or test.
 5. **Placeholder extraction:** `extractPlaceholders("Fix {bug} in {module}")` returns `["bug", "module"]`.
 6. **Placeholder filling:** Filling all placeholders enables the Launch button. Unfilled placeholders disable it.
 7. **Custom template CRUD:** Create → list → update → delete cycle works for custom templates.

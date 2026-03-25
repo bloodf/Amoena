@@ -46,7 +46,7 @@ interface HealthResult {
 
 function parseGatewayVersion(res: Response): string | null {
 	const direct =
-		res.headers.get("x-lunaria-version") ||
+		res.headers.get("x-amoena-version") ||
 		res.headers.get("x-clawdbot-version");
 	if (direct) return direct.trim();
 	const server = res.headers.get("server") || "";
@@ -54,7 +54,7 @@ function parseGatewayVersion(res: Response): string | null {
 	return m?.[1] || null;
 }
 
-function hasLunaria32ToolsProfileRisk(version: string | null): boolean {
+function hasAmoena32ToolsProfileRisk(version: string | null): boolean {
 	if (!version) return false;
 	const m = version.match(/^(\d{4})\.(\d+)\.(\d+)/);
 	if (!m) return false;
@@ -249,8 +249,8 @@ export async function POST(request: NextRequest) {
 			const latency = Date.now() - start;
 			const status = res.ok ? "online" : "error";
 			const gatewayVersion = parseGatewayVersion(res);
-			const compatibilityWarning = hasLunaria32ToolsProfileRisk(gatewayVersion)
-				? "Lunaria 2026.3.2+ defaults tools.profile=messaging; Lunaria should enforce coding profile when spawning."
+			const compatibilityWarning = hasAmoena32ToolsProfileRisk(gatewayVersion)
+				? "Amoena 2026.3.2+ defaults tools.profile=messaging; Amoena should enforce coding profile when spawning."
 				: undefined;
 
 			const errorMessage = res.ok ? null : `HTTP ${res.status}`;

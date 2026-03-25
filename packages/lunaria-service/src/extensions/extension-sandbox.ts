@@ -5,7 +5,7 @@ export interface SandboxOptions {
   cpuTimeoutMs?: number;
 }
 
-export interface LunariaExtensionApi {
+export interface AmoenaExtensionApi {
   [key: string]: unknown;
 }
 
@@ -89,7 +89,7 @@ export class ExtensionSandbox {
     return result;
   }
 
-  expose(api: LunariaExtensionApi): void {
+  expose(api: AmoenaExtensionApi): void {
     if (this.disposed) {
       throw new Error('sandbox has been disposed');
     }

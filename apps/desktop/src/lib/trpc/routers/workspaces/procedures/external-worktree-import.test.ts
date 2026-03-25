@@ -15,13 +15,13 @@ import { join } from "node:path";
  *
  * These tests verify that:
  * 1. External worktrees are automatically detected and imported
- * 2. The createdByLunaria flag is correctly set
+ * 2. The createdByAmoena flag is correctly set
  * 3. External worktrees are not deleted from disk when workspace is removed
  */
 
 const TEST_DIR = join(
 	realpathSync(tmpdir()),
-	`lunaria-test-external-wt-${process.pid}`,
+	`amoena-test-external-wt-${process.pid}`,
 );
 
 function createTestRepo(name: string): string {
@@ -92,7 +92,7 @@ describe("External worktree detection and import", () => {
 	});
 
 	test("external worktree can be created and detected", () => {
-		// Create external worktree manually (simulates user creating it outside Lunaria)
+		// Create external worktree manually (simulates user creating it outside Amoena)
 		createExternalWorktree(
 			mainRepoPath,
 			"feature-external",
@@ -156,7 +156,7 @@ describe("External worktree detection and import", () => {
 
 		// This test verifies that external worktrees are NOT deleted
 		// In the actual implementation, the delete procedure will check
-		// the createdByLunaria flag and skip disk deletion for external worktrees
+		// the createdByAmoena flag and skip disk deletion for external worktrees
 
 		// Verify data still exists (would be deleted if we didn't have protection)
 		expect(existsSync(join(externalWorktreePath, "important-data.txt"))).toBe(

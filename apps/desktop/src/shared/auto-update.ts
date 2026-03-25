@@ -9,4 +9,4 @@ export const AUTO_UPDATE_STATUS = {
 export type AutoUpdateStatus =
 	(typeof AUTO_UPDATE_STATUS)[keyof typeof AUTO_UPDATE_STATUS];
 
-export const RELEASES_URL = "https://github.com/Lunaria/lunaria/releases";
+export const RELEASES_URL = "https://github.com/Amoena/amoena/releases";

@@ -7,7 +7,7 @@ function makeItem(overrides: Partial<MarketplaceItem> = {}): MarketplaceItem {
   return {
     id: "item-1",
     name: "Test Plugin",
-    author: "lunaria-team",
+    author: "amoena-team",
     installs: "1k",
     installCount: 1000,
     desc: "A test plugin",
@@ -27,9 +27,9 @@ function makeItem(overrides: Partial<MarketplaceItem> = {}): MarketplaceItem {
 }
 
 const items: MarketplaceItem[] = [
-  makeItem({ id: "1", name: "Alpha", author: "lunaria-team", category: "Extensions", trusted: true, installCount: 500, rating: 4.0, tags: ["alpha"], installed: false, featured: true }),
+  makeItem({ id: "1", name: "Alpha", author: "amoena-team", category: "Extensions", trusted: true, installCount: 500, rating: 4.0, tags: ["alpha"], installed: false, featured: true }),
   makeItem({ id: "2", name: "Beta", author: "community", category: "Themes", trusted: false, installCount: 200, rating: 3.5, tags: ["beta"], installed: true }),
-  makeItem({ id: "3", name: "Gamma", author: "lunaria-team", category: "Agent Templates", trusted: true, installCount: 800, rating: 5.0, tags: ["gamma"], installed: false, featured: true }),
+  makeItem({ id: "3", name: "Gamma", author: "amoena-team", category: "Agent Templates", trusted: true, installCount: 800, rating: 5.0, tags: ["gamma"], installed: false, featured: true }),
   makeItem({ id: "4", name: "Delta Tool", author: "community", category: "Tool Packs", trusted: false, installCount: 100, rating: 2.0, tags: ["delta"], installed: true }),
 ];
 
@@ -86,7 +86,7 @@ describe("useMarketplaceState", () => {
 
   test("searches by author", () => {
     const { result } = renderHook(() => useMarketplaceState(items));
-    act(() => { result.current.setSearchQuery("lunaria-team"); });
+    act(() => { result.current.setSearchQuery("amoena-team"); });
     expect(result.current.filtered.length).toBe(2);
   });
 
@@ -111,10 +111,10 @@ describe("useMarketplaceState", () => {
     expect(result.current.filtered.length).toBe(2);
   });
 
-  test("authorFilter=official filters to lunaria-team only", () => {
+  test("authorFilter=official filters to amoena-team only", () => {
     const { result } = renderHook(() => useMarketplaceState(items));
     act(() => { result.current.setAuthorFilter("official"); });
-    expect(result.current.filtered.every((item) => item.author === "lunaria-team")).toBe(true);
+    expect(result.current.filtered.every((item) => item.author === "amoena-team")).toBe(true);
     expect(result.current.filtered.length).toBe(2);
   });
 

@@ -1,6 +1,6 @@
 # Database
 
-Lunaria uses a single SQLite database file for all persistent state. The database lives in the platform app data directory and is opened at runtime startup. Schema evolution is managed by a versioned migration system — 14 migrations ship with the current release.
+Amoena uses a single SQLite database file for all persistent state. The database lives in the platform app data directory and is opened at runtime startup. Schema evolution is managed by a versioned migration system — 14 migrations ship with the current release.
 
 ## Migration System
 
@@ -123,10 +123,10 @@ Inter-agent mailbox. `message_type` is `message`, `decision_request`, or `decisi
 Registered lifecycle hooks. `handler_type` is one of `command` (shell), `http` (webhook), `prompt` (static text injection), or `agent` (spawn agent). `timeout_ms` defaults to 30 000. `priority` controls execution order when multiple hooks match the same event.
 
 ### plugins
-Plugin registry for installed extensions. `ecosystem` is one of `claude-code`, `opencode`, `lunaria`, or `custom`. Health tracking columns (`health_status`, `error_count`, `last_error`, `latency_ms_avg`) enable the plugin health dashboard.
+Plugin registry for installed extensions. `ecosystem` is one of `claude-code`, `opencode`, `amoena`, or `custom`. Health tracking columns (`health_status`, `error_count`, `last_error`, `latency_ms_avg`) enable the plugin health dashboard.
 
 ### observations
-Memory observations captured during sessions. Each observation has a `uri` in the form `lunaria://memory/{scope}/{id}` and a `parent_uri`. `category` is one of `profile`, `preference`, `entity`, `pattern`, `tool_usage`, or `skill`.
+Memory observations captured during sessions. Each observation has a `uri` in the form `amoena://memory/{scope}/{id}` and a `parent_uri`. `category` is one of `profile`, `preference`, `entity`, `pattern`, `tool_usage`, or `skill`.
 
 ### observations_fts
 A `fts5` virtual table mirroring `observations` with Porter stemmer tokenization. Kept in sync via INSERT/UPDATE/DELETE triggers.

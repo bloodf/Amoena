@@ -1,6 +1,6 @@
 # Extension Manifest
 
-All Lunaria extensions (`.luna` files) contain an embedded JSON manifest that declares capabilities, permissions, and contribution points.
+All Amoena extensions (`.luna` files) contain an embedded JSON manifest that declares capabilities, permissions, and contribution points.
 
 ## Format
 
@@ -101,7 +101,7 @@ Extensions declare what they contribute via the `contributes` field.
 }
 ```
 
-Panels are HTML/CSS/JS embedded as assets. They run in a sandboxed context with access to the `lunaria.*` API.
+Panels are HTML/CSS/JS embedded as assets. They run in a sandboxed context with access to the `amoena.*` API.
 
 ### menus
 
@@ -215,4 +215,4 @@ See [hooks.md](./hooks.md) for all 24 event types and handler types.
 
 - Imported Claude Code and OpenCode plugins are auto-normalized into this schema.
 - Do not assume browser-extension or VS Code extension semantics.
-- Lunaria has its own host model, permissions system, and runtime.
+- Amoena has its own host model, permissions system, and runtime.

@@ -20,7 +20,7 @@ import {
 
 const TEST_DIR = join(
 	realpathSync(tmpdir()),
-	`lunaria-test-git-${process.pid}`,
+	`amoena-test-git-${process.pid}`,
 );
 
 function createTestRepo(name: string): string {
@@ -88,7 +88,7 @@ describe("getDefaultBranch", () => {
 	} {
 		const testDir = join(
 			realpathSync(tmpdir()),
-			`lunaria-test-${testName}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+			`amoena-test-${testName}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
 		);
 		mkdirSync(testDir, { recursive: true });
 		execSync("git init", { cwd: testDir, stdio: "ignore" });
@@ -365,7 +365,7 @@ describe("Shell Environment", () => {
 		const tmpDir = mkdtempSync(join(realpathSync(tmpdir()), "shell-env-test-"));
 		writeFileSync(
 			join(tmpDir, ".zshrc"),
-			'export __LUNARIA_SHELL_ENV_TEST__="interactive"\n',
+			'export __AMOENA_SHELL_ENV_TEST__="interactive"\n',
 		);
 
 		const origZDOTDIR = process.env.ZDOTDIR;
@@ -376,7 +376,7 @@ describe("Shell Environment", () => {
 
 		try {
 			const env = await getShellEnvironment();
-			expect(env.__LUNARIA_SHELL_ENV_TEST__).toBe("interactive");
+			expect(env.__AMOENA_SHELL_ENV_TEST__).toBe("interactive");
 		} finally {
 			if (origZDOTDIR !== undefined) process.env.ZDOTDIR = origZDOTDIR;
 			else delete process.env.ZDOTDIR;
@@ -445,7 +445,7 @@ describe("getCurrentBranch", () => {
 	test("returns branch name for empty repo with unborn HEAD", async () => {
 		const repoPath = join(
 			realpathSync(tmpdir()),
-			`lunaria-test-current-branch-empty-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+			`amoena-test-current-branch-empty-${Date.now()}-${Math.random().toString(36).slice(2)}`,
 		);
 
 		mkdirSync(repoPath, { recursive: true });
@@ -469,7 +469,7 @@ describe("getCurrentBranch", () => {
 	test("returns null in detached HEAD state", async () => {
 		const repoPath = join(
 			realpathSync(tmpdir()),
-			`lunaria-test-current-branch-detached-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+			`amoena-test-current-branch-detached-${Date.now()}-${Math.random().toString(36).slice(2)}`,
 		);
 
 		mkdirSync(repoPath, { recursive: true });
@@ -732,25 +732,25 @@ describe("hasUnpushedCommits", () => {
 describe("parsePrUrl", () => {
 	test("parses canonical GitHub PR URL", () => {
 		expect(
-			parsePrUrl("https://github.com/Lunaria/lunaria/pull/1781"),
+			parsePrUrl("https://github.com/Amoena/amoena/pull/1781"),
 		).toEqual({
-			owner: "LunariaAi",
-			repo: "lunaria",
+			owner: "AmoenaAi",
+			repo: "amoena",
 			number: 1781,
 		});
 	});
 
 	test("parses GitHub URL without protocol", () => {
-		expect(parsePrUrl("github.com/Lunaria/lunaria/pull/1781")).toEqual({
-			owner: "LunariaAi",
-			repo: "lunaria",
+		expect(parsePrUrl("github.com/Amoena/amoena/pull/1781")).toEqual({
+			owner: "AmoenaAi",
+			repo: "amoena",
 			number: 1781,
 		});
 	});
 
 	test("returns null for non-PR URLs", () => {
 		expect(
-			parsePrUrl("https://github.com/Lunaria/lunaria/issues/1781"),
+			parsePrUrl("https://github.com/Amoena/amoena/issues/1781"),
 		).toBe(null);
 	});
 });

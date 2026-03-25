@@ -3,7 +3,7 @@ import * as childProcess from "node:child_process";
 import path from "node:path";
 import { app } from "electron";
 
-const MEMORY_PORT = Number(process.env.LUNARIA_MEMORY_PORT ?? 37777);
+const MEMORY_PORT = Number(process.env.AMOENA_MEMORY_PORT ?? 37777);
 const STARTUP_TIMEOUT = 20_000;
 const MAX_RESTARTS = 3;
 

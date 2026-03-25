@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { LUNARIA_MANAGED_BINARIES } from "./agent-wrappers-common";
+import { AMOENA_MANAGED_BINARIES } from "./agent-wrappers-common";
 import { BASH_DIR, BIN_DIR, ZSH_DIR } from "./paths";
 
 export interface ShellWrapperPaths {
@@ -23,20 +23,20 @@ function getShellName(shell: string): string {
 }
 
 /**
- * Shell snippet to save all LUNARIA_* env vars before sourcing user RC files.
- * Used in tandem with {@link LUNARIA_ENV_RESTORE} to prevent user shell
- * configs from overriding Lunaria-managed environment variables (e.g.
- * LUNARIA_WORKSPACE_NAME).
+ * Shell snippet to save all AMOENA_* env vars before sourcing user RC files.
+ * Used in tandem with {@link AMOENA_ENV_RESTORE} to prevent user shell
+ * configs from overriding Amoena-managed environment variables (e.g.
+ * AMOENA_WORKSPACE_NAME).
  *
- * @see https://github.com/Lunaria/lunaria/issues/2386
+ * @see https://github.com/Amoena/amoena/issues/2386
  */
-const LUNARIA_ENV_SAVE = `_lunaria_saved_env="$(export -p 2>/dev/null | grep ' LUNARIA_')"`;
+const AMOENA_ENV_SAVE = `_amoena_saved_env="$(export -p 2>/dev/null | grep ' AMOENA_')"`;
 
 /**
- * Shell snippet to restore previously saved LUNARIA_* env vars after
+ * Shell snippet to restore previously saved AMOENA_* env vars after
  * sourcing user RC files.
  */
-const LUNARIA_ENV_RESTORE = `eval "$_lunaria_saved_env" 2>/dev/null || true`;
+const AMOENA_ENV_RESTORE = `eval "$_amoena_saved_env" 2>/dev/null || true`;
 
 function quoteShellLiteral(value: string): string {
 	return `'${value.replaceAll("'", `'"'"'`)}'`;
@@ -84,13 +84,13 @@ function writeFileIfChanged(
 function buildManagedCommandPrelude(shellName: string, binDir: string): string {
 	if (shellName === "fish") {
 		const escapedBinDir = escapeFishDoubleQuoted(binDir);
-		return LUNARIA_MANAGED_BINARIES.map(
+		return AMOENA_MANAGED_BINARIES.map(
 			(name) =>
 				`functions -q ${name}; and functions -e ${name}
 function ${name}
-  set -l _lunaria_wrapper "${escapedBinDir}/${name}"
-  if test -x "$_lunaria_wrapper"; and not test -d "$_lunaria_wrapper"
-    "$_lunaria_wrapper" $argv
+  set -l _amoena_wrapper "${escapedBinDir}/${name}"
+  if test -x "$_amoena_wrapper"; and not test -d "$_amoena_wrapper"
+    "$_amoena_wrapper" $argv
   else
     command ${name} $argv
   end
@@ -98,13 +98,13 @@ end`,
 		).join("\n");
 	}
 
-	return LUNARIA_MANAGED_BINARIES.map(
+	return AMOENA_MANAGED_BINARIES.map(
 		(name) =>
 			`unalias ${name} 2>/dev/null || true
 ${name}() {
-  _lunaria_wrapper=${quoteShellLiteral(`${binDir}/${name}`)}
-  if [ -x "$_lunaria_wrapper" ] && [ ! -d "$_lunaria_wrapper" ]; then
-    "$_lunaria_wrapper" "$@"
+  _amoena_wrapper=${quoteShellLiteral(`${binDir}/${name}`)}
+  if [ -x "$_amoena_wrapper" ] && [ ! -d "$_amoena_wrapper" ]; then
+    "$_amoena_wrapper" "$@"
   else
     command ${name} "$@"
   fi
@@ -114,13 +114,13 @@ ${name}() {
 
 /** Build a shell snippet that idempotently prepends BIN_DIR to PATH. */
 function buildPathPrependFunction(binDir: string): string {
-	return `_lunaria_prepend_bin() {
+	return `_amoena_prepend_bin() {
   case ":$PATH:" in
     *:${quoteShellLiteral(binDir)}:*) ;;
     *) export PATH=${quoteShellLiteral(binDir)}:"$PATH" ;;
   esac
 }
-_lunaria_prepend_bin`;
+_amoena_prepend_bin`;
 }
 
 /**
@@ -131,7 +131,7 @@ _lunaria_prepend_bin`;
  */
 function buildZshPrecmdHook(binDir: string): string {
 	return `typeset -ga precmd_functions 2>/dev/null || true
-_lunaria_ensure_path() {
+_amoena_ensure_path() {
   case ":$PATH:" in
     *:${quoteShellLiteral(binDir)}:*) ;;
     *) PATH=${quoteShellLiteral(binDir)}:"$PATH" ;;
@@ -139,7 +139,7 @@ _lunaria_ensure_path() {
 }
 {
   # Keep our hook last so it wins over other PATH-mutating precmd hooks.
-  precmd_functions=(\${precmd_functions:#_lunaria_ensure_path} _lunaria_ensure_path)
+  precmd_functions=(\${precmd_functions:#_amoena_ensure_path} _amoena_ensure_path)
 } 2>/dev/null || true`;
 }
 
@@ -160,12 +160,12 @@ export function createZshWrapper(
 	// Temporarily restore the user's ZDOTDIR while sourcing user config, then
 	// switch back so zsh continues through our wrapper chain.
 	const zshenvPath = path.join(paths.ZSH_DIR, ".zshenv");
-	const zshenvScript = `# Lunaria zsh env wrapper
-${LUNARIA_ENV_SAVE}
-_lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
-export ZDOTDIR="$_lunaria_home"
-[[ -f "$_lunaria_home/.zshenv" ]] && source "$_lunaria_home/.zshenv"
-${LUNARIA_ENV_RESTORE}
+	const zshenvScript = `# Amoena zsh env wrapper
+${AMOENA_ENV_SAVE}
+_amoena_home="\${AMOENA_ORIG_ZDOTDIR:-$HOME}"
+export ZDOTDIR="$_amoena_home"
+[[ -f "$_amoena_home/.zshenv" ]] && source "$_amoena_home/.zshenv"
+${AMOENA_ENV_RESTORE}
 export ZDOTDIR=${quotedZshDir}
 `;
 	const wroteZshenv = writeFileIfChanged(zshenvPath, zshenvScript, 0o644);
@@ -173,24 +173,24 @@ export ZDOTDIR=${quotedZshDir}
 	// Source user .zprofile with their ZDOTDIR, then restore wrapper ZDOTDIR
 	// so startup continues into our .zshrc wrapper.
 	const zprofilePath = path.join(paths.ZSH_DIR, ".zprofile");
-	const zprofileScript = `# Lunaria zsh profile wrapper
-${LUNARIA_ENV_SAVE}
-_lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
-export ZDOTDIR="$_lunaria_home"
-[[ -f "$_lunaria_home/.zprofile" ]] && source "$_lunaria_home/.zprofile"
-${LUNARIA_ENV_RESTORE}
+	const zprofileScript = `# Amoena zsh profile wrapper
+${AMOENA_ENV_SAVE}
+_amoena_home="\${AMOENA_ORIG_ZDOTDIR:-$HOME}"
+export ZDOTDIR="$_amoena_home"
+[[ -f "$_amoena_home/.zprofile" ]] && source "$_amoena_home/.zprofile"
+${AMOENA_ENV_RESTORE}
 export ZDOTDIR=${quotedZshDir}
 `;
 	const wroteZprofile = writeFileIfChanged(zprofilePath, zprofileScript, 0o644);
 
 	// Reset ZDOTDIR before sourcing so Oh My Zsh works correctly
 	const zshrcPath = path.join(paths.ZSH_DIR, ".zshrc");
-	const zshrcScript = `# Lunaria zsh rc wrapper
-${LUNARIA_ENV_SAVE}
-_lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
-export ZDOTDIR="$_lunaria_home"
-[[ -f "$_lunaria_home/.zshrc" ]] && source "$_lunaria_home/.zshrc"
-${LUNARIA_ENV_RESTORE}
+	const zshrcScript = `# Amoena zsh rc wrapper
+${AMOENA_ENV_SAVE}
+_amoena_home="\${AMOENA_ORIG_ZDOTDIR:-$HOME}"
+export ZDOTDIR="$_amoena_home"
+[[ -f "$_amoena_home/.zshrc" ]] && source "$_amoena_home/.zshrc"
+${AMOENA_ENV_RESTORE}
 ${buildPathPrependFunction(paths.BIN_DIR)}
 ${buildZshPrecmdHook(paths.BIN_DIR)}
 rehash 2>/dev/null || true
@@ -201,30 +201,30 @@ export ZDOTDIR=${quotedZshDir}
 
 	// .zlogin runs AFTER .zshrc in login shells. By restoring ZDOTDIR above,
 	// zsh sources our .zlogin instead of the user's directly. We source the
-	// user's .zlogin only for interactive shells, then re-assert Lunaria's
+	// user's .zlogin only for interactive shells, then re-assert Amoena's
 	// PATH prepend after user startup hooks run.
 	const zloginPath = path.join(paths.ZSH_DIR, ".zlogin");
-	const zloginScript = `# Lunaria zsh login wrapper
-${LUNARIA_ENV_SAVE}
-_lunaria_home="\${LUNARIA_ORIG_ZDOTDIR:-$HOME}"
-export ZDOTDIR="$_lunaria_home"
+	const zloginScript = `# Amoena zsh login wrapper
+${AMOENA_ENV_SAVE}
+_amoena_home="\${AMOENA_ORIG_ZDOTDIR:-$HOME}"
+export ZDOTDIR="$_amoena_home"
 if [[ -o interactive ]]; then
-  [[ -f "$_lunaria_home/.zlogin" ]] && source "$_lunaria_home/.zlogin"
+  [[ -f "$_amoena_home/.zlogin" ]] && source "$_amoena_home/.zlogin"
 fi
-${LUNARIA_ENV_RESTORE}
+${AMOENA_ENV_RESTORE}
 ${buildZshPrecmdHook(paths.BIN_DIR)}
 ${buildPathPrependFunction(paths.BIN_DIR)}
 rehash 2>/dev/null || true
 # One-shot shell-ready marker for preset command timing.
 # Uses precmd so it fires AFTER direnv and other hooks complete,
 # right before the first prompt is displayed.
-_lunaria_shell_ready() {
-  precmd_functions=(\${precmd_functions:#_lunaria_shell_ready})
-  printf '\\033]777;LunariaAiell-ready\\007'
+_amoena_shell_ready() {
+  precmd_functions=(\${precmd_functions:#_amoena_shell_ready})
+  printf '\\033]777;AmoenaAiell-ready\\007'
 }
 # Keep our hook LAST so it fires after direnv and other precmd hooks complete.
-precmd_functions=(\${precmd_functions[@]} _lunaria_shell_ready)
-export ZDOTDIR="$_lunaria_home"
+precmd_functions=(\${precmd_functions[@]} _amoena_shell_ready)
+export ZDOTDIR="$_amoena_home"
 `;
 	const wroteZlogin = writeFileIfChanged(zloginPath, zloginScript, 0o644);
 	const changed = wroteZshenv || wroteZprofile || wroteZshrc || wroteZlogin;
@@ -239,10 +239,10 @@ export function createBashWrapper(
 	logModeDiagnostics("bash");
 
 	const rcfilePath = path.join(paths.BASH_DIR, "rcfile");
-	const script = `# Lunaria bash rcfile wrapper
+	const script = `# Amoena bash rcfile wrapper
 
-# Save Lunaria env vars before sourcing user config
-${LUNARIA_ENV_SAVE}
+# Save Amoena env vars before sourcing user config
+${AMOENA_ENV_SAVE}
 
 # Source system profile
 [[ -f /etc/profile ]] && source /etc/profile
@@ -259,10 +259,10 @@ fi
 # Source bashrc if separate
 [[ -f "$HOME/.bashrc" ]] && source "$HOME/.bashrc"
 
-# Restore Lunaria env vars that user config may have overridden
-${LUNARIA_ENV_RESTORE}
+# Restore Amoena env vars that user config may have overridden
+${AMOENA_ENV_RESTORE}
 
-# Keep lunaria bin first without duplicating entries
+# Keep amoena bin first without duplicating entries
 ${buildPathPrependFunction(paths.BIN_DIR)}
 hash -r 2>/dev/null || true
 # Minimal prompt (path/env shown in toolbar) - emerald to match app theme
@@ -270,28 +270,28 @@ export PS1=$'\\[\\e[1;38;2;52;211;153m\\]❯\\[\\e[0m\\] '
 # One-shot shell-ready marker for preset command timing.
 # Uses PROMPT_COMMAND so it fires AFTER direnv and other hooks complete.
 # Supports both scalar and array PROMPT_COMMAND (Bash 5.1+).
-_lunaria_shell_ready() {
-  printf '\\033]777;LunariaAiell-ready\\007'
+_amoena_shell_ready() {
+  printf '\\033]777;AmoenaAiell-ready\\007'
   if [[ "$(declare -p PROMPT_COMMAND 2>/dev/null)" == "declare -a"* ]]; then
     local -a _new=()
     for _cmd in "\${PROMPT_COMMAND[@]}"; do
-      [[ "$_cmd" != "_lunaria_shell_ready" ]] && _new+=("$_cmd")
+      [[ "$_cmd" != "_amoena_shell_ready" ]] && _new+=("$_cmd")
     done
     PROMPT_COMMAND=("\${_new[@]}")
   else
-    PROMPT_COMMAND="\${_lunaria_orig_prompt_cmd}"
-    unset _lunaria_orig_prompt_cmd
+    PROMPT_COMMAND="\${_amoena_orig_prompt_cmd}"
+    unset _amoena_orig_prompt_cmd
   fi
-  unset -f _lunaria_shell_ready
+  unset -f _amoena_shell_ready
 }
 if [[ "$(declare -p PROMPT_COMMAND 2>/dev/null)" == "declare -a"* ]]; then
-  PROMPT_COMMAND=("\${PROMPT_COMMAND[@]}" "_lunaria_shell_ready")
+  PROMPT_COMMAND=("\${PROMPT_COMMAND[@]}" "_amoena_shell_ready")
 else
-  _lunaria_orig_prompt_cmd="\${PROMPT_COMMAND}"
-  if [[ -n "\${_lunaria_orig_prompt_cmd}" ]]; then
-    PROMPT_COMMAND="\${_lunaria_orig_prompt_cmd};_lunaria_shell_ready"
+  _amoena_orig_prompt_cmd="\${PROMPT_COMMAND}"
+  if [[ -n "\${_amoena_orig_prompt_cmd}" ]]; then
+    PROMPT_COMMAND="\${_amoena_orig_prompt_cmd};_amoena_shell_ready"
   else
-    PROMPT_COMMAND="_lunaria_shell_ready"
+    PROMPT_COMMAND="_amoena_shell_ready"
   fi
 fi
 `;
@@ -306,7 +306,7 @@ export function getShellEnv(
 	const shellName = getShellName(shell);
 	if (shellName === "zsh") {
 		return {
-			LUNARIA_ORIG_ZDOTDIR: process.env.ZDOTDIR || os.homedir(),
+			AMOENA_ORIG_ZDOTDIR: process.env.ZDOTDIR || os.homedir(),
 			ZDOTDIR: paths.ZSH_DIR,
 		};
 	}
@@ -329,7 +329,7 @@ export function getShellArgs(
 		return [
 			"-l",
 			"--init-command",
-			`set -l _lunaria_bin "${escapedBinDir}"; contains -- "$_lunaria_bin" $PATH; or set -gx PATH "$_lunaria_bin" $PATH; function _lunaria_shell_ready --on-event fish_prompt; printf '\\033]777;LunariaAiell-ready\\007'; functions -e _lunaria_shell_ready; end`,
+			`set -l _amoena_bin "${escapedBinDir}"; contains -- "$_amoena_bin" $PATH; or set -gx PATH "$_amoena_bin" $PATH; function _amoena_shell_ready --on-event fish_prompt; printf '\\033]777;AmoenaAiell-ready\\007'; functions -e _amoena_shell_ready; end`,
 		];
 	}
 	if (["zsh", "sh", "ksh"].includes(shellName)) {

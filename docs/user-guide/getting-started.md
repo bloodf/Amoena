@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide walks you through installing Lunaria, connecting your first AI provider, and running your first session.
+This guide walks you through installing Amoena, connecting your first AI provider, and running your first session.
 
 ## Prerequisites
 
@@ -11,17 +11,17 @@ This guide walks you through installing Lunaria, connecting your first AI provid
 
 ### macOS
 
-Download the `.dmg` from the [Releases](https://github.com/LunariaAi/lunaria/releases) page, open it, and drag **Lunaria** to your Applications folder.
+Download the `.dmg` from the [Releases](https://github.com/AmoenaAi/amoena/releases) page, open it, and drag **Amoena** to your Applications folder.
 
 Alternatively, install via Homebrew:
 
 ```bash
-brew install --cask lunaria
+brew install --cask amoena
 ```
 
 ### Windows
 
-Download and run the `.msi` installer from the Releases page. Lunaria installs to `%LOCALAPPDATA%\Lunaria` and adds itself to the Start Menu.
+Download and run the `.msi` installer from the Releases page. Amoena installs to `%LOCALAPPDATA%\Amoena` and adds itself to the Start Menu.
 
 ### Linux
 
@@ -29,24 +29,24 @@ Download the `.AppImage` or `.deb` package from the Releases page:
 
 ```bash
 # Debian / Ubuntu
-sudo dpkg -i lunaria_*.deb
+sudo dpkg -i amoena_*.deb
 
 # AppImage (any distro)
-chmod +x Lunaria-*.AppImage
-./Lunaria-*.AppImage
+chmod +x Amoena-*.AppImage
+./Amoena-*.AppImage
 ```
 
 ### CLI Only (Headless)
 
-If you built from source, the `lunaria` CLI binary is available at `apps/desktop/src-tauri/target/release/lunaria`. It can run without the desktop GUI by starting a headless runtime automatically.
+If you built from source, the `amoena` CLI binary is available at `apps/desktop/src-tauri/target/release/amoena`. It can run without the desktop GUI by starting a headless runtime automatically.
 
 ```bash
-lunaria health
+amoena health
 ```
 
 ## First Run
 
-When Lunaria launches for the first time, the **Setup Wizard** guides you through:
+When Amoena launches for the first time, the **Setup Wizard** guides you through:
 
 1. **Theme selection** -- light, dark, or system-matched
 2. **Provider authentication** -- connect at least one AI provider
@@ -77,10 +77,10 @@ The desktop app starts an embedded Axum HTTP server (the "runtime") that exposes
 Navigate to **Settings > Providers** or run:
 
 ```bash
-lunaria auth anthropic
+amoena auth anthropic
 ```
 
-This opens your browser to authenticate via OAuth. Once complete, Lunaria discovers available models and stores credentials securely in your system keychain (via Tauri Stronghold).
+This opens your browser to authenticate via OAuth. Once complete, Amoena discovers available models and stores credentials securely in your system keychain (via Tauri Stronghold).
 
 Supported providers:
 
@@ -93,7 +93,7 @@ Supported providers:
 You can check provider status at any time:
 
 ```bash
-lunaria providers list
+amoena providers list
 ```
 
 ## Creating Your First Session
@@ -111,28 +111,28 @@ A **session** is a conversation with an AI agent. Sessions track messages, tool 
 
 ```bash
 # Create a session using Claude
-lunaria sessions create --working-dir /path/to/project --provider anthropic --model claude-sonnet-4-20250514
+amoena sessions create --working-dir /path/to/project --provider anthropic --model claude-sonnet-4-20250514
 
 # Send a message
-lunaria sessions message <session-id> "Explain the architecture of this project"
+amoena sessions message <session-id> "Explain the architecture of this project"
 
 # List all sessions
-lunaria sessions list
+amoena sessions list
 ```
 
 ### Session Modes
 
 Sessions operate in one of two modes:
 
-- **Wrapper mode** (`--tui-type claude-code | codex | gemini | opencode`) -- Lunaria wraps an external CLI tool, proxying its I/O through the runtime. This lets you use Claude Code, Codex CLI, or Gemini CLI with Lunaria's UI, memory, and orchestration features.
-- **Native mode** (`--tui-type native`) -- Lunaria drives the AI provider directly via its own inference pipeline.
+- **Wrapper mode** (`--tui-type claude-code | codex | gemini | opencode`) -- Amoena wraps an external CLI tool, proxying its I/O through the runtime. This lets you use Claude Code, Codex CLI, or Gemini CLI with Amoena's UI, memory, and orchestration features.
+- **Native mode** (`--tui-type native`) -- Amoena drives the AI provider directly via its own inference pipeline.
 
 ## Autopilot Mode
 
 Autopilot lets an agent work autonomously across multiple turns. Enable it from the session view or via the CLI:
 
 ```bash
-lunaria sessions autopilot <session-id> --enable
+amoena sessions autopilot <session-id> --enable
 ```
 
 When active, Autopilot:
@@ -153,14 +153,14 @@ When active, Autopilot:
 
 ## Data Storage
 
-Lunaria stores all data locally:
+Amoena stores all data locally:
 
 | What              | Location                         |
 | ----------------- | -------------------------------- |
-| Database          | `~/.lunaria/lunaria.db` (SQLite) |
-| Logs              | `~/.lunaria/logs/`               |
-| Extensions        | `~/.lunaria/extensions/`         |
-| Runtime discovery | `~/.lunaria/runtime.json`        |
+| Database          | `~/.amoena/amoena.db` (SQLite) |
+| Logs              | `~/.amoena/logs/`               |
+| Extensions        | `~/.amoena/extensions/`         |
+| Runtime discovery | `~/.amoena/runtime.json`        |
 | Credentials       | System keychain (Stronghold)     |
 
 ## Next Steps
@@ -168,4 +168,4 @@ Lunaria stores all data locally:
 - [Orchestration and Agents](../features/agents.md) -- spawn sub-agents and form teams
 - [Extensions](./extensions.md) -- install and build `.luna` extensions
 - [CLI Reference](./tui.md) -- full CLI command reference
-- [Architecture Overview](../architecture/overview.md) -- understand how Lunaria works under the hood
+- [Architecture Overview](../architecture/overview.md) -- understand how Amoena works under the hood

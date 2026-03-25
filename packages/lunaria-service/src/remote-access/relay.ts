@@ -40,7 +40,7 @@ const rooms = new Map<string, RoomState>();
 /**
  * Creates a new relay room bridging a host and mobile device.
  *
- * @param hostDevice   - The desktop/host Lunaria instance.
+ * @param hostDevice   - The desktop/host Amoena instance.
  * @param mobileDevice - The mobile device connecting to the host.
  * @returns The newly created `RelayRoom`.
  */

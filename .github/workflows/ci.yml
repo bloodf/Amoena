@@ -140,4 +140,4 @@ jobs:
       - name: Build CLI
         run: bash scripts/build-tui.sh
       - name: Verify CLI runs
-        run: node apps/tui/bin/lunaria.js --version
+        run: node apps/tui/bin/amoena.js --version

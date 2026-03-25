@@ -1,9 +1,9 @@
-import { runLunaria } from "./command";
+import { runAmoena } from "./command";
 import { config } from "./config";
 import { db_helpers, getDatabase } from "./db";
 import { eventBus } from "./event-bus";
 import { logger } from "./logger";
-import { callLunariaGateway } from "./lunaria-gateway";
+import { callAmoenaGateway } from "./amoena-gateway";
 
 interface DispatchableTask {
 	id: number;
@@ -28,7 +28,7 @@ interface DispatchableTask {
 
 /**
  * Classify a task's complexity and return the appropriate model ID to pass
- * to the Lunaria gateway. Uses keyword signals on title + description.
+ * to the Amoena gateway. Uses keyword signals on title + description.
  *
  * Tiers:
  *   ROUTINE  → cheap model (Haiku)   — file ops, status checks, formatting
@@ -113,13 +113,13 @@ function classifyTaskModel(task: DispatchableTask): string | null {
 }
 
 /** Extract the gateway agent identifier from the agent's config JSON.
- *  Falls back to agent_name (display name) if lunariaId is not set. */
+ *  Falls back to agent_name (display name) if amoenaId is not set. */
 function resolveGatewayAgentId(task: DispatchableTask): string {
 	if (task.agent_config) {
 		try {
 			const cfg = JSON.parse(task.agent_config);
-			if (typeof cfg.lunariaId === "string" && cfg.lunariaId)
-				return cfg.lunariaId;
+			if (typeof cfg.amoenaId === "string" && cfg.amoenaId)
+				return cfg.amoenaId;
 		} catch {
 			/* ignore */
 		}
@@ -137,7 +137,7 @@ function buildTaskPrompt(
 			: `TASK-${task.id}`;
 
 	const lines = [
-		"You have been assigned a task in Lunaria.",
+		"You have been assigned a task in Amoena.",
 		"",
 		`**[${ticket}] ${task.title}**`,
 		`Priority: ${task.priority}`,
@@ -197,7 +197,7 @@ function parseAgentResponse(stdout: string): AgentResponseParsed {
 					? parsed.session_id
 					: null;
 
-		// Lunaria agent --json returns { payloads: [{ text: "..." }] }
+		// Amoena agent --json returns { payloads: [{ text: "..." }] }
 		if (parsed?.payloads?.[0]?.text) {
 			return { text: parsed.payloads[0].text, sessionId };
 		}
@@ -221,8 +221,8 @@ function getAnthropicApiKey(): string | null {
 }
 
 function isGatewayAvailable(): boolean {
-	// Gateway is available if Lunaria is installed OR a gateway is registered in the DB
-	if (config.lunariaHome) return true;
+	// Gateway is available if Amoena is installed OR a gateway is registered in the DB
+	if (config.amoenaHome) return true;
 	try {
 		const db = getDatabase();
 		const row = db.prepare("SELECT COUNT(*) as c FROM gateways").get() as
@@ -409,8 +409,8 @@ function resolveGatewayAgentIdForReview(task: ReviewableTask): string {
 	if (task.agent_config) {
 		try {
 			const cfg = JSON.parse(task.agent_config);
-			if (typeof cfg.lunariaId === "string" && cfg.lunariaId)
-				return cfg.lunariaId;
+			if (typeof cfg.amoenaId === "string" && cfg.amoenaId)
+				return cfg.amoenaId;
 		} catch {
 			/* ignore */
 		}
@@ -425,7 +425,7 @@ function buildReviewPrompt(task: ReviewableTask): string {
 			: `TASK-${task.id}`;
 
 	const lines = [
-		"You are Aegis, the quality reviewer for Lunaria.",
+		"You are Aegis, the quality reviewer for Amoena.",
 		"Review the following completed task and its resolution.",
 		"",
 		`**[${ticket}] ${task.title}**`,
@@ -547,7 +547,7 @@ export async function runAegisReviews(): Promise<{
 					idempotencyKey: `aegis-review-${task.id}-${Date.now()}`,
 					deliver: false,
 				};
-				const finalResult = await runLunaria(
+				const finalResult = await runAmoena(
 					[
 						"gateway",
 						"call",
@@ -922,7 +922,7 @@ export async function dispatchAssignedTasks(): Promise<{
 					{ taskId: task.id, targetSession, agent: task.agent_name },
 					"Dispatching task to targeted session",
 				);
-				const sendResult = await callLunariaGateway<any>(
+				const sendResult = await callAmoenaGateway<any>(
 					"chat.send",
 					{
 						sessionKey: targetSession,
@@ -960,7 +960,7 @@ export async function dispatchAssignedTasks(): Promise<{
 				// Use --expect-final to block until the agent completes and returns the full
 				// response payload (result.payloads[0].text). The two-step agent → agent.wait
 				// pattern only returns lifecycle metadata and never includes the agent's text.
-				const finalResult = await runLunaria(
+				const finalResult = await runAmoena(
 					[
 						"gateway",
 						"call",

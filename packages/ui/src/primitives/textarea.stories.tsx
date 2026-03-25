@@ -39,7 +39,7 @@ export const AllStates: Story = {
   render: () => (
     <div className="flex flex-col gap-4 w-[350px]">
       <Textarea placeholder="Default" />
-      <Textarea placeholder="With value" defaultValue="Hello, Lunaria" />
+      <Textarea placeholder="With value" defaultValue="Hello, Amoena" />
       <Textarea placeholder="Disabled" disabled />
       <Textarea placeholder="Read-only" readOnly defaultValue="Read-only content" />
     </div>

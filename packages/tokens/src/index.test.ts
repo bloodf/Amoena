@@ -4,17 +4,17 @@ import {
   lovableMotionTokens,
   lovableThemeTokens,
   lovableTypographyTokens,
-  lunariaBorderWidthTokens,
-  lunariaMotionTokens,
-  lunariaOpacityTokens,
-  lunariaRadiusTokens,
-  lunariaShadowTokens,
-  lunariaSpacingTokens,
-  lunariaThemeTokens,
-  lunariaTokens,
-  lunariaTransitionTokens,
-  lunariaTypographyTokens,
-  lunariaZIndexTokens,
+  amoenaBorderWidthTokens,
+  amoenaMotionTokens,
+  amoenaOpacityTokens,
+  amoenaRadiusTokens,
+  amoenaShadowTokens,
+  amoenaSpacingTokens,
+  amoenaThemeTokens,
+  amoenaTokens,
+  amoenaTransitionTokens,
+  amoenaTypographyTokens,
+  amoenaZIndexTokens,
   permissionStateTokens,
   providerIdentityTokens,
   rateLimitPressureTokens,
@@ -39,9 +39,9 @@ describe("@lunaria/tokens", () => {
   });
 
   test("backward compat aliases point to the same objects", () => {
-    expect(lovableThemeTokens).toBe(lunariaThemeTokens);
-    expect(lovableTypographyTokens).toBe(lunariaTypographyTokens);
-    expect(lovableMotionTokens).toBe(lunariaMotionTokens);
+    expect(lovableThemeTokens).toBe(amoenaThemeTokens);
+    expect(lovableTypographyTokens).toBe(amoenaTypographyTokens);
+    expect(lovableMotionTokens).toBe(amoenaMotionTokens);
   });
 
   test("generates css variable declarations", () => {
@@ -50,11 +50,11 @@ describe("@lunaria/tokens", () => {
         background: "270 7% 7%",
         foreground: "0 0% 88%",
       },
-      { prefix: "lunaria" },
+      { prefix: "amoena" },
     );
 
-    expect(css).toContain("--lunaria-background: 270 7% 7%;");
-    expect(css).toContain("--lunaria-foreground: 0 0% 88%;");
+    expect(css).toContain("--amoena-background: 270 7% 7%;");
+    expect(css).toContain("--amoena-foreground: 0 0% 88%;");
   });
 
   test("builds theme-specific css blocks with correct selectors", () => {
@@ -78,7 +78,7 @@ describe("@lunaria/tokens", () => {
     expect(providerIdentityTokens.ollama).toBe("hsl(var(--green))");
   });
 
-  test("includes semantic state and pressure tokens required by Lunaria", () => {
+  test("includes semantic state and pressure tokens required by Amoena", () => {
     expect(stateTokens.streaming).toBe("hsl(var(--magenta))");
     expect(stateTokens.waitingApproval).toBe("hsl(var(--warning))");
     expect(rateLimitPressureTokens.safe).toBe("hsl(var(--success))");
@@ -96,7 +96,7 @@ describe("@lunaria/tokens", () => {
   });
 
   test("typography font sizes have size, lineHeight, and letterSpacing", () => {
-    const sizes = lunariaTypographyTokens.fontSize;
+    const sizes = amoenaTypographyTokens.fontSize;
     expect(sizes.xs.size).toBe("0.75rem");
     expect(sizes.xs.lineHeight).toBe("1rem");
     expect(sizes.xs.letterSpacing).toBe("0.01em");
@@ -108,33 +108,33 @@ describe("@lunaria/tokens", () => {
   });
 
   test("spacing tokens exist and have expected values", () => {
-    expect(lunariaSpacingTokens["0"]).toBe("0px");
-    expect(lunariaSpacingTokens.px).toBe("1px");
-    expect(lunariaSpacingTokens["4"]).toBe("16px");
-    expect(lunariaSpacingTokens["24"]).toBe("96px");
-    expect(Object.keys(lunariaSpacingTokens).length).toBeGreaterThanOrEqual(21);
+    expect(amoenaSpacingTokens["0"]).toBe("0px");
+    expect(amoenaSpacingTokens.px).toBe("1px");
+    expect(amoenaSpacingTokens["4"]).toBe("16px");
+    expect(amoenaSpacingTokens["24"]).toBe("96px");
+    expect(Object.keys(amoenaSpacingTokens).length).toBeGreaterThanOrEqual(21);
   });
 
   test("radius tokens exist and have expected values", () => {
-    expect(lunariaRadiusTokens.none).toBe("0");
-    expect(lunariaRadiusTokens.DEFAULT).toBe("0.25rem");
-    expect(lunariaRadiusTokens.full).toBe("9999px");
-    expect(lunariaRadiusTokens.lg).toBe("0.5rem");
+    expect(amoenaRadiusTokens.none).toBe("0");
+    expect(amoenaRadiusTokens.DEFAULT).toBe("0.25rem");
+    expect(amoenaRadiusTokens.full).toBe("9999px");
+    expect(amoenaRadiusTokens.lg).toBe("0.5rem");
   });
 
   test("shadow tokens have both light and dark variants", () => {
-    expect(lunariaShadowTokens.light).toBeDefined();
-    expect(lunariaShadowTokens.dark).toBeDefined();
-    expect(lunariaShadowTokens.light.sm).toContain("rgb(0 0 0 / 0.1)");
-    expect(lunariaShadowTokens.dark.sm).toContain("rgb(0 0 0 / 0.4)");
-    expect(lunariaShadowTokens.light.none).toBe("0 0 #0000");
-    expect(lunariaShadowTokens.dark.none).toBe("0 0 #0000");
-    expect(lunariaShadowTokens.light.inner).toContain("inset");
-    expect(lunariaShadowTokens.dark.inner).toContain("inset");
+    expect(amoenaShadowTokens.light).toBeDefined();
+    expect(amoenaShadowTokens.dark).toBeDefined();
+    expect(amoenaShadowTokens.light.sm).toContain("rgb(0 0 0 / 0.1)");
+    expect(amoenaShadowTokens.dark.sm).toContain("rgb(0 0 0 / 0.4)");
+    expect(amoenaShadowTokens.light.none).toBe("0 0 #0000");
+    expect(amoenaShadowTokens.dark.none).toBe("0 0 #0000");
+    expect(amoenaShadowTokens.light.inner).toContain("inset");
+    expect(amoenaShadowTokens.dark.inner).toContain("inset");
   });
 
   test("z-index tokens have expected ordering", () => {
-    const z = lunariaZIndexTokens;
+    const z = amoenaZIndexTokens;
     expect(Number(z.base)).toBeLessThan(Number(z.raised));
     expect(Number(z.raised)).toBeLessThan(Number(z.dropdown));
     expect(Number(z.dropdown)).toBeLessThan(Number(z.sticky));
@@ -147,34 +147,34 @@ describe("@lunaria/tokens", () => {
   });
 
   test("border width tokens exist", () => {
-    expect(lunariaBorderWidthTokens.DEFAULT).toBe("1px");
-    expect(lunariaBorderWidthTokens["0"]).toBe("0px");
-    expect(lunariaBorderWidthTokens["2"]).toBe("2px");
-    expect(lunariaBorderWidthTokens["4"]).toBe("4px");
-    expect(lunariaBorderWidthTokens["8"]).toBe("8px");
+    expect(amoenaBorderWidthTokens.DEFAULT).toBe("1px");
+    expect(amoenaBorderWidthTokens["0"]).toBe("0px");
+    expect(amoenaBorderWidthTokens["2"]).toBe("2px");
+    expect(amoenaBorderWidthTokens["4"]).toBe("4px");
+    expect(amoenaBorderWidthTokens["8"]).toBe("8px");
   });
 
   test("opacity tokens have expected values", () => {
-    expect(lunariaOpacityTokens["0"]).toBe("0");
-    expect(lunariaOpacityTokens["50"]).toBe("0.5");
-    expect(lunariaOpacityTokens["100"]).toBe("1");
-    expect(lunariaOpacityTokens["75"]).toBe("0.75");
-    expect(Object.keys(lunariaOpacityTokens).length).toBeGreaterThanOrEqual(16);
+    expect(amoenaOpacityTokens["0"]).toBe("0");
+    expect(amoenaOpacityTokens["50"]).toBe("0.5");
+    expect(amoenaOpacityTokens["100"]).toBe("1");
+    expect(amoenaOpacityTokens["75"]).toBe("0.75");
+    expect(Object.keys(amoenaOpacityTokens).length).toBeGreaterThanOrEqual(16);
   });
 
   test("transition presets exist", () => {
-    expect(lunariaTransitionTokens.none).toBe("none");
-    expect(lunariaTransitionTokens.all).toContain("200ms");
-    expect(lunariaTransitionTokens.colors).toContain("background-color");
-    expect(lunariaTransitionTokens.opacity).toContain("opacity");
-    expect(lunariaTransitionTokens.shadow).toContain("box-shadow");
-    expect(lunariaTransitionTokens.transform).toContain("transform");
+    expect(amoenaTransitionTokens.none).toBe("none");
+    expect(amoenaTransitionTokens.all).toContain("200ms");
+    expect(amoenaTransitionTokens.colors).toContain("background-color");
+    expect(amoenaTransitionTokens.opacity).toContain("opacity");
+    expect(amoenaTransitionTokens.shadow).toContain("box-shadow");
+    expect(amoenaTransitionTokens.transform).toContain("transform");
   });
 
   // ─── Build pipeline tests ─────────────────────────────────────────────
 
   describe("buildWebCSS", () => {
-    const css = buildWebCSS(lunariaTokens);
+    const css = buildWebCSS(amoenaTokens);
 
     test("outputs a :root block with dark-mode color variables", () => {
       expect(css).toContain(":root {");
@@ -238,7 +238,7 @@ describe("@lunaria/tokens", () => {
   });
 
   describe("buildNativeTokens", () => {
-    const native = buildNativeTokens(lunariaTokens);
+    const native = buildNativeTokens(amoenaTokens);
 
     test("converts dark-mode HSL colors to hex", () => {
       expect(native.colorBackground).toBe("#121113");
@@ -294,7 +294,7 @@ describe("@lunaria/tokens", () => {
   });
 
   describe("buildDesignTokensJSON", () => {
-    const json = buildDesignTokensJSON(lunariaTokens) as Record<string, any>;
+    const json = buildDesignTokensJSON(amoenaTokens) as Record<string, any>;
 
     test("outputs DTCG-formatted color tokens with $value and $type", () => {
       expect(json.color.dark.background.$type).toBe("color");

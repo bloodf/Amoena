@@ -1,6 +1,6 @@
 # Configuration
 
-Lunaria's configuration is stored in SQLite via a `SettingsRepository` module. Settings are scoped, typed, and managed entirely at runtime — there is no hand-edited config file.
+Amoena's configuration is stored in SQLite via a `SettingsRepository` module. Settings are scoped, typed, and managed entirely at runtime — there is no hand-edited config file.
 
 ## Settings Scopes
 
@@ -39,11 +39,11 @@ To set a provider API key:
 2. Select your provider (Claude, Codex, Gemini, OpenCode)
 3. Enter your API key and click **Save**
 
-The key is stored immediately in the keyring. Lunaria reads it from the keyring at runtime and never writes it to disk.
+The key is stored immediately in the keyring. Amoena reads it from the keyring at runtime and never writes it to disk.
 
 ### Environment Variable Fallback
 
-Lunaria also reads API keys from environment variables as a fallback:
+Amoena also reads API keys from environment variables as a fallback:
 
 | Provider | Environment Variable |
 |----------|---------------------|
@@ -77,7 +77,7 @@ Remote access is disabled by default. To enable:
 2. Toggle **Enable Remote Server**
 3. Configure port (default: randomised per launch) and authentication mode
 
-When enabled, Lunaria starts an Axum HTTP server on localhost. Pair a mobile device via the **Remote Access** panel (QR code or 6-digit PIN).
+When enabled, Amoena starts an Axum HTTP server on localhost. Pair a mobile device via the **Remote Access** panel (QR code or 6-digit PIN).
 
 See [Features: Remote Access](/features/remote-access) for full documentation.
 
@@ -89,7 +89,7 @@ See [Features: Remote Access](/features/remote-access) for full documentation.
 | `dev.show_tool_details` | Show full tool input/output in the UI |
 | `dev.enable_api_playground` | Enable the API playground panel |
 
-Logs are written to `~/.lunaria/logs/lunaria.log`.
+Logs are written to `~/.amoena/logs/amoena.log`.
 
 ## Configuration via the API
 

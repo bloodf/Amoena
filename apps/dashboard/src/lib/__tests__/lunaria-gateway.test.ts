@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseGatewayJsonOutput } from "@/lib/lunaria-gateway";
+import { parseGatewayJsonOutput } from "@/lib/amoena-gateway";
 
 describe("parseGatewayJsonOutput", () => {
 	it("parses embedded object payloads", () => {

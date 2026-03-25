@@ -160,7 +160,7 @@ const ALLOWED_GATEWAY_PATHS = [
 	"/api/heartbeat",
 	"/api/agents",
 	"/api/config",
-	// Current Lunaria gateway routes
+	// Current Amoena gateway routes
 	"/healthz",
 	"/health",
 	"/ready",

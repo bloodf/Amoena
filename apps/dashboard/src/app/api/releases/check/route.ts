@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { APP_VERSION } from "@/lib/version";
 
 const GITHUB_RELEASES_URL =
-	"https://api.github.com/repos/LunariaAi/lunaria/releases/latest";
+	"https://api.github.com/repos/AmoenaAi/amoena/releases/latest";
 
 /** Simple semver compare: returns 1 if a > b, -1 if a < b, 0 if equal. */
 function compareSemver(a: string, b: string): number {

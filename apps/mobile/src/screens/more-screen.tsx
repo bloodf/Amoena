@@ -1,7 +1,7 @@
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { router } from "expo-router";
 
-import { useLunariaTranslation } from "@lunaria/i18n";
+import { useAmoenaTranslation } from "@lunaria/i18n";
 import { styles } from "@/theme/styles";
 import { tokens } from "@/theme/tokens";
 
@@ -13,7 +13,7 @@ const menuItems = [
 ] as const;
 
 export function MoreScreen() {
-  const { t } = useLunariaTranslation();
+  const { t } = useAmoenaTranslation();
 
   return (
     <ScrollView

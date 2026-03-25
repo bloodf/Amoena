@@ -1,4 +1,4 @@
-export type TuiProvider = "lunaria" | "claude" | "opencode" | "codex" | "gemini" | "ollama";
+export type TuiProvider = "amoena" | "claude" | "opencode" | "codex" | "gemini" | "ollama";
 
 export interface SessionRecord {
   id: string;

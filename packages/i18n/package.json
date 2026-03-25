@@ -2,11 +2,11 @@
   "name": "@lunaria/i18n",
   "version": "0.1.0",
   "private": true,
-  "description": "Lunaria internationalization — 5 languages",
+  "description": "Amoena internationalization — 5 languages",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LunariaAi/lunaria.git",
+    "url": "https://github.com/AmoenaAi/amoena.git",
     "directory": "packages/i18n"
   },
   "type": "module",

@@ -4,7 +4,7 @@ Extensions are not always active. They are activated on-demand based on **activa
 
 ## Why Lazy Activation?
 
-Activating every extension at startup would slow down Lunaria and consume resources for extensions that may never be used in a given session. Instead, extensions declare the conditions under which they should activate, and Lunaria activates them just-in-time.
+Activating every extension at startup would slow down Amoena and consume resources for extensions that may never be used in a given session. Instead, extensions declare the conditions under which they should activate, and Amoena activates them just-in-time.
 
 ## Declaring Activation Events
 
@@ -19,7 +19,7 @@ In the manifest, `activationEvents` is an array of event strings:
 }
 ```
 
-An extension activates when **any** of its declared events fires. Once activated, it stays active for the remainder of the Lunaria process lifetime (activations are not reversed).
+An extension activates when **any** of its declared events fires. Once activated, it stays active for the remainder of the Amoena process lifetime (activations are not reversed).
 
 ## Supported Activation Events
 
@@ -72,7 +72,7 @@ Examples:
 
 ## How Activation Works
 
-When Lunaria fires an activation event (e.g. a session starts), it calls `fire_activation_event("onSession")`:
+When Amoena fires an activation event (e.g. a session starts), it calls `fire_activation_event("onSession")`:
 
 1. All loaded extensions are iterated
 2. For each **enabled** extension, its `activationEvents` are checked against the event
@@ -102,7 +102,7 @@ All contributions from **enabled** extensions are aggregated at startup into `Ag
 
 ## Debugging Activation
 
-To verify your extension activated, check the Lunaria developer logs (Help → Developer Logs). Look for entries like:
+To verify your extension activated, check the Amoena developer logs (Help → Developer Logs). Look for entries like:
 
 ```
 INFO  extensions::manager  extension activated  id="com.example.my-extension"  event="onSession"

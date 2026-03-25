@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: Lunaria
+  name: Amoena
   text: The AI Agent Operating System
   tagline: Multi-agent orchestration, persistent memory, agent evaluation, and an extension marketplace — all in a native desktop environment.
   actions:
@@ -11,7 +11,7 @@ hero:
       link: /getting-started/installation
     - theme: alt
       text: View on GitHub
-      link: https://github.com/LunariaAi/lunaria
+      link: https://github.com/AmoenaAi/amoena
 
 features:
   - icon: 👥

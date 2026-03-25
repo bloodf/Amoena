@@ -14,7 +14,7 @@ function LocationProbe() {
   return <span data-testid="location">{location.pathname}</span>;
 }
 
-describe("Lunaria coverage hardening", () => {
+describe("Amoena coverage hardening", () => {
   test("home screen remaining quick actions navigate correctly", () => {
     render(
       <MemoryRouter initialEntries={["/"]}>

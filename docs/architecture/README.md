@@ -1,8 +1,8 @@
-# Lunaria Architecture Documentation
+# Amoena Architecture Documentation
 
 ## Overview
 
-**Lunaria** is a desktop-first AI development environment with two product surfaces:
+**Amoena** is a desktop-first AI development environment with two product surfaces:
 
 - **Desktop GUI**: Tauri v2 + React 19 + Rust (Axum). This is the primary platform and the execution host.
 - **React Native Mobile App**: React Native. This is a paired remote client for the desktop runtime.
@@ -11,8 +11,8 @@ There is **no web application** in the active architecture. Older web, WebRTC, a
 
 The desktop runtime supports two execution modes behind one UI:
 
-- **Native mode**: Lunaria runs its own agent loop and calls providers directly.
-- **Wrapper mode**: Lunaria wraps Claude Code, OpenCode, Codex CLI, and Gemini CLI.
+- **Native mode**: Amoena runs its own agent loop and calls providers directly.
+- **Wrapper mode**: Amoena wraps Claude Code, OpenCode, Codex CLI, and Gemini CLI.
 
 The Axum server is the single source of truth for application state. Desktop and mobile clients consume the same server-owned contracts.
 
@@ -20,7 +20,7 @@ The Axum server is the single source of truth for application state. Desktop and
 
 ```mermaid
 graph TB
-    subgraph "Lunaria Desktop App"
+    subgraph "Amoena Desktop App"
         subgraph "Desktop UI (React 19)"
             UI[UI Screens]
             Store[Zustand Cache]
@@ -100,7 +100,7 @@ graph TB
 | [mcp-protocol.md](mcp-protocol.md) | MCP server and client integration: transports, tool/resource exposure, remote tool aggregation, auth, and phasing. |
 | [plugin-framework.md](plugin-framework.md) | Plugin manifest, lifecycle, permissions, extension points, and plugin host rules. |
 | [marketplace-discovery.md](marketplace-discovery.md) | Registry aggregation, marketplace indexing, and search/cache design. |
-| [tui-capability-matrix.md](tui-capability-matrix.md) | Capability comparison for Claude Code, OpenCode, Codex CLI, Gemini CLI, and Lunaria native mode. |
+| [tui-capability-matrix.md](tui-capability-matrix.md) | Capability comparison for Claude Code, OpenCode, Codex CLI, Gemini CLI, and Amoena native mode. |
 | [git-github-integration.md](git-github-integration.md) | Git/worktree/GitHub integration patterns used by the desktop runtime. |
 | [automation.md](automation.md) | Background automation via time-based schedules and filesystem watchers that trigger autonomous agent sessions. |
 

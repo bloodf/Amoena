@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lunaria uses git as the foundation for workspace isolation, change tracking, and collaboration. All agent-initiated changes happen in isolated workspaces backed by git worktrees or CoW clones.
+Amoena uses git as the foundation for workspace isolation, change tracking, and collaboration. All agent-initiated changes happen in isolated workspaces backed by git worktrees or CoW clones.
 
 ## Workspace Isolation Strategy
 
@@ -18,16 +18,16 @@ Each workspace is a full working copy with its own git state. Changes are commit
 
 ## Branch Strategy
 
-- Agent sessions create branches named `lunaria/<session-id>` in the workspace.
+- Agent sessions create branches named `amoena/<session-id>` in the workspace.
 - Users review changes through the merge review UI before accepting into their working tree.
 - Direct edits to `main` or the user's current branch are never performed by agents.
 
 ## Monorepo Structure
 
-Lunaria is a **monorepo** managed by bun workspaces. There are no git submodules.
+Amoena is a **monorepo** managed by bun workspaces. There are no git submodules.
 
 ```
-lunaria/
+amoena/
 ├── apps/desktop/     # Tauri desktop application
 ├── packages/ui/      # Shared design system
 ├── packages/tokens/  # Design tokens
@@ -44,7 +44,7 @@ GitHub integration is used for:
 - **Issue tracking:** Session goals can reference GitHub issues.
 - **CI status:** Build and test results from GitHub Actions are visible in the session workspace.
 
-GitHub features are optional — Lunaria works fully offline with local git only.
+GitHub features are optional — Amoena works fully offline with local git only.
 
 ## Merge Review
 

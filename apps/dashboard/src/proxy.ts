@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import os from "node:os";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { buildLunariaCsp, buildNonceRequestHeaders } from "@/lib/csp";
+import { buildAmoenaCsp, buildNonceRequestHeaders } from "@/lib/csp";
 import {
 	LEGACY_MC_SESSION_COOKIE_NAME,
 	MC_SESSION_COOKIE_NAME,
@@ -128,7 +128,7 @@ function addSecurityHeaders(
 	const effectiveNonce = nonce || crypto.randomBytes(16).toString("base64");
 	response.headers.set(
 		"Content-Security-Policy",
-		buildLunariaCsp({ nonce: effectiveNonce, googleEnabled }),
+		buildAmoenaCsp({ nonce: effectiveNonce, googleEnabled }),
 	);
 
 	return response;
@@ -211,7 +211,7 @@ export function proxy(request: NextRequest) {
 	}
 
 	// Local desktop mode: skip auth entirely (single-user, no cloud)
-	if (envFlag("LUNARIA_LOCAL_MODE")) {
+	if (envFlag("AMOENA_LOCAL_MODE")) {
 		const { response, nonce } = nextResponseWithNonce(request);
 		return addSecurityHeaders(response, request, nonce);
 	}

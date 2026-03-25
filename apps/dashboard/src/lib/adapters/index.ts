@@ -4,10 +4,10 @@ import { ClaudeSdkAdapter } from "./claude-sdk";
 import { CrewAIAdapter } from "./crewai";
 import { GenericAdapter } from "./generic";
 import { LangGraphAdapter } from "./langgraph";
-import { LunariaAdapter } from "./lunaria";
+import { AmoenaAdapter } from "./amoena";
 
 const adapters: Record<string, () => FrameworkAdapter> = {
-	lunaria: () => new LunariaAdapter(),
+	amoena: () => new AmoenaAdapter(),
 	generic: () => new GenericAdapter(),
 	crewai: () => new CrewAIAdapter(),
 	langgraph: () => new LangGraphAdapter(),

@@ -1,6 +1,6 @@
 # Workspace Merge Review
 
-Lunaria never auto-merges isolated workspaces back into the main workspace.
+Amoena never auto-merges isolated workspaces back into the main workspace.
 
 ## Review Payload
 

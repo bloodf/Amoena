@@ -125,9 +125,9 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           tagName: ${{ github.event.inputs.version || github.ref_name }}
-          releaseName: Lunaria ${{ github.event.inputs.version || github.ref_name }}
+          releaseName: Amoena ${{ github.event.inputs.version || github.ref_name }}
           releaseBody: |
-            See [CHANGELOG.md](https://github.com/LunariaAi/lunaria/blob/main/CHANGELOG.md) for details.
+            See [CHANGELOG.md](https://github.com/AmoenaAi/amoena/blob/main/CHANGELOG.md) for details.
 
             ## Downloads
 
@@ -157,8 +157,8 @@ jobs:
 
       - name: Smoke test CLI
         run: |
-          chmod +x apps/tui/bin/lunaria.js
-          node apps/tui/bin/lunaria.js --version
+          chmod +x apps/tui/bin/amoena.js
+          node apps/tui/bin/amoena.js --version
 
       - name: Pack for npm
         working-directory: apps/tui
@@ -167,7 +167,7 @@ jobs:
       - name: Upload CLI artifact
         uses: actions/upload-artifact@v4
         with:
-          name: lunaria-cli
+          name: amoena-cli
           path: apps/tui/*.tgz
 
   publish-cli:

@@ -1,7 +1,7 @@
 /**
  * Agent Config Sync
  *
- * Reads agents from lunaria.json and upserts them into the MC database.
+ * Reads agents from amoena.json and upserts them into the MC database.
  * Used by both the /api/agents/sync endpoint and the startup scheduler.
  */
 
@@ -14,7 +14,7 @@ import { parseJsonRelaxed } from "./json-relaxed";
 import { logger } from "./logger";
 import { resolveWithin } from "./paths";
 
-interface LunariaAgent {
+interface AmoenaAgent {
 	id: string;
 	name?: string;
 	default?: boolean;
@@ -144,15 +144,15 @@ function parseToolsFromFile(content: string): {
 }
 
 function getConfigPath(): string | null {
-	return config.lunariaConfigPath || null;
+	return config.amoenaConfigPath || null;
 }
 
 function resolveAgentWorkspacePath(workspace: string): string {
 	if (isAbsolute(workspace)) return resolve(workspace);
-	if (!config.lunariaStateDir) {
-		throw new Error("LUNARIA_STATE_DIR not configured");
+	if (!config.amoenaStateDir) {
+		throw new Error("AMOENA_STATE_DIR not configured");
 	}
-	return resolveWithin(config.lunariaStateDir, workspace);
+	return resolveWithin(config.amoenaStateDir, workspace);
 }
 
 const MAX_WORKSPACE_FILE_BYTES = 1024 * 1024; // 1 MB
@@ -215,10 +215,10 @@ export function enrichAgentConfigFromWorkspace(configData: any): any {
 	};
 }
 
-/** Read and parse lunaria.json agents list */
-async function readLunariaAgents(): Promise<LunariaAgent[]> {
+/** Read and parse amoena.json agents list */
+async function readAmoenaAgents(): Promise<AmoenaAgent[]> {
 	const configPath = getConfigPath();
-	if (!configPath) throw new Error("LUNARIA_CONFIG_PATH not configured");
+	if (!configPath) throw new Error("AMOENA_CONFIG_PATH not configured");
 
 	const { readFile } = require("node:fs/promises");
 	const raw = await readFile(configPath, "utf-8");
@@ -226,8 +226,8 @@ async function readLunariaAgents(): Promise<LunariaAgent[]> {
 	return parsed?.agents?.list || [];
 }
 
-/** Extract MC-friendly fields from an Lunaria agent config */
-function mapAgentToMC(agent: LunariaAgent): {
+/** Extract MC-friendly fields from an Amoena agent config */
+function mapAgentToMC(agent: AmoenaAgent): {
 	name: string;
 	role: string;
 	config: any;
@@ -237,7 +237,7 @@ function mapAgentToMC(agent: LunariaAgent): {
 	const role = agent.identity?.theme || "agent";
 	// Store the full config minus systemPrompt/soul (which can be large)
 	const configData = enrichAgentConfigFromWorkspace({
-		lunariaId: agent.id,
+		amoenaId: agent.id,
 		model: agent.model,
 		identity: agent.identity,
 		sandbox: agent.sandbox,
@@ -255,13 +255,13 @@ function mapAgentToMC(agent: LunariaAgent): {
 	return { name, role, config: configData, soul_content };
 }
 
-/** Sync agents from lunaria.json into the MC database */
+/** Sync agents from amoena.json into the MC database */
 export async function syncAgentsFromConfig(
 	actor: string = "system",
 ): Promise<SyncResult> {
-	let agents: LunariaAgent[];
+	let agents: AmoenaAgent[];
 	try {
-		agents = await readLunariaAgents();
+		agents = await readAmoenaAgents();
 	} catch (err: any) {
 		return {
 			synced: 0,
@@ -372,11 +372,11 @@ export async function syncAgentsFromConfig(
 	return { synced, created, updated, agents: results };
 }
 
-/** Preview the diff between lunaria.json and MC database without writing */
+/** Preview the diff between amoena.json and MC database without writing */
 export async function previewSyncDiff(): Promise<SyncDiff> {
-	let agents: LunariaAgent[];
+	let agents: AmoenaAgent[];
 	try {
-		agents = await readLunariaAgents();
+		agents = await readAmoenaAgents();
 	} catch {
 		return {
 			inConfig: 0,
@@ -425,10 +425,10 @@ export async function previewSyncDiff(): Promise<SyncDiff> {
 	};
 }
 
-/** Write an agent config back to lunaria.json agents.list */
+/** Write an agent config back to amoena.json agents.list */
 export async function writeAgentToConfig(agentConfig: any): Promise<void> {
 	const configPath = getConfigPath();
-	if (!configPath) throw new Error("LUNARIA_CONFIG_PATH not configured");
+	if (!configPath) throw new Error("AMOENA_CONFIG_PATH not configured");
 
 	const { readFile, writeFile } = require("node:fs/promises");
 	const raw = await readFile(configPath, "utf-8");
@@ -437,7 +437,7 @@ export async function writeAgentToConfig(agentConfig: any): Promise<void> {
 	if (!parsed.agents) parsed.agents = {};
 	if (!parsed.agents.list) parsed.agents.list = [];
 
-	const normalizedAgentConfig = normalizeAgentConfigForLunaria(agentConfig);
+	const normalizedAgentConfig = normalizeAgentConfigForAmoena(agentConfig);
 
 	// Find existing by id
 	const idx = parsed.agents.list.findIndex(
@@ -445,7 +445,7 @@ export async function writeAgentToConfig(agentConfig: any): Promise<void> {
 	);
 	if (idx >= 0) {
 		// Deep merge: preserve fields not in update
-		parsed.agents.list[idx] = normalizeAgentConfigForLunaria(
+		parsed.agents.list[idx] = normalizeAgentConfigForAmoena(
 			deepMerge(parsed.agents.list[idx], normalizedAgentConfig),
 		);
 	} else {
@@ -460,7 +460,7 @@ export async function removeAgentFromConfig(match: {
 	name?: string | null;
 }): Promise<{ removed: boolean }> {
 	const configPath = getConfigPath();
-	if (!configPath) throw new Error("LUNARIA_CONFIG_PATH not configured");
+	if (!configPath) throw new Error("AMOENA_CONFIG_PATH not configured");
 
 	const id = String(match.id || "").trim();
 	const name = String(match.name || "").trim();
@@ -546,7 +546,7 @@ function normalizeModelConfig(model: unknown): unknown {
 	};
 }
 
-function normalizeAgentConfigForLunaria(agentConfig: any): any {
+function normalizeAgentConfigForAmoena(agentConfig: any): any {
 	if (!agentConfig || typeof agentConfig !== "object") return agentConfig;
 	if (!("model" in agentConfig)) return agentConfig;
 	return {

@@ -3,7 +3,7 @@ import * as childProcess from "node:child_process";
 import path from "node:path";
 import { app } from "electron";
 
-const DASHBOARD_PORT = Number(process.env.LUNARIA_DASHBOARD_PORT ?? 3456);
+const DASHBOARD_PORT = Number(process.env.AMOENA_DASHBOARD_PORT ?? 3456);
 const STARTUP_TIMEOUT = 30_000;
 const MAX_RESTARTS = 3;
 

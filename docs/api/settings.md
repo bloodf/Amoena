@@ -1,6 +1,6 @@
 # Settings & Providers API
 
-Settings control Lunaria's runtime behavior. Provider endpoints manage AI provider configurations and API keys.
+Settings control Amoena's runtime behavior. Provider endpoints manage AI provider configurations and API keys.
 
 ---
 

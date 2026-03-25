@@ -1,6 +1,6 @@
 # Remote Access
 
-Lunaria's remote access system allows mobile and tablet devices to connect to the desktop runtime over LAN or an encrypted relay. It handles device pairing, JWT-based authentication with token rotation, and end-to-end encrypted relay communication.
+Amoena's remote access system allows mobile and tablet devices to connect to the desktop runtime over LAN or an encrypted relay. It handles device pairing, JWT-based authentication with token rotation, and end-to-end encrypted relay communication.
 
 ## Architecture
 
@@ -35,7 +35,7 @@ Omitting `port` lets the OS pick a random available port. The response includes 
   "bindAddress": "0.0.0.0",
   "baseUrl": "http://192.168.1.5:47821",
   "lanBaseUrl": "http://192.168.1.5:47821",
-  "relayEndpoint": "wss://relay.lunaria.dev",
+  "relayEndpoint": "wss://relay.amoena.dev",
   "pairingPinTtlSeconds": 300
 }
 ```
@@ -86,7 +86,7 @@ Response:
   "pairingToken": "550e8400-e29b-41d4-a716-446655440000",
   "pin": "742851",
   "pinCode": "742851",
-  "qrPayload": "lunaria://pair?host=192.168.1.5&port=47821&pin=742851&token=550e8400-...&tls=false",
+  "qrPayload": "amoena://pair?host=192.168.1.5&port=47821&pin=742851&token=550e8400-...&tls=false",
   "baseUrl": "http://192.168.1.5:47821",
   "serverUrl": "http://192.168.1.5:47821",
   "expiresAtUnixMs": 1710000300000
@@ -236,7 +236,7 @@ POST /api/v1/remote/relay/room
 ```json
 {
   "roomId": "room-uuid",
-  "relayEndpoint": "wss://relay.lunaria.dev",
+  "relayEndpoint": "wss://relay.amoena.dev",
   "serverPublicKey": "<base64 X25519 public key>"
 }
 ```

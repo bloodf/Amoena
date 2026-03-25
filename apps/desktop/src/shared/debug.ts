@@ -2,10 +2,10 @@
  * Debug logging utility for development and QA.
  *
  * Enable debug logs by setting environment variable:
- *   LUNARIA_DEBUG=1 bun run desktop
+ *   AMOENA_DEBUG=1 bun run desktop
  *
  * Or in .env:
- *   LUNARIA_DEBUG=1
+ *   AMOENA_DEBUG=1
  *
  * Usage:
  *   import { debugLog } from "shared/debug";
@@ -15,10 +15,10 @@
 
 const isDebugEnabled =
 	typeof process !== "undefined" &&
-	(process.env.LUNARIA_DEBUG === "1" || process.env.LUNARIA_DEBUG === "true");
+	(process.env.AMOENA_DEBUG === "1" || process.env.AMOENA_DEBUG === "true");
 
 /**
- * Log a debug message if LUNARIA_DEBUG is enabled.
+ * Log a debug message if AMOENA_DEBUG is enabled.
  *
  * @param namespace - Category for the log (e.g., "notifications", "agent-hooks")
  * @param args - Values to log (same as console.log)

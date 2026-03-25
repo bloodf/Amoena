@@ -3,7 +3,7 @@ import { createHmac } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { homedir, hostname, platform } from "node:os";
 
-const APP_DEVICE_SALT = "lunaria-desktop-device-id-v1";
+const APP_DEVICE_SALT = "amoena-desktop-device-id-v1";
 
 function getRawMachineId(): string {
 	try {
@@ -41,7 +41,7 @@ function getRawMachineId(): string {
 		// Fallback if platform-specific method fails
 	}
 
-	return `${hostname()}-${homedir()}-lunaria-fallback`;
+	return `${hostname()}-${homedir()}-amoena-fallback`;
 }
 
 let cachedMachineId: string | null = null;

@@ -13,6 +13,7 @@ export default defineConfig({
       "@": path.resolve(dirname, "src"),
       "react-native": "react-native-web",
       "expo-router": path.resolve(dirname, "src/test/expo-router.tsx"),
+      "expo-notifications": path.resolve(dirname, "src/test/expo-notifications.ts"),
     },
   },
   test: {

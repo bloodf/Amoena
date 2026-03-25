@@ -1,5 +1,5 @@
 /**
- * Skill Registry Client — Proxied search & install for ClawdHub, skills.sh, and Awesome Lunaria
+ * Skill Registry Client — Proxied search & install for ClawdHub, skills.sh, and Awesome Amoena
  *
  * All external requests are server-side only (no direct browser→registry calls).
  * Includes content validation and security scanning on download.
@@ -16,7 +16,7 @@ import { resolveWithin } from "./paths";
 // Types
 // ---------------------------------------------------------------------------
 
-export type RegistrySource = "clawhub" | "skills-sh" | "awesome-lunaria";
+export type RegistrySource = "clawhub" | "skills-sh" | "awesome-amoena";
 
 export interface RegistrySkill {
 	slug: string;
@@ -209,21 +209,21 @@ export function checkSkillSecurity(content: string): SecurityReport {
 
 const CLAWHUB_API = "https://clawhub.ai/api";
 const SKILLS_SH_API = "https://skills.sh/api";
-const AWESOME_LUNARIA_README =
-	"https://raw.githubusercontent.com/VoltAgent/awesome-lunaria-skills/main/README.md";
-const AWESOME_LUNARIA_RAW_BASE =
-	"https://raw.githubusercontent.com/lunaria/skills/main/skills";
+const AWESOME_AMOENA_README =
+	"https://raw.githubusercontent.com/VoltAgent/awesome-amoena-skills/main/README.md";
+const AWESOME_AMOENA_RAW_BASE =
+	"https://raw.githubusercontent.com/amoena/skills/main/skills";
 const FETCH_TIMEOUT = 10_000;
 
 // ---------------------------------------------------------------------------
-// Awesome Lunaria — in-memory cached index from GitHub README
+// Awesome Amoena — in-memory cached index from GitHub README
 // ---------------------------------------------------------------------------
 
 const AWESOME_CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 let awesomeCache: { skills: RegistrySkill[]; fetchedAt: number } | null = null;
 
 const AWESOME_ENTRY_RE =
-	/^- \[([^\]]+)\]\(https:\/\/github\.com\/lunaria\/skills\/tree\/main\/skills\/([^/]+)\/([^/]+)\/SKILL\.md\)\s*-\s*(.+)$/gm;
+	/^- \[([^\]]+)\]\(https:\/\/github\.com\/amoena\/skills\/tree\/main\/skills\/([^/]+)\/([^/]+)\/SKILL\.md\)\s*-\s*(.+)$/gm;
 
 function parseAwesomeReadme(markdown: string): RegistrySkill[] {
 	const skills: RegistrySkill[] = [];
@@ -236,7 +236,7 @@ function parseAwesomeReadme(markdown: string): RegistrySkill[] {
 			description: description.trim(),
 			author,
 			version: "latest",
-			source: "awesome-lunaria",
+			source: "awesome-amoena",
 		});
 	}
 	return skills;
@@ -252,7 +252,7 @@ async function fetchAwesomeIndex(): Promise<RegistrySkill[]> {
 		const timer = setTimeout(() => controller.abort(), 15_000);
 		let res: Response;
 		try {
-			res = await fetch(AWESOME_LUNARIA_README, { signal: controller.signal });
+			res = await fetch(AWESOME_AMOENA_README, { signal: controller.signal });
 		} finally {
 			clearTimeout(timer);
 		}
@@ -262,13 +262,13 @@ async function fetchAwesomeIndex(): Promise<RegistrySkill[]> {
 		awesomeCache = { skills, fetchedAt: now };
 		return skills;
 	} catch (err: any) {
-		logger.warn({ err: err.message }, "Awesome Lunaria fetch error");
+		logger.warn({ err: err.message }, "Awesome Amoena fetch error");
 		if (awesomeCache) return awesomeCache.skills; // stale fallback
 		return [];
 	}
 }
 
-async function searchAwesomeLunaria(
+async function searchAwesomeAmoena(
 	query: string,
 ): Promise<RegistrySearchResult> {
 	const index = await fetchAwesomeIndex();
@@ -281,16 +281,16 @@ async function searchAwesomeLunaria(
 				s.author.toLowerCase().includes(q),
 		)
 		.slice(0, 50);
-	return { skills: matched, total: matched.length, source: "awesome-lunaria" };
+	return { skills: matched, total: matched.length, source: "awesome-amoena" };
 }
 
-async function fetchAwesomeLunariaSkill(
+async function fetchAwesomeAmoenaSkill(
 	slug: string,
 ): Promise<{ content: string }> {
-	const url = `${AWESOME_LUNARIA_RAW_BASE}/${slug}/SKILL.md`;
+	const url = `${AWESOME_AMOENA_RAW_BASE}/${slug}/SKILL.md`;
 	const res = await fetchWithTimeout(url);
 	if (!res.ok)
-		throw new Error(`Awesome Lunaria skill fetch failed (${res.status})`);
+		throw new Error(`Awesome Amoena skill fetch failed (${res.status})`);
 	const content = await res.text();
 	return { content };
 }
@@ -420,7 +420,7 @@ export async function searchRegistry(
 ): Promise<RegistrySearchResult> {
 	if (source === "clawhub") return searchClawdHub(query);
 	if (source === "skills-sh") return searchSkillsSh(query);
-	if (source === "awesome-lunaria") return searchAwesomeLunaria(query);
+	if (source === "awesome-amoena") return searchAwesomeAmoena(query);
 	return { skills: [], total: 0, source };
 }
 
@@ -438,10 +438,10 @@ function skillNameFromSlug(slug: string): string {
 function getTargetDir(targetRoot: string): string {
 	const home = homedir();
 	const cwd = process.cwd();
-	const lunariaState =
-		process.env.LUNARIA_STATE_DIR ||
-		process.env.LUNARIA_HOME ||
-		join(home, ".lunaria");
+	const amoenaState =
+		process.env.AMOENA_STATE_DIR ||
+		process.env.AMOENA_HOME ||
+		join(home, ".amoena");
 	const rootMap: Record<string, string> = {
 		"user-agents":
 			process.env.MC_SKILLS_USER_AGENTS_DIR || join(home, ".agents", "skills"),
@@ -452,7 +452,7 @@ function getTargetDir(targetRoot: string): string {
 			join(cwd, ".agents", "skills"),
 		"project-codex":
 			process.env.MC_SKILLS_PROJECT_CODEX_DIR || join(cwd, ".codex", "skills"),
-		lunaria: process.env.MC_SKILLS_LUNARIA_DIR || join(lunariaState, "skills"),
+		amoena: process.env.MC_SKILLS_AMOENA_DIR || join(amoenaState, "skills"),
 	};
 	const dir = rootMap[targetRoot];
 	if (!dir) throw new Error(`Invalid target root: ${targetRoot}`);
@@ -505,8 +505,8 @@ export async function installFromRegistry(
 			const result = await fetchClawdHubSkill(req.slug);
 			content = result.content;
 			registryHash = result.hash;
-		} else if (req.source === "awesome-lunaria") {
-			const result = await fetchAwesomeLunariaSkill(req.slug);
+		} else if (req.source === "awesome-amoena") {
+			const result = await fetchAwesomeAmoenaSkill(req.slug);
 			content = result.content;
 		} else {
 			const result = await fetchSkillsShSkill(req.slug);

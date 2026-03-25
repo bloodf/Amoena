@@ -2,7 +2,7 @@
 
 ## Scope
 
-This document describes the documentation and process side of Lunaria releases.
+This document describes the documentation and process side of Amoena releases.
 
 ## Before Release
 

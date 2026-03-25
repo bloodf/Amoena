@@ -2,7 +2,7 @@ import { readdirSync, statSync, unlinkSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 import { config, ensureDirExists } from "@/lib/config";
 import { getDatabase, logAuditEvent } from "@/lib/db";
 import { logger } from "@/lib/logger";
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
 
 	const target = request.nextUrl.searchParams.get("target");
 
-	// Gateway state backup via `lunaria backup create`
+	// Gateway state backup via `amoena backup create`
 	if (target === "gateway") {
 		ensureDirExists(BACKUP_DIR);
 		const ipAddress =
@@ -64,14 +64,14 @@ export async function POST(request: NextRequest) {
 			let stdout: string;
 			let stderr: string;
 			try {
-				const result = await runLunaria(
+				const result = await runAmoena(
 					["backup", "create", "--output", BACKUP_DIR],
 					{ timeoutMs: 60000 },
 				);
 				stdout = result.stdout;
 				stderr = result.stderr;
 			} catch (error: any) {
-				// lunaria backup may exit non-zero despite success — check output
+				// amoena backup may exit non-zero despite success — check output
 				stdout = error.stdout || "";
 				stderr = error.stderr || "";
 				const combined = `${stdout}\n${stderr}`;
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 			const output = (stdout || stderr).trim();
 
 			logAuditEvent({
-				action: "lunaria.backup",
+				action: "amoena.backup",
 				actor: auth.user.username,
 				actor_id: auth.user.id,
 				detail: { output },

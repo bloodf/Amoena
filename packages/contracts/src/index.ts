@@ -1,5 +1,5 @@
 /**
- * @lunaria/contracts — shared type definitions for the Lunaria stack.
+ * @lunaria/contracts — shared type definitions for the Amoena stack.
  *
  * Import from this barrel rather than from individual modules so that
  * the public API surface stays stable across refactors.

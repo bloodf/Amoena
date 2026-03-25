@@ -4,7 +4,7 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/lib/config", () => ({
-	config: { lunariaConfigPath: "" },
+	config: { amoenaConfigPath: "" },
 }));
 
 vi.mock("@/lib/logger", () => ({
@@ -18,11 +18,11 @@ describe("registerMcAsDashboard", () => {
 
 	beforeEach(async () => {
 		tempDir = mkdtempSync(path.join(os.tmpdir(), "mc-gateway-runtime-"));
-		configPath = path.join(tempDir, "lunaria.json");
+		configPath = path.join(tempDir, "amoena.json");
 		process.env = { ...originalEnv };
 
 		const { config } = await import("@/lib/config");
-		config.lunariaConfigPath = configPath;
+		config.amoenaConfigPath = configPath;
 	});
 
 	afterEach(() => {
@@ -31,7 +31,7 @@ describe("registerMcAsDashboard", () => {
 		vi.resetModules();
 	});
 
-	it("adds the Lunaria origin without disabling device auth", async () => {
+	it("adds the Amoena origin without disabling device auth", async () => {
 		writeFileSync(
 			configPath,
 			`${JSON.stringify(

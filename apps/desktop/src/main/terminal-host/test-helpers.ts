@@ -9,7 +9,7 @@ export function supportsLocalSocketBinding(): boolean {
 	}
 
 	const probeDir = mkdtempSync(
-		join(realpathSync(tmpdir()), "lunaria-socket-probe-"),
+		join(realpathSync(tmpdir()), "amoena-socket-probe-"),
 	);
 	const probeSocketPath = join(probeDir, "probe.sock");
 

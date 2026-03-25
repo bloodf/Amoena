@@ -8,7 +8,7 @@ type WindowId = "main" | "about";
  * In development, the Next.js dev server runs on this port.
  * In production, the bundled Next.js standalone server runs on this port.
  */
-const DASHBOARD_PORT = Number(process.env.LUNARIA_DASHBOARD_PORT ?? 3456);
+const DASHBOARD_PORT = Number(process.env.AMOENA_DASHBOARD_PORT ?? 3456);
 
 /**
  * Load an Electron window with the Next.js dashboard URL.

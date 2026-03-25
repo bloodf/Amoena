@@ -1,7 +1,7 @@
 {
   "app": {
     "runtimeEyebrow": "Runtime de Escritorio",
-    "title": "Lunaria",
+    "title": "Amoena",
     "connecting": "Estableciendo el runtime localhost de confianza e hidratando la interfaz de escritorio.",
     "bootstrapFailed": "Fallo de Inicio",
     "unknownStatus": "desconocido",

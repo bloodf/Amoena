@@ -1,6 +1,6 @@
 # Product Documentation
 
-This section explains Lunaria from the user’s perspective.
+This section explains Amoena from the user’s perspective.
 
 ## Main Guides
 

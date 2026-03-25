@@ -16,7 +16,7 @@ function parseEnvLine(line: string): { key: string; value: string } | null {
 	return { key, value };
 }
 
-async function readLunariaEnvFile(
+async function readAmoenaEnvFile(
 	envFilePath: string,
 ): Promise<Map<string, string>> {
 	try {
@@ -38,8 +38,8 @@ export async function getEffectiveEnvValue(
 	options?: { envFilePath?: string },
 ): Promise<string> {
 	const envFilePath =
-		options?.envFilePath || join(config.lunariaStateDir, ".env");
-	const envMap = await readLunariaEnvFile(envFilePath);
+		options?.envFilePath || join(config.amoenaStateDir, ".env");
+	const envMap = await readAmoenaEnvFile(envFilePath);
 	const fromFile = envMap.get(key);
 	if (typeof fromFile === "string" && fromFile.length > 0) return fromFile;
 

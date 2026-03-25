@@ -259,21 +259,21 @@ t3code is currently executing direction A while designing toward B.
 
 ---
 
-## What Lunaria (Electron + Next.js) Could Learn
+## What Amoena (Electron + Next.js) Could Learn
 
-Lunaria is already an Electron + web app for multi-agent orchestration, which means t3code and Lunaria share the same fundamental architecture. The key lessons:
+Amoena is already an Electron + web app for multi-agent orchestration, which means t3code and Amoena share the same fundamental architecture. The key lessons:
 
-| t3code Pattern                                     | Lunaria Application                                                                                                                            |
+| t3code Pattern                                     | Amoena Application                                                                                                                            |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| CQRS/Event-Sourced orchestration engine            | Apply to Lunaria's mission-control run/agent tracking — commands in, events out, read model projected                                          |
-| `packages/contracts` schema-only package           | Lunaria likely already has contracts — ensure they are schema-only with no runtime logic                                                       |
-| `ProviderAdapterShape` typed interface             | Lunaria's agent adapters (Claude Code, Codex, etc.) should implement a uniform interface covering session, turn, interrupt, approval, rollback |
-| Approval policy system (4 levels, 4 sandbox modes) | Lunaria's permission UX should offer the same granularity — not just on/off                                                                    |
-| Git worktree checkpointing per agent turn          | Lunaria could adopt checkpoint-per-turn with revert capability                                                                                 |
-| `syncShellEnvironment()` in Electron main          | Critical: Lunaria must sync shell $PATH so agent CLIs are discoverable                                                                         |
-| xterm.js embedded terminal over PTY/WebSocket      | Add embedded terminal to Lunaria's agent sessions                                                                                              |
-| `backendProcess` pattern (Electron spawns server)  | Lunaria may already do this — verify child process lifecycle (restart on crash, port negotiation)                                              |
-| Effect-TS DI via ServiceMap.Service                | Applicable if Lunaria adopts Effect; otherwise use equivalent layered DI                                                                       |
+| CQRS/Event-Sourced orchestration engine            | Apply to Amoena's mission-control run/agent tracking — commands in, events out, read model projected                                          |
+| `packages/contracts` schema-only package           | Amoena likely already has contracts — ensure they are schema-only with no runtime logic                                                       |
+| `ProviderAdapterShape` typed interface             | Amoena's agent adapters (Claude Code, Codex, etc.) should implement a uniform interface covering session, turn, interrupt, approval, rollback |
+| Approval policy system (4 levels, 4 sandbox modes) | Amoena's permission UX should offer the same granularity — not just on/off                                                                    |
+| Git worktree checkpointing per agent turn          | Amoena could adopt checkpoint-per-turn with revert capability                                                                                 |
+| `syncShellEnvironment()` in Electron main          | Critical: Amoena must sync shell $PATH so agent CLIs are discoverable                                                                         |
+| xterm.js embedded terminal over PTY/WebSocket      | Add embedded terminal to Amoena's agent sessions                                                                                              |
+| `backendProcess` pattern (Electron spawns server)  | Amoena may already do this — verify child process lifecycle (restart on crash, port negotiation)                                              |
+| Effect-TS DI via ServiceMap.Service                | Applicable if Amoena adopts Effect; otherwise use equivalent layered DI                                                                       |
 | Command deduplication via receipt IDs              | Prevent duplicate agent actions when network is unreliable                                                                                     |
 
 ---

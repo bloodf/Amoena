@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lunaria uses SQLite as its primary database with JSONL files for transcript persistence. This document defines how concurrent access is managed.
+Amoena uses SQLite as its primary database with JSONL files for transcript persistence. This document defines how concurrent access is managed.
 
 ## SQLite Concurrency
 

@@ -47,7 +47,7 @@ describe("MobileHomeScreen", () => {
       baseUrl: "http://127.0.0.1:47821",
       pairingToken: "pair-token",
       pin: "847291",
-      deviceName: "Lunaria Phone",
+      deviceName: "Amoena Phone",
     });
   });
 });

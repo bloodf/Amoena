@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lunaria provides undo/redo at two levels: workspace-level (git-based) and UI-level (editor state).
+Amoena provides undo/redo at two levels: workspace-level (git-based) and UI-level (editor state).
 
 ## Workspace-Level Undo
 

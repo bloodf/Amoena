@@ -20,7 +20,7 @@ Build the Run Comparison feature — a side-by-side diff view that lets users pi
 
 ## Repository Context
 
-- **Monorepo root:** `/Users/heitor/Developer/github.com/Lunaria/lunaria`
+- **Monorepo root:** `/Users/heitor/Developer/github.com/Amoena/amoena`
 - **Telemetry module (Phase 1):** `apps/dashboard/src/lib/mission-control-telemetry.ts`
 - **Run reporter (Phase 1):** `apps/dashboard/src/lib/run-reporter.ts` — exports `RunReport`, `generateReport()`
 - **Mission Control UI (Phase 1):** `apps/dashboard/src/components/panels/mission-control/`

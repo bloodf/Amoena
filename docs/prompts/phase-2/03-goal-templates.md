@@ -88,7 +88,7 @@ RALPH BLOCKED
 
 ## CONTEXT
 
-**Project:** Lunaria — Multi-agent orchestration platform
+**Project:** Amoena — Multi-agent orchestration platform
 **Phase:** 2 (Intelligence Layer)
 **Tech stack:** TypeScript, Next.js (App Router), better-sqlite3, Vitest, React
 **Branch to create:** `feature/mission-control-templates-reports`
@@ -96,7 +96,7 @@ RALPH BLOCKED
 
 ### What Goal Templates are
 
-A "goal" in Lunaria is a unit of work containing an ordered list of tasks (the TaskGraph).
+A "goal" in Amoena is a unit of work containing an ordered list of tasks (the TaskGraph).
 Each task has a title, type, description, and suggested agent assignment.
 
 Goal Templates are pre-built goal definitions that let users launch common workflows
@@ -482,7 +482,7 @@ interface LaunchPayload {
 ### AC-6: One-click launch integration
 
 `TemplatesPanel` handles the launch callback by:
-1. Emitting a custom DOM event: `new CustomEvent("lunaria:load-template", { detail: payload })`
+1. Emitting a custom DOM event: `new CustomEvent("amoena:load-template", { detail: payload })`
 2. The existing Mission Control GoalInput component is expected to listen for this event and
    populate itself. Since GoalInput may not exist yet (Phase 1), implement the event emission
    and document the expected listener interface in a comment.
@@ -520,7 +520,7 @@ Required test cases:
 - `TemplateCard shows delete button only for custom templates`
 - `TemplateCard delete requires confirmation`
 - `TemplateLauncher shows task list`
-- `TemplateLauncher emits lunaria:load-template event on confirm`
+- `TemplateLauncher emits amoena:load-template event on confirm`
 - `CustomTemplateSaveDialog validates required fields`
 - `CustomTemplateSaveDialog calls POST /api/mission-control/templates`
 - `API GET returns built-ins merged with custom templates`

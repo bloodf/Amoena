@@ -19,7 +19,7 @@ function renderWithRouter(path: string, element: React.ReactElement) {
   );
 }
 
-describe("Lunaria operational flows", () => {
+describe("Amoena operational flows", () => {
   test("home screen filters recent sessions", async () => {
     renderWithRouter("/", <HomeScreen />);
 
@@ -126,12 +126,12 @@ function ThemeProbe() {
 
 describe("useTheme", () => {
   test("toggles theme and persists to localStorage", async () => {
-    localStorage.removeItem("lunaria-theme");
+    localStorage.removeItem("amoena-theme");
     render(<ThemeProbe />);
 
     expect(screen.getByText("dark")).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: /toggle/i }));
     expect(screen.getByText("light")).toBeTruthy();
-    expect(localStorage.getItem("lunaria-theme")).toBe("light");
+    expect(localStorage.getItem("amoena-theme")).toBe("light");
   });
 });

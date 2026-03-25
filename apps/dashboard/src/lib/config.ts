@@ -15,57 +15,57 @@ function clampInt(
 
 const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
 const defaultDataDir = path.join(process.cwd(), ".data");
-const configuredDataDir = process.env.LUNARIA_DATA_DIR || defaultDataDir;
+const configuredDataDir = process.env.AMOENA_DATA_DIR || defaultDataDir;
 const buildScratchRoot =
-	process.env.LUNARIA_BUILD_DATA_DIR || path.join(os.tmpdir(), "lunaria-build");
+	process.env.AMOENA_BUILD_DATA_DIR || path.join(os.tmpdir(), "amoena-build");
 const resolvedDataDir = isBuildPhase
 	? path.join(buildScratchRoot, `worker-${process.pid}`)
 	: configuredDataDir;
 const resolvedDbPath = isBuildPhase
-	? process.env.LUNARIA_BUILD_DB_PATH ||
-		path.join(resolvedDataDir, "lunaria.db")
-	: process.env.LUNARIA_DB_PATH || path.join(resolvedDataDir, "lunaria.db");
+	? process.env.AMOENA_BUILD_DB_PATH ||
+		path.join(resolvedDataDir, "amoena.db")
+	: process.env.AMOENA_DB_PATH || path.join(resolvedDataDir, "amoena.db");
 const resolvedTokensPath = isBuildPhase
-	? process.env.LUNARIA_BUILD_TOKENS_PATH ||
-		path.join(resolvedDataDir, "lunaria-tokens.json")
-	: process.env.LUNARIA_TOKENS_PATH ||
-		path.join(resolvedDataDir, "lunaria-tokens.json");
-const defaultLunariaStateDir = path.join(os.homedir(), ".lunaria");
-const explicitLunariaConfigPath =
-	process.env.LUNARIA_CONFIG_PATH ||
-	process.env.LUNARIA_LUNARIA_CONFIG_PATH ||
+	? process.env.AMOENA_BUILD_TOKENS_PATH ||
+		path.join(resolvedDataDir, "amoena-tokens.json")
+	: process.env.AMOENA_TOKENS_PATH ||
+		path.join(resolvedDataDir, "amoena-tokens.json");
+const defaultAmoenaStateDir = path.join(os.homedir(), ".amoena");
+const explicitAmoenaConfigPath =
+	process.env.AMOENA_CONFIG_PATH ||
+	process.env.AMOENA_AMOENA_CONFIG_PATH ||
 	"";
-const legacyLunariaHome =
-	process.env.LUNARIA_HOME ||
+const legacyAmoenaHome =
+	process.env.AMOENA_HOME ||
 	process.env.CLAWDBOT_HOME ||
-	process.env.LUNARIA_LUNARIA_HOME ||
+	process.env.AMOENA_AMOENA_HOME ||
 	"";
-const lunariaStateDir =
-	process.env.LUNARIA_STATE_DIR ||
+const amoenaStateDir =
+	process.env.AMOENA_STATE_DIR ||
 	process.env.CLAWDBOT_STATE_DIR ||
-	legacyLunariaHome ||
-	(explicitLunariaConfigPath
-		? path.dirname(explicitLunariaConfigPath)
-		: defaultLunariaStateDir);
-const lunariaConfigPath =
-	explicitLunariaConfigPath || path.join(lunariaStateDir, "lunaria.json");
-const lunariaWorkspaceDir =
-	process.env.LUNARIA_WORKSPACE_DIR ||
-	process.env.LUNARIA_WORKSPACE_DIR ||
-	(lunariaStateDir ? path.join(lunariaStateDir, "workspace") : "");
+	legacyAmoenaHome ||
+	(explicitAmoenaConfigPath
+		? path.dirname(explicitAmoenaConfigPath)
+		: defaultAmoenaStateDir);
+const amoenaConfigPath =
+	explicitAmoenaConfigPath || path.join(amoenaStateDir, "amoena.json");
+const amoenaWorkspaceDir =
+	process.env.AMOENA_WORKSPACE_DIR ||
+	process.env.AMOENA_WORKSPACE_DIR ||
+	(amoenaStateDir ? path.join(amoenaStateDir, "workspace") : "");
 const defaultMemoryDir = (() => {
-	if (process.env.LUNARIA_MEMORY_DIR) return process.env.LUNARIA_MEMORY_DIR;
-	// Prefer Lunaria workspace memory context (daily notes + knowledge-base)
+	if (process.env.AMOENA_MEMORY_DIR) return process.env.AMOENA_MEMORY_DIR;
+	// Prefer Amoena workspace memory context (daily notes + knowledge-base)
 	// when available; fallback to legacy sqlite memory path.
 	if (
-		lunariaWorkspaceDir &&
-		(fs.existsSync(path.join(lunariaWorkspaceDir, "memory")) ||
-			fs.existsSync(path.join(lunariaWorkspaceDir, "knowledge-base")))
+		amoenaWorkspaceDir &&
+		(fs.existsSync(path.join(amoenaWorkspaceDir, "memory")) ||
+			fs.existsSync(path.join(amoenaWorkspaceDir, "knowledge-base")))
 	) {
-		return lunariaWorkspaceDir;
+		return amoenaWorkspaceDir;
 	}
 	return (
-		(lunariaStateDir ? path.join(lunariaStateDir, "memory") : "") ||
+		(amoenaStateDir ? path.join(amoenaStateDir, "memory") : "") ||
 		path.join(defaultDataDir, "memory")
 	);
 })();
@@ -78,31 +78,31 @@ export const config = {
 	dataDir: resolvedDataDir,
 	dbPath: resolvedDbPath,
 	tokensPath: resolvedTokensPath,
-	// Keep lunariaHome as a legacy alias for existing code paths.
-	lunariaHome: lunariaStateDir,
-	lunariaStateDir,
-	lunariaConfigPath,
-	lunariaBin: process.env.LUNARIA_BIN || "lunaria",
+	// Keep amoenaHome as a legacy alias for existing code paths.
+	amoenaHome: amoenaStateDir,
+	amoenaStateDir,
+	amoenaConfigPath,
+	amoenaBin: process.env.AMOENA_BIN || "amoena",
 	clawdbotBin: process.env.CLAWDBOT_BIN || "clawdbot",
-	gatewayHost: process.env.LUNARIA_GATEWAY_HOST || "127.0.0.1",
+	gatewayHost: process.env.AMOENA_GATEWAY_HOST || "127.0.0.1",
 	gatewayPort: clampInt(
-		Number(process.env.LUNARIA_GATEWAY_PORT || "18789"),
+		Number(process.env.AMOENA_GATEWAY_PORT || "18789"),
 		1,
 		65535,
 		18789,
 	),
 	logsDir:
-		process.env.LUNARIA_LOG_DIR ||
-		(lunariaStateDir ? path.join(lunariaStateDir, "logs") : ""),
+		process.env.AMOENA_LOG_DIR ||
+		(amoenaStateDir ? path.join(amoenaStateDir, "logs") : ""),
 	tempLogsDir: process.env.CLAWDBOT_TMP_LOG_DIR || "",
 	memoryDir: defaultMemoryDir,
 	memoryAllowedPrefixes:
-		defaultMemoryDir === lunariaWorkspaceDir
+		defaultMemoryDir === amoenaWorkspaceDir
 			? ["memory/", "knowledge-base/"]
 			: [],
 	soulTemplatesDir:
-		process.env.LUNARIA_SOUL_TEMPLATES_DIR ||
-		(lunariaStateDir ? path.join(lunariaStateDir, "templates", "souls") : ""),
+		process.env.AMOENA_SOUL_TEMPLATES_DIR ||
+		(amoenaStateDir ? path.join(amoenaStateDir, "templates", "souls") : ""),
 	homeDir: os.homedir(),
 	gnap: {
 		enabled: process.env.GNAP_ENABLED === "true",

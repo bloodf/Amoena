@@ -1,12 +1,12 @@
 # AI Development Toolchain
 
-This guide documents the AI agents, skills, MCP servers, hooks, and tools recommended for developing Lunaria. The goal is maximum AI leverage across the entire development lifecycle.
+This guide documents the AI agents, skills, MCP servers, hooks, and tools recommended for developing Amoena. The goal is maximum AI leverage across the entire development lifecycle.
 
 ## Claude Code Setup
 
 ### Required Skills
 
-Install these skills for every Claude Code session working on Lunaria:
+Install these skills for every Claude Code session working on Amoena:
 
 | Skill | Source | Purpose |
 |-------|--------|---------|
@@ -51,7 +51,7 @@ Configure in `.claude/settings.json`:
 
 ### Custom Agents
 
-Lunaria uses custom Claude Code agents in `.claude/agents/` for specialized development tasks. See the agents directory for the full set.
+Amoena uses custom Claude Code agents in `.claude/agents/` for specialized development tasks. See the agents directory for the full set.
 
 ### Hooks Configuration
 
@@ -74,7 +74,7 @@ Recommended hooks in `.claude/settings.json`:
     ],
     "Stop": [
       {
-        "command": "osascript -e 'display notification \"Claude Code task complete\" with title \"Lunaria\"'"
+        "command": "osascript -e 'display notification \"Claude Code task complete\" with title \"Amoena\"'"
       }
     ]
   }
@@ -104,7 +104,7 @@ Orchestrator (main Claude Code session)
 
 ### AGENTS.md
 
-Codex reads `AGENTS.md` for project context. See `/AGENTS.md` for the Lunaria-specific configuration.
+Codex reads `AGENTS.md` for project context. See `/AGENTS.md` for the Amoena-specific configuration.
 
 ### Multi-Agent with Codex
 
@@ -185,7 +185,7 @@ For each implementation prompt:
 
 ## Architectural Inspirations
 
-Lunaria draws design patterns and structural ideas from several open-source projects. These are not runtime dependencies — they are reference architectures whose concepts have been adapted into Lunaria's own systems.
+Amoena draws design patterns and structural ideas from several open-source projects. These are not runtime dependencies — they are reference architectures whose concepts have been adapted into Amoena's own systems.
 
 ### agency-agents
 
@@ -193,11 +193,11 @@ Lunaria draws design patterns and structural ideas from several open-source proj
 
 A collection of 130+ agent persona definitions with a multi-tool conversion pipeline that transforms persona YAML into formats consumable by different agent runtimes.
 
-**What Lunaria borrows:**
+**What Amoena borrows:**
 
-- **Division taxonomy.** agency-agents organizes personas into functional divisions (engineering, research, operations, creative, etc.). Lunaria's agent management system (`AgentManagementScreen`, agent teams configuration) uses an analogous division model to categorize and filter agents by role.
-- **Persona schema.** The structured persona format (name, role, expertise domains, system prompt, tool permissions) informed the shape of Lunaria's agent definition schema stored in SQLite and surfaced in the agent management UI.
-- **Multi-format export pipeline.** The concept of a single canonical agent definition that can be exported to multiple backend formats (Claude Code subagent, OpenCode config, standalone prompt file) directly influenced Lunaria's wrapper adapter framework described in `docs/architecture/agent-backend-interface.md`.
+- **Division taxonomy.** agency-agents organizes personas into functional divisions (engineering, research, operations, creative, etc.). Amoena's agent management system (`AgentManagementScreen`, agent teams configuration) uses an analogous division model to categorize and filter agents by role.
+- **Persona schema.** The structured persona format (name, role, expertise domains, system prompt, tool permissions) informed the shape of Amoena's agent definition schema stored in SQLite and surfaced in the agent management UI.
+- **Multi-format export pipeline.** The concept of a single canonical agent definition that can be exported to multiple backend formats (Claude Code subagent, OpenCode config, standalone prompt file) directly influenced Amoena's wrapper adapter framework described in `docs/architecture/agent-backend-interface.md`.
 
 **Maps to:** Agent management subsystem, wrapper adapter framework, `.claude/agents/` definitions.
 
@@ -207,11 +207,11 @@ A collection of 130+ agent persona definitions with a multi-tool conversion pipe
 
 A multi-agent swarm framework built around finite state machines, GraphRAG-backed memory, and persistent personality profiles for long-running collaborative agent sessions.
 
-**What Lunaria borrows:**
+**What Amoena borrows:**
 
-- **Extended agent lifecycle states.** MiroFish models agents with states beyond simple idle/running/done — including warming up, waiting for peer, negotiating, and cooling down. Lunaria adopts a similar extended state machine for agent sessions, enabling the UI to show granular status in the session workspace and Kanban board.
-- **Collaboration metadata.** MiroFish attaches `collaborationStyle`, `communicationPreference`, and `decisionWeight` to each agent profile. Lunaria's agent teams configuration (see `docs/architecture/multi-agent-runtime.md`) uses equivalent metadata to govern how agents in a team coordinate, whose output takes priority, and how consensus is reached.
-- **Team consensus patterns.** The voting, delegation, and arbitration patterns for multi-agent decision-making informed Lunaria's mailbox-based inter-agent communication and the orchestrator's conflict resolution strategy.
+- **Extended agent lifecycle states.** MiroFish models agents with states beyond simple idle/running/done — including warming up, waiting for peer, negotiating, and cooling down. Amoena adopts a similar extended state machine for agent sessions, enabling the UI to show granular status in the session workspace and Kanban board.
+- **Collaboration metadata.** MiroFish attaches `collaborationStyle`, `communicationPreference`, and `decisionWeight` to each agent profile. Amoena's agent teams configuration (see `docs/architecture/multi-agent-runtime.md`) uses equivalent metadata to govern how agents in a team coordinate, whose output takes priority, and how consensus is reached.
+- **Team consensus patterns.** The voting, delegation, and arbitration patterns for multi-agent decision-making informed Amoena's mailbox-based inter-agent communication and the orchestrator's conflict resolution strategy.
 
 **Maps to:** Multi-agent runtime, agent teams and mailbox system, session workspace lifecycle states.
 
@@ -221,11 +221,11 @@ A multi-agent swarm framework built around finite state machines, GraphRAG-backe
 
 A design quality system that combines OKLCH color science, automated anti-pattern detection, and 18 specialized steering skills to enforce visual consistency and accessibility standards.
 
-**What Lunaria borrows:**
+**What Amoena borrows:**
 
-- **7-domain audit framework.** impeccable audits UI across seven domains: color contrast, spacing rhythm, typography scale, component consistency, motion coherence, responsive fidelity, and accessibility compliance. Lunaria uses this framework as the basis for UI quality gates in its Storybook verification pipeline and test coverage hardening (see `docs/prompts/07-ui-implementation/13-ui-test-coverage-hardening.md`).
-- **Anti-pattern detection approach.** Rather than only checking for the presence of correct patterns, impeccable also flags known anti-patterns (z-index stacking conflicts, inconsistent border radii, orphaned design tokens). Lunaria's theming and design system (`docs/architecture/theming-design-system.md`) incorporates similar negative checks alongside its OKLCH palette validation.
-- **OKLCH color science alignment.** impeccable's perceptually uniform color validation reinforced Lunaria's choice of OKLCH as the palette foundation, with the magenta accent `#B800B8` validated through the same perceptual uniformity principles.
+- **7-domain audit framework.** impeccable audits UI across seven domains: color contrast, spacing rhythm, typography scale, component consistency, motion coherence, responsive fidelity, and accessibility compliance. Amoena uses this framework as the basis for UI quality gates in its Storybook verification pipeline and test coverage hardening (see `docs/prompts/07-ui-implementation/13-ui-test-coverage-hardening.md`).
+- **Anti-pattern detection approach.** Rather than only checking for the presence of correct patterns, impeccable also flags known anti-patterns (z-index stacking conflicts, inconsistent border radii, orphaned design tokens). Amoena's theming and design system (`docs/architecture/theming-design-system.md`) incorporates similar negative checks alongside its OKLCH palette validation.
+- **OKLCH color science alignment.** impeccable's perceptually uniform color validation reinforced Amoena's choice of OKLCH as the palette foundation, with the magenta accent `#B800B8` validated through the same perceptual uniformity principles.
 
 **Maps to:** Design token system, Storybook quality gates, theming and design system, UI test coverage.
 
@@ -235,11 +235,11 @@ A design quality system that combines OKLCH color science, automated anti-patter
 
 A context database designed for AI agent workloads, featuring tiered context loading, session transcript compression, memory deduplication, and AGFS (Agent File System) for virtual file-based context access.
 
-**What Lunaria borrows:**
+**What Amoena borrows:**
 
-- **Three-tier context loading (L0/L1/L2).** OpenViking loads context in three tiers: L0 (always present — identity, rules, active task), L1 (session-scoped — recent transcript, open files, workspace state), and L2 (on-demand — full repository search, archived sessions, long-term memory). Lunaria's memory system (`docs/architecture/memory-system.md`) follows the same tiered injection pattern, with L0 mapped to the system prompt and active session, L1 to the hybrid retrieval cache, and L2 to the full SQLite-backed memory store.
-- **6-category memory taxonomy.** OpenViking classifies memories into six categories: facts, preferences, procedures, relationships, events, and context. Lunaria's Claude-mem parity architecture uses a compatible taxonomy for its observe-persist-retrieve-inject cycle, ensuring that different memory types are weighted and retrieved appropriately.
-- **Session compression and deduplication.** The techniques for compressing long transcripts into summaries while preserving key decision points, and deduplicating redundant observations before persistence, informed Lunaria's JSONL transcript management and memory consolidation strategies.
+- **Three-tier context loading (L0/L1/L2).** OpenViking loads context in three tiers: L0 (always present — identity, rules, active task), L1 (session-scoped — recent transcript, open files, workspace state), and L2 (on-demand — full repository search, archived sessions, long-term memory). Amoena's memory system (`docs/architecture/memory-system.md`) follows the same tiered injection pattern, with L0 mapped to the system prompt and active session, L1 to the hybrid retrieval cache, and L2 to the full SQLite-backed memory store.
+- **6-category memory taxonomy.** OpenViking classifies memories into six categories: facts, preferences, procedures, relationships, events, and context. Amoena's Claude-mem parity architecture uses a compatible taxonomy for its observe-persist-retrieve-inject cycle, ensuring that different memory types are weighted and retrieved appropriately.
+- **Session compression and deduplication.** The techniques for compressing long transcripts into summaries while preserving key decision points, and deduplicating redundant observations before persistence, informed Amoena's JSONL transcript management and memory consolidation strategies.
 
 **Maps to:** Memory system, context injection pipeline, JSONL transcript persistence, hybrid retrieval.
 

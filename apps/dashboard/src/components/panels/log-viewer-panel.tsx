@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 import { createClientLogger } from "@/lib/client-logger";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 const log = createClientLogger("LogViewer");
 
@@ -31,7 +31,7 @@ function downloadFile(content: string, filename: string, mime: string) {
 
 export function LogViewerPanel() {
 	const t = useTranslations("logViewer");
-	const { logs, logFilters, setLogFilters, clearLogs, addLog } = useLunaria();
+	const { logs, logFilters, setLogFilters, clearLogs, addLog } = useAmoena();
 	const [isAutoScroll, setIsAutoScroll] = useState(true);
 	const [availableSources, setAvailableSources] = useState<string[]>([]);
 	const [isLoading, setIsLoading] = useState(false);

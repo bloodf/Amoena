@@ -289,13 +289,13 @@ describe("env", () => {
 
 			it("should include shell wrapper control vars", () => {
 				const env = {
-					ZDOTDIR: "/Users/test/.lunaria-dev/zsh",
-					BASH_ENV: "/Users/test/.lunaria-dev/bash/rcfile",
+					ZDOTDIR: "/Users/test/.amoena-dev/zsh",
+					BASH_ENV: "/Users/test/.amoena-dev/bash/rcfile",
 					PATH: "/usr/bin",
 				};
 				const result = buildSafeEnv(env);
-				expect(result.ZDOTDIR).toBe("/Users/test/.lunaria-dev/zsh");
-				expect(result.BASH_ENV).toBe("/Users/test/.lunaria-dev/bash/rcfile");
+				expect(result.ZDOTDIR).toBe("/Users/test/.amoena-dev/zsh");
+				expect(result.BASH_ENV).toBe("/Users/test/.amoena-dev/bash/rcfile");
 			});
 
 			it("should include proxy vars (both cases)", () => {
@@ -464,18 +464,18 @@ describe("env", () => {
 			});
 		});
 
-		describe("includes LUNARIA_* prefix vars", () => {
-			it("should include LUNARIA_* vars (our metadata)", () => {
+		describe("includes AMOENA_* prefix vars", () => {
+			it("should include AMOENA_* vars (our metadata)", () => {
 				const env = {
-					LUNARIA_PANE_ID: "pane-1",
-					LUNARIA_TAB_ID: "tab-1",
-					LUNARIA_WORKSPACE_ID: "ws-1",
+					AMOENA_PANE_ID: "pane-1",
+					AMOENA_TAB_ID: "tab-1",
+					AMOENA_WORKSPACE_ID: "ws-1",
 					PATH: "/usr/bin",
 				};
 				const result = buildSafeEnv(env);
-				expect(result.LUNARIA_PANE_ID).toBe("pane-1");
-				expect(result.LUNARIA_TAB_ID).toBe("tab-1");
-				expect(result.LUNARIA_WORKSPACE_ID).toBe("ws-1");
+				expect(result.AMOENA_PANE_ID).toBe("pane-1");
+				expect(result.AMOENA_TAB_ID).toBe("tab-1");
+				expect(result.AMOENA_WORKSPACE_ID).toBe("ws-1");
 			});
 		});
 
@@ -536,15 +536,15 @@ describe("env", () => {
 				expect(result.PATHEXT).toBe(".COM;.EXE;.BAT;.CMD");
 			});
 
-			it("should include Lunaria_* prefix vars case-insensitively on Windows", () => {
+			it("should include Amoena_* prefix vars case-insensitively on Windows", () => {
 				const env = {
-					Lunaria_Pane_Id: "pane-1",
-					LUNARIA_TAB_ID: "tab-1",
+					Amoena_Pane_Id: "pane-1",
+					AMOENA_TAB_ID: "tab-1",
 					PATH: "/usr/bin",
 				};
 				const result = buildSafeEnv(env, { platform: "win32" });
-				expect(result.Lunaria_Pane_Id).toBe("pane-1");
-				expect(result.LUNARIA_TAB_ID).toBe("tab-1");
+				expect(result.Amoena_Pane_Id).toBe("pane-1");
+				expect(result.AMOENA_TAB_ID).toBe("tab-1");
 			});
 
 			it("should preserve original key casing in output", () => {
@@ -592,7 +592,7 @@ describe("env", () => {
 			"DATABASE_URL",
 			"CLERK_SECRET_KEY",
 			"SSL_CERT_FILE",
-			"LUNARIA_HOME_DIR",
+			"AMOENA_HOME_DIR",
 		];
 
 		beforeEach(() => {
@@ -658,9 +658,9 @@ describe("env", () => {
 		});
 
 		describe("terminal metadata", () => {
-			it("should set TERM_PROGRAM to Lunaria", () => {
+			it("should set TERM_PROGRAM to Amoena", () => {
 				const result = buildTerminalEnv(baseParams);
-				expect(result.TERM_PROGRAM).toBe("Lunaria");
+				expect(result.TERM_PROGRAM).toBe("Amoena");
 			});
 
 			it("should set COLORTERM to truecolor", () => {
@@ -668,12 +668,12 @@ describe("env", () => {
 				expect(result.COLORTERM).toBe("truecolor");
 			});
 
-			it("should set Lunaria-specific env vars", () => {
+			it("should set Amoena-specific env vars", () => {
 				const result = buildTerminalEnv(baseParams);
 
-				expect(result.LUNARIA_PANE_ID).toBe("pane-1");
-				expect(result.LUNARIA_TAB_ID).toBe("tab-1");
-				expect(result.LUNARIA_WORKSPACE_ID).toBe("ws-1");
+				expect(result.AMOENA_PANE_ID).toBe("pane-1");
+				expect(result.AMOENA_TAB_ID).toBe("tab-1");
+				expect(result.AMOENA_WORKSPACE_ID).toBe("ws-1");
 			});
 
 			it("should handle optional workspace params", () => {
@@ -684,17 +684,17 @@ describe("env", () => {
 					rootPath: "/root/path",
 				});
 
-				expect(result.LUNARIA_WORKSPACE_NAME).toBe("my-workspace");
-				expect(result.LUNARIA_WORKSPACE_PATH).toBe("/path/to/workspace");
-				expect(result.LUNARIA_ROOT_PATH).toBe("/root/path");
+				expect(result.AMOENA_WORKSPACE_NAME).toBe("my-workspace");
+				expect(result.AMOENA_WORKSPACE_PATH).toBe("/path/to/workspace");
+				expect(result.AMOENA_ROOT_PATH).toBe("/root/path");
 			});
 
 			it("should default optional params to empty string", () => {
 				const result = buildTerminalEnv(baseParams);
 
-				expect(result.LUNARIA_WORKSPACE_NAME).toBe("");
-				expect(result.LUNARIA_WORKSPACE_PATH).toBe("");
-				expect(result.LUNARIA_ROOT_PATH).toBe("");
+				expect(result.AMOENA_WORKSPACE_NAME).toBe("");
+				expect(result.AMOENA_WORKSPACE_PATH).toBe("");
+				expect(result.AMOENA_ROOT_PATH).toBe("");
 			});
 
 			it("should set LANG to a UTF-8 locale", () => {
@@ -702,29 +702,29 @@ describe("env", () => {
 				expect(result.LANG).toContain("UTF-8");
 			});
 
-			it("should include LUNARIA_PORT", () => {
+			it("should include AMOENA_PORT", () => {
 				const result = buildTerminalEnv(baseParams);
-				expect(result.LUNARIA_PORT).toBeDefined();
-				expect(typeof result.LUNARIA_PORT).toBe("string");
+				expect(result.AMOENA_PORT).toBeDefined();
+				expect(typeof result.AMOENA_PORT).toBe("string");
 			});
 
-			it("should preserve LUNARIA_HOME_DIR for app-launched hooks", () => {
-				process.env.LUNARIA_HOME_DIR = "/tmp/lunaria-home";
+			it("should preserve AMOENA_HOME_DIR for app-launched hooks", () => {
+				process.env.AMOENA_HOME_DIR = "/tmp/amoena-home";
 				const result = buildTerminalEnv(baseParams);
-				expect(result.LUNARIA_HOME_DIR).toBe("/tmp/lunaria-home");
+				expect(result.AMOENA_HOME_DIR).toBe("/tmp/amoena-home");
 			});
 		});
 
-		it("should include LUNARIA_ENV for dev/prod separation", () => {
+		it("should include AMOENA_ENV for dev/prod separation", () => {
 			const result = buildTerminalEnv(baseParams);
-			expect(result.LUNARIA_ENV).toBeDefined();
-			expect(["development", "production"]).toContain(result.LUNARIA_ENV);
+			expect(result.AMOENA_ENV).toBeDefined();
+			expect(["development", "production"]).toContain(result.AMOENA_ENV);
 		});
 
-		it("should include LUNARIA_HOOK_VERSION for protocol versioning", () => {
+		it("should include AMOENA_HOOK_VERSION for protocol versioning", () => {
 			const result = buildTerminalEnv(baseParams);
-			expect(result.LUNARIA_HOOK_VERSION).toBeDefined();
-			expect(result.LUNARIA_HOOK_VERSION).toBe("2");
+			expect(result.AMOENA_HOOK_VERSION).toBeDefined();
+			expect(result.AMOENA_HOOK_VERSION).toBe("2");
 		});
 
 		describe("SSL_CERT_FILE fallback on macOS", () => {

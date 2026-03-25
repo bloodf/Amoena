@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 import { config } from "@/lib/config";
 import { getDatabase } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { parseLunariaDoctorOutput } from "@/lib/lunaria-doctor";
-import { archiveOrphanTranscriptsForStateDir } from "@/lib/lunaria-doctor-fix";
+import { parseAmoenaDoctorOutput } from "@/lib/amoena-doctor";
+import { archiveOrphanTranscriptsForStateDir } from "@/lib/amoena-doctor-fix";
 
 function getCommandDetail(error: unknown): {
 	detail: string;
@@ -27,7 +27,7 @@ function getCommandDetail(error: unknown): {
 	};
 }
 
-function isMissingLunaria(detail: string): boolean {
+function isMissingAmoena(detail: string): boolean {
 	return /enoent|not installed|not reachable|command not found/i.test(detail);
 }
 
@@ -38,13 +38,13 @@ export async function GET(request: Request) {
 	}
 
 	try {
-		const result = await runLunaria(["doctor"], { timeoutMs: 15000 });
+		const result = await runAmoena(["doctor"], { timeoutMs: 15000 });
 		return NextResponse.json(
-			parseLunariaDoctorOutput(
+			parseAmoenaDoctorOutput(
 				`${result.stdout}\n${result.stderr}`,
 				result.code ?? 0,
 				{
-					stateDir: config.lunariaStateDir,
+					stateDir: config.amoenaStateDir,
 				},
 			),
 			{
@@ -53,16 +53,16 @@ export async function GET(request: Request) {
 		);
 	} catch (error) {
 		const { detail, code } = getCommandDetail(error);
-		if (isMissingLunaria(detail)) {
+		if (isMissingAmoena(detail)) {
 			return NextResponse.json(
-				{ error: "Lunaria is not installed or not reachable" },
+				{ error: "Amoena is not installed or not reachable" },
 				{ status: 400 },
 			);
 		}
 
 		return NextResponse.json(
-			parseLunariaDoctorOutput(detail, code ?? 1, {
-				stateDir: config.lunariaStateDir,
+			parseAmoenaDoctorOutput(detail, code ?? 1, {
+				stateDir: config.amoenaStateDir,
 			}),
 			{
 				headers: { "Cache-Control": "no-store" },
@@ -80,16 +80,16 @@ export async function POST(request: Request) {
 	try {
 		const progress: Array<{ step: string; detail: string }> = [];
 
-		const fixResult = await runLunaria(["doctor", "--fix"], {
+		const fixResult = await runAmoena(["doctor", "--fix"], {
 			timeoutMs: 120000,
 		});
 		progress.push({
 			step: "doctor",
-			detail: "Applied Lunaria doctor config fixes.",
+			detail: "Applied Amoena doctor config fixes.",
 		});
 
 		try {
-			await runLunaria(
+			await runAmoena(
 				["sessions", "cleanup", "--all-agents", "--enforce", "--fix-missing"],
 				{ timeoutMs: 120000 },
 			);
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
 		}
 
 		const orphanFix = archiveOrphanTranscriptsForStateDir(
-			config.lunariaStateDir,
+			config.amoenaStateDir,
 		);
 		progress.push({
 			step: "orphans",
@@ -116,12 +116,12 @@ export async function POST(request: Request) {
 					: `No orphan transcript files found across ${orphanFix.storesScanned} session store(s).`,
 		});
 
-		const postFix = await runLunaria(["doctor"], { timeoutMs: 15000 });
-		const status = parseLunariaDoctorOutput(
+		const postFix = await runAmoena(["doctor"], { timeoutMs: 15000 });
+		const status = parseAmoenaDoctorOutput(
 			`${postFix.stdout}\n${postFix.stderr}`,
 			postFix.code ?? 0,
 			{
-				stateDir: config.lunariaStateDir,
+				stateDir: config.amoenaStateDir,
 			},
 		);
 
@@ -130,7 +130,7 @@ export async function POST(request: Request) {
 			db.prepare(
 				"INSERT INTO audit_log (action, actor, detail) VALUES (?, ?, ?)",
 			).run(
-				"lunaria.doctor.fix",
+				"amoena.doctor.fix",
 				auth.user.username,
 				JSON.stringify({
 					level: status.level,
@@ -150,21 +150,21 @@ export async function POST(request: Request) {
 		});
 	} catch (error) {
 		const { detail, code } = getCommandDetail(error);
-		if (isMissingLunaria(detail)) {
+		if (isMissingAmoena(detail)) {
 			return NextResponse.json(
-				{ error: "Lunaria is not installed or not reachable" },
+				{ error: "Amoena is not installed or not reachable" },
 				{ status: 400 },
 			);
 		}
 
-		logger.error({ err: error }, "Lunaria doctor fix failed");
+		logger.error({ err: error }, "Amoena doctor fix failed");
 
 		return NextResponse.json(
 			{
-				error: "Lunaria doctor fix failed",
+				error: "Amoena doctor fix failed",
 				detail,
-				status: parseLunariaDoctorOutput(detail, code ?? 1, {
-					stateDir: config.lunariaStateDir,
+				status: parseAmoenaDoctorOutput(detail, code ?? 1, {
+					stateDir: config.amoenaStateDir,
 				}),
 			},
 			{ status: 500 },

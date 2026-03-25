@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigateToPanel, usePrefetchPanel } from "@/lib/navigation";
 import { getPluginNavItems } from "@/lib/plugins";
 import { APP_VERSION } from "@/lib/version";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface NavItem {
 	id: string;
@@ -257,7 +257,7 @@ export function NavRail() {
 		defaultOrgName,
 		interfaceMode,
 		setInterfaceMode,
-	} = useLunaria();
+	} = useAmoena();
 	const navigateToPanel = useNavigateToPanel();
 	const prefetchPanel = usePrefetchPanel();
 	const tn = useTranslations("nav");
@@ -396,7 +396,7 @@ export function NavRail() {
 					<div className="w-9 h-9 rounded-lg overflow-hidden bg-background border border-border/50 flex items-center justify-center shrink-0 hover:border-void-cyan/40 hover:glow-cyan transition-smooth">
 						<Image
 							src="/brand/mc-logo-128.png"
-							alt="Lunaria logo"
+							alt="Amoena logo"
 							width={36}
 							height={36}
 							className="w-full h-full object-cover"
@@ -405,7 +405,7 @@ export function NavRail() {
 					{sidebarExpanded && (
 						<div className="flex items-baseline gap-2 truncate flex-1 min-w-0">
 							<span className="text-sm font-semibold text-foreground truncate">
-								Lunaria
+								Amoena
 							</span>
 							<span className="text-2xs text-muted-foreground font-mono-tight shrink-0">
 								v{APP_VERSION}
@@ -617,7 +617,7 @@ export function NavRail() {
 				{sidebarExpanded && (
 					<div className="px-2 pb-2 space-y-2 shrink-0">
 						<a
-							href="https://x.com/nyk_lunaria/status/2022996371922649192?s=20"
+							href="https://x.com/nyk_amoena/status/2022996371922649192?s=20"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="block rounded-lg border border-border/50 bg-surface-1 hover:bg-surface-2 hover:border-primary/30 transition-all duration-200 p-2 group"
@@ -635,14 +635,14 @@ export function NavRail() {
 							</p>
 						</a>
 						<a
-							href="https://lunaria.dev"
+							href="https://amoena.dev"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="block rounded-lg border border-void-cyan/20 bg-gradient-to-br from-void-cyan/5 to-transparent hover:from-void-cyan/10 hover:border-void-cyan/40 transition-all duration-200 p-2 group"
 						>
 							<div className="flex items-center gap-1.5 mb-0.5">
 								<span className="text-2xs font-bold text-foreground group-hover:text-void-cyan transition-colors">
-									lunaria
+									amoena
 								</span>
 								<span className="text-[9px] px-1 py-px rounded bg-void-cyan/15 text-void-cyan">
 									.dev
@@ -1134,7 +1134,7 @@ function ContextSwitcher({
 	setInterfaceMode: (mode: "essential" | "full") => void;
 	activeTab: string;
 }) {
-	const { setShowProjectManagerModal } = useLunaria();
+	const { setShowProjectManagerModal } = useAmoena();
 	const tcs = useTranslations("contextSwitcher");
 	const tn = useTranslations("nav");
 	const tc = useTranslations("common");
@@ -1149,7 +1149,7 @@ function ContextSwitcher({
 		username: "",
 		display_name: "",
 		gateway_port: "",
-		install_lunaria: true,
+		install_amoena: true,
 		install_claude: false,
 		install_codex: false,
 	});
@@ -1494,7 +1494,7 @@ function ContextSwitcher({
 										const tools = [
 											osUser.has_claude && "claude",
 											osUser.has_codex && "codex",
-											osUser.has_lunaria && "lunaria",
+											osUser.has_amoena && "amoena",
 										].filter(Boolean);
 										const statusLabel = isLocal
 											? tools.length > 0
@@ -1611,27 +1611,27 @@ function ContextSwitcher({
 														<label className="flex items-center gap-1 cursor-pointer">
 															<input
 																type="checkbox"
-																checked={createForm.install_lunaria}
+																checked={createForm.install_amoena}
 																onChange={(e) =>
 																	setCreateForm((f) => ({
 																		...f,
-																		install_lunaria: e.target.checked,
+																		install_amoena: e.target.checked,
 																	}))
 																}
 																className="w-3 h-3 rounded accent-primary"
 															/>
 															<span className="text-[10px] text-foreground">
-																lunaria
+																amoena
 															</span>
 														</label>
 														<label
-															className={`flex items-center gap-1 ${createForm.install_lunaria ? "opacity-50" : ""} cursor-pointer`}
+															className={`flex items-center gap-1 ${createForm.install_amoena ? "opacity-50" : ""} cursor-pointer`}
 														>
 															<input
 																type="checkbox"
 																checked={
 																	createForm.install_claude ||
-																	createForm.install_lunaria
+																	createForm.install_amoena
 																}
 																onChange={(e) =>
 																	setCreateForm((f) => ({
@@ -1639,26 +1639,26 @@ function ContextSwitcher({
 																		install_claude: e.target.checked,
 																	}))
 																}
-																disabled={createForm.install_lunaria}
+																disabled={createForm.install_amoena}
 																className="w-3 h-3 rounded accent-primary"
 															/>
 															<span className="text-[10px] text-foreground">
 																claude
 															</span>
-															{createForm.install_lunaria && (
+															{createForm.install_amoena && (
 																<span className="text-[9px] text-muted-foreground/50 italic">
 																	included
 																</span>
 															)}
 														</label>
 														<label
-															className={`flex items-center gap-1 ${createForm.install_lunaria ? "opacity-50" : ""} cursor-pointer`}
+															className={`flex items-center gap-1 ${createForm.install_amoena ? "opacity-50" : ""} cursor-pointer`}
 														>
 															<input
 																type="checkbox"
 																checked={
 																	createForm.install_codex ||
-																	createForm.install_lunaria
+																	createForm.install_amoena
 																}
 																onChange={(e) =>
 																	setCreateForm((f) => ({
@@ -1666,13 +1666,13 @@ function ContextSwitcher({
 																		install_codex: e.target.checked,
 																	}))
 																}
-																disabled={createForm.install_lunaria}
+																disabled={createForm.install_amoena}
 																className="w-3 h-3 rounded accent-primary"
 															/>
 															<span className="text-[10px] text-foreground">
 																codex
 															</span>
-															{createForm.install_lunaria && (
+															{createForm.install_amoena && (
 																<span className="text-[9px] text-muted-foreground/50 italic">
 																	included
 																</span>
@@ -1722,7 +1722,7 @@ function ContextSwitcher({
 																	gateway_port: createForm.gateway_port
 																		? Number(createForm.gateway_port)
 																		: undefined,
-																	install_lunaria: createForm.install_lunaria,
+																	install_amoena: createForm.install_amoena,
 																	install_claude: createForm.install_claude,
 																	install_codex: createForm.install_codex,
 																}),
@@ -1737,7 +1737,7 @@ function ContextSwitcher({
 																username: "",
 																display_name: "",
 																gateway_port: "",
-																install_lunaria: true,
+																install_amoena: true,
 																install_claude: false,
 																install_codex: false,
 															});

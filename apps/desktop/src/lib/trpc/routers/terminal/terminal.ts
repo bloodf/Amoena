@@ -19,7 +19,7 @@ import { assertWorkspaceUsable } from "../workspaces/utils/usability";
 import { resolveTerminalThemeType } from "./theme-type";
 import { getWorkspaceTerminalContext, resolveCwd } from "./utils";
 
-const DEBUG_TERMINAL = process.env.LUNARIA_TERMINAL_DEBUG === "1";
+const DEBUG_TERMINAL = process.env.AMOENA_TERMINAL_DEBUG === "1";
 const logger = console;
 let createOrAttachCallCounter = 0;
 
@@ -37,14 +37,14 @@ const SAFE_ID = z
  * Sessions are keyed by paneId and linked to workspaces for cwd resolution
  *
  * Environment variables set for terminal sessions:
- * - PATH: Prepends ~/.lunaria/bin so wrapper scripts intercept agent commands
- * - LUNARIA_PANE_ID: The pane ID (used by notification hooks, session key)
- * - LUNARIA_TAB_ID: The tab ID (parent of pane, used by notification hooks)
- * - LUNARIA_WORKSPACE_ID: The workspace ID (used by notification hooks)
- * - LUNARIA_WORKSPACE_NAME: The workspace name (used by setup/teardown scripts)
- * - LUNARIA_WORKSPACE_PATH: The worktree path (used by setup/teardown scripts)
- * - LUNARIA_ROOT_PATH: The main repo path (used by setup/teardown scripts)
- * - LUNARIA_PORT: The hooks server port for agent completion notifications
+ * - PATH: Prepends ~/.amoena/bin so wrapper scripts intercept agent commands
+ * - AMOENA_PANE_ID: The pane ID (used by notification hooks, session key)
+ * - AMOENA_TAB_ID: The tab ID (parent of pane, used by notification hooks)
+ * - AMOENA_WORKSPACE_ID: The workspace ID (used by notification hooks)
+ * - AMOENA_WORKSPACE_NAME: The workspace name (used by setup/teardown scripts)
+ * - AMOENA_WORKSPACE_PATH: The worktree path (used by setup/teardown scripts)
+ * - AMOENA_ROOT_PATH: The main repo path (used by setup/teardown scripts)
+ * - AMOENA_PORT: The hooks server port for agent completion notifications
  */
 export const createTerminalRouter = () => {
 	const registry = getWorkspaceRuntimeRegistry();

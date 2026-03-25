@@ -1,6 +1,6 @@
 # Sessions
 
-A session is the fundamental unit of work in Lunaria. It represents a continuous conversation with an AI agent, tracks all exchanged messages, owns a working directory, and optionally links to a workspace clone and a parent session.
+A session is the fundamental unit of work in Amoena. It represents a continuous conversation with an AI agent, tracks all exchanged messages, owns a working directory, and optionally links to a workspace clone and a parent session.
 
 ## Session Types
 

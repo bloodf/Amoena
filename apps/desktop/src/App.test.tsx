@@ -106,7 +106,7 @@ describe('App shell', () => {
         return {
           ok: true,
           json: async () => ({
-            appName: 'Lunaria',
+            appName: 'Amoena',
             appVersion: '0.0.1',
             instanceId: launchContext.instanceId,
             status: 'ok',
@@ -269,7 +269,7 @@ describe('App shell', () => {
               enabled: false,
               lanEnabled: false,
               relayEnabled: false,
-              relayEndpoint: 'relay.lunaria.app',
+              relayEndpoint: 'relay.amoena.app',
             },
             settings: {},
           }),
@@ -329,7 +329,7 @@ describe('App shell', () => {
       throw new Error(`Unexpected fetch call: ${input}`);
     });
 
-    (globalThis as any).__lunariaTestState = {
+    (globalThis as any).__amoenaTestState = {
       setSessions(nextSessions: any[]) {
         sessionSummaries = nextSessions;
       },
@@ -350,7 +350,7 @@ describe('App shell', () => {
     EventSourceStub.reset();
     vi.unstubAllGlobals();
     vi.clearAllMocks();
-    delete (globalThis as any).__lunariaTestState;
+    delete (globalThis as any).__amoenaTestState;
   });
 
   it('hydrates the runtime and renders the routed shell', async () => {
@@ -403,8 +403,8 @@ describe('App shell', () => {
     await screen.findByText('Git Integration Pro');
 
     await userEvent.type(
-      screen.getByPlaceholderText(/lunaria:\/\/plugin\/install/i),
-      'lunaria://plugin/install?id=my-plugin&source=registry',
+      screen.getByPlaceholderText(/amoena:\/\/plugin\/install/i),
+      'amoena://plugin/install?id=my-plugin&source=registry',
     );
     await userEvent.click(screen.getByText('Review Deeplink'));
 
@@ -415,7 +415,7 @@ describe('App shell', () => {
   });
 
   it('opens a runtime-backed session workspace and file preview', async () => {
-    (globalThis as any).__lunariaTestState.setSessions([
+    (globalThis as any).__amoenaTestState.setSessions([
       {
         id: 'session-1',
         sessionMode: 'native',
@@ -462,7 +462,7 @@ describe('App shell', () => {
   });
 
   it('updates the workspace from session stream events and renders active subagents', async () => {
-    (globalThis as any).__lunariaTestState.setSessions([
+    (globalThis as any).__amoenaTestState.setSessions([
       {
         id: 'session-1',
         sessionMode: 'native',
@@ -473,7 +473,7 @@ describe('App shell', () => {
         updatedAt: '2026-03-13T00:00:00Z',
       },
     ]);
-    (globalThis as any).__lunariaTestState.setAgents([
+    (globalThis as any).__amoenaTestState.setAgents([
       {
         id: 'agent-main',
         agentType: 'Primary Engineer',
@@ -538,7 +538,7 @@ describe('App shell', () => {
   });
 
   it('sends structured folder_ref attachments from the workspace composer', async () => {
-    (globalThis as any).__lunariaTestState.setSessions([
+    (globalThis as any).__amoenaTestState.setSessions([
       {
         id: 'session-1',
         sessionMode: 'native',
@@ -566,10 +566,10 @@ describe('App shell', () => {
     };
 
     const dataTransfer = {
-      getData: (format: string) => (format === 'lunaria/file' ? JSON.stringify(payload) : ''),
+      getData: (format: string) => (format === 'amoena/file' ? JSON.stringify(payload) : ''),
       files: [],
       items: [],
-      types: ['lunaria/file'],
+      types: ['amoena/file'],
     };
 
     await userEvent.click(screen.getByRole('button', { name: /files/i }));

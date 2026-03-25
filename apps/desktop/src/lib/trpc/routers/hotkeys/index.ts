@@ -52,7 +52,7 @@ export const createHotkeysRouter = (getWindow: () => BrowserWindow | null) => {
 
 			const result = await dialog.showSaveDialog(window, {
 				title: "Export Keyboard Shortcuts",
-				defaultPath: "lunaria-hotkeys.json",
+				defaultPath: "amoena-hotkeys.json",
 				filters: [{ name: "JSON", extensions: ["json"] }],
 			});
 

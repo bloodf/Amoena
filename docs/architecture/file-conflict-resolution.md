@@ -2,7 +2,7 @@
 
 ## Overview
 
-Conflicts arise when an agent's workspace changes overlap with the user's working tree. Lunaria resolves conflicts during the merge review phase — never silently.
+Conflicts arise when an agent's workspace changes overlap with the user's working tree. Amoena resolves conflicts during the merge review phase — never silently.
 
 ## When Conflicts Occur
 
@@ -16,7 +16,7 @@ Conflicts arise when an agent's workspace changes overlap with the user's workin
 
 ### 1. Detection
 
-Before merging agent changes, Lunaria runs:
+Before merging agent changes, Amoena runs:
 ```
 git merge-tree --write-tree <user-branch> <agent-branch>
 ```
@@ -48,7 +48,7 @@ After resolution:
 
 ## Prevention
 
-Lunaria reduces conflict likelihood through:
+Amoena reduces conflict likelihood through:
 - **Workspace isolation:** Agents never edit the user's working tree directly
 - **File locking (advisory):** When a user has a file open in an external editor, warn the agent
 - **Stale detection:** Long-running sessions prompt the user to refresh the workspace base

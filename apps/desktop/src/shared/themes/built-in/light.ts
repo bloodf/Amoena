@@ -1,12 +1,12 @@
 import type { Theme } from "../types";
 
 /**
- * Light theme - based on the original Lunaria light mode colors
+ * Light theme - based on the original Amoena light mode colors
  */
 export const lightTheme: Theme = {
 	id: "light",
 	name: "Light",
-	author: "Lunaria",
+	author: "Amoena",
 	type: "light",
 	isBuiltIn: true,
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lunaria uses GitHub Actions for continuous integration and deployment. The pipeline validates code quality, runs tests, and builds release artifacts.
+Amoena uses GitHub Actions for continuous integration and deployment. The pipeline validates code quality, runs tests, and builds release artifacts.
 
 ## Pipeline Stages
 

@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 type SuperTab = "tenants" | "jobs" | "events";
 
@@ -84,7 +84,7 @@ const JOB_PAGE_SIZE = 8;
 
 export function SuperAdminPanel() {
 	const t = useTranslations("superAdmin");
-	const { currentUser, dashboardMode } = useLunaria();
+	const { currentUser, dashboardMode } = useAmoena();
 	const isLocal = dashboardMode === "local";
 
 	const [tenants, setTenants] = useState<TenantRow[]>([]);
@@ -137,7 +137,7 @@ export function SuperAdminPanel() {
 		display_name: "",
 		linux_user: "",
 		plan_tier: "standard",
-		owner_gateway: "lunaria-main",
+		owner_gateway: "amoena-main",
 		gateway_port: "",
 		dashboard_port: "",
 		dry_run: true,
@@ -196,7 +196,7 @@ export function SuperAdminPanel() {
 						{
 							id: -1,
 							slug: "local-system",
-							display_name: "Local Lunaria",
+							display_name: "Local Amoena",
 							linux_user: currentUser?.username || "local",
 							created_by: "local",
 							owner_gateway: primaryGateway?.name || "local",
@@ -249,7 +249,7 @@ export function SuperAdminPanel() {
 							id,
 							tenant_id: -1,
 							tenant_slug: "local-system",
-							tenant_display_name: "Local Lunaria",
+							tenant_display_name: "Local Amoena",
 							job_type: "automation",
 							status,
 							dry_run: 1,
@@ -460,7 +460,7 @@ export function SuperAdminPanel() {
 				display_name: "",
 				linux_user: "",
 				plan_tier: "standard",
-				owner_gateway: "lunaria-main",
+				owner_gateway: "amoena-main",
 				gateway_port: "",
 				dashboard_port: "",
 				dry_run: true,
@@ -779,8 +779,8 @@ export function SuperAdminPanel() {
 								className="h-9 px-3 rounded-md bg-secondary border border-border text-sm text-foreground"
 							>
 								{gatewayOptions.length === 0 ? (
-									<option value={form.owner_gateway || "lunaria-main"}>
-										{form.owner_gateway || "lunaria-main"}
+									<option value={form.owner_gateway || "amoena-main"}>
+										{form.owner_gateway || "amoena-main"}
 									</option>
 								) : (
 									gatewayOptions.map((gw) => (

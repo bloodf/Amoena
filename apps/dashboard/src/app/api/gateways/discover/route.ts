@@ -12,7 +12,7 @@ interface DiscoveredGateway {
 
 /**
  * GET /api/gateways/discover
- * Discovers Lunaria gateways via systemd services and port scanning.
+ * Discovers Amoena gateways via systemd services and port scanning.
  * Does not require filesystem access to other users' configs.
  */
 export async function GET(request: NextRequest) {
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 
 	const discovered: DiscoveredGateway[] = [];
 
-	// Parse systemd services for lunaria-gateway instances
+	// Parse systemd services for amoena-gateway instances
 	try {
 		const output = execFileSync(
 			"systemctl",
@@ -32,31 +32,31 @@ export async function GET(request: NextRequest) {
 
 		const gwLines = output
 			.split("\n")
-			.filter((l) => l.includes("lunaria") && l.includes("gateway"));
+			.filter((l) => l.includes("amoena") && l.includes("gateway"));
 
 		for (const line of gwLines) {
-			// e.g. "lunaria-gateway@quant.service loaded active running Lunaria Gateway (quant)"
+			// e.g. "amoena-gateway@quant.service loaded active running Amoena Gateway (quant)"
 			const parts = line.trim().split(/\s+/);
 			const serviceName = parts[0] || "";
 			const state = parts[2] || ""; // active/inactive
-			const description = parts.slice(4).join(" "); // "Lunaria Gateway (quant)"
+			const description = parts.slice(4).join(" "); // "Amoena Gateway (quant)"
 
 			// Extract user from service name
 			let user = "";
-			const templateMatch = serviceName.match(/lunaria-gateway@(\w+)\.service/);
+			const templateMatch = serviceName.match(/amoena-gateway@(\w+)\.service/);
 			if (templateMatch) {
 				user = templateMatch[1];
 			} else {
-				// Custom service name like "lunaria-leads-gateway.service"
-				const customMatch = serviceName.match(/lunaria-(\w+)-gateway\.service/);
+				// Custom service name like "amoena-leads-gateway.service"
+				const customMatch = serviceName.match(/amoena-(\w+)-gateway\.service/);
 				if (customMatch) user = customMatch[1];
 			}
 			if (!user) continue;
 
-			// Find the port by checking what lunaria-gateway processes are listening on
+			// Find the port by checking what amoena-gateway processes are listening on
 			let port = 0;
 			try {
-				const configPath = `/home/${user}/.lunaria/lunaria.json`;
+				const configPath = `/home/${user}/.amoena/amoena.json`;
 				const raw = readFileSync(configPath, "utf-8");
 				const config = JSON.parse(raw);
 				if (typeof config?.gateway?.port === "number")

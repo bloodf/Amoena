@@ -33,7 +33,7 @@ interface ScanResult {
 	categories: {
 		credentials: Category;
 		network: Category;
-		lunaria: Category;
+		amoena: Category;
 		runtime: Category;
 		os: Category;
 	};
@@ -94,7 +94,7 @@ const OVERALL_COLOR: Record<string, string> = {
 const CATEGORY_LABELS: Record<string, { label: string; icon: string }> = {
 	credentials: { label: "Credentials", icon: "K" },
 	network: { label: "Network", icon: "N" },
-	lunaria: { label: "Lunaria", icon: "O" },
+	amoena: { label: "Amoena", icon: "O" },
 	runtime: { label: "Runtime", icon: "R" },
 	os: { label: "OS Security", icon: "S" },
 };
@@ -224,7 +224,7 @@ export function SecurityScanCard({
 						Run a comprehensive security scan of your installation
 					</p>
 					<p className="text-xs text-muted-foreground/60">
-						Checks credentials, network config, Lunaria hardening, and runtime
+						Checks credentials, network config, Amoena hardening, and runtime
 						security
 					</p>
 				</div>

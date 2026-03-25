@@ -20,7 +20,7 @@ function renderInRouter(path: string, element: ReactElement) {
   );
 }
 
-describe("Lunaria screens", () => {
+describe("Amoena screens", () => {
   test("renders Home screen shell", () => {
     renderInRouter("/", <HomeScreen />);
     expect(screen.getByText("Welcome back")).not.toBeNull();

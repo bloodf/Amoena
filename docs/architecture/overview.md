@@ -1,12 +1,12 @@
 # System Architecture
 
-Lunaria is a desktop-first AI development environment built with **Tauri** (Rust backend) and **React** (TypeScript frontend). It orchestrates multiple AI providers and agents through an embedded HTTP runtime.
+Amoena is a desktop-first AI development environment built with **Tauri** (Rust backend) and **React** (TypeScript frontend). It orchestrates multiple AI providers and agents through an embedded HTTP runtime.
 
 ## High-Level Architecture
 
 ```
 +-----------------------------------------------------------------------+
-|                          Lunaria Desktop App                           |
+|                          Amoena Desktop App                           |
 |                                                                        |
 |  +-----------------------------+    +-------------------------------+  |
 |  |     Frontend (Webview)      |    |      Tauri Backend (Rust)     |  |
@@ -68,7 +68,7 @@ All Rust backend code lives in `apps/desktop/src-tauri/src/`:
 src/
 +-- lib.rs                  # Tauri app setup, plugin registration
 +-- main.rs                 # Desktop entry point
-+-- bin/lunaria/            # CLI binary
++-- bin/amoena/            # CLI binary
 |   +-- main.rs             # CLI entry, arg parsing (clap)
 |   +-- client.rs           # HTTP client for CLI
 |   +-- commands/           # Subcommand implementations
@@ -244,7 +244,7 @@ Hooks run with a configurable timeout (default 30s) and can be filtered by regex
 
 ## Persistence Layer
 
-All state is stored in a single SQLite database (`~/.lunaria/lunaria.db`):
+All state is stored in a single SQLite database (`~/.amoena/amoena.db`):
 
 ```
 +-- sessions

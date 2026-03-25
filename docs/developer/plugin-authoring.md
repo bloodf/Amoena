@@ -2,11 +2,11 @@
 
 ## Overview
 
-This guide walks you through creating a Lunaria plugin from scratch. For the full plugin API reference, see `docs/developer/plugins/`.
+This guide walks you through creating a Amoena plugin from scratch. For the full plugin API reference, see `docs/developer/plugins/`.
 
 ## Prerequisites
 
-- Lunaria desktop app installed and running
+- Amoena desktop app installed and running
 - Familiarity with TypeScript
 - Read `docs/developer/plugins/manifest.md` for the manifest schema
 
@@ -128,27 +128,27 @@ See `docs/developer/plugins/ui-extensions.md` for layout options.
 bun test
 
 # Load plugin in development mode
-# In Lunaria: Settings > Plugins > Load from directory > select your plugin folder
+# In Amoena: Settings > Plugins > Load from directory > select your plugin folder
 ```
 
 See `docs/developer/plugins/testing-and-release.md` for the full testing workflow.
 
 ## Ecosystem Compatibility
 
-Lunaria can import plugins from both Claude Code (`oh-my-claudecode`) and OpenCode (`oh-my-opencode`) ecosystems. If you're porting an existing plugin, see the ecosystem compatibility section in `docs/architecture/plugin-framework.md`.
+Amoena can import plugins from both Claude Code (`oh-my-claudecode`) and OpenCode (`oh-my-opencode`) ecosystems. If you're porting an existing plugin, see the ecosystem compatibility section in `docs/architecture/plugin-framework.md`.
 
 ## Publishing
 
-Plugin distribution is handled through the Lunaria Marketplace (V2.0). Until then, plugins are shared as git repositories and loaded from local directories.
+Plugin distribution is handled through the Amoena Marketplace (V2.0). Until then, plugins are shared as git repositories and loaded from local directories.
 
 ## Deep-Link Install Format
 
-Lunaria supports install-review deep links for plugins and extensions. The current deeplink parser expects the `lunaria://` scheme and an `install` path.
+Amoena supports install-review deep links for plugins and extensions. The current deeplink parser expects the `amoena://` scheme and an `install` path.
 
 Example:
 
 ```text
-lunaria://plugin/install?id=my-plugin&source=registry&manifestUrl=https://example.com/manifest.json&version=1.0.0&publisher=lunaria-team&title=My%20Plugin&signature=abc123
+amoena://plugin/install?id=my-plugin&source=registry&manifestUrl=https://example.com/manifest.json&version=1.0.0&publisher=amoena-team&title=My%20Plugin&signature=abc123
 ```
 
 Important fields:

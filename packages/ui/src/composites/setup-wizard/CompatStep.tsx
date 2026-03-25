@@ -10,7 +10,7 @@ export function SetupWizardCompatStep({
       <div>
         <h2 className="mb-2 text-lg font-semibold text-foreground">Ecosystem Compatibility</h2>
         <p className="mx-auto max-w-md text-sm text-muted-foreground">
-          Lunaria can import compatible agent settings, hooks, and extension metadata from supported ecosystems.
+          Amoena can import compatible agent settings, hooks, and extension metadata from supported ecosystems.
         </p>
       </div>
 
@@ -24,7 +24,7 @@ export function SetupWizardCompatStep({
       </div>
 
       <Button onClick={onLaunch} className="px-6 py-2.5 text-sm">
-        Launch Lunaria
+        Launch Amoena
       </Button>
     </div>
   );

@@ -20,7 +20,7 @@ Build the Time Saved calculator and Streaks tracker — gamification features th
 
 ## Repository Context
 
-- **Monorepo root:** `/Users/heitor/Developer/github.com/Lunaria/lunaria`
+- **Monorepo root:** `/Users/heitor/Developer/github.com/Amoena/amoena`
 - **Telemetry module (Phase 1):** `apps/dashboard/src/lib/mission-control-telemetry.ts`
 - **Mission Control UI (Phase 1):** `apps/dashboard/src/components/panels/mission-control/`
 - **Database:** `apps/dashboard/src/lib/db.ts`

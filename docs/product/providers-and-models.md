@@ -12,7 +12,7 @@
 
 ---
 
-Lunaria supports cloud and local model providers.
+Amoena supports cloud and local model providers.
 
 ## Provider Setup
 
@@ -34,7 +34,7 @@ Local models are intended for lightweight tasks such as:
 
 ## Reasoning-Capable Models
 
-For supported models, Lunaria exposes:
+For supported models, Amoena exposes:
 
 - reasoning support badge
 - default reasoning mode: `off`, `auto`, `on`

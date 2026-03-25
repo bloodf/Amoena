@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface Activity {
 	id: number;
@@ -234,7 +234,7 @@ function TimelineRow({ activity }: { activity: Activity }) {
 // ── Main Component ──────────────────────────────
 export function ActivityFeedPanel() {
 	const t = useTranslations("activityFeed");
-	const { agents } = useLunaria();
+	const { agents } = useAmoena();
 
 	const [activities, setActivities] = useState<Activity[]>([]);
 	const [sessions, setSessions] = useState<SessionInfo[]>([]);

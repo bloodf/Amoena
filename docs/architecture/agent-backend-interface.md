@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the backend architecture for Lunaria's agent system. The design supports two modes: **wrapper backends** that delegate to external TUI/CLI runtimes, and a **native backend** powered by Lunaria's own engine using the Vercel AI SDK. Both modes expose a unified adapter contract for session lifecycle, streaming I/O, tool execution, permission mediation, context management, and observability.
+This document defines the backend architecture for Amoena's agent system. The design supports two modes: **wrapper backends** that delegate to external TUI/CLI runtimes, and a **native backend** powered by Amoena's own engine using the Vercel AI SDK. Both modes expose a unified adapter contract for session lifecycle, streaming I/O, tool execution, permission mediation, context management, and observability.
 
 ## Language Authority
 
@@ -28,7 +28,7 @@ The TypeScript definitions shown in this document are **generated output** — d
 
 ## Native Backend
 
-The native backend is Lunaria's own agent engine. The Axum runtime owns session state, permissions, tools, and persistence, while a **persistent Bun daemon** (see Bun Daemon Architecture below) handles LLM provider calls through the Vercel AI SDK v5. Results are streamed back through Axum to connected clients over SSE.
+The native backend is Amoena's own agent engine. The Axum runtime owns session state, permissions, tools, and persistence, while a **persistent Bun daemon** (see Bun Daemon Architecture below) handles LLM provider calls through the Vercel AI SDK v5. Results are streamed back through Axum to connected clients over SSE.
 
 ### Vercel AI SDK v5 Integration
 
@@ -65,7 +65,7 @@ New providers are added by installing the corresponding `@ai-sdk/*` package and 
 The native backend streams responses to clients (desktop, web, mobile) via Server-Sent Events (SSE):
 
 ```
-Client <--SSE-- Lunaria Server <--IPC--> Bun Daemon <--streamText()-- LLM Provider
+Client <--SSE-- Amoena Server <--IPC--> Bun Daemon <--streamText()-- LLM Provider
                      |
                      +--> Tool execution (local)
                      +--> Context management
@@ -140,7 +140,7 @@ Multi-step tool use (agent loops) are bounded by a configurable `maxSteps` param
 
 ## Wrapper Backends
 
-Wrapper backends delegate to external TUI/CLI runtimes. They translate between Lunaria's unified adapter contract and the specific transport/protocol of each runtime.
+Wrapper backends delegate to external TUI/CLI runtimes. They translate between Amoena's unified adapter contract and the specific transport/protocol of each runtime.
 
 ### Supported Runtimes
 
@@ -481,7 +481,7 @@ Sessions support forking and resuming:
 All sessions are persisted as JSONL (JSON Lines) files:
 
 ```
-~/.lunaria/sessions/<session-id>.jsonl
+~/.amoena/sessions/<session-id>.jsonl
 ```
 
 Each line is a self-contained JSON object representing one event (message, tool call, tool result, compaction marker, metadata update). This format supports:
@@ -545,7 +545,7 @@ MCP servers expose their tool schemas via the `tools/list` method. The backend:
 
 ## Ecosystem Compatibility Layer
 
-When running in native mode, the backend reads and applies configuration files from **both Claude Code and OpenCode ecosystems** simultaneously. This makes Lunaria the only AI tool that can run plugins from both ecosystems (e.g., oh-my-claudecode + oh-my-opencode) at the same time, giving users 100% feature access to every community extension.
+When running in native mode, the backend reads and applies configuration files from **both Claude Code and OpenCode ecosystems** simultaneously. This makes Amoena the only AI tool that can run plugins from both ecosystems (e.g., oh-my-claudecode + oh-my-opencode) at the same time, giving users 100% feature access to every community extension.
 
 ### Configuration Files
 
@@ -562,7 +562,7 @@ When running in native mode, the backend reads and applies configuration files f
 
 ### Plugin Ecosystem Manager
 
-Lunaria auto-discovers and manages plugins from both ecosystems:
+Amoena auto-discovers and manages plugins from both ecosystems:
 
 - **Auto-discovery**: Scans `~/.claude/` for Claude Code plugins (oh-my-claudecode, claude-mem, etc.) and `~/.opencode/` plus `opencode.json` for OpenCode plugins (oh-my-opencode, etc.).
 - **Per-plugin enable/disable**: Each plugin can be individually toggled via Settings > Plugins. Users can run oh-my-claudecode and oh-my-opencode simultaneously, or selectively enable specific plugins.
@@ -575,14 +575,14 @@ Lunaria auto-discovers and manages plugins from both ecosystems:
 
 OpenCode configuration is loaded alongside Claude Code config:
 
-- **`opencode.json` agents**: Agent definitions (build, plan, general, explore, compaction, title, summary) are imported as Lunaria agent profiles. Each agent's model, system prompt, tool access, and permission config are preserved.
-- **OpenCode hooks**: OpenCode's event hooks (session lifecycle, tool execution, approval/guardrail events) are normalized to Lunaria's Hook Engine format and executed with the same semantics.
+- **`opencode.json` agents**: Agent definitions (build, plan, general, explore, compaction, title, summary) are imported as Amoena agent profiles. Each agent's model, system prompt, tool access, and permission config are preserved.
+- **OpenCode hooks**: OpenCode's event hooks (session lifecycle, tool execution, approval/guardrail events) are normalized to Amoena's Hook Engine format and executed with the same semantics.
 - **OpenCode MCP servers**: MCP server configurations from `opencode.json` are merged with Claude Code MCP configs. On conflict (same server name), Claude Code config takes precedence (configurable).
-- **Provider config**: Provider overrides in `opencode.json` are imported into Lunaria's provider system. Users can use OpenCode's provider setup for initial config, then manage everything from Lunaria.
+- **Provider config**: Provider overrides in `opencode.json` are imported into Amoena's provider system. Users can use OpenCode's provider setup for initial config, then manage everything from Amoena.
 
 ### Agent Profile Aggregation and Tab Switching
 
-Lunaria aggregates agent profiles from all sources and exposes them as **tab-switchable agents** — similar to OpenCode's Tab key for cycling between agents:
+Amoena aggregates agent profiles from all sources and exposes them as **tab-switchable agents** — similar to OpenCode's Tab key for cycling between agents:
 
 | Source | Example Agents | Priority |
 |--------|---------------|----------|
@@ -591,7 +591,7 @@ Lunaria aggregates agent profiles from all sources and exposes them as **tab-swi
 | OpenCode `opencode.json` agents | build, plan, general, explore, compaction, title, summary | Medium |
 | oh-my-claudecode catalog | executor, architect, debugger, planner, designer, etc. | Medium |
 | oh-my-opencode catalog | OpenCode-specific agent personas | Medium |
-| User custom (`~/.lunaria/agents/`) | User-defined agents | Highest (overrides) |
+| User custom (`~/.amoena/agents/`) | User-defined agents | Highest (overrides) |
 
 **Tab switching behavior**:
 
@@ -599,7 +599,7 @@ Lunaria aggregates agent profiles from all sources and exposes them as **tab-swi
 - **Composer UI**: Agent tab bar above the input field shows available agents with active indicator. Click to switch.
 - **Mid-session switching**: Changing agent tab preserves conversation history but changes the active system prompt, tool access, and permission config for subsequent turns.
 - **Per-ecosystem filtering**: Users can filter the tab bar to show only agents from a specific ecosystem (Claude Code, OpenCode, or custom).
-- **Agent deduplication**: When the same logical agent exists in multiple ecosystems (e.g., "build" in both Claude Code and OpenCode), Lunaria shows one entry with a source indicator. Users choose which ecosystem's definition to use via Settings.
+- **Agent deduplication**: When the same logical agent exists in multiple ecosystems (e.g., "build" in both Claude Code and OpenCode), Amoena shows one entry with a source indicator. Users choose which ecosystem's definition to use via Settings.
 
 ### CLAUDE.md Processing
 
@@ -700,7 +700,7 @@ Dynamic provider installation: if the required `@ai-sdk/*` package is not instal
 
 ### Local Model Support
 
-Lunaria natively connects to locally-running inference servers for small, fast models ideal for lightweight tasks:
+Amoena natively connects to locally-running inference servers for small, fast models ideal for lightweight tasks:
 
 **Supported local runtimes**:
 
@@ -721,7 +721,7 @@ Lunaria natively connects to locally-running inference servers for small, fast m
 - **Privacy**: Sensitive codebases that cannot be sent to cloud APIs. All inference stays on-device.
 - **Cost**: Zero marginal cost per token. Ideal for high-volume lightweight operations.
 
-**Configuration** (`lunaria.json`):
+**Configuration** (`amoena.json`):
 
 ```json
 {
@@ -752,7 +752,7 @@ API keys and credentials are resolved through a fallback chain:
 | 0 | No auth (local models) | Ollama, llama.cpp, LM Studio — no key needed |
 | 1 | Environment variable | `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` |
 | 2 | Credential store | System keychain via `keytar` or OS-native secret store |
-| 3 | Config file | `~/.lunaria/providers.json` (encrypted at rest) |
+| 3 | Config file | `~/.amoena/providers.json` (encrypted at rest) |
 | 4 | Interactive setup | Prompt user for key on first use, store in credential store |
 
 Resolution is per-provider. The backend never logs or persists raw API keys outside the credential store. Keys loaded from environment variables are used in-memory only.

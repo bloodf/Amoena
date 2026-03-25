@@ -20,10 +20,10 @@ export interface GatewaySession {
 }
 
 function getGatewaySessionStoreFiles(): string[] {
-	const lunariaStateDir = config.lunariaStateDir;
-	if (!lunariaStateDir) return [];
+	const amoenaStateDir = config.amoenaStateDir;
+	if (!amoenaStateDir) return [];
 
-	const agentsDir = path.join(lunariaStateDir, "agents");
+	const agentsDir = path.join(amoenaStateDir, "agents");
 	if (!fs.existsSync(agentsDir)) return [];
 
 	let agentDirs: string[];
@@ -62,10 +62,10 @@ export function invalidateSessionCache(): void {
 }
 
 /**
- * Read all sessions from Lunaria agent session stores on disk.
+ * Read all sessions from Amoena agent session stores on disk.
  *
- * Lunaria stores sessions per-agent at:
- *   {LUNARIA_STATE_DIR}/agents/{agentName}/sessions/sessions.json
+ * Amoena stores sessions per-agent at:
+ *   {AMOENA_STATE_DIR}/agents/{agentName}/sessions/sessions.json
  *
  * Each file is a JSON object keyed by session key (e.g. "agent:<agent>:main")
  * with session metadata as values.

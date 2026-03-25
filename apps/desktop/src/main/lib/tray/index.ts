@@ -111,7 +111,7 @@ function openTerminalSettings(): void {
 	menuEmitter.emit("open-settings", "terminal");
 }
 
-function openSessionInLunaria(workspaceId: string): void {
+function openSessionInAmoena(workspaceId: string): void {
 	showWindow();
 	menuEmitter.emit("open-workspace", workspaceId);
 }
@@ -185,8 +185,8 @@ function buildSessionsSubmenu(
 					label: formatSessionLabel(session),
 					submenu: [
 						{
-							label: "Open in Lunaria",
-							click: () => openSessionInLunaria(session.workspaceId),
+							label: "Open in Amoena",
+							click: () => openSessionInAmoena(session.workspaceId),
 						},
 						{
 							label: "Kill",
@@ -223,8 +223,8 @@ async function quitApp(): Promise<void> {
 		buttons: ["Cancel", "Keep Sessions", "Kill Sessions"],
 		defaultId: 1,
 		cancelId: 0,
-		title: "Quit Lunaria?",
-		message: "Quit Lunaria?",
+		title: "Quit Amoena?",
+		message: "Quit Amoena?",
 		detail:
 			"Keep sessions running in the background, or kill all sessions and shut down the daemon?",
 	});
@@ -247,7 +247,7 @@ async function quitApp(): Promise<void> {
 					buttons: ["OK"],
 					defaultId: 0,
 					title: "Failed to kill sessions",
-					message: "Lunaria could not kill terminal sessions.",
+					message: "Amoena could not kill terminal sessions.",
 					detail:
 						"The app will stay open so you can retry or quit while keeping sessions running in the background.",
 				})
@@ -283,7 +283,7 @@ async function updateTrayMenu(): Promise<void> {
 		},
 		{ type: "separator" },
 		{
-			label: "Open Lunaria",
+			label: "Open Amoena",
 			click: showWindow,
 		},
 		{
@@ -318,7 +318,7 @@ export function initTray(): void {
 		}
 
 		tray = new Tray(icon);
-		tray.setToolTip("Lunaria");
+		tray.setToolTip("Amoena");
 
 		updateTrayMenu().catch((error) => {
 			console.error("[Tray] Failed to build initial menu:", error);

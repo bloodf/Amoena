@@ -6,7 +6,7 @@ import {
 } from "@/lib/agent-sync";
 import { buildAgentConfig, getTemplate } from "@/lib/agent-templates";
 import { requireRole } from "@/lib/auth";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 import { config as appConfig } from "@/lib/config";
 import { type Agent, db_helpers, getDatabase, logAuditEvent } from "@/lib/db";
 import { eventBus } from "@/lib/event-bus";
@@ -193,7 +193,7 @@ export async function POST(request: NextRequest) {
 
 		const {
 			name,
-			lunaria_id,
+			amoena_id,
 			role,
 			session_key,
 			soul_content,
@@ -202,11 +202,11 @@ export async function POST(request: NextRequest) {
 			template,
 			gateway_config,
 			write_to_gateway,
-			provision_lunaria_workspace,
-			lunaria_workspace_path,
+			provision_amoena_workspace,
+			amoena_workspace_path,
 		} = body;
 
-		const lunariaId = (lunaria_id || name || "agent")
+		const amoenaId = (amoena_id || name || "agent")
 			.toLowerCase()
 			.replace(/[^a-z0-9]+/g, "-")
 			.replace(/^-|-$/g, "");
@@ -249,30 +249,30 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		if (provision_lunaria_workspace) {
-			if (!appConfig.lunariaStateDir) {
+		if (provision_amoena_workspace) {
+			if (!appConfig.amoenaStateDir) {
 				return NextResponse.json(
 					{
 						error:
-							"LUNARIA_STATE_DIR is not configured; cannot provision Lunaria workspace",
+							"AMOENA_STATE_DIR is not configured; cannot provision Amoena workspace",
 					},
 					{ status: 500 },
 				);
 			}
 
-			const workspacePath = lunaria_workspace_path
-				? path.resolve(lunaria_workspace_path)
+			const workspacePath = amoena_workspace_path
+				? path.resolve(amoena_workspace_path)
 				: resolveWithin(
-						appConfig.lunariaStateDir,
-						path.join("workspaces", lunariaId),
+						appConfig.amoenaStateDir,
+						path.join("workspaces", amoenaId),
 					);
 
 			try {
-				await runLunaria(
+				await runAmoena(
 					[
 						"agents",
 						"add",
-						lunariaId,
+						amoenaId,
 						"--workspace",
 						workspacePath,
 						"--non-interactive",
@@ -281,14 +281,14 @@ export async function POST(request: NextRequest) {
 				);
 			} catch (provisionError: any) {
 				logger.error(
-					{ err: provisionError, lunariaId, workspacePath },
-					"Lunaria workspace provisioning failed",
+					{ err: provisionError, amoenaId, workspacePath },
+					"Amoena workspace provisioning failed",
 				);
 				return NextResponse.json(
 					{
 						error:
 							provisionError?.message ||
-							"Failed to provision Lunaria agent workspace",
+							"Failed to provision Amoena agent workspace",
 					},
 					{ status: 502 },
 				);
@@ -359,7 +359,7 @@ export async function POST(request: NextRequest) {
 		if (write_to_gateway && finalConfig) {
 			try {
 				await writeAgentToConfig({
-					id: lunariaId,
+					id: amoenaId,
 					name,
 					...(finalConfig.model && { model: finalConfig.model }),
 					...(finalConfig.identity && { identity: finalConfig.identity }),
@@ -378,7 +378,7 @@ export async function POST(request: NextRequest) {
 					actor_id: auth.user.id,
 					target_type: "agent",
 					target_id: agentId as number,
-					detail: { name, lunaria_id: lunariaId, template: template || null },
+					detail: { name, amoena_id: amoenaId, template: template || null },
 					ip_address: ipAddress,
 				});
 			} catch (gwErr: any) {

@@ -3,18 +3,18 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 type UpdateState = "idle" | "updating" | "success" | "error";
 
-export function LunariaUpdateBanner() {
+export function AmoenaUpdateBanner() {
 	const {
-		lunariaUpdate,
-		lunariaUpdateDismissedVersion,
-		dismissLunariaUpdate,
-		setLunariaUpdate,
-	} = useLunaria();
-	const t = useTranslations("lunariaUpdateBanner");
+		amoenaUpdate,
+		amoenaUpdateDismissedVersion,
+		dismissAmoenaUpdate,
+		setAmoenaUpdate,
+	} = useAmoena();
+	const t = useTranslations("amoenaUpdateBanner");
 	const tc = useTranslations("common");
 	const [copied, setCopied] = useState(false);
 	const [state, setState] = useState<UpdateState>("idle");
@@ -22,12 +22,12 @@ export function LunariaUpdateBanner() {
 	const [newVersion, setNewVersion] = useState<string | null>(null);
 	const [showChangelog, setShowChangelog] = useState(false);
 
-	if (!lunariaUpdate) return null;
-	if (lunariaUpdateDismissedVersion === lunariaUpdate.latest) return null;
+	if (!amoenaUpdate) return null;
+	if (amoenaUpdateDismissedVersion === amoenaUpdate.latest) return null;
 
 	function handleCopy() {
 		navigator.clipboard
-			.writeText(lunariaUpdate?.updateCommand)
+			.writeText(amoenaUpdate?.updateCommand)
 			.then(() => {
 				setCopied(true);
 				setTimeout(() => setCopied(false), 2000);
@@ -40,7 +40,7 @@ export function LunariaUpdateBanner() {
 		setErrorMsg(null);
 
 		try {
-			const res = await fetch("/api/lunaria/update", { method: "POST" });
+			const res = await fetch("/api/amoena/update", { method: "POST" });
 			const data = await res.json();
 
 			if (!res.ok) {
@@ -52,7 +52,7 @@ export function LunariaUpdateBanner() {
 			setState("success");
 			setNewVersion(data.newVersion);
 			// Clear the banner after a few seconds
-			setTimeout(() => setLunariaUpdate(null), 5000);
+			setTimeout(() => setAmoenaUpdate(null), 5000);
 		} catch {
 			setState("error");
 			setErrorMsg(t("networkError"));
@@ -68,13 +68,13 @@ export function LunariaUpdateBanner() {
 				<p className="flex-1 text-xs text-cyan-300">
 					{state === "updating" && (
 						<span className="font-medium text-amber-300">
-							{t("updatingLunaria")}
+							{t("updatingAmoena")}
 						</span>
 					)}
 					{state === "success" && (
 						<span className="font-medium text-emerald-300">
-							{t("lunariaUpdated", {
-								version: newVersion || lunariaUpdate.latest,
+							{t("amoenaUpdated", {
+								version: newVersion || amoenaUpdate.latest,
 							})}
 						</span>
 					)}
@@ -84,10 +84,10 @@ export function LunariaUpdateBanner() {
 					{state === "idle" && (
 						<>
 							<span className="font-medium text-cyan-200">
-								{t("lunariaUpdateAvailable", { version: lunariaUpdate.latest })}
+								{t("amoenaUpdateAvailable", { version: amoenaUpdate.latest })}
 							</span>
 							{" ("}
-							{t("installed", { version: lunariaUpdate.installed })}
+							{t("installed", { version: amoenaUpdate.installed })}
 							{")"}
 						</>
 					)}
@@ -100,7 +100,7 @@ export function LunariaUpdateBanner() {
 						>
 							{tc("updateNow")}
 						</button>
-						{lunariaUpdate.releaseNotes && (
+						{amoenaUpdate.releaseNotes && (
 							<button
 								onClick={() => setShowChangelog((v) => !v)}
 								className="shrink-0 text-2xs font-medium text-cyan-400 hover:text-cyan-300 px-2 py-1 rounded border border-cyan-500/20 hover:border-cyan-500/40 transition-colors"
@@ -115,7 +115,7 @@ export function LunariaUpdateBanner() {
 							{copied ? t("copied") : t("copyCommand")}
 						</button>
 						<a
-							href={lunariaUpdate.releaseUrl}
+							href={amoenaUpdate.releaseUrl}
 							target="_blank"
 							rel="noopener noreferrer"
 							className="shrink-0 text-2xs font-medium text-cyan-400 hover:text-cyan-300 px-2 py-1 rounded border border-cyan-500/20 hover:border-cyan-500/40 transition-colors"
@@ -125,7 +125,7 @@ export function LunariaUpdateBanner() {
 						<Button
 							variant="ghost"
 							size="icon-xs"
-							onClick={() => dismissLunariaUpdate(lunariaUpdate.latest)}
+							onClick={() => dismissAmoenaUpdate(amoenaUpdate.latest)}
 							className="shrink-0 text-cyan-400/60 hover:text-cyan-300 hover:bg-transparent"
 							title={tc("dismiss")}
 						>
@@ -164,9 +164,9 @@ export function LunariaUpdateBanner() {
 					</svg>
 				)}
 			</div>
-			{showChangelog && lunariaUpdate.releaseNotes && (
+			{showChangelog && amoenaUpdate.releaseNotes && (
 				<div className="mt-1 px-4 py-3 rounded-lg bg-cyan-500/5 border border-cyan-500/10 text-xs text-cyan-300/80 whitespace-pre-wrap max-h-64 overflow-y-auto">
-					{lunariaUpdate.releaseNotes}
+					{amoenaUpdate.releaseNotes}
 				</div>
 			)}
 		</div>

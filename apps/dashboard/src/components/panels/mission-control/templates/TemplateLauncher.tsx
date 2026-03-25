@@ -28,7 +28,7 @@ export function TemplateLauncher({ template, onLaunch, onCancel }: TemplateLaunc
 
 	function handleLaunch() {
 		if (!allFilled && placeholders.length > 0) return;
-		eventBus.broadcast("lunaria:load-template" as any, {
+		eventBus.broadcast("amoena:load-template" as any, {
 			templateId: template.id,
 			goalText: filledGoalText,
 			options: template.options,

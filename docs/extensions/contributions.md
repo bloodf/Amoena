@@ -1,6 +1,6 @@
 # Extension Contributions
 
-The `contributes` field in the manifest declares what an extension adds to Lunaria. Each contribution type is described below with its full schema and examples.
+The `contributes` field in the manifest declares what an extension adds to Amoena. Each contribution type is described below with its full schema and examples.
 
 ## commands
 
@@ -50,7 +50,7 @@ Commands are named actions that appear in the command palette and can be invoked
 
 ## menus
 
-Menus place commands or panel openers into specific locations in the Lunaria UI. The `menus` field is a map from **location key** to an array of menu items.
+Menus place commands or panel openers into specific locations in the Amoena UI. The `menus` field is a map from **location key** to an array of menu items.
 
 ### Schema
 
@@ -122,7 +122,7 @@ Menus place commands or panel openers into specific locations in the Lunaria UI.
 
 ## panels
 
-Panels are HTML/CSS/JS applications rendered in a sandboxed webview inside the Lunaria workspace. They are the primary way to add rich UI to the application.
+Panels are HTML/CSS/JS applications rendered in a sandboxed webview inside the Amoena workspace. They are the primary way to add rich UI to the application.
 
 ### Schema
 
@@ -150,7 +150,7 @@ Panels are HTML/CSS/JS applications rendered in a sandboxed webview inside the L
 
 ### Panel Runtime
 
-Panels run as full HTML documents. You can use standard web APIs, inline `<script>` tags, and `<style>` blocks. CSS custom properties for Lunaria's theme colors are injected into the document root:
+Panels run as full HTML documents. You can use standard web APIs, inline `<script>` tags, and `<style>` blocks. CSS custom properties for Amoena's theme colors are injected into the document root:
 
 ```css
 /* Available CSS variables */
@@ -196,7 +196,7 @@ window.parent.postMessage({ type: 'panel-ready' }, '*');
 
 ## settings
 
-Settings declare user-configurable preferences that appear in the Lunaria settings UI under an extension-specific section.
+Settings declare user-configurable preferences that appear in the Amoena settings UI under an extension-specific section.
 
 ### Schema
 
@@ -263,7 +263,7 @@ Settings declare user-configurable preferences that appear in the Lunaria settin
 
 ## hooks
 
-Hooks register handlers for Lunaria lifecycle events. When an event fires, all registered handlers execute.
+Hooks register handlers for Amoena lifecycle events. When an event fires, all registered handlers execute.
 
 ### Schema
 
@@ -348,7 +348,7 @@ Tools add new capabilities that the AI can call during a session. Each tool has 
 
 ### Handler Execution
 
-When the AI calls your tool, Lunaria sends a JSON-RPC request to your backend:
+When the AI calls your tool, Amoena sends a JSON-RPC request to your backend:
 
 ```json
 {

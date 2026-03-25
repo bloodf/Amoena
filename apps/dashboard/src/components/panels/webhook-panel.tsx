@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 interface Webhook {
 	id: number;
@@ -102,7 +102,7 @@ const AVAILABLE_EVENTS = [
 
 export function WebhookPanel() {
 	const t = useTranslations("webhooks");
-	const { dashboardMode } = useLunaria();
+	const { dashboardMode } = useAmoena();
 	const isLocalMode = dashboardMode === "local";
 	const [webhooks, setWebhooks] = useState<Webhook[]>([]);
 	const [webhookAutomations, setWebhookAutomations] = useState<SchedulerTask[]>(

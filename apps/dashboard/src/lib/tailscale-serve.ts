@@ -63,7 +63,7 @@ export function findTailscaleServePort(
  * Checks the Web config for:
  * 1. A `/gw` path handler (authoritative)
  * 2. Any handler proxying to port 18789 (port-based proxy)
- * 3. Fallback: `gateway.tailscale.mode === 'serve'` in lunaria.json (legacy)
+ * 3. Fallback: `gateway.tailscale.mode === 'serve'` in amoena.json (legacy)
  */
 export function detectTailscaleServe(
 	web: Record<string, any> | null | undefined,
@@ -82,8 +82,8 @@ export function detectTailscaleServe(
 		}
 	}
 
-	// Legacy: check lunaria.json config
-	const effectivePath = configPath || process.env.LUNARIA_CONFIG_PATH || "";
+	// Legacy: check amoena.json config
+	const effectivePath = configPath || process.env.AMOENA_CONFIG_PATH || "";
 	if (!effectivePath) return false;
 	try {
 		const raw = readFileSync(effectivePath, "utf-8");

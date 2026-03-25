@@ -9,7 +9,7 @@ vi.mock("@/lib/auth", () => ({
 }));
 
 vi.mock("@/lib/config", () => ({
-	config: { lunariaConfigPath: "" },
+	config: { amoenaConfigPath: "" },
 }));
 
 vi.mock("@/lib/db", () => ({
@@ -62,7 +62,7 @@ describe("security-scan fix route env mutation", () => {
 	});
 
 	it("preserves runtime env overrides in test mode while updating env files", async () => {
-		process.env.LUNARIA_TEST_MODE = "1";
+		process.env.AMOENA_TEST_MODE = "1";
 		process.env.MC_DISABLE_RATE_LIMIT = "1";
 
 		const { POST } = await import("@/app/api/security-scan/fix/route");
@@ -81,7 +81,7 @@ describe("security-scan fix route env mutation", () => {
 	});
 
 	it("mutates runtime env outside test mode so fixes apply immediately", async () => {
-		delete process.env.LUNARIA_TEST_MODE;
+		delete process.env.AMOENA_TEST_MODE;
 		process.env.MC_DISABLE_RATE_LIMIT = "1";
 
 		const { POST } = await import("@/app/api/security-scan/fix/route");

@@ -1,4 +1,4 @@
-description: 'Lunaria Migration Prompts - Claude Code Agent Quality Evaluation'
+description: 'Amoena Migration Prompts - Claude Code Agent Quality Evaluation'
 
 providers:
   - id: 'anthropic:messages:claude-sonnet-4-20250514'

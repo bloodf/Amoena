@@ -8,8 +8,8 @@
  *
  * IPC Protocol:
  * - Uses NDJSON (newline-delimited JSON) over Unix domain socket
- * - Socket: ~/.lunaria/terminal-host.sock
- * - Auth token: ~/.lunaria/terminal-host.token
+ * - Socket: ~/.amoena/terminal-host.sock
+ * - Auth token: ~/.amoena/terminal-host.token
  */
 
 import { randomBytes } from "node:crypto";
@@ -24,7 +24,7 @@ import {
 import { createServer, type Server, Socket } from "node:net";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { LUNARIA_DIR_NAME } from "shared/constants";
+import { AMOENA_DIR_NAME } from "shared/constants";
 import {
 	type CancelCreateOrAttachRequest,
 	type ClearScrollbackRequest,
@@ -55,14 +55,14 @@ import { TerminalHost } from "./terminal-host";
 
 const DAEMON_VERSION = "1.0.0";
 
-// LUNARIA_DIR_NAME is imported from shared/constants for multi-worktree support
-// This allows workspace-specific home directories (e.g., ~/.lunaria-my-feature)
-const LUNARIA_HOME_DIR = join(homedir(), LUNARIA_DIR_NAME);
+// AMOENA_DIR_NAME is imported from shared/constants for multi-worktree support
+// This allows workspace-specific home directories (e.g., ~/.amoena-my-feature)
+const AMOENA_HOME_DIR = join(homedir(), AMOENA_DIR_NAME);
 
 // Socket and token paths
-const SOCKET_PATH = join(LUNARIA_HOME_DIR, "terminal-host.sock");
-const TOKEN_PATH = join(LUNARIA_HOME_DIR, "terminal-host.token");
-const PID_PATH = join(LUNARIA_HOME_DIR, "terminal-host.pid");
+const SOCKET_PATH = join(AMOENA_HOME_DIR, "terminal-host.sock");
+const TOKEN_PATH = join(AMOENA_HOME_DIR, "terminal-host.token");
+const PID_PATH = join(AMOENA_HOME_DIR, "terminal-host.pid");
 
 // =============================================================================
 // Logging
@@ -685,15 +685,15 @@ function isSocketLive(): Promise<boolean> {
 }
 
 async function startServer(): Promise<void> {
-	// Ensure lunaria directory exists with proper permissions
-	if (!existsSync(LUNARIA_HOME_DIR)) {
-		mkdirSync(LUNARIA_HOME_DIR, { recursive: true, mode: 0o700 });
-		log("info", `Created directory: ${LUNARIA_HOME_DIR}`);
+	// Ensure amoena directory exists with proper permissions
+	if (!existsSync(AMOENA_HOME_DIR)) {
+		mkdirSync(AMOENA_HOME_DIR, { recursive: true, mode: 0o700 });
+		log("info", `Created directory: ${AMOENA_HOME_DIR}`);
 	}
 
 	// Ensure directory has correct permissions
 	try {
-		chmodSync(LUNARIA_HOME_DIR, 0o700);
+		chmodSync(AMOENA_HOME_DIR, 0o700);
 	} catch {
 		// May fail if not owner, that's okay
 	}
@@ -824,7 +824,7 @@ function setupSignalHandlers() {
 async function main() {
 	log("info", "Terminal Host Daemon starting...");
 	log("info", `Environment: ${process.env.NODE_ENV || "production"}`);
-	log("info", `Home directory: ${LUNARIA_HOME_DIR}`);
+	log("info", `Home directory: ${AMOENA_HOME_DIR}`);
 
 	setupSignalHandlers();
 

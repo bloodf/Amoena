@@ -1,7 +1,7 @@
 export const de = {
   app: {
     runtimeEyebrow: "Desktop Laufzeit",
-    title: "Lunaria",
+    title: "Amoena",
     connecting:
       "Die vertrauenswuerdige localhost Laufzeit wird aufgebaut und die Desktop Shell wird geladen.",
     bootstrapFailed: "Start Fehlgeschlagen",

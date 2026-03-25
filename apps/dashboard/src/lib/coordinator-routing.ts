@@ -9,7 +9,7 @@ export interface CoordinatorAgentRecord {
 export interface ResolvedCoordinatorTarget {
 	deliveryName: string;
 	sessionKey: string | null;
-	lunariaAgentId: string | null;
+	amoenaAgentId: string | null;
 	resolvedBy: "direct" | "configured" | "default" | "main_session" | "fallback";
 }
 
@@ -19,7 +19,7 @@ function normalizeName(value: string | null | undefined): string {
 		.toLowerCase();
 }
 
-function normalizeLunariaId(value: string | null | undefined): string {
+function normalizeAmoenaId(value: string | null | undefined): string {
 	return normalizeName(value).replace(/\s+/g, "-");
 }
 
@@ -33,10 +33,10 @@ function parseConfig(raw: string | null | undefined): Record<string, unknown> {
 	}
 }
 
-function getConfigLunariaId(agent: CoordinatorAgentRecord): string | null {
+function getConfigAmoenaId(agent: CoordinatorAgentRecord): string | null {
 	const parsed = parseConfig(agent.config);
-	return typeof parsed.lunariaId === "string" && parsed.lunariaId.trim()
-		? parsed.lunariaId.trim()
+	return typeof parsed.amoenaId === "string" && parsed.amoenaId.trim()
+		? parsed.amoenaId.trim()
 		: null;
 }
 
@@ -50,10 +50,10 @@ function findSessionForAgent(
 	sessions: GatewaySession[],
 ): GatewaySession | undefined {
 	const name = normalizeName(agent.name);
-	const lunariaId = normalizeLunariaId(getConfigLunariaId(agent) || agent.name);
+	const amoenaId = normalizeAmoenaId(getConfigAmoenaId(agent) || agent.name);
 	return sessions.find((session) => {
 		const sessionAgent = normalizeName(session.agent);
-		return sessionAgent === name || sessionAgent === lunariaId;
+		return sessionAgent === name || sessionAgent === amoenaId;
 	});
 }
 
@@ -68,13 +68,13 @@ function resolveConfiguredCoordinatorTarget(
 	return (
 		allAgents.find((agent) => {
 			const byName = normalizeName(agent.name) === wanted;
-			const byLunariaId =
-				normalizeLunariaId(getConfigLunariaId(agent) || agent.name) === wanted;
+			const byAmoenaId =
+				normalizeAmoenaId(getConfigAmoenaId(agent) || agent.name) === wanted;
 			const session = findSessionForAgent(agent, sessions);
 			const bySessionAgent = session
 				? normalizeName(session.agent) === wanted
 				: false;
-			return byName || byLunariaId || bySessionAgent;
+			return byName || byAmoenaId || bySessionAgent;
 		}) || null
 	);
 }
@@ -96,8 +96,8 @@ export function resolveCoordinatorDeliveryTarget(params: {
 		agent: CoordinatorAgentRecord,
 		resolvedBy: ResolvedCoordinatorTarget["resolvedBy"],
 	): ResolvedCoordinatorTarget => {
-		const lunariaAgentId =
-			getConfigLunariaId(agent) || normalizeLunariaId(agent.name);
+		const amoenaAgentId =
+			getConfigAmoenaId(agent) || normalizeAmoenaId(agent.name);
 		const sessionKey =
 			explicitSessionKey ||
 			agent.session_key?.trim() ||
@@ -107,7 +107,7 @@ export function resolveCoordinatorDeliveryTarget(params: {
 		return {
 			deliveryName: agent.name,
 			sessionKey,
-			lunariaAgentId,
+			amoenaAgentId,
 			resolvedBy,
 		};
 	};
@@ -135,20 +135,20 @@ export function resolveCoordinatorDeliveryTarget(params: {
 		);
 		if (mainSession) {
 			const matchingAgent = params.allAgents.find((agent) => {
-				const lunariaId = normalizeLunariaId(
-					getConfigLunariaId(agent) || agent.name,
+				const amoenaId = normalizeAmoenaId(
+					getConfigAmoenaId(agent) || agent.name,
 				);
 				const agentName = normalizeName(agent.name);
 				const sessionAgent = normalizeName(mainSession.agent);
-				return sessionAgent === agentName || sessionAgent === lunariaId;
+				return sessionAgent === agentName || sessionAgent === amoenaId;
 			});
 
 			return {
 				deliveryName: matchingAgent?.name || mainSession.agent,
 				sessionKey: explicitSessionKey || mainSession.key || null,
-				lunariaAgentId:
-					getConfigLunariaId(matchingAgent || { name: mainSession.agent }) ||
-					normalizeLunariaId(mainSession.agent),
+				amoenaAgentId:
+					getConfigAmoenaId(matchingAgent || { name: mainSession.agent }) ||
+					normalizeAmoenaId(mainSession.agent),
 				resolvedBy: "main_session",
 			};
 		}
@@ -165,7 +165,7 @@ export function resolveCoordinatorDeliveryTarget(params: {
 	return {
 		deliveryName: params.to,
 		sessionKey: explicitSessionKey,
-		lunariaAgentId: normalizeLunariaId(params.to),
+		amoenaAgentId: normalizeAmoenaId(params.to),
 		resolvedBy: "fallback",
 	};
 }

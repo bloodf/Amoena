@@ -2,7 +2,7 @@ import { existsSync, statSync } from "node:fs";
 import net from "node:net";
 import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { runLunaria } from "@/lib/command";
+import { runAmoena } from "@/lib/command";
 import { config } from "@/lib/config";
 import { getDatabase } from "@/lib/db";
 import { logger } from "@/lib/logger";
@@ -59,14 +59,14 @@ export async function GET(request: NextRequest) {
 }
 
 async function getVersionInfo() {
-	let lunaria: string | null = null;
+	let amoena: string | null = null;
 	try {
-		const { stdout } = await runLunaria(["--version"], { timeoutMs: 3000 });
-		lunaria = stdout.trim();
+		const { stdout } = await runAmoena(["--version"], { timeoutMs: 3000 });
+		amoena = stdout.trim();
 	} catch {
-		// lunaria not available
+		// amoena not available
 	}
-	return { app: APP_VERSION, lunaria };
+	return { app: APP_VERSION, amoena };
 }
 
 function getSecurityInfo() {

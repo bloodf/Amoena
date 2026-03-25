@@ -30,7 +30,7 @@ export function ExportButton({ report, onExport }: ExportButtonProps) {
 	];
 
 	function hasSecrets(): boolean {
-		const skipWarning = localStorage.getItem("lunaria:skip-secret-warning") === "true";
+		const skipWarning = localStorage.getItem("amoena:skip-secret-warning") === "true";
 		if (skipWarning) return false;
 		// Check if report contains secrets
 		const { totalRedacted, types } = scrubReport(report);

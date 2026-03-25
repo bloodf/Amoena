@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { runClawdbot, runCommand, runLunaria } from "@/lib/command";
+import { runClawdbot, runCommand, runAmoena } from "@/lib/command";
 import { config } from "@/lib/config";
 import { getDatabase } from "@/lib/db";
 import { registerMcAsDashboard } from "@/lib/gateway-runtime";
@@ -385,7 +385,7 @@ async function getSystemStatus(workspaceId: number) {
 					command: parts.slice(2).join(" "),
 				};
 			})
-			.filter((proc) => /clawdbot|lunaria/i.test(proc.command));
+			.filter((proc) => /clawdbot|amoena/i.test(proc.command));
 		status.processes = processes;
 	} catch (error) {
 		logger.error({ err: error }, "Error getting process info");
@@ -448,7 +448,7 @@ async function getGatewayStatus() {
 		const match = stdout
 			.split("\n")
 			.find((line) =>
-				/clawdbot-gateway|lunaria-gateway|lunaria.*gateway/i.test(line),
+				/clawdbot-gateway|amoena-gateway|amoena.*gateway/i.test(line),
 			);
 		if (match) {
 			const parts = match.trim().split(/\s+/);
@@ -469,7 +469,7 @@ async function getGatewayStatus() {
 	}
 
 	try {
-		const { stdout } = await runLunaria(["--version"], { timeoutMs: 3000 });
+		const { stdout } = await runAmoena(["--version"], { timeoutMs: 3000 });
 		gatewayStatus.version = stdout.trim();
 	} catch (_error) {
 		try {
@@ -713,9 +713,9 @@ async function getCapabilities(request?: NextRequest) {
 		gatewayReachable ||
 		(await isPortOpen(config.gatewayHost, config.gatewayPort));
 
-	const lunariaHome = Boolean(
-		(config.lunariaStateDir && existsSync(config.lunariaStateDir)) ||
-			(config.lunariaConfigPath && existsSync(config.lunariaConfigPath)),
+	const amoenaHome = Boolean(
+		(config.amoenaStateDir && existsSync(config.amoenaStateDir)) ||
+			(config.amoenaConfigPath && existsSync(config.amoenaConfigPath)),
 	);
 
 	const claudeProjectsPath = path.join(config.claudeHome, "projects");
@@ -796,12 +796,12 @@ async function getCapabilities(request?: NextRequest) {
 		}
 	}
 
-	// Auto-register MC as default dashboard when gateway + lunaria home detected
+	// Auto-register MC as default dashboard when gateway + amoena home detected
 	let dashboardRegistration: {
 		registered: boolean;
 		alreadySet: boolean;
 	} | null = null;
-	if (gateway && lunariaHome) {
+	if (gateway && amoenaHome) {
 		try {
 			let mcUrl = process.env.MC_BASE_URL || "";
 			if (!mcUrl && request) {
@@ -819,7 +819,7 @@ async function getCapabilities(request?: NextRequest) {
 
 	return {
 		gateway,
-		lunariaHome,
+		amoenaHome,
 		claudeHome,
 		claudeSessions,
 		hermesInstalled,

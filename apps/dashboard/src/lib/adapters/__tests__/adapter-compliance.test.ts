@@ -63,7 +63,7 @@ const testReport: TaskReport = {
 // ─── Shared Compliance Tests ─────────────────────────────────────────────────
 
 const ALL_FRAMEWORKS = [
-	"lunaria",
+	"amoena",
 	"generic",
 	"crewai",
 	"langgraph",

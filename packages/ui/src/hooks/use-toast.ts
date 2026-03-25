@@ -184,11 +184,11 @@ function useToast() {
 }
 
 /** Extended toast with variant convenience methods. */
-const lunariaToast = Object.assign(toast, {
+const amoenaToast = Object.assign(toast, {
   success: (message: string) => toast({ title: message, variant: 'default' }),
   error: (message: string) => toast({ title: message, variant: 'destructive' }),
   warning: (message: string) => toast({ title: message, variant: 'default' }),
   info: (message: string) => toast({ title: message, variant: 'default' }),
 });
 
-export { useToast, toast, lunariaToast };
+export { useToast, toast, amoenaToast };

@@ -1,6 +1,6 @@
 # Memory API
 
-Lunaria maintains a hierarchical memory system with three abstraction tiers (L0/L1/L2) for compressing and retrieving observations across sessions.
+Amoena maintains a hierarchical memory system with three abstraction tiers (L0/L1/L2) for compressing and retrieving observations across sessions.
 
 ## Memory Tiers
 

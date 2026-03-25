@@ -317,7 +317,7 @@ export function buildPromptCommandFromAgentConfig({
 	const promptCommand = config.promptCommand.trim() || config.command.trim();
 	if (!promptCommand) return null;
 
-	let delimiter = `LUNARIA_PROMPT_${randomId.replaceAll("-", "")}`;
+	let delimiter = `AMOENA_PROMPT_${randomId.replaceAll("-", "")}`;
 	while (prompt.includes(delimiter)) {
 		delimiter = `${delimiter}_X`;
 	}

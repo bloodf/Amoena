@@ -90,9 +90,9 @@ export function getAnthropicEnvConfigPath(
 	options?: AnthropicEnvConfigDiskOptions,
 ): string {
 	if (options?.configPath) return options.configPath;
-	const lunariaHome =
-		process.env.LUNARIA_HOME_DIR?.trim() || join(homedir(), ".lunaria");
-	return join(lunariaHome, CONFIG_FILE_NAME);
+	const amoenaHome =
+		process.env.AMOENA_HOME_DIR?.trim() || join(homedir(), ".amoena");
+	return join(amoenaHome, CONFIG_FILE_NAME);
 }
 
 export function parseAnthropicEnvText(envText: string): AnthropicEnvVariables {

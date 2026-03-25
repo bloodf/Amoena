@@ -1,12 +1,12 @@
-# Lunaria System Architecture
+# Amoena System Architecture
 
 ## Scope
 
-This document defines Lunaria's runtime architecture for the desktop app (Tauri v2 + React 19), including the dual-mode process model, the local Axum HTTP server, all major subsystem components, inter-process communication, state management, security controls, and key runtime sequences.
+This document defines Amoena's runtime architecture for the desktop app (Tauri v2 + React 19), including the dual-mode process model, the local Axum HTTP server, all major subsystem components, inter-process communication, state management, security controls, and key runtime sequences.
 
 ## Process Model
 
-Lunaria runs as a multi-process desktop system with a **Dual IPC strategy**: local operations use Tauri native `invoke()` for zero-copy, in-process communication with the Rust backend, while an Axum HTTP server acts as a **remote coordination layer** activated only when remote access is enabled. The Tauri main process hosts all core managers and is the **state authority** for the local desktop — the Axum server is not the single source of truth for local operations.
+Amoena runs as a multi-process desktop system with a **Dual IPC strategy**: local operations use Tauri native `invoke()` for zero-copy, in-process communication with the Rust backend, while an Axum HTTP server acts as a **remote coordination layer** activated only when remote access is enabled. The Tauri main process hosts all core managers and is the **state authority** for the local desktop — the Axum server is not the single source of truth for local operations.
 
 Five primary execution domains:
 
@@ -51,11 +51,11 @@ Five primary execution domains:
 
 ### Dual-Mode Execution
 
-Lunaria supports two fundamentally different execution modes behind one unified UX surface:
+Amoena supports two fundamentally different execution modes behind one unified UX surface:
 
-**Wrapper Mode** spawns external TUI CLI tools as child processes, acting as a GUI shell around existing AI coding assistants. The user's chosen TUI (Claude Code, OpenCode, Codex CLI, Gemini CLI) runs as a child process with Lunaria mediating I/O.
+**Wrapper Mode** spawns external TUI CLI tools as child processes, acting as a GUI shell around existing AI coding assistants. The user's chosen TUI (Claude Code, OpenCode, Codex CLI, Gemini CLI) runs as a child process with Amoena mediating I/O.
 
-**Native Mode** runs Lunaria's own agentic loop. The Tauri main process owns session state and orchestration, while a persistent Bun daemon performs the Vercel AI SDK v5 provider calls needed for streaming generation and embeddings. No external CLI binary is required. Native mode enables full control over the agent lifecycle: subagent spawning, team coordination, memory injection, tool execution, hooks, and autopilot workflows.
+**Native Mode** runs Amoena's own agentic loop. The Tauri main process owns session state and orchestration, while a persistent Bun daemon performs the Vercel AI SDK v5 provider calls needed for streaming generation and embeddings. No external CLI binary is required. Native mode enables full control over the agent lifecycle: subagent spawning, team coordination, memory injection, tool execution, hooks, and autopilot workflows.
 
 Both modes produce the same `Session` and `StreamEvent` contracts, share the same message timeline UI, and write to the same persistence layer. Users can switch modes per session.
 
@@ -74,7 +74,7 @@ The desktop webview uses Tauri `invoke()` for all command-and-control operations
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
-│                         Lunaria Desktop App                              │
+│                         Amoena Desktop App                              │
 │                                                                          │
 │  ┌──────────────────────┐    ┌─────────────────────────────────────────┐ │
 │  │  Webview (React)      │    │  Tauri Main Process — State Authority   │ │
@@ -391,14 +391,14 @@ Manages authentication, model registry, and API key storage for all AI providers
 - **Reasoning capability model**: Provider/model metadata includes whether a model supports reasoning, which reasoning modes are available (`off`, `auto`, `on`), whether effort levels are supported, and whether reasoning-token budgets are exposed to the client.
 - **API key storage**: Keys stored in the OS keychain via Tauri's secure storage plugin. Never written to SQLite or JSON config.
 - **Provider abstraction**: In native mode, delegates to Vercel AI SDK v5 provider instances (`@ai-sdk/anthropic`, `@ai-sdk/openai`, `@ai-sdk/google`). In wrapper mode, the child process handles its own auth.
-- **Local model support**: Connects to locally-running inference servers for small, fast models (Qwen 3.5, Phi-4, Llama 3.2, Gemma 3, etc.) ideal for simple tasks like commit messages, code formatting, file renaming, and quick lookups. Supports Ollama (`@ai-sdk/ollama` or OpenAI-compatible endpoint), llama.cpp server, LM Studio, and any OpenAI-compatible local server. Local models require no API keys, no internet, and have zero cost. Auto-detected via well-known ports (Ollama on 11434, LM Studio on 1234) or user-configured endpoints in `lunaria.json`. Users can assign local models as the default for lightweight agent tasks (title generation, compaction summaries, observation classification) while reserving cloud models for complex reasoning.
+- **Local model support**: Connects to locally-running inference servers for small, fast models (Qwen 3.5, Phi-4, Llama 3.2, Gemma 3, etc.) ideal for simple tasks like commit messages, code formatting, file renaming, and quick lookups. Supports Ollama (`@ai-sdk/ollama` or OpenAI-compatible endpoint), llama.cpp server, LM Studio, and any OpenAI-compatible local server. Local models require no API keys, no internet, and have zero cost. Auto-detected via well-known ports (Ollama on 11434, LM Studio on 1234) or user-configured endpoints in `amoena.json`. Users can assign local models as the default for lightweight agent tasks (title generation, compaction summaries, observation classification) while reserving cloud models for complex reasoning.
 - **Reasoning defaults**: User defaults are stored per provider/model. Per-turn overrides take precedence over per-model defaults, which take precedence over the adaptive auto-policy.
 
 ### Agent Orchestrator
 
-Runs Lunaria's native agentic loop using the Vercel AI SDK v5. Only active in native mode.
+Runs Amoena's native agentic loop using the Vercel AI SDK v5. Only active in native mode.
 
-- **Agentic loop**: Implements a tool-use loop (`generateText` with `maxSteps`) where the model calls tools, Lunaria executes them, and results feed back until the model produces a final response or hits the step limit.
+- **Agentic loop**: Implements a tool-use loop (`generateText` with `maxSteps`) where the model calls tools, Amoena executes them, and results feed back until the model produces a final response or hits the step limit.
 - **Tab-switchable agents**: Users switch between active agent profiles via keyboard tabs (like OpenCode's Tab key) or the composer's agent tab switcher. Each tab represents a different agent persona (e.g., Build, Plan, Explore, Review) with its own system prompt, tool access, and permission config. Agent profiles are sourced from: built-in defaults, Claude Code's `.claude/agents/` definitions, OpenCode's agent config, oh-my-claudecode agent catalog, oh-my-opencode agent catalog, and user-defined custom agents. Switching tabs mid-session preserves conversation history but changes the active agent's behavior for subsequent turns.
 - **Subagent spawning**: Creates child agent contexts with scoped tool sets, isolated conversation history, and constrained system prompts. Subagents run concurrently with independent context windows.
 - **Team coordination**: Orchestrates multiple agents working on related tasks. Supports fan-out (parallel execution) and pipeline (sequential handoff) patterns. Coordinates via shared memory observations.
@@ -428,7 +428,7 @@ Manages tool registration, execution sandboxing, and permission evaluation for n
 
 ### Hook Engine
 
-Lifecycle event system with a Claude-compatible core event set plus Lunaria-specific extensions. Canonical hook definitions live in [`plugin-framework.md`](./plugin-framework.md) and persist through the `hooks` table in [`data-model.md`](./data-model.md).
+Lifecycle event system with a Claude-compatible core event set plus Amoena-specific extensions. Canonical hook definitions live in [`plugin-framework.md`](./plugin-framework.md) and persist through the `hooks` table in [`data-model.md`](./data-model.md).
 
 **Canonical Hook Events:**
 
@@ -511,13 +511,13 @@ Browser-based preview with element selection for UI development tasks.
 E2E encrypted paired-device access for the React Native mobile app.
 
 - **QR pairing**: Generates a QR code containing a one-time pairing token and the relay or LAN endpoint details. The paired mobile app scans the QR to establish a persistent device link.
-- **E2E encryption**: All traffic between the mobile client and the Lunaria desktop instance is encrypted end-to-end using X25519 key exchange and XChaCha20-Poly1305. The relay server sees only opaque ciphertext.
+- **E2E encryption**: All traffic between the mobile client and the Amoena desktop instance is encrypted end-to-end using X25519 key exchange and XChaCha20-Poly1305. The relay server sees only opaque ciphertext.
 - **Relay protocol**: The mobile app can connect through a cloud relay server for non-LAN access. The relay routes ciphertext between paired devices by device ID and stores no session data.
-- **Opt-in LAN mode**: When remote access is enabled in settings, Lunaria may expose a secondary LAN listener bound to a user-approved interface for paired-device access. The primary desktop API remains localhost-only.
+- **Opt-in LAN mode**: When remote access is enabled in settings, Amoena may expose a secondary LAN listener bound to a user-approved interface for paired-device access. The primary desktop API remains localhost-only.
 
 ### Ecosystem Compat Layer
 
-Lunaria is the **only AI tool that natively consumes plugins and hooks from both Claude Code and OpenCode ecosystems simultaneously**. This means tools like oh-my-claudecode and oh-my-opencode can run side-by-side, giving users the combined power of every community extension in a single interface.
+Amoena is the **only AI tool that natively consumes plugins and hooks from both Claude Code and OpenCode ecosystems simultaneously**. This means tools like oh-my-claudecode and oh-my-opencode can run side-by-side, giving users the combined power of every community extension in a single interface.
 
 #### Claude Code Compatibility
 
@@ -526,19 +526,19 @@ Reads and applies Claude Code configuration files natively:
 - **`.claude/` directory**: Reads `settings.json` (model preferences, permissions), `CLAUDE.md` (project instructions), and any custom rules files.
 - **`.claude/agents/` directory**: Reads agent definition files that define specialized agent personas with custom system prompts and tool sets.
 - **`CLAUDE.md`**: Parsed and injected into the system prompt for native mode sessions. Supports the full CLAUDE.md spec including conditional sections and file references.
-- **`hooks.json`**: Hook definitions are loaded into the Hook Engine. Claude Code shell-style hooks are imported as Lunaria `command` handlers with the same JSON-on-stdin contract.
-- **`settings.json`**: Permission rules and model preferences are merged into Lunaria's settings with Claude Code values as defaults that the user can override.
-- **Write-back**: When users modify settings through Lunaria's UI that map to Claude Code config, changes are written back to the appropriate files so the configuration stays in sync.
+- **`hooks.json`**: Hook definitions are loaded into the Hook Engine. Claude Code shell-style hooks are imported as Amoena `command` handlers with the same JSON-on-stdin contract.
+- **`settings.json`**: Permission rules and model preferences are merged into Amoena's settings with Claude Code values as defaults that the user can override.
+- **Write-back**: When users modify settings through Amoena's UI that map to Claude Code config, changes are written back to the appropriate files so the configuration stays in sync.
 
 #### OpenCode Compatibility
 
 Reads and applies OpenCode configuration and agent definitions:
 
-- **`opencode.json`**: Project-level config with provider overrides, model selection, and agent profiles. Merged with `lunaria.json` (Lunaria values take precedence on conflict).
+- **`opencode.json`**: Project-level config with provider overrides, model selection, and agent profiles. Merged with `amoena.json` (Amoena values take precedence on conflict).
 - **`.opencode/` directory**: Reads agent definitions, custom instructions, and workspace config.
-- **OpenCode agents**: Agent definitions from OpenCode's config (build, plan, general, explore, etc.) are imported as Lunaria agent profiles. Each agent's model, system prompt, tool access, and permission config are preserved.
-- **OpenCode hooks**: OpenCode's event hooks (session lifecycle, tool execution, guardrail events) are normalized into Lunaria's Hook Engine event format and executed with the same semantics.
-- **OpenCode MCP servers**: MCP server configurations from `opencode.json` are loaded into Lunaria's MCP integration alongside any Claude Code MCP configs.
+- **OpenCode agents**: Agent definitions from OpenCode's config (build, plan, general, explore, etc.) are imported as Amoena agent profiles. Each agent's model, system prompt, tool access, and permission config are preserved.
+- **OpenCode hooks**: OpenCode's event hooks (session lifecycle, tool execution, guardrail events) are normalized into Amoena's Hook Engine event format and executed with the same semantics.
+- **OpenCode MCP servers**: MCP server configurations from `opencode.json` are loaded into Amoena's MCP integration alongside any Claude Code MCP configs.
 
 #### Plugin Ecosystem Manager
 
@@ -547,9 +547,9 @@ Manages the unified plugin surface that spans both ecosystems:
 - **Plugin discovery**: Auto-detects installed plugins from both ecosystems. Scans `~/.claude/` for Claude Code plugins (oh-my-claudecode, claude-mem, etc.) and `~/.opencode/` plus `opencode.json` for OpenCode plugins (oh-my-opencode, etc.).
 - **Per-plugin enable/disable**: Each discovered plugin can be individually enabled or disabled via the Settings > Plugins UI. Users can run oh-my-claudecode and oh-my-opencode simultaneously, or selectively enable only the plugins they want.
 - **Ecosystem filter**: Settings UI provides ecosystem-level toggles — enable/disable all Claude Code plugins or all OpenCode plugins as a group, then fine-tune individual plugins within each ecosystem.
-- **Conflict resolution**: When plugins from different ecosystems register handlers for the same event, Lunaria runs both in declared priority order. Users can reorder plugin priority in the Plugins settings.
+- **Conflict resolution**: When plugins from different ecosystems register handlers for the same event, Amoena runs both in declared priority order. Users can reorder plugin priority in the Plugins settings.
 - **Plugin isolation**: Each plugin runs in its own hook context. A failing plugin does not block other plugins or the main agent loop. Errors are logged and surfaced in the Plugin Health dashboard.
-- **100% feature parity**: Plugins get full access to Lunaria's capabilities — the same tool execution, memory, agent spawning, and hook events that the native engine uses. A plugin designed for Claude Code or OpenCode works at 100% of its capability in Lunaria.
+- **100% feature parity**: Plugins get full access to Amoena's capabilities — the same tool execution, memory, agent spawning, and hook events that the native engine uses. A plugin designed for Claude Code or OpenCode works at 100% of its capability in Amoena.
 
 ### Session Manager
 

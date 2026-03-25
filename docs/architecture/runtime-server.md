@@ -1,6 +1,6 @@
 # Runtime Server
 
-The Axum runtime server is the engine of Lunaria. It starts on a random localhost port when the Tauri shell launches, exposes 110+ REST and SSE endpoints, manages the AI worker process, coordinates all subsystems, and serves as the single source of truth for session, agent, memory, and device state.
+The Axum runtime server is the engine of Amoena. It starts on a random localhost port when the Tauri shell launches, exposes 110+ REST and SSE endpoints, manages the AI worker process, coordinates all subsystems, and serves as the single source of truth for session, agent, memory, and device state.
 
 ## Bootstrap Flow
 

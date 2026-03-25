@@ -122,22 +122,22 @@ function getSkillRoots(): SkillRoot[] {
 			),
 		},
 	];
-	// Add Lunaria gateway skill roots when configured
-	const lunariaState =
-		process.env.LUNARIA_STATE_DIR ||
-		process.env.LUNARIA_HOME ||
-		join(home, ".lunaria");
-	const lunariaSkills = resolveSkillRoot(
-		"MC_SKILLS_LUNARIA_DIR",
-		join(lunariaState, "skills"),
+	// Add Amoena gateway skill roots when configured
+	const amoenaState =
+		process.env.AMOENA_STATE_DIR ||
+		process.env.AMOENA_HOME ||
+		join(home, ".amoena");
+	const amoenaSkills = resolveSkillRoot(
+		"MC_SKILLS_AMOENA_DIR",
+		join(amoenaState, "skills"),
 	);
-	roots.push({ source: "lunaria", path: lunariaSkills });
+	roots.push({ source: "amoena", path: amoenaSkills });
 
-	// Add Lunaria workspace-local skills (takes precedence when names conflict)
+	// Add Amoena workspace-local skills (takes precedence when names conflict)
 	const workspaceDir =
-		process.env.LUNARIA_WORKSPACE_DIR ||
-		process.env.LUNARIA_WORKSPACE_DIR ||
-		join(lunariaState, "workspace");
+		process.env.AMOENA_WORKSPACE_DIR ||
+		process.env.AMOENA_WORKSPACE_DIR ||
+		join(amoenaState, "workspace");
 	const workspaceSkills = resolveSkillRoot(
 		"MC_SKILLS_WORKSPACE_DIR",
 		join(workspaceDir, "skills"),
@@ -148,17 +148,17 @@ function getSkillRoots(): SkillRoot[] {
 	try {
 		const { readdirSync, existsSync } =
 			require("node:fs") as typeof import("node:fs");
-		const entries = readdirSync(lunariaState) as string[];
+		const entries = readdirSync(amoenaState) as string[];
 		for (const entry of entries) {
 			if (!entry.startsWith("workspace-")) continue;
-			const skillsDir = join(lunariaState, entry, "skills");
+			const skillsDir = join(amoenaState, entry, "skills");
 			if (existsSync(skillsDir)) {
 				const agentName = entry.replace("workspace-", "");
 				roots.push({ source: `workspace-${agentName}`, path: skillsDir });
 			}
 		}
 	} catch {
-		// lunariaBase may not exist
+		// amoenaBase may not exist
 	}
 
 	return roots;

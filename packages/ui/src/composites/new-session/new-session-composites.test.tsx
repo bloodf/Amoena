@@ -23,11 +23,11 @@ describe("ProviderPicker", () => {
     render(
       <ProviderPicker
         providers={newSessionProviders}
-        selectedProvider="lunaria"
+        selectedProvider="amoena"
         onSelect={() => {}}
       />,
     );
-    expect(screen.getByText("Lunaria AI")).toBeTruthy();
+    expect(screen.getByText("Amoena AI")).toBeTruthy();
     expect(screen.getByText("Claude Code")).toBeTruthy();
     expect(screen.getByText("OpenCode")).toBeTruthy();
     expect(screen.getByText("Codex CLI")).toBeTruthy();
@@ -40,7 +40,7 @@ describe("ProviderPicker", () => {
     render(
       <ProviderPicker
         providers={newSessionProviders}
-        selectedProvider="lunaria"
+        selectedProvider="amoena"
         onSelect={onSelect}
       />,
     );
@@ -54,20 +54,20 @@ describe("FeaturedProviderCard", () => {
 
   test("renders provider label and description", () => {
     render(<FeaturedProviderCard provider={provider} onSelect={() => {}} />);
-    expect(screen.getByText("Lunaria AI")).toBeTruthy();
+    expect(screen.getByText("Amoena AI")).toBeTruthy();
     expect(screen.getByText(provider.desc)).toBeTruthy();
   });
 
   test("renders model badges", () => {
     render(<FeaturedProviderCard provider={provider} onSelect={() => {}} />);
-    expect(screen.getByText("Lunaria Pro")).toBeTruthy();
-    expect(screen.getByText("Lunaria Fast")).toBeTruthy();
+    expect(screen.getByText("Amoena Pro")).toBeTruthy();
+    expect(screen.getByText("Amoena Fast")).toBeTruthy();
   });
 
   test("fires onSelect when clicked", () => {
     const onSelect = mock(() => {});
     render(<FeaturedProviderCard provider={provider} onSelect={onSelect} />);
-    fireEvent.click(screen.getByText("Lunaria AI"));
+    fireEvent.click(screen.getByText("Amoena AI"));
     expect(onSelect).toHaveBeenCalled();
   });
 });

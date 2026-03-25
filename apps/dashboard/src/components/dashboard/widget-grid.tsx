@@ -7,7 +7,7 @@ import {
 	getDefaultLayout,
 	getWidgetById,
 } from "@/lib/dashboard-widgets";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 import type { DashboardData } from "./widget-primitives";
 import { EventStreamWidget } from "./widgets/event-stream-widget";
 import { GatewayHealthWidget } from "./widgets/gateway-health-widget";
@@ -45,7 +45,7 @@ const SIZE_CLASSES: Record<string, string> = {
 };
 
 export function WidgetGrid({ data }: { data: DashboardData }) {
-	const { dashboardLayout, setDashboardLayout, dashboardMode } = useLunaria();
+	const { dashboardLayout, setDashboardLayout, dashboardMode } = useAmoena();
 	const mode = dashboardMode === "local" ? "local" : "full";
 	const [customizing, setCustomizing] = useState(false);
 	const [dragId, setDragId] = useState<string | null>(null);

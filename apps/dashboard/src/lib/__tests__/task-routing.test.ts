@@ -5,13 +5,13 @@ describe("resolveTaskImplementationTarget", () => {
 	it("returns explicit implementation target metadata when present", () => {
 		const result = resolveTaskImplementationTarget({
 			metadata: {
-				implementation_repo: "LunariaAi/lunaria",
+				implementation_repo: "AmoenaAi/amoena",
 				code_location: "/apps/api",
 			},
 		});
 
 		expect(result).toEqual({
-			implementation_repo: "LunariaAi/lunaria",
+			implementation_repo: "AmoenaAi/amoena",
 			code_location: "/apps/api",
 		});
 	});
@@ -19,13 +19,13 @@ describe("resolveTaskImplementationTarget", () => {
 	it("supports legacy metadata keys for backward compatibility", () => {
 		const result = resolveTaskImplementationTarget({
 			metadata: {
-				github_repo: "LunariaAi/lunaria",
+				github_repo: "AmoenaAi/amoena",
 				path: "/packages/core",
 			},
 		});
 
 		expect(result).toEqual({
-			implementation_repo: "LunariaAi/lunaria",
+			implementation_repo: "AmoenaAi/amoena",
 			code_location: "/packages/core",
 		});
 	});
@@ -33,7 +33,7 @@ describe("resolveTaskImplementationTarget", () => {
 	it("prefers explicit implementation target metadata over legacy fallback keys", () => {
 		const result = resolveTaskImplementationTarget({
 			metadata: {
-				implementation_repo: "LunariaAi/lunaria",
+				implementation_repo: "AmoenaAi/amoena",
 				github_repo: "legacy/repo",
 				code_location: "/apps/api",
 				path: "/legacy/path",
@@ -41,7 +41,7 @@ describe("resolveTaskImplementationTarget", () => {
 		});
 
 		expect(result).toEqual({
-			implementation_repo: "LunariaAi/lunaria",
+			implementation_repo: "AmoenaAi/amoena",
 			code_location: "/apps/api",
 		});
 	});

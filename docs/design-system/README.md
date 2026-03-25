@@ -1,6 +1,6 @@
 # Design System
 
-The Lunaria design system is implemented in `packages/ui/` using shadcn/ui + Radix UI primitives with Tailwind CSS v4 and an OKLCH color palette.
+The Amoena design system is implemented in `packages/ui/` using shadcn/ui + Radix UI primitives with Tailwind CSS v4 and an OKLCH color palette.
 
 ## Documentation
 

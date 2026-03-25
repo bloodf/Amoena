@@ -2,7 +2,7 @@ import { randomBytes } from "node:crypto";
 
 // --- Constants ---
 
-export const LUNARIA_VERSION = "0.1.0";
+export const AMOENA_VERSION = "0.1.0";
 
 export const DEFAULT_PORTS = {
   dashboard: 3456,

@@ -94,7 +94,7 @@ const worktrees = createTable("worktrees", [
 	"branch",
 	"baseBranch",
 	"gitStatus",
-	"createdByLunaria",
+	"createdByAmoena",
 ] as const);
 
 const settings = createTable("settings", [
@@ -182,7 +182,7 @@ function withDefaults(tableName: TableName, row: Row): Row {
 			return {
 				id: null,
 				gitStatus: null,
-				createdByLunaria: true,
+				createdByAmoena: true,
 				...row,
 			};
 		case "settings":
@@ -370,7 +370,7 @@ afterAll(() => {
 
 const TEST_DIR = join(
 	realpathSync(tmpdir()),
-	`lunaria-test-create-${process.pid}`,
+	`amoena-test-create-${process.pid}`,
 );
 
 function createTestRepo(name: string): string {
@@ -497,7 +497,7 @@ describe("Workspace creation with external worktree auto-import", () => {
 			.get();
 
 		expect(importedWorktree).toBeDefined();
-		expect(importedWorktree?.createdByLunaria).toBe(false); // External worktree
+		expect(importedWorktree?.createdByAmoena).toBe(false); // External worktree
 		expect(importedWorktree?.path).toBe(externalWorktreePath);
 
 		// Verify worktree still exists on disk
@@ -550,7 +550,7 @@ describe("Workspace creation with external worktree auto-import", () => {
 			.from(worktrees)
 			.where(eq(worktrees.id, worktreeId))
 			.get();
-		expect(worktree?.createdByLunaria).toBe(false);
+		expect(worktree?.createdByAmoena).toBe(false);
 
 		// Mirror the actual delete flow: remove the workspace row and then the
 		// imported worktree record, while preserving the external worktree on disk.
@@ -656,6 +656,6 @@ describe("External worktree import via openExternalWorktree", () => {
 			.get();
 
 		expect(importedWorktree).toBeDefined();
-		expect(importedWorktree?.createdByLunaria).toBe(false);
+		expect(importedWorktree?.createdByAmoena).toBe(false);
 	});
 });

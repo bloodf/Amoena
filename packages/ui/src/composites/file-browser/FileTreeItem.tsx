@@ -28,7 +28,7 @@ export function FileTreeItem({
       inferredTypes: isFolder ? item.inferredTypes : undefined,
       truncated: isFolder ? item.truncated ?? false : undefined,
     };
-    event.dataTransfer.setData("lunaria/file", JSON.stringify(data));
+    event.dataTransfer.setData("amoena/file", JSON.stringify(data));
     event.dataTransfer.effectAllowed = "copy";
 
     const ghost = document.createElement("div");

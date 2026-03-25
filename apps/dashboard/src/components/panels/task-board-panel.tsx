@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { createClientLogger } from "@/lib/client-logger";
 import { useFocusTrap } from "@/lib/use-focus-trap";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 
 const log = createClientLogger("TaskBoard");
 
@@ -529,7 +529,7 @@ export function TaskBoardPanel() {
 		addSpawnRequest,
 		updateSpawnRequest,
 		dashboardMode,
-	} = useLunaria();
+	} = useAmoena();
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -755,7 +755,7 @@ export function TaskBoardPanel() {
 		e.preventDefault();
 	};
 
-	const { updateTask } = useLunaria();
+	const { updateTask } = useAmoena();
 
 	const handleDrop = async (e: React.DragEvent, newStatus: string) => {
 		e.preventDefault();
@@ -1547,7 +1547,7 @@ function TaskDetailModal({
 }) {
 	const t = useTranslations("taskBoard");
 	const _router = useRouter();
-	const { currentUser } = useLunaria();
+	const { currentUser } = useAmoena();
 	const commentAuthor = currentUser?.username || "system";
 	const resolvedProjectName =
 		task.project_name ||
@@ -1692,7 +1692,7 @@ function TaskDetailModal({
 			.replace(/\[3[0-9]m/g, "")
 			.replace(/\[39m/g, "");
 
-		// Try to parse as JSON payload (Lunaria agent result format)
+		// Try to parse as JSON payload (Amoena agent result format)
 		try {
 			const parsed = JSON.parse(stripped);
 			if (parsed && typeof parsed === "object") {

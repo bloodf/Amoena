@@ -22,10 +22,10 @@ This is the coordination heart of the Mission Control Platform. All other compon
 
 ## Repository Context
 
-- Monorepo root: `/Users/heitor/Developer/github.com/Lunaria/lunaria`
-- New module location: `packages/lunaria-service/src/orchestration/dag-engine/`
-- Existing orchestration: `packages/lunaria-service/src/orchestration/` — read `types.ts` and `agent-spawner.ts` for context before writing
-- CLI adapters (built in Prompt 01): `packages/lunaria-service/src/orchestration/cli-adapters/`
+- Monorepo root: `/Users/heitor/Developer/github.com/Amoena/amoena`
+- New module location: `packages/amoena-service/src/orchestration/dag-engine/`
+- Existing orchestration: `packages/amoena-service/src/orchestration/` — read `types.ts` and `agent-spawner.ts` for context before writing
+- CLI adapters (built in Prompt 01): `packages/amoena-service/src/orchestration/cli-adapters/`
 - SQLite telemetry (built in Prompt 03): `apps/dashboard/src/lib/db.ts` via `better-sqlite3`
 - Package manager: Bun
 
@@ -255,7 +255,7 @@ export async function createWorktree(
   baseRef: string,
 ): Promise<WorktreeInfo> {
   // git worktree add <path> -b <branch> <baseRef>
-  // path = repoRoot + "/.lunaria-worktrees/" + goalId + "/" + taskId
+  // path = repoRoot + "/.amoena-worktrees/" + goalId + "/" + taskId
 }
 
 /** Remove a worktree (after merge or 24h cleanup) */
@@ -404,13 +404,13 @@ On resume, tasks that were `completed` stay completed. Tasks that were `running`
 9. **Merge auto:** Two tasks modifying non-overlapping files produce `MergeResult.strategy = "auto"` and `conflicts = []`.
 10. **Merge flag:** Two tasks modifying the same file produce `MergeResult.strategy = "review_required"` and the file appears in `conflicts[0].files`.
 11. **Worktree cleanup:** `listStaleWorktrees()` returns worktrees older than 24h and excludes recent ones.
-12. **No TypeScript errors:** `bun tsc --noEmit` in `packages/lunaria-service` passes clean.
+12. **No TypeScript errors:** `bun tsc --noEmit` in `packages/amoena-service` passes clean.
 
 ---
 
 ## Test Requirements
 
-Location: `packages/lunaria-service/src/orchestration/dag-engine/__tests__/`
+Location: `packages/amoena-service/src/orchestration/dag-engine/__tests__/`
 
 ```
 scheduler.test.ts
@@ -450,7 +450,7 @@ merger.test.ts
 
 ## Dependencies on Other Components
 
-- **Prompt 01 (CLI Adapters):** Imports `AgentAdapter`, `AgentSession`, `AdapterTask`, `SessionResult` from `packages/lunaria-service/src/orchestration/cli-adapters/`
+- **Prompt 01 (CLI Adapters):** Imports `AgentAdapter`, `AgentSession`, `AdapterTask`, `SessionResult` from `packages/amoena-service/src/orchestration/cli-adapters/`
 - **Prompt 03 (Telemetry):** Calls telemetry write functions after each task state transition and on goal completion. Import from `apps/dashboard/src/lib/db.ts` via the shared package boundary, or better: accept a `TelemetryWriter` interface injected via constructor to avoid a hard dependency on the dashboard package.
 
 ---
@@ -467,20 +467,20 @@ merger.test.ts
 
 | Path | Purpose |
 |---|---|
-| `packages/lunaria-service/src/orchestration/dag-engine/types.ts` | DAG-specific types |
-| `packages/lunaria-service/src/orchestration/dag-engine/task-node.ts` | TaskNode class |
-| `packages/lunaria-service/src/orchestration/dag-engine/scheduler.ts` | DagScheduler |
-| `packages/lunaria-service/src/orchestration/dag-engine/router.ts` | Heuristic router |
-| `packages/lunaria-service/src/orchestration/dag-engine/worktree.ts` | Git worktree utilities |
-| `packages/lunaria-service/src/orchestration/dag-engine/merger.ts` | Post-run merge strategy |
-| `packages/lunaria-service/src/orchestration/dag-engine/recovery.ts` | Crash recovery utilities |
-| `packages/lunaria-service/src/orchestration/dag-engine/goal-run.ts` | GoalRun class |
-| `packages/lunaria-service/src/orchestration/dag-engine/index.ts` | Re-exports |
-| `packages/lunaria-service/src/orchestration/dag-engine/__tests__/scheduler.test.ts` | Tests |
-| `packages/lunaria-service/src/orchestration/dag-engine/__tests__/router.test.ts` | Tests |
-| `packages/lunaria-service/src/orchestration/dag-engine/__tests__/goal-run.test.ts` | Tests |
-| `packages/lunaria-service/src/orchestration/dag-engine/__tests__/worktree.test.ts` | Tests |
-| `packages/lunaria-service/src/orchestration/dag-engine/__tests__/merger.test.ts` | Tests |
+| `packages/amoena-service/src/orchestration/dag-engine/types.ts` | DAG-specific types |
+| `packages/amoena-service/src/orchestration/dag-engine/task-node.ts` | TaskNode class |
+| `packages/amoena-service/src/orchestration/dag-engine/scheduler.ts` | DagScheduler |
+| `packages/amoena-service/src/orchestration/dag-engine/router.ts` | Heuristic router |
+| `packages/amoena-service/src/orchestration/dag-engine/worktree.ts` | Git worktree utilities |
+| `packages/amoena-service/src/orchestration/dag-engine/merger.ts` | Post-run merge strategy |
+| `packages/amoena-service/src/orchestration/dag-engine/recovery.ts` | Crash recovery utilities |
+| `packages/amoena-service/src/orchestration/dag-engine/goal-run.ts` | GoalRun class |
+| `packages/amoena-service/src/orchestration/dag-engine/index.ts` | Re-exports |
+| `packages/amoena-service/src/orchestration/dag-engine/__tests__/scheduler.test.ts` | Tests |
+| `packages/amoena-service/src/orchestration/dag-engine/__tests__/router.test.ts` | Tests |
+| `packages/amoena-service/src/orchestration/dag-engine/__tests__/goal-run.test.ts` | Tests |
+| `packages/amoena-service/src/orchestration/dag-engine/__tests__/worktree.test.ts` | Tests |
+| `packages/amoena-service/src/orchestration/dag-engine/__tests__/merger.test.ts` | Tests |
 
 ---
 
@@ -488,7 +488,7 @@ merger.test.ts
 
 ```bash
 # Type check
-cd packages/lunaria-service && bun tsc --noEmit
+cd packages/amoena-service && bun tsc --noEmit
 
 # Unit tests only (exclude integration)
 bun test src/orchestration/dag-engine/__tests__ --exclude "*.integration.*"

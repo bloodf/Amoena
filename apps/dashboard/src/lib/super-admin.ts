@@ -106,13 +106,13 @@ export function buildBootstrapPlan(
 	tenant: {
 		slug: string;
 		linux_user: string;
-		lunaria_home: string;
+		amoena_home: string;
 		workspace_root: string;
 		gateway_port?: number | null;
 		dashboard_port?: number | null;
 	},
 	opts: {
-		templateLunariaJsonPath: string;
+		templateAmoenaJsonPath: string;
 		gatewaySystemdTemplatePath: string;
 	},
 ): ProvisionStep[] {
@@ -134,8 +134,8 @@ export function buildBootstrapPlan(
 			timeout_ms: 10000,
 		},
 		{
-			key: "create-lunaria-state",
-			title: `Create Lunaria state directory ${tenant.lunaria_home}`,
+			key: "create-amoena-state",
+			title: `Create Amoena state directory ${tenant.amoena_home}`,
 			command: [
 				"/usr/bin/install",
 				"-d",
@@ -145,7 +145,7 @@ export function buildBootstrapPlan(
 				tenant.linux_user,
 				"-g",
 				tenant.linux_user,
-				tenant.lunaria_home,
+				tenant.amoena_home,
 			],
 			requires_root: true,
 			timeout_ms: 10000,
@@ -168,13 +168,13 @@ export function buildBootstrapPlan(
 			timeout_ms: 10000,
 		},
 		{
-			key: "seed-lunaria-template",
-			title: "Seed base Lunaria config scaffold",
+			key: "seed-amoena-template",
+			title: "Seed base Amoena config scaffold",
 			command: [
 				"/usr/bin/cp",
 				"-n",
-				opts.templateLunariaJsonPath,
-				`${tenant.lunaria_home}/lunaria.json`,
+				opts.templateAmoenaJsonPath,
+				`${tenant.amoena_home}/amoena.json`,
 			],
 			requires_root: true,
 			timeout_ms: 12000,
@@ -192,8 +192,8 @@ export function buildBootstrapPlan(
 			timeout_ms: 20000,
 		},
 		{
-			key: "ensure-lunaria-tenants-dir",
-			title: "Ensure /etc/lunaria-tenants exists",
+			key: "ensure-amoena-tenants-dir",
+			title: "Ensure /etc/amoena-tenants exists",
 			command: [
 				"/usr/bin/install",
 				"-d",
@@ -203,19 +203,19 @@ export function buildBootstrapPlan(
 				"root",
 				"-g",
 				"root",
-				"/etc/lunaria-tenants",
+				"/etc/amoena-tenants",
 			],
 			requires_root: true,
 			timeout_ms: 5000,
 		},
 		{
 			key: "install-gateway-systemd-template",
-			title: "Install lunaria-gateway@.service template",
+			title: "Install amoena-gateway@.service template",
 			command: [
 				"/usr/bin/cp",
 				"-n",
 				opts.gatewaySystemdTemplatePath,
-				"/etc/systemd/system/lunaria-gateway@.service",
+				"/etc/systemd/system/amoena-gateway@.service",
 			],
 			requires_root: true,
 			timeout_ms: 5000,
@@ -226,8 +226,8 @@ export function buildBootstrapPlan(
 			command: [
 				"/usr/bin/cp",
 				"-f",
-				`${artifactDir}/lunaria-gateway.env`,
-				`/etc/lunaria-tenants/${tenant.linux_user}.env`,
+				`${artifactDir}/amoena-gateway.env`,
+				`/etc/amoena-tenants/${tenant.linux_user}.env`,
 			],
 			requires_root: true,
 			timeout_ms: 5000,
@@ -241,12 +241,12 @@ export function buildBootstrapPlan(
 		},
 		{
 			key: "enable-start-gateway",
-			title: `Enable/start lunaria-gateway@${tenant.linux_user}.service`,
+			title: `Enable/start amoena-gateway@${tenant.linux_user}.service`,
 			command: [
 				"/usr/bin/systemctl",
 				"enable",
 				"--now",
-				`lunaria-gateway@${tenant.linux_user}.service`,
+				`amoena-gateway@${tenant.linux_user}.service`,
 			],
 			requires_root: true,
 			timeout_ms: 5000,
@@ -258,7 +258,7 @@ export function buildDecommissionPlan(
 	tenant: {
 		slug: string;
 		linux_user: string;
-		lunaria_home: string;
+		amoena_home: string;
 		workspace_root: string;
 	},
 	options?: {
@@ -272,23 +272,23 @@ export function buildDecommissionPlan(
 	const plan: ProvisionStep[] = [
 		{
 			key: "disable-stop-gateway",
-			title: `Disable/stop lunaria-gateway@${tenant.linux_user}.service`,
+			title: `Disable/stop amoena-gateway@${tenant.linux_user}.service`,
 			command: [
 				"/usr/bin/systemctl",
 				"disable",
 				"--now",
-				`lunaria-gateway@${tenant.linux_user}.service`,
+				`amoena-gateway@${tenant.linux_user}.service`,
 			],
 			requires_root: true,
 			timeout_ms: 10000,
 		},
 		{
 			key: "remove-tenant-gateway-env",
-			title: `Remove /etc/lunaria-tenants/${tenant.linux_user}.env`,
+			title: `Remove /etc/amoena-tenants/${tenant.linux_user}.env`,
 			command: [
 				"/usr/bin/rm",
 				"-f",
-				`/etc/lunaria-tenants/${tenant.linux_user}.env`,
+				`/etc/amoena-tenants/${tenant.linux_user}.env`,
 			],
 			requires_root: true,
 			timeout_ms: 5000,
@@ -298,9 +298,9 @@ export function buildDecommissionPlan(
 	if (removeStateDirs && !removeLinuxUser) {
 		plan.push(
 			{
-				key: "remove-lunaria-state-dir",
-				title: `Remove ${tenant.lunaria_home}`,
-				command: ["/usr/bin/rm", "-rf", tenant.lunaria_home],
+				key: "remove-amoena-state-dir",
+				title: `Remove ${tenant.amoena_home}`,
+				command: ["/usr/bin/rm", "-rf", tenant.amoena_home],
 				requires_root: true,
 				timeout_ms: 10000,
 			},
@@ -350,15 +350,15 @@ function ensureProvisionArtifacts(job: any) {
 	const requestJson = parseJobRequest(job) as any;
 	const slug = String(requestJson?.slug || job?.tenant_slug || "").trim();
 	const linuxUser = String(job?.linux_user || "").trim();
-	const lunariaHome = String(job?.lunaria_home || "").trim();
+	const amoenaHome = String(job?.amoena_home || "").trim();
 	const gatewayPort = Number(
 		requestJson?.gateway_port ?? job?.gateway_port ?? 0,
 	);
 
 	if (!slug) throw new Error("Missing tenant slug for artifact generation");
 	if (!linuxUser) throw new Error("Missing linux_user for artifact generation");
-	if (!lunariaHome)
-		throw new Error("Missing lunaria_home for artifact generation");
+	if (!amoenaHome)
+		throw new Error("Missing amoena_home for artifact generation");
 	if (
 		!Number.isInteger(gatewayPort) ||
 		gatewayPort < 1024 ||
@@ -375,14 +375,14 @@ function ensureProvisionArtifacts(job: any) {
 	const gatewayEnv = [
 		`TENANT_SLUG=${slug}`,
 		`TENANT_USER=${linuxUser}`,
-		`LUNARIA_HOME=${lunariaHome}`,
-		`LUNARIA_STATE_DIR=${lunariaHome}`,
-		`LUNARIA_CONFIG_PATH=${lunariaHome}/lunaria.json`,
-		`LUNARIA_GATEWAY_PORT=${gatewayPort}`,
+		`AMOENA_HOME=${amoenaHome}`,
+		`AMOENA_STATE_DIR=${amoenaHome}`,
+		`AMOENA_CONFIG_PATH=${amoenaHome}/amoena.json`,
+		`AMOENA_GATEWAY_PORT=${gatewayPort}`,
 		"",
 	].join("\n");
 
-	fs.writeFileSync(path.join(artifactDir, "lunaria-gateway.env"), gatewayEnv, {
+	fs.writeFileSync(path.join(artifactDir, "amoena-gateway.env"), gatewayEnv, {
 		mode: 0o600,
 	});
 }
@@ -456,7 +456,7 @@ export function getProvisionJob(jobId: number) {
 	const db = getDatabase();
 	const row = db
 		.prepare(`
-    SELECT pj.*, t.slug as tenant_slug, t.display_name as tenant_display_name, t.linux_user, t.lunaria_home, t.workspace_root
+    SELECT pj.*, t.slug as tenant_slug, t.display_name as tenant_display_name, t.linux_user, t.amoena_home, t.workspace_root
     FROM provision_jobs pj
     JOIN tenants t ON t.id = pj.tenant_id
     WHERE pj.id = ?
@@ -486,26 +486,26 @@ export function createTenantAndBootstrapJob(
 ) {
 	const db = getDatabase();
 
-	const templateLunariaJsonPath = String(
-		process.env.MC_SUPER_TEMPLATE_LUNARIA_JSON ||
-			(process.env.LUNARIA_HOME
-				? path.join(process.env.LUNARIA_HOME, "lunaria.json")
+	const templateAmoenaJsonPath = String(
+		process.env.MC_SUPER_TEMPLATE_AMOENA_JSON ||
+			(process.env.AMOENA_HOME
+				? path.join(process.env.AMOENA_HOME, "amoena.json")
 				: ""),
 	).trim();
-	if (!templateLunariaJsonPath) {
+	if (!templateAmoenaJsonPath) {
 		throw new Error(
-			"Missing Lunaria template config. Set MC_SUPER_TEMPLATE_LUNARIA_JSON to an lunaria.json to seed new tenants.",
+			"Missing Amoena template config. Set MC_SUPER_TEMPLATE_AMOENA_JSON to an amoena.json to seed new tenants.",
 		);
 	}
 
 	const repoRoot =
-		String(process.env.LUNARIA_REPO_ROOT || process.cwd()).trim() ||
+		String(process.env.AMOENA_REPO_ROOT || process.cwd()).trim() ||
 		process.cwd();
 	const gatewaySystemdTemplatePath = path.join(
 		repoRoot,
 		"ops",
 		"templates",
-		"lunaria-gateway@.service",
+		"amoena-gateway@.service",
 	);
 
 	const slug = normalizeSlug(request.slug);
@@ -541,13 +541,13 @@ export function createTenantAndBootstrapJob(
 
 	const tenantHomeRoot = getTenantHomeRoot();
 	const workspaceDirname = getTenantWorkspaceDirname();
-	const lunariaHome = joinPosix(tenantHomeRoot, linuxUser, ".lunaria");
+	const amoenaHome = joinPosix(tenantHomeRoot, linuxUser, ".amoena");
 	const workspaceRoot = joinPosix(tenantHomeRoot, linuxUser, workspaceDirname);
 
 	const inserted = db.transaction(() => {
 		const tenantRes = db
 			.prepare(`
-      INSERT INTO tenants (slug, display_name, linux_user, plan_tier, status, lunaria_home, workspace_root, gateway_port, dashboard_port, config, created_by, owner_gateway)
+      INSERT INTO tenants (slug, display_name, linux_user, plan_tier, status, amoena_home, workspace_root, gateway_port, dashboard_port, config, created_by, owner_gateway)
       VALUES (?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?)
     `)
 			.run(
@@ -555,7 +555,7 @@ export function createTenantAndBootstrapJob(
 				displayName,
 				linuxUser,
 				planTier,
-				lunariaHome,
+				amoenaHome,
 				workspaceRoot,
 				gatewayPort,
 				dashboardPort,
@@ -570,13 +570,13 @@ export function createTenantAndBootstrapJob(
 			{
 				slug,
 				linux_user: linuxUser,
-				lunaria_home: lunariaHome,
+				amoena_home: amoenaHome,
 				workspace_root: workspaceRoot,
 				gateway_port: gatewayPort,
 				dashboard_port: dashboardPort,
 			},
 			{
-				templateLunariaJsonPath,
+				templateAmoenaJsonPath,
 				gatewaySystemdTemplatePath,
 			},
 		);
@@ -672,7 +672,7 @@ export function createTenantDecommissionJob(
 		{
 			slug: tenant.slug,
 			linux_user: tenant.linux_user,
-			lunaria_home: tenant.lunaria_home,
+			amoena_home: tenant.amoena_home,
 			workspace_root: tenant.workspace_root,
 		},
 		{

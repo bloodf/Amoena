@@ -1,8 +1,8 @@
-# Lunaria Migration Roadmap
+# Amoena Migration Roadmap
 
-This folder contains the complete plan, prompts, and tracking for migrating Lunaria from Tauri/Rust to an Electron-based architecture by forking [LunariaAi/superset](https://github.com/LunariaAi/superset).
+This folder contains the complete plan, prompts, and tracking for migrating Amoena from Tauri/Rust to an Electron-based architecture by forking [AmoenaAi/superset](https://github.com/AmoenaAi/superset).
 
-The roadmap is written for the Codex GUI app. The current `lunaria` repo is the source/reference repo. The Superset migration target lives in a sibling workspace, defaulting to `../lunaria-desktop`.
+The roadmap is written for the Codex GUI app. The current `amoena` repo is the source/reference repo. The Superset migration target lives in a sibling workspace, defaulting to `../amoena-desktop`.
 
 ## Documents
 
@@ -20,7 +20,7 @@ Self-contained prompts for Codex GUI orchestration. Each has full context, step-
 | ---------------------------------------------------------------------------- | ----- | -------- | ---------------------------------------------------------------------------------- |
 | [orchestrator.md](./prompts/orchestrator.md)                                 | All   | 8 weeks  | Master prompt for the Codex GUI leader; coordinates phases and bounded subagents   |
 | [phase-1-fork-rebrand.md](./prompts/phase-1-fork-rebrand.md)                 | 1     | 1 week   | Fork Superset, strip branding, remove cloud deps, apply magenta theme              |
-| [phase-2-monorepo-restructure.md](./prompts/phase-2-monorepo-restructure.md) | 2     | 1 week   | DB migrations, tRPC routers, lunaria-service scaffold, UI placeholders             |
+| [phase-2-monorepo-restructure.md](./prompts/phase-2-monorepo-restructure.md) | 2     | 1 week   | DB migrations, tRPC routers, amoena-service scaffold, UI placeholders             |
 | [phase-3-core-services.md](./prompts/phase-3-core-services.md)               | 3     | 3 weeks  | Port Memory, Remote Access, Orchestration, Extensions, Autopilot + 5 more services |
 | [phase-4-ui-integration.md](./prompts/phase-4-ui-integration.md)             | 4     | 2 weeks  | Build 11 screens with live data, Memory Graph Home as default                      |
 | [phase-5-polish-release.md](./prompts/phase-5-polish-release.md)             | 5     | 1 week   | Mobile app, full i18n, testing, build distribution, docs                           |
@@ -30,7 +30,7 @@ Self-contained prompts for Codex GUI orchestration. Each has full context, step-
 ```bash
 # In the Codex GUI app:
 # "Read docs/roadmap/prompts/orchestrator.md and begin Phase 1."
-# The orchestrator will prepare ../lunaria-desktop as the Superset fork workspace.
+# The orchestrator will prepare ../amoena-desktop as the Superset fork workspace.
 ```
 
 ## Review History

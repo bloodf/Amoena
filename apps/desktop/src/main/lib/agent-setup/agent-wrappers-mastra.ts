@@ -4,7 +4,7 @@ import path from "node:path";
 import {
 	buildWrapperScript,
 	createWrapper,
-	isLunariaManagedHookCommand,
+	isAmoenaManagedHookCommand,
 	reconcileManagedEntries,
 	writeFileIfChanged,
 } from "./agent-wrappers-common";
@@ -76,7 +76,7 @@ export function getMastraHooksJsonContent(notifyScriptPath: string): string {
 			desired: [{ type: "command", command: notifyCommand }],
 			isManaged: (entry: MastraHookDefinition) =>
 				entry.command?.includes(notifyScriptPath) ||
-				isLunariaManagedHookCommand(entry.command, NOTIFY_SCRIPT_NAME),
+				isAmoenaManagedHookCommand(entry.command, NOTIFY_SCRIPT_NAME),
 			isEquivalent: (
 				entry: MastraHookDefinition,
 				desiredEntry: MastraHookDefinition,

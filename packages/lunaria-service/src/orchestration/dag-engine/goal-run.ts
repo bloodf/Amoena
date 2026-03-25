@@ -343,7 +343,7 @@ export class GoalRun extends EventEmitter {
   }
 
   private async _runTask(node: TaskNode, adapter: AgentAdapter): Promise<void> {
-    let worktreePath = node.state.worktreePath ?? `/tmp/lunaria/${node.spec.id}`;
+    let worktreePath = node.state.worktreePath ?? `/tmp/amoena/${node.spec.id}`;
     if (!this.skipWorktree) {
       try {
         const wt = await createWorktree(

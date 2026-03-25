@@ -13,7 +13,7 @@ import {
 // ---------------------------------------------------------------------------
 
 function makeTmpDir(): string {
-  return fs.mkdtempSync(path.join(os.tmpdir(), "lunaria-replay-test-"));
+  return fs.mkdtempSync(path.join(os.tmpdir(), "amoena-replay-test-"));
 }
 
 function writeFile(dir: string, name: string, mtimeMs: number): string {
@@ -31,7 +31,7 @@ describe("defaultRecordingsDir", () => {
   it("returns a path under the home directory", () => {
     const dir = defaultRecordingsDir();
     expect(dir).toContain(os.homedir());
-    expect(dir).toContain(".lunaria");
+    expect(dir).toContain(".amoena");
     expect(dir).toContain("recordings");
   });
 });

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines how Lunaria creates, manages, and tears down isolated execution environments for agent code. Agents run arbitrary commands (build, test, install packages) inside per-session containers so the host machine is never exposed to unintended side effects.
+This document defines how Amoena creates, manages, and tears down isolated execution environments for agent code. Agents run arbitrary commands (build, test, install packages) inside per-session containers so the host machine is never exposed to unintended side effects.
 
 Priority: **V1.5**
 
@@ -15,7 +15,7 @@ Priority: **V1.5**
 
 ## Container Runtime
 
-Lunaria uses Docker/OCI containers as the isolation primitive. This is a deliberate cross-platform choice — unlike Apple's Containerization framework (macOS 26+, Apple Silicon only), Docker Engine runs on all three desktop targets.
+Amoena uses Docker/OCI containers as the isolation primitive. This is a deliberate cross-platform choice — unlike Apple's Containerization framework (macOS 26+, Apple Silicon only), Docker Engine runs on all three desktop targets.
 
 | Runtime | Platform | Notes |
 |---------|----------|-------|
@@ -121,7 +121,7 @@ Responses stream back as newline-delimited JSON:
 ```toml
 [sandbox]
 enabled = true
-image = "lunaria/agent-sandbox:latest"
+image = "amoena/agent-sandbox:latest"
 memory_limit = "2g"
 cpu_limit = 2
 network = "none"        # none | bridge | host
@@ -130,7 +130,7 @@ env = { NODE_ENV = "development" }
 retention = "1h"        # immediate | 1h | 24h | manual
 ```
 
-Configuration is specified per agent in the agent manifest. Defaults are applied from the global Lunaria settings. The setup wizard detects Docker availability and prompts for installation if missing.
+Configuration is specified per agent in the agent manifest. Defaults are applied from the global Amoena settings. The setup wizard detects Docker availability and prompts for installation if missing.
 
 ## Filesystem Strategy
 
@@ -146,7 +146,7 @@ Configuration is specified per agent in the agent manifest. Defaults are applied
 | Docker unavailable | Host-process execution with restricted permissions. User warned at session start. |
 | Future (V2+) | WASM sandbox for lightweight isolation without Docker dependency |
 
-When running in host-process fallback, Lunaria applies OS-level restrictions where possible (macOS sandbox profiles, Windows job objects, Linux namespaces) but cannot guarantee full isolation. A persistent banner warns the user that sandbox protection is degraded.
+When running in host-process fallback, Amoena applies OS-level restrictions where possible (macOS sandbox profiles, Windows job objects, Linux namespaces) but cannot guarantee full isolation. A persistent banner warns the user that sandbox protection is degraded.
 
 ## Rust Integration
 
@@ -158,7 +158,7 @@ The Sandbox Manager is a Rust module in the Tauri main process, peer to the exis
 
 ## Competitive Reference
 
-| Capability | Osaurus | Lunaria |
+| Capability | Osaurus | Amoena |
 |------------|---------|---------|
 | Isolation technology | Apple Containerization (Linux VMs) | Docker/OCI containers |
 | Platform support | macOS 26+, Apple Silicon only | macOS, Windows, Linux |

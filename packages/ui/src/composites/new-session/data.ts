@@ -9,10 +9,10 @@ export const newSessionWorkTargets: SessionOptionCard<"local" | "worktree" | "cl
 
 export const newSessionProviders: ProviderOption[] = [
   {
-    id: "lunaria",
-    label: "Lunaria AI",
+    id: "amoena",
+    label: "Amoena AI",
     desc: "Built-in intelligent assistant — native to your workspace with full context awareness",
-    models: ["Lunaria Pro", "Lunaria Fast"],
+    models: ["Amoena Pro", "Amoena Fast"],
     featured: true,
     color: "primary",
     icon: Sparkles,

@@ -2,13 +2,13 @@
 
 ## Scope
 
-This document defines Lunaria's on-device speech-to-text architecture for voice input in agent chat sessions, covering the transcription engine, audio capture pipeline, interaction modes, platform considerations, and integration with the existing session system.
+This document defines Amoena's on-device speech-to-text architecture for voice input in agent chat sessions, covering the transcription engine, audio capture pipeline, interaction modes, platform considerations, and integration with the existing session system.
 
 **Priority**: V2.0
 
 ## Overview
 
-Lunaria provides on-device speech-to-text so users can dictate instructions to agents hands-free. All audio capture and transcription runs locally — no audio data leaves the machine. The engine is Whisper.cpp with Rust bindings, chosen for cross-platform support across macOS, Windows, and Linux. The Tauri main process owns the voice subsystem lifecycle, consistent with its role as the state authority.
+Amoena provides on-device speech-to-text so users can dictate instructions to agents hands-free. All audio capture and transcription runs locally — no audio data leaves the machine. The engine is Whisper.cpp with Rust bindings, chosen for cross-platform support across macOS, Windows, and Linux. The Tauri main process owns the voice subsystem lifecycle, consistent with its role as the state authority.
 
 ## Motivation
 
@@ -23,7 +23,7 @@ Lunaria provides on-device speech-to-text so users can dictate instructions to a
 
 ### Engine
 
-Whisper.cpp is a C/C++ port of OpenAI's Whisper model optimized for local inference. Lunaria uses the [`whisper-rs`](https://github.com/tazz4843/whisper-rs) crate for Rust bindings, loaded as a module in the Tauri main process.
+Whisper.cpp is a C/C++ port of OpenAI's Whisper model optimized for local inference. Amoena uses the [`whisper-rs`](https://github.com/tazz4843/whisper-rs) crate for Rust bindings, loaded as a module in the Tauri main process.
 
 Key properties:
 
@@ -115,7 +115,7 @@ Properties:
 
 - Lowest latency: no VAD processing overhead during capture.
 - Most predictable: user explicitly controls when recording starts and stops.
-- Registered via Tauri's `global_shortcut` API, works even when Lunaria is not focused.
+- Registered via Tauri's `global_shortcut` API, works even when Amoena is not focused.
 
 ### Voice Activity Detection (VAD)
 
@@ -127,11 +127,11 @@ Continuous listening mode that automatically detects speech boundaries.
 - Audio outside speech regions is discarded (not buffered, not transcribed).
 - Higher resource usage than push-to-talk due to continuous audio capture.
 
-**Optional wake word**: When `wake_word` is configured (e.g., `"hey lunaria"`), the VAD pipeline adds a keyword-spotting stage before triggering transcription. A lightweight keyword detector runs on the continuous audio stream; full Whisper transcription only activates after wake word detection. This reduces spurious transcriptions when the user is speaking to someone else.
+**Optional wake word**: When `wake_word` is configured (e.g., `"hey amoena"`), the VAD pipeline adds a keyword-spotting stage before triggering transcription. A lightweight keyword detector runs on the continuous audio stream; full Whisper transcription only activates after wake word detection. This reduces spurious transcriptions when the user is speaking to someone else.
 
 ### Global Transcription
 
-Transcribes speech and inserts the result into any focused text field on the system, not just Lunaria's chat input.
+Transcribes speech and inserts the result into any focused text field on the system, not just Amoena's chat input.
 
 - Activated via a separate global hotkey (configurable).
 - Uses OS accessibility APIs to insert text at the cursor position:
@@ -167,7 +167,7 @@ The waveform visualization during capture is optional and rendered in the fronte
 ## Configuration
 
 ```jsonc
-// In Lunaria settings (merged with defaults)
+// In Amoena settings (merged with defaults)
 {
   "voice": {
     "enabled": false,
@@ -214,7 +214,7 @@ Permission flow:
 Models are **not bundled** with the application binary to keep download size reasonable. Instead:
 
 1. User enables voice input in settings and selects a model.
-2. Lunaria checks the data directory (`$LUNARIA_DATA/models/whisper/`) for the model file.
+2. Amoena checks the data directory (`$AMOENA_DATA/models/whisper/`) for the model file.
 3. If missing, the model is downloaded from a CDN (Hugging Face mirror) with progress shown in the UI.
 4. Downloaded models are verified against a SHA-256 checksum.
 5. The model picker in settings shows each variant's size, estimated download time, and accuracy trade-off.
@@ -223,7 +223,7 @@ Model files persist across updates. Users can delete models from settings to rec
 
 ## Competitive Reference
 
-| Aspect | Osaurus | Lunaria |
+| Aspect | Osaurus | Amoena |
 |--------|---------|---------|
 | Engine | FluidAudio on Apple Neural Engine | Whisper.cpp (CPU + optional GPU) |
 | Platform | macOS only | macOS, Windows, Linux |
@@ -233,7 +233,7 @@ Model files persist across updates. Users can delete models from settings to rec
 | VAD | Yes, with wake word | Yes, with optional wake word |
 | Global transcription | Yes (any app) | Yes (any app, opt-in) |
 
-Lunaria trades Apple-specific hardware acceleration for cross-platform reach. On macOS, Metal acceleration through Whisper.cpp partially closes the latency gap. The open Whisper model ecosystem also allows users to choose their accuracy/speed trade-off and supports a broader set of languages.
+Amoena trades Apple-specific hardware acceleration for cross-platform reach. On macOS, Metal acceleration through Whisper.cpp partially closes the latency gap. The open Whisper model ecosystem also allows users to choose their accuracy/speed trade-off and supports a broader set of languages.
 
 ## Dependencies
 

@@ -2,7 +2,7 @@ import { Zap, Terminal, Bot, Sparkles, Cpu, Brain, FileText, GitBranch, Lightbul
 import { cn } from "@/lib/utils";
 
 const providerInfo: Record<string, { label: string; icon: React.ElementType; color: string; bg: string }> = {
-  lunaria: { label: "Lunaria AI", icon: Brain, color: "text-primary", bg: "bg-primary/10" },
+  amoena: { label: "Amoena AI", icon: Brain, color: "text-primary", bg: "bg-primary/10" },
   claude: { label: "Claude Code", icon: Bot, color: "text-tui-claude", bg: "bg-tui-claude/10" },
   opencode: { label: "OpenCode", icon: Terminal, color: "text-tui-opencode", bg: "bg-tui-opencode/10" },
   codex: { label: "Codex CLI", icon: Cpu, color: "text-tui-codex", bg: "bg-tui-codex/10" },
@@ -25,7 +25,7 @@ interface EmptySessionStateProps {
 }
 
 export function EmptySessionState({ provider, model, sessionName, onSuggestionClick }: EmptySessionStateProps) {
-  const info = providerInfo[provider] || providerInfo.lunaria;
+  const info = providerInfo[provider] || providerInfo.amoena;
   const Icon = info.icon;
 
   return (

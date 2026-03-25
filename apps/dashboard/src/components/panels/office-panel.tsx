@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 import { buildOfficeLayout } from "@/lib/office-layout";
-import { type Agent, useLunaria } from "@/store";
+import { type Agent, useAmoena } from "@/store";
 
 type ViewMode = "office" | "org-chart";
 type OrgSegmentMode = "category" | "role" | "status";
@@ -687,7 +687,7 @@ function pointAlongPath(
 
 export function OfficePanel() {
 	const t = useTranslations("office");
-	const { agents, dashboardMode, currentUser } = useLunaria();
+	const { agents, dashboardMode, currentUser } = useAmoena();
 	const isLocalMode = dashboardMode === "local";
 	const [localAgents, setLocalAgents] = useState<Agent[]>([]);
 	const [sessionAgents, setSessionAgents] = useState<Agent[]>([]);

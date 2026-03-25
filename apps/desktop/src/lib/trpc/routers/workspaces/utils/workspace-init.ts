@@ -18,7 +18,7 @@ import {
 	removeWorktree,
 	sanitizeGitError,
 } from "./git";
-import { copyLunariaConfigToWorktree } from "./setup";
+import { copyAmoenaConfigToWorktree } from "./setup";
 
 export interface WorkspaceInitParams {
 	workspaceId: string;
@@ -137,7 +137,7 @@ export async function initializeWorkspaceWorktree({
 				"copying_config",
 				"Copying configuration...",
 			);
-			copyLunariaConfigToWorktree(mainRepoPath, worktreePath);
+			copyAmoenaConfigToWorktree(mainRepoPath, worktreePath);
 
 			if (manager.isCancellationRequested(workspaceId)) {
 				try {
@@ -474,7 +474,7 @@ export async function initializeWorkspaceWorktree({
 			"copying_config",
 			"Copying configuration...",
 		);
-		copyLunariaConfigToWorktree(mainRepoPath, worktreePath);
+		copyAmoenaConfigToWorktree(mainRepoPath, worktreePath);
 
 		if (manager.isCancellationRequested(workspaceId)) {
 			try {

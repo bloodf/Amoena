@@ -197,7 +197,7 @@ Do not start Phase 2 with a failing build or failing tests. Fix first.
 [ ] Smoke test: Agent Leaderboard renders (may show cold-start state if < 5 runs)
 [ ] Smoke test: Run Comparison enables after 2+ completed runs
 [ ] Smoke test: Goal Templates loads 5 built-in templates
-[ ] Smoke test: Template launch fires lunaria:load-template event (check DevTools)
+[ ] Smoke test: Template launch fires amoena:load-template event (check DevTools)
 [ ] Smoke test: Time Saved badge shows in Mission Control header
 [ ] Smoke test: Export a run report as HTML — verify file downloads and opens in browser
 [ ] Smoke test: Export a run report as Markdown — verify file downloads

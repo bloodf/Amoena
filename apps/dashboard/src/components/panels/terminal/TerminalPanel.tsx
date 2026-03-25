@@ -72,7 +72,7 @@ export function TerminalPanel() {
 				xtermRef.current = terminal;
 				setXtermLoaded(true);
 
-				terminal.writeln("\x1b[1;36m  Lunaria Terminal\x1b[0m");
+				terminal.writeln("\x1b[1;36m  Amoena Terminal\x1b[0m");
 				terminal.writeln("\x1b[2m  Ready. Spawn an agent or open a shell.\x1b[0m");
 				terminal.writeln("");
 

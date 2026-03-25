@@ -39,7 +39,7 @@ export interface ScanResult {
 	categories: {
 		credentials: Category;
 		network: Category;
-		lunaria: Category;
+		amoena: Category;
 		runtime: Category;
 		os: Category;
 	};
@@ -91,11 +91,11 @@ const INSECURE_PASSWORDS = new Set([
 export function runSecurityScan(): ScanResult {
 	const credentials = scanCredentials();
 	const network = scanNetwork();
-	const lunaria = scanLunaria();
+	const amoena = scanAmoena();
 	const runtime = scanRuntime();
 	const osLevel = scanOS();
 
-	const categories = { credentials, network, lunaria, runtime, os: osLevel };
+	const categories = { credentials, network, amoena, runtime, os: osLevel };
 	const allChecks = Object.values(categories).flatMap((c) => c.checks);
 
 	const weightedMax = allChecks.reduce(
@@ -344,7 +344,7 @@ function scanNetwork(): Category {
 		detail: `Gateway host is ${gwHost}`,
 		fix:
 			gwHost !== "127.0.0.1" && gwHost !== "localhost"
-				? "Set LUNARIA_GATEWAY_HOST=127.0.0.1 — never expose the gateway publicly"
+				? "Set AMOENA_GATEWAY_HOST=127.0.0.1 — never expose the gateway publicly"
 				: "",
 		severity: "critical",
 	});
@@ -353,20 +353,20 @@ function scanNetwork(): Category {
 }
 
 // ---------------------------------------------------------------------------
-// Category: Lunaria
+// Category: Amoena
 // ---------------------------------------------------------------------------
 
-function scanLunaria(): Category {
+function scanAmoena(): Category {
 	const checks: Check[] = [];
-	const configPath = config.lunariaConfigPath;
+	const configPath = config.amoenaConfigPath;
 
 	if (!configPath || !existsSync(configPath)) {
 		checks.push({
 			id: "config_found",
-			name: "Lunaria config found",
+			name: "Amoena config found",
 			status: "warn",
-			detail: "lunaria.json not found — Lunaria checks skipped",
-			fix: "Set LUNARIA_HOME or LUNARIA_CONFIG_PATH in .env",
+			detail: "amoena.json not found — Amoena checks skipped",
+			fix: "Set AMOENA_HOME or AMOENA_CONFIG_PATH in .env",
 			severity: "medium",
 		});
 		return scoreCategory(checks);
@@ -378,10 +378,10 @@ function scanLunaria(): Category {
 	} catch (_err) {
 		checks.push({
 			id: "config_valid",
-			name: "Lunaria config valid",
+			name: "Amoena config valid",
 			status: "fail",
-			detail: "lunaria.json could not be parsed",
-			fix: "Check lunaria.json for syntax errors",
+			detail: "amoena.json could not be parsed",
+			fix: "Check amoena.json for syntax errors",
 			severity: "high",
 		});
 		return scoreCategory(checks);
@@ -394,7 +394,7 @@ function scanLunaria(): Category {
 			id: "config_permissions",
 			name: "Config file permissions",
 			status: mode === "600" ? "pass" : "warn",
-			detail: `lunaria.json permissions are ${mode}`,
+			detail: `amoena.json permissions are ${mode}`,
 			fix: mode !== "600" ? `Run: chmod 600 ${configPath}` : "",
 			severity: "medium",
 			fixSafety: "safe",
@@ -803,7 +803,7 @@ function scanOS(): Category {
 				uid === 0
 					? "Process is running as root (UID 0)"
 					: `Running as UID ${uid}`,
-			fix: uid === 0 ? "Run Lunaria as a non-root user" : "",
+			fix: uid === 0 ? "Run Amoena as a non-root user" : "",
 			severity: "critical",
 			platform: "all",
 		});

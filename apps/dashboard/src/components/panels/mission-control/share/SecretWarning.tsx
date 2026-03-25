@@ -28,7 +28,7 @@ export function SecretWarning({ redactedCount, redactedTypes, onProceed, onCance
 
 	function handleProceed() {
 		if (dontWarn) {
-			localStorage.setItem("lunaria:skip-secret-warning", "true");
+			localStorage.setItem("amoena:skip-secret-warning", "true");
 		}
 		onProceed();
 	}

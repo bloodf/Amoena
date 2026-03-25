@@ -8,7 +8,7 @@ import { Loader } from "@/components/ui/loader";
 import { buildTaskStatParts, formatModelName } from "@/lib/agent-card-helpers";
 import { createClientLogger } from "@/lib/client-logger";
 import { useSmartPoll } from "@/lib/use-smart-poll";
-import { type Agent, useLunaria } from "@/store";
+import { type Agent, useAmoena } from "@/store";
 import {
 	ActivityTab,
 	ChannelsTab,
@@ -98,7 +98,7 @@ const statusCardStyles: Record<
 
 export function AgentSquadPanelPhase3() {
 	const t = useTranslations("agentSquadPhase3");
-	const { agents, setAgents } = useLunaria();
+	const { agents, setAgents } = useAmoena();
 	const [loading, setLoading] = useState(agents.length === 0);
 	const [error, setError] = useState<string | null>(null);
 	const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
@@ -226,7 +226,7 @@ export function AgentSquadPanelPhase3() {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
-					message: `🤖 **Wake Up Call**\n\nAgent ${agentName}, you have been manually woken up.\nCheck Lunaria for any pending tasks or notifications.\n\n⏰ ${new Date().toLocaleString()}`,
+					message: `🤖 **Wake Up Call**\n\nAgent ${agentName}, you have been manually woken up.\nCheck Amoena for any pending tasks or notifications.\n\n⏰ ${new Date().toLocaleString()}`,
 				}),
 			});
 

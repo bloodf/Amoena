@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Contributor-facing summary of how Lunaria verifies runtime and UI behavior.
+Contributor-facing summary of how Amoena verifies runtime and UI behavior.
 
 ## Main Commands
 

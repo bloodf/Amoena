@@ -64,7 +64,7 @@ export class DiscoveryService {
     this.listenSocket.on('message', (msg: Buffer) => {
       try {
         const announcement = JSON.parse(msg.toString()) as DiscoveryAnnouncement;
-        if (announcement.service !== 'lunaria') return;
+        if (announcement.service !== 'amoena') return;
 
         const entry: DiscoveredService = { ...announcement, lastSeenAt: Date.now() };
         this.discovered.set(announcement.deviceId, entry);
@@ -96,7 +96,7 @@ export class DiscoveryService {
 
   private _sendAnnouncement(): void {
     const announcement: DiscoveryAnnouncement = {
-      service: 'lunaria',
+      service: 'amoena',
       host: this.options.host,
       port: this.options.port,
       deviceId: this.options.deviceId,

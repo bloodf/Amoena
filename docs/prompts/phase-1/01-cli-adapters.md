@@ -14,24 +14,24 @@ You are running in an autonomous loop. These rules are non-negotiable:
 
 ## Component Overview
 
-Build three CLI adapter modules that wrap the Claude Code, OpenAI Codex, and Google Gemini CLI tools as spawnable child processes. These adapters form the lowest layer of the Lunaria Mission Control Platform: everything above (the DAG engine, UI, reporter) depends on these producing a consistent event stream.
+Build three CLI adapter modules that wrap the Claude Code, OpenAI Codex, and Google Gemini CLI tools as spawnable child processes. These adapters form the lowest layer of the Amoena Mission Control Platform: everything above (the DAG engine, UI, reporter) depends on these producing a consistent event stream.
 
 The module lives at:
 
 ```
-packages/lunaria-service/src/orchestration/cli-adapters/
+packages/amoena-service/src/orchestration/cli-adapters/
 ```
 
 ---
 
 ## Repository Context
 
-- Monorepo root: `/Users/heitor/Developer/github.com/Lunaria/lunaria`
-- This package: `packages/lunaria-service/`
+- Monorepo root: `/Users/heitor/Developer/github.com/Amoena/amoena`
+- This package: `packages/amoena-service/`
 - Credential resolvers already exist at:
   - `packages/terminal-host/src/providers/model-providers/LocalModelProvider/utils/resolveAnthropicCredential.ts`
   - `packages/terminal-host/src/providers/model-providers/LocalModelProvider/utils/resolveOpenAICredential.ts`
-- Orchestration types already at: `packages/lunaria-service/src/orchestration/types.ts`
+- Orchestration types already at: `packages/amoena-service/src/orchestration/types.ts`
 - Agent spawner reference (read before writing): `apps/dashboard/src/lib/` — `claude-sessions.ts`, `codex-sessions.ts`
 - TypeScript config root: `tsconfig.json` at repo root; package-level `tsconfig.json` inherits from it
 - Package manager: Bun (`bun.lock` at root, use `bun` commands not `npm`)
@@ -43,7 +43,7 @@ packages/lunaria-service/src/orchestration/cli-adapters/
 ### Directory structure to create
 
 ```
-packages/lunaria-service/src/orchestration/cli-adapters/
+packages/amoena-service/src/orchestration/cli-adapters/
   index.ts                   # re-exports
   types.ts                   # AgentAdapter, AgentSession interfaces
   utils/
@@ -343,7 +343,7 @@ All of the following must be true before this component is considered done:
 
 ## Test Requirements
 
-Location: `packages/lunaria-service/src/orchestration/cli-adapters/__tests__/`
+Location: `packages/amoena-service/src/orchestration/cli-adapters/__tests__/`
 
 ### Unit tests (mock child_process)
 
@@ -406,20 +406,20 @@ Use these to test the parser in isolation without spawning a real process.
 
 | Path | Purpose |
 |---|---|
-| `packages/lunaria-service/src/orchestration/cli-adapters/types.ts` | All interfaces and types |
-| `packages/lunaria-service/src/orchestration/cli-adapters/utils/spawn.ts` | spawnCliAgent() |
-| `packages/lunaria-service/src/orchestration/cli-adapters/utils/timeout.ts` | handleTimeout() |
-| `packages/lunaria-service/src/orchestration/cli-adapters/utils/output-parser.ts` | OutputParser base |
-| `packages/lunaria-service/src/orchestration/cli-adapters/utils/base-session.ts` | BaseAgentSession |
-| `packages/lunaria-service/src/orchestration/cli-adapters/claude-adapter.ts` | ClaudeCodeAdapter |
-| `packages/lunaria-service/src/orchestration/cli-adapters/codex-adapter.ts` | CodexAdapter |
-| `packages/lunaria-service/src/orchestration/cli-adapters/gemini-adapter.ts` | GeminiAdapter stub |
-| `packages/lunaria-service/src/orchestration/cli-adapters/index.ts` | Re-exports |
-| `packages/lunaria-service/src/orchestration/cli-adapters/__tests__/claude-adapter.test.ts` | Unit tests |
-| `packages/lunaria-service/src/orchestration/cli-adapters/__tests__/codex-adapter.test.ts` | Unit tests |
-| `packages/lunaria-service/src/orchestration/cli-adapters/__tests__/gemini-adapter.test.ts` | Unit tests |
-| `packages/lunaria-service/src/orchestration/cli-adapters/__tests__/fixtures/claude-session-success.jsonl` | Test fixture |
-| `packages/lunaria-service/src/orchestration/cli-adapters/__tests__/fixtures/claude-session-token-counts.jsonl` | Test fixture |
+| `packages/amoena-service/src/orchestration/cli-adapters/types.ts` | All interfaces and types |
+| `packages/amoena-service/src/orchestration/cli-adapters/utils/spawn.ts` | spawnCliAgent() |
+| `packages/amoena-service/src/orchestration/cli-adapters/utils/timeout.ts` | handleTimeout() |
+| `packages/amoena-service/src/orchestration/cli-adapters/utils/output-parser.ts` | OutputParser base |
+| `packages/amoena-service/src/orchestration/cli-adapters/utils/base-session.ts` | BaseAgentSession |
+| `packages/amoena-service/src/orchestration/cli-adapters/claude-adapter.ts` | ClaudeCodeAdapter |
+| `packages/amoena-service/src/orchestration/cli-adapters/codex-adapter.ts` | CodexAdapter |
+| `packages/amoena-service/src/orchestration/cli-adapters/gemini-adapter.ts` | GeminiAdapter stub |
+| `packages/amoena-service/src/orchestration/cli-adapters/index.ts` | Re-exports |
+| `packages/amoena-service/src/orchestration/cli-adapters/__tests__/claude-adapter.test.ts` | Unit tests |
+| `packages/amoena-service/src/orchestration/cli-adapters/__tests__/codex-adapter.test.ts` | Unit tests |
+| `packages/amoena-service/src/orchestration/cli-adapters/__tests__/gemini-adapter.test.ts` | Unit tests |
+| `packages/amoena-service/src/orchestration/cli-adapters/__tests__/fixtures/claude-session-success.jsonl` | Test fixture |
+| `packages/amoena-service/src/orchestration/cli-adapters/__tests__/fixtures/claude-session-token-counts.jsonl` | Test fixture |
 
 ---
 
@@ -429,7 +429,7 @@ After implementation, run these and show the output:
 
 ```bash
 # Type check
-cd packages/lunaria-service && bun tsc --noEmit
+cd packages/amoena-service && bun tsc --noEmit
 
 # Unit tests
 bun test src/orchestration/cli-adapters/__tests__

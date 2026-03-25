@@ -28,13 +28,13 @@ const defaultEnv: BootstrapEnv = import.meta.env;
 export function isElectronRuntime(): boolean {
   return (
     typeof window !== 'undefined' &&
-    typeof (window as unknown as { lunaria?: unknown }).lunaria !== 'undefined'
+    typeof (window as unknown as { amoena?: unknown }).amoena !== 'undefined'
   );
 }
 
 export function readDevLaunchContext(env: BootstrapEnv = defaultEnv): LaunchContext | null {
-  const apiBaseUrl = env.VITE_LUNARIA_API_BASE_URL;
-  const bootstrapToken = env.VITE_LUNARIA_BOOTSTRAP_TOKEN;
+  const apiBaseUrl = env.VITE_AMOENA_API_BASE_URL;
+  const bootstrapToken = env.VITE_AMOENA_BOOTSTRAP_TOKEN;
 
   if (!apiBaseUrl || !bootstrapToken) {
     return null;
@@ -42,10 +42,10 @@ export function readDevLaunchContext(env: BootstrapEnv = defaultEnv): LaunchCont
 
   return {
     apiBaseUrl,
-    bootstrapPath: env.VITE_LUNARIA_BOOTSTRAP_PATH ?? '/api/v1/bootstrap/auth',
+    bootstrapPath: env.VITE_AMOENA_BOOTSTRAP_PATH ?? '/api/v1/bootstrap/auth',
     bootstrapToken,
-    expiresAtUnixMs: Number(env.VITE_LUNARIA_BOOTSTRAP_EXPIRES_AT ?? '0'),
-    instanceId: env.VITE_LUNARIA_INSTANCE_ID ?? 'dev-browser',
+    expiresAtUnixMs: Number(env.VITE_AMOENA_BOOTSTRAP_EXPIRES_AT ?? '0'),
+    instanceId: env.VITE_AMOENA_INSTANCE_ID ?? 'dev-browser',
   };
 }
 
@@ -54,8 +54,8 @@ type ElectronBridge = {
 };
 
 function getElectronBridge(): ElectronBridge | null {
-  const win = window as unknown as { lunaria?: ElectronBridge };
-  return win.lunaria ?? null;
+  const win = window as unknown as { amoena?: ElectronBridge };
+  return win.amoena ?? null;
 }
 
 export async function resolveLaunchContext(env: BootstrapEnv = defaultEnv): Promise<LaunchContext> {
@@ -68,7 +68,7 @@ export async function resolveLaunchContext(env: BootstrapEnv = defaultEnv): Prom
 
   if (!devLaunchContext) {
     throw new Error(
-      'Missing Lunaria launch context. Run through Electron or set VITE_LUNARIA_API_BASE_URL and VITE_LUNARIA_BOOTSTRAP_TOKEN.',
+      'Missing Amoena launch context. Run through Electron or set VITE_AMOENA_API_BASE_URL and VITE_AMOENA_BOOTSTRAP_TOKEN.',
     );
   }
 

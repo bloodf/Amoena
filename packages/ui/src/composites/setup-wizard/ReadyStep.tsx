@@ -20,7 +20,7 @@ export function SetupWizardReadyStep({
       <div>
         <h2 className="mb-2 text-2xl font-semibold text-foreground">You&apos;re all set</h2>
         <p className="mx-auto max-w-md text-sm text-muted-foreground">
-          Lunaria is configured and ready. Start a session to begin working with your AI agents.
+          Amoena is configured and ready. Start a session to begin working with your AI agents.
         </p>
       </div>
       <div className="mx-auto max-w-sm space-y-2 text-left">
@@ -39,7 +39,7 @@ export function SetupWizardReadyStep({
         ))}
       </div>
       <Button onClick={onLaunch} className="px-6 py-2.5 text-sm">
-        Launch Lunaria
+        Launch Amoena
       </Button>
     </div>
   );

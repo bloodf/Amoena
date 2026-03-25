@@ -1,10 +1,10 @@
 "use client";
 
-import { useLunaria } from "@/store";
+import { useAmoena } from "@/store";
 import { ChatWorkspace } from "./chat-workspace";
 
 export function ChatPanel() {
-	const { chatPanelOpen, setChatPanelOpen } = useLunaria();
+	const { chatPanelOpen, setChatPanelOpen } = useAmoena();
 
 	if (!chatPanelOpen) return null;
 

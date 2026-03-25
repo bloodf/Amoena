@@ -17,7 +17,7 @@ function DemoForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="lunaria" {...field} />
+                <Input placeholder="amoena" {...field} />
               </FormControl>
               <FormDescription>Your public display name.</FormDescription>
               <FormMessage />
