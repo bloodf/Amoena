@@ -5,28 +5,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+For the full detailed changelog, see [CHANGELOG.md](https://github.com/LunariaAi/lunaria/blob/main/CHANGELOG.md) in the repository root.
+
+## [0.9.0] - 2026-03-24
+
+- Agent prompt quality evaluation via Promptfoo
+- Revised agent prompts based on evaluation scores
+- Restructured migration plan and roadmap documentation
+
+## [0.8.0] - 2026-03-22
+
+- Expanded desktop and mobile runtime surfaces
+- Comprehensive GUI remediation (type fixes, error handling)
+- Tauri plugins: system tray, auto-updater, clipboard, deep links, Stronghold, notifications, and more
+
+## [0.7.0] - 2026-03-20
+
+- GitHub Actions CI/CD workflows for build, test, lint, and release
+- Issue templates and release automation
+
+## [0.6.0] - 2026-03-19
+
+- VitePress documentation site with full API reference
+- 30+ architecture documents covering all subsystems
+
+## [0.5.0] - 2026-03-18
+
+- 267 Rust tests covering all backend subsystems
+- Vitest tests for UI components
+- Playwright E2E test specifications
+
+## [0.4.0] - 2026-03-17
+
+- Expo React Native companion mobile app for remote access
+
+## [0.3.0] - 2026-03-16
+
+- React desktop frontend with 15 pages (Home, Session, Agents, Autopilot, Marketplace, Memory, Workspaces, Settings, Providers, Remote, Usage, Tasks, Visual Editor, Opinions)
+- Command palette, worker bridge, runtime bootstrap
+
+## [0.2.0] - 2026-03-15
+
+- Extension system with `.luna` binary format
+- Plugin registry with multi-ecosystem support
+- Remote access with QR/PIN device pairing
+- Memory system with L0/L1/L2 tiered observations and hybrid search
+- Orchestration engine with agent spawning, teams, and consensus
+- Hook engine with 23 event types
+- Terminal multiplexing
+- CLI wrappers for Claude Code, Codex, Gemini, OpenCode
+
 ## [0.1.0] - 2026-03-14
 
-### Added
-
-- **Runtime Server**: Axum-based REST/SSE runtime with 110+ API endpoints
-- **Session Management**: Create, list, delete sessions with parent/child hierarchy
-- **AI Worker Bridge**: Bun subprocess for model inference with streaming support
-- **Provider System**: Claude, Codex, Gemini, and OpenCode adapter support
-- **Multi-Agent Orchestration**: Spawn subagents, form teams, mailbox communication
-- **Tool Execution**: Permission-brokered tool system with approval workflows
-- **Memory System**: L0/L1/L2 observation hierarchy with embedding-based retrieval
-- **Hook Engine**: 23 event types with command, HTTP, prompt, and agent handlers
-- **Extension System**: Single `.luna` binary format with manifest-driven contributions (commands, menus, panels, settings, hooks, tools, providers)
-- **Plugin Registry**: Install, execute, and manage runtime plugins
-- **Workspace Management**: Git-integrated workspaces with branch isolation and merge reviews
-- **Remote Access**: Device pairing via QR/PIN, LAN discovery, relay protocol
-- **Terminal Multiplexing**: PTY-based terminal sessions with resize support
-- **Desktop UI**: React 19 + TypeScript component library with 30+ composites
-- **Storybook**: Visual component development and testing
-- **i18n**: 5 languages (English, Portuguese, Spanish, French, German)
-- **Autopilot Mode**: Autonomous multi-turn task execution with phase tracking
-- **Routing Service**: Intelligent provider/model selection based on task type and persona
-- **Configuration**: Keyring-based secret storage, scoped settings
-- **SQLite Persistence**: Full migration system with 20+ repository modules
-- **267 Rust tests** covering all backend subsystems
+- Monorepo initialization with Bun workspaces
+- Design token system, i18n framework (5 languages)
+- Typed runtime client with 70+ API methods
+- UI component library with 30+ composites
+- Tauri backend with Axum runtime server (110+ endpoints)
+- SQLite persistence with 20+ repository modules
+- Provider system (Claude, Codex, Gemini, OpenCode)
+- Routing service with adaptive reasoning
+- Session management, autopilot, message queue, task management
+- Workspace management with merge reviews
+- Usage analytics, file operations, CLI binary
