@@ -6,40 +6,138 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
-  install:
+  rust-check:
+    name: Rust Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
         with:
-          bun-version: latest
-      - run: bun install --frozen-lockfile
+          workspaces: apps/desktop/src-tauri
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
+      - name: Cargo check
+        working-directory: apps/desktop/src-tauri
+        run: cargo check
+      - name: Cargo test
+        working-directory: apps/desktop/src-tauri
+        run: cargo test --no-fail-fast -- --test-threads=1
 
-  test:
-    needs: install
+  rust-clippy:
+    name: Rust Clippy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          bun-version: latest
-      - run: bun install --frozen-lockfile
-      - name: Run lunaria-service tests
-        run: cd packages/lunaria-service && bunx vitest run
-      - name: Run UI tests
-        run: cd packages/ui && bun test
-        continue-on-error: true
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/src-tauri
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
+      - name: Clippy
+        working-directory: apps/desktop/src-tauri
+        run: cargo clippy -- -D warnings
 
-  build:
-    needs: install
+  rust-fmt:
+    name: Rust Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - name: Check formatting
+        working-directory: apps/desktop/src-tauri
+        run: cargo fmt --check
+
+  ts-typecheck:
+    name: TypeScript Typecheck
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - name: Typecheck all packages
+        run: bun run type-check
+
+  vitest:
+    name: Vitest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - name: Run unit tests
+        run: bunx vitest run --reporter=verbose
+        working-directory: apps/desktop
+      - name: Run package tests
+        run: bunx vitest run --reporter=verbose
+        working-directory: packages/ui
+
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - name: Run ESLint
+        run: bun run lint
+
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - name: Check formatting
+        run: bun run format:check
+
+  playwright:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+    needs: [ts-typecheck, vitest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - name: Install Playwright
+        run: bunx playwright install --with-deps chromium
+      - name: Run E2E tests
+        working-directory: apps/desktop
+        run: bunx playwright test
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          bun-version: latest
-      - run: bun install --frozen-lockfile
-      - name: Build dashboard
-        run: cd apps/dashboard && bunx next build
-        continue-on-error: true
+          name: playwright-report
+          path: apps/desktop/playwright-report/
+          retention-days: 7
+
+  cli-build:
+    name: CLI Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - name: Build CLI
+        run: bash scripts/build-tui.sh
+      - name: Verify CLI runs
+        run: node apps/tui/bin/lunaria.js --version

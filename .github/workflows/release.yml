@@ -7,51 +7,186 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version (e.g., v0.2.0)'
+        description: 'Release version (e.g., v1.0.0)'
         required: true
         type: string
 
 permissions:
   contents: write
 
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
-  build:
+  lint-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/src-tauri
+      - run: bun install
+
+      - name: Install Linux system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
+
+      - name: ESLint
+        run: bun run lint
+
+      - name: TypeScript typecheck
+        run: bun run type-check
+
+      - name: Vitest
+        run: bunx vitest run --reporter=verbose
+        working-directory: apps/desktop
+
+      - name: Rust tests
+        working-directory: apps/desktop/src-tauri
+        run: cargo test --no-fail-fast -- --test-threads=1
+
+  build-desktop:
+    name: Build Desktop (${{ matrix.target }})
+    needs: lint-and-test
     strategy:
       fail-fast: false
       matrix:
         include:
           - platform: macos-latest
             target: aarch64-apple-darwin
+            arch: arm64
           - platform: macos-latest
             target: x86_64-apple-darwin
-          - platform: ubuntu-latest
+            arch: x64
+          - platform: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
+            arch: x64
+          - platform: ubuntu-22.04-arm
+            target: aarch64-unknown-linux-gnu
+            arch: arm64
           - platform: windows-latest
             target: x86_64-pc-windows-msvc
+            arch: x64
 
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/src-tauri
+          key: ${{ matrix.target }}
+
       - uses: oven-sh/setup-bun@v2
       - run: bun install
 
-      - name: Install Linux dependencies
-        if: matrix.platform == 'ubuntu-latest'
+      - name: Install Linux system dependencies
+        if: contains(matrix.platform, 'ubuntu')
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
+
+      - name: Import macOS code-signing certificate
+        if: contains(matrix.platform, 'macos')
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+        run: |
+          if [ -n "$APPLE_CERTIFICATE" ]; then
+            echo "$APPLE_CERTIFICATE" | base64 --decode > certificate.p12
+            security create-keychain -p actions build.keychain
+            security default-keychain -s build.keychain
+            security unlock-keychain -p actions build.keychain
+            security import certificate.p12 -k build.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+            security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k actions build.keychain
+            rm certificate.p12
+          fi
 
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           tagName: ${{ github.event.inputs.version || github.ref_name }}
           releaseName: Lunaria ${{ github.event.inputs.version || github.ref_name }}
-          releaseBody: See [CHANGELOG.md](https://github.com/LunariaAi/lunaria/blob/main/CHANGELOG.md) for details.
+          releaseBody: |
+            See [CHANGELOG.md](https://github.com/LunariaAi/lunaria/blob/main/CHANGELOG.md) for details.
+
+            ## Downloads
+
+            | Platform | Architecture | File |
+            |----------|-------------|------|
+            | macOS    | Apple Silicon (arm64) | `.dmg` |
+            | macOS    | Intel (x64)  | `.dmg` |
+            | Windows  | x64          | `.msi` / `.exe` |
+            | Linux    | x64          | `.AppImage` / `.deb` |
+            | Linux    | arm64        | `.AppImage` / `.deb` |
           releaseDraft: true
           prerelease: false
           projectPath: apps/desktop
+          args: --target ${{ matrix.target }}
+
+  build-cli:
+    name: Build CLI
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+
+      - name: Build TUI/CLI
+        run: bash scripts/build-tui.sh
+
+      - name: Smoke test CLI
+        run: |
+          chmod +x apps/tui/bin/lunaria.js
+          node apps/tui/bin/lunaria.js --version
+
+      - name: Pack for npm
+        working-directory: apps/tui
+        run: bun pack
+
+      - name: Upload CLI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lunaria-cli
+          path: apps/tui/*.tgz
+
+  publish-cli:
+    name: Publish CLI to npm
+    needs: build-cli
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+
+      - name: Build CLI
+        run: bash scripts/build-tui.sh
+
+      - name: Publish to npm
+        working-directory: apps/tui
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+          npm publish --access public

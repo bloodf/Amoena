@@ -1,6 +1,6 @@
 {
   "name": "@lunaria/desktop",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Desktop-first AI development environment with multi-agent orchestration and extensibility",
   "license": "MIT",
@@ -11,7 +11,7 @@
   "keywords": [
     "ai",
     "development-environment",
-    "electron",
+    "tauri",
     "desktop",
     "multi-agent",
     "extensions"
@@ -39,7 +39,7 @@
     "desktop:dev": "bun run --cwd apps/desktop dev",
     "desktop:test": "bun run --cwd apps/desktop test",
     "desktop:build": "bun run --cwd apps/desktop build",
-    "desktop:smoke": "bun run --cwd apps/desktop e2e",
+    "desktop:smoke": "bun run --cwd apps/desktop tauri:smoke",
     "mobile:dev": "bun run --cwd apps/mobile start",
     "mobile:test": "bun run --cwd apps/mobile test",
     "format": "prettier --write .",
@@ -77,8 +77,8 @@
     "*.{json,md,yml,yaml,html,css}": [
       "prettier --write"
     ],
-    "*.{ts,tsx,json,md}": [
-      "prettier --write"
+    "*.rs": [
+      "cargo fmt --check"
     ]
   },
   "dependencies": {
