@@ -6,16 +6,16 @@
  * the previous one when a recoverable error is detected.
  */
 
-import { randomUUID } from "crypto";
+import { randomUUID } from 'crypto';
 
 /** The ordered phases of an autopilot run. */
 export enum AutopilotPhase {
-  Analysis = "Analysis",
-  Planning = "Planning",
-  Implementation = "Implementation",
-  Testing = "Testing",
-  Review = "Review",
-  Merge = "Merge",
+  Analysis = 'Analysis',
+  Planning = 'Planning',
+  Implementation = 'Implementation',
+  Testing = 'Testing',
+  Review = 'Review',
+  Merge = 'Merge',
 }
 
 /** Ordered array used for phase advancement / rollback arithmetic. */
@@ -32,12 +32,7 @@ const PHASE_ORDER: ReadonlyArray<AutopilotPhase> = [
 const DEFAULT_PHASE_TIMEOUT_MS = 10 * 60 * 1000;
 
 /** Runtime status of an autopilot run. */
-export type AutopilotStatus =
-  | "running"
-  | "paused"
-  | "completed"
-  | "failed"
-  | "timed_out";
+export type AutopilotStatus = 'running' | 'paused' | 'completed' | 'failed' | 'timed_out';
 
 /** Metadata recorded for each phase. */
 export interface PhaseRecord {
@@ -75,7 +70,7 @@ export interface AutopilotOptions {
 export class AutopilotTerminalError extends Error {
   constructor(runId: string, status: AutopilotStatus) {
     super(`Run "${runId}" is in terminal state "${status}" and cannot be advanced.`);
-    this.name = "AutopilotTerminalError";
+    this.name = 'AutopilotTerminalError';
   }
 }
 
@@ -83,26 +78,57 @@ export class AutopilotTerminalError extends Error {
 export class AutopilotRollbackError extends Error {
   constructor(phase: AutopilotPhase) {
     super(`Cannot roll back from the first phase "${phase}".`);
-    this.name = "AutopilotRollbackError";
+    this.name = 'AutopilotRollbackError';
+  }
+}
+
+/** Error thrown when a phase execution exceeds its timeout. */
+export class PhaseTimeoutError extends Error {
+  constructor(phase: AutopilotPhase, timeoutMs: number) {
+    super(`Phase "${phase}" timed out after ${timeoutMs}ms.`);
+    this.name = 'PhaseTimeoutError';
   }
 }
 
 /** In-memory store: runId → AutopilotRun. */
 const runStore = new Map<string, AutopilotRun>();
 
-function resolveTimeout(
-  phase: AutopilotPhase,
-  overrides: PhaseTimeouts = {},
-): number {
+function resolveTimeout(phase: AutopilotPhase, overrides: PhaseTimeouts = {}): number {
   return overrides[phase] ?? DEFAULT_PHASE_TIMEOUT_MS;
 }
 
 function isTerminal(status: AutopilotStatus): boolean {
-  return status === "completed" || status === "failed" || status === "timed_out";
+  return status === 'completed' || status === 'failed' || status === 'timed_out';
 }
 
 function indexOfPhase(phase: AutopilotPhase): number {
   return PHASE_ORDER.indexOf(phase);
+}
+
+/**
+ * Runs a phase execution with timeout enforcement.
+ *
+ * @param phaseExecution - The async function to execute for the phase.
+ * @param timeoutMs - Timeout in milliseconds.
+ * @returns Promise that resolves with the result or rejects on timeout.
+ */
+async function runPhaseWithTimeout<T>(
+  phaseExecution: () => Promise<T>,
+  timeoutMs: number,
+): Promise<{ timedOut: boolean }> {
+  const timeoutPromise = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new PhaseTimeoutError(AutopilotPhase.Analysis, timeoutMs)), timeoutMs),
+  );
+
+  try {
+    await Promise.race([phaseExecution(), timeoutPromise]);
+    return { timedOut: false };
+  } catch (error) {
+    if (error instanceof PhaseTimeoutError) {
+      return { timedOut: true };
+    }
+    throw error;
+  }
 }
 
 /**
@@ -134,7 +160,7 @@ export async function startAutopilot(
     goal,
     phases: [initialPhaseRecord],
     currentPhase: firstPhase,
-    status: "running",
+    status: 'running',
   };
 
   runStore.set(run.id, run);
@@ -147,7 +173,12 @@ export async function startAutopilot(
  * If the run is already at the final phase (Merge) and it is advanced,
  * the run transitions to `completed`.
  *
+ * When phaseExecution is provided, it is raced against the current phase's
+ * timeout. If the timeout expires before phaseExecution completes, the run
+ * transitions to `timed_out` and returns without advancing.
+ *
  * @param runId - ID of the run to advance.
+ * @param phaseExecution - Optional async function representing phase work.
  * @returns Updated `AutopilotRun`.
  * @throws {AutopilotTerminalError} If the run is in a terminal state.
  *
@@ -156,7 +187,10 @@ export async function startAutopilot(
  * const updated = await advancePhase(run.id);
  * ```
  */
-export async function advancePhase(runId: string): Promise<AutopilotRun> {
+export async function advancePhase(
+  runId: string,
+  phaseExecution?: () => Promise<unknown>,
+): Promise<AutopilotRun> {
   const run = runStore.get(runId);
   if (!run) {
     throw new Error(`No autopilot run found with id "${runId}".`);
@@ -168,11 +202,26 @@ export async function advancePhase(runId: string): Promise<AutopilotRun> {
   const currentIndex = indexOfPhase(run.currentPhase);
   const now = new Date();
 
+  // If phaseExecution is provided, race it against the current phase's timeout.
+  if (phaseExecution) {
+    const currentPhaseTimeoutMs = run.phases[run.phases.length - 1].timeoutMs;
+
+    const { timedOut } = await runPhaseWithTimeout(phaseExecution, currentPhaseTimeoutMs);
+
+    if (timedOut) {
+      // Timeout expired before phase execution completed.
+      const timedOutRun: AutopilotRun = {
+        ...run,
+        status: 'timed_out',
+      };
+      runStore.set(runId, timedOutRun);
+      return timedOutRun;
+    }
+  }
+
   // Close the current phase record.
   const closedPhases: PhaseRecord[] = run.phases.map((p) =>
-    p.phase === run.currentPhase && p.endedAt === null
-      ? { ...p, endedAt: now }
-      : p,
+    p.phase === run.currentPhase && p.endedAt === null ? { ...p, endedAt: now } : p,
   );
 
   // Check if this was the last phase.
@@ -180,7 +229,7 @@ export async function advancePhase(runId: string): Promise<AutopilotRun> {
     const completed: AutopilotRun = {
       ...run,
       phases: closedPhases,
-      status: "completed",
+      status: 'completed',
     };
     runStore.set(runId, completed);
     return completed;

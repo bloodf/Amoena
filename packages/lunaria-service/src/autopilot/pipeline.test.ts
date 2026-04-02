@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, vi } from 'vitest';
 import {
   startAutopilot,
   advancePhase,
@@ -6,7 +6,7 @@ import {
   AutopilotPhase,
   AutopilotTerminalError,
   AutopilotRollbackError,
-} from "./pipeline.js";
+} from './pipeline.js';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -18,33 +18,33 @@ async function advanceN(runId: string, n: number) {
   for (let i = 0; i < n; i++) {
     run = await advancePhase(runId);
   }
-  return run!;
+  return run as Awaited<ReturnType<typeof advancePhase>>;
 }
 
 // ---------------------------------------------------------------------------
 // Create
 // ---------------------------------------------------------------------------
 
-describe("startAutopilot", () => {
-  it("creates a run with the supplied goal", async () => {
-    const run = await startAutopilot("Refactor the auth module");
-    expect(run.goal).toBe("Refactor the auth module");
+describe('startAutopilot', () => {
+  it('creates a run with the supplied goal', async () => {
+    const run = await startAutopilot('Refactor the auth module');
+    expect(run.goal).toBe('Refactor the auth module');
   });
 
-  it("starts in the Analysis phase with running status", async () => {
-    const run = await startAutopilot("initial goal");
+  it('starts in the Analysis phase with running status', async () => {
+    const run = await startAutopilot('initial goal');
     expect(run.currentPhase).toBe(AutopilotPhase.Analysis);
-    expect(run.status).toBe("running");
+    expect(run.status).toBe('running');
   });
 
-  it("assigns a unique id to each run", async () => {
-    const a = await startAutopilot("goal a");
-    const b = await startAutopilot("goal b");
+  it('assigns a unique id to each run', async () => {
+    const a = await startAutopilot('goal a');
+    const b = await startAutopilot('goal b');
     expect(a.id).not.toBe(b.id);
   });
 
-  it("records the initial phase in the phases array", async () => {
-    const run = await startAutopilot("goal");
+  it('records the initial phase in the phases array', async () => {
+    const run = await startAutopilot('goal');
     expect(run.phases).toHaveLength(1);
     expect(run.phases[0].phase).toBe(AutopilotPhase.Analysis);
     expect(run.phases[0].endedAt).toBeNull();
@@ -55,15 +55,15 @@ describe("startAutopilot", () => {
 // Phase advancement
 // ---------------------------------------------------------------------------
 
-describe("advancePhase", () => {
-  it("advances from Analysis to Planning", async () => {
-    const run = await startAutopilot("goal");
+describe('advancePhase', () => {
+  it('advances from Analysis to Planning', async () => {
+    const run = await startAutopilot('goal');
     const advanced = await advancePhase(run.id);
     expect(advanced.currentPhase).toBe(AutopilotPhase.Planning);
   });
 
-  it("progresses through all 6 phases sequentially", async () => {
-    const run = await startAutopilot("goal");
+  it('progresses through all 6 phases sequentially', async () => {
+    const run = await startAutopilot('goal');
     const phases = [
       AutopilotPhase.Analysis,
       AutopilotPhase.Planning,
@@ -79,34 +79,30 @@ describe("advancePhase", () => {
     }
   });
 
-  it("closes the current phase record when advancing", async () => {
-    const run = await startAutopilot("goal");
+  it('closes the current phase record when advancing', async () => {
+    const run = await startAutopilot('goal');
     const advanced = await advancePhase(run.id);
-    const closedRecord = advanced.phases.find(
-      (p) => p.phase === AutopilotPhase.Analysis,
-    );
+    const closedRecord = advanced.phases.find((p) => p.phase === AutopilotPhase.Analysis);
     expect(closedRecord?.endedAt).not.toBeNull();
   });
 
-  it("transitions to completed status when advancing past the final phase", async () => {
-    const run = await startAutopilot("goal");
+  it('transitions to completed status when advancing past the final phase', async () => {
+    const run = await startAutopilot('goal');
     // Advance through all 5 intermediate steps to reach Merge
     await advanceN(run.id, 5);
     // Advancing from Merge completes the run
     const completed = await advancePhase(run.id);
-    expect(completed.status).toBe("completed");
+    expect(completed.status).toBe('completed');
   });
 
-  it("throws AutopilotTerminalError when advancing a completed run", async () => {
-    const run = await startAutopilot("goal");
+  it('throws AutopilotTerminalError when advancing a completed run', async () => {
+    const run = await startAutopilot('goal');
     await advanceN(run.id, 6); // completes the run
     await expect(advancePhase(run.id)).rejects.toBeInstanceOf(AutopilotTerminalError);
   });
 
-  it("throws an error when run id does not exist", async () => {
-    await expect(advancePhase("nonexistent-id")).rejects.toThrow(
-      /No autopilot run found/,
-    );
+  it('throws an error when run id does not exist', async () => {
+    await expect(advancePhase('nonexistent-id')).rejects.toThrow(/No autopilot run found/);
   });
 });
 
@@ -114,23 +110,21 @@ describe("advancePhase", () => {
 // Rollback
 // ---------------------------------------------------------------------------
 
-describe("rollbackPhase", () => {
-  it("rolls back from Planning to Analysis", async () => {
-    const run = await startAutopilot("goal");
+describe('rollbackPhase', () => {
+  it('rolls back from Planning to Analysis', async () => {
+    const run = await startAutopilot('goal');
     await advancePhase(run.id); // → Planning
     const rolled = await rollbackPhase(run.id);
     expect(rolled.currentPhase).toBe(AutopilotPhase.Analysis);
   });
 
-  it("removes the current phase record and appends a fresh previous phase record", async () => {
-    const run = await startAutopilot("goal");
+  it('removes the current phase record and appends a fresh previous phase record', async () => {
+    const run = await startAutopilot('goal');
     await advancePhase(run.id); // → Planning (phases: Analysis[closed], Planning[open])
     const rolled = await rollbackPhase(run.id);
 
     // Planning record should be gone entirely
-    const planningRecord = rolled.phases.find(
-      (p) => p.phase === AutopilotPhase.Planning,
-    );
+    const planningRecord = rolled.phases.find((p) => p.phase === AutopilotPhase.Planning);
     expect(planningRecord).toBeUndefined();
 
     // The implementation keeps the original closed Analysis record and appends
@@ -143,13 +137,13 @@ describe("rollbackPhase", () => {
     expect(lastRecord.endedAt).toBeNull();
   });
 
-  it("throws AutopilotRollbackError when already at the first phase", async () => {
-    const run = await startAutopilot("goal");
+  it('throws AutopilotRollbackError when already at the first phase', async () => {
+    const run = await startAutopilot('goal');
     await expect(rollbackPhase(run.id)).rejects.toBeInstanceOf(AutopilotRollbackError);
   });
 
-  it("throws AutopilotTerminalError when rolling back a completed run", async () => {
-    const run = await startAutopilot("goal");
+  it('throws AutopilotTerminalError when rolling back a completed run', async () => {
+    const run = await startAutopilot('goal');
     await advanceN(run.id, 6); // completes
     await expect(rollbackPhase(run.id)).rejects.toBeInstanceOf(AutopilotTerminalError);
   });
@@ -159,17 +153,104 @@ describe("rollbackPhase", () => {
 // Phase timeout configuration
 // ---------------------------------------------------------------------------
 
-describe("startAutopilot — phase timeout options", () => {
-  it("applies custom timeout override for the Analysis phase", async () => {
-    const run = await startAutopilot("goal", {
+describe('startAutopilot — phase timeout options', () => {
+  it('applies custom timeout override for the Analysis phase', async () => {
+    const run = await startAutopilot('goal', {
       phaseTimeouts: { [AutopilotPhase.Analysis]: 30_000 },
     });
     expect(run.phases[0].timeoutMs).toBe(30_000);
   });
 
-  it("uses the default timeout when no override is provided", async () => {
-    const run = await startAutopilot("goal");
+  it('uses the default timeout when no override is provided', async () => {
+    const run = await startAutopilot('goal');
     const defaultMs = 10 * 60 * 1000;
     expect(run.phases[0].timeoutMs).toBe(defaultMs);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Phase timeout watchdog
+// ---------------------------------------------------------------------------
+
+describe('advancePhase — phase timeout enforcement', () => {
+  it('(a) phase exceeds timeout → status transitions to timed_out', async () => {
+    vi.useFakeTimers();
+    try {
+      const run = await startAutopilot('goal', {
+        phaseTimeouts: { [AutopilotPhase.Analysis]: 50 },
+      });
+
+      // Start advance with a slow phase execution (100ms)
+      const slowExecution = () =>
+        new Promise<void>((resolve) => {
+          setTimeout(() => resolve(), 100);
+        });
+
+      const advancePromise = advancePhase(run.id, slowExecution);
+
+      // Exhaust the 50ms timeout but not the 100ms execution
+      vi.advanceTimersByTime(51);
+      await Promise.resolve();
+
+      const result = await advancePromise;
+      expect(result.status).toBe('timed_out');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('(b) phase completes before timeout → normal phase advance', async () => {
+    vi.useFakeTimers();
+    try {
+      const run = await startAutopilot('goal', {
+        phaseTimeouts: { [AutopilotPhase.Analysis]: 100 },
+      });
+
+      // Start advance with a fast phase execution (50ms)
+      const fastExecution = () =>
+        new Promise<void>((resolve) => {
+          setTimeout(() => resolve(), 50);
+        });
+
+      const advancePromise = advancePhase(run.id, fastExecution);
+
+      // Advance time past the 50ms execution but before 100ms timeout
+      vi.advanceTimersByTime(51);
+      await Promise.resolve();
+
+      const result = await advancePromise;
+      expect(result.currentPhase).toBe(AutopilotPhase.Planning);
+      expect(result.status).toBe('running');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('(c) timeout → phase does not advance and status is timed_out', async () => {
+    vi.useFakeTimers();
+    try {
+      const run = await startAutopilot('goal', {
+        phaseTimeouts: { [AutopilotPhase.Analysis]: 50 },
+      });
+
+      // Attempt to advance Analysis with a slow execution
+      const slowExecution = () =>
+        new Promise<void>((resolve) => {
+          setTimeout(() => resolve(), 100);
+        });
+
+      const advancePromise = advancePhase(run.id, slowExecution);
+
+      // Exhaust the 50ms timeout
+      vi.advanceTimersByTime(51);
+      await Promise.resolve();
+
+      const result = await advancePromise;
+      // On timeout, the phase should not advance and status should be timed_out
+      expect(result.status).toBe('timed_out');
+      expect(result.currentPhase).toBe(AutopilotPhase.Analysis);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
