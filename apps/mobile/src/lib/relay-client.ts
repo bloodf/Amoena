@@ -5,16 +5,12 @@
  * Handles connect, send, receive, and heartbeat with automatic reconnection.
  */
 
-import { AppState, type AppStateStatus } from "react-native";
+import { AppState, type AppStateStatus } from 'react-native';
 
 export type RelayMessageHandler = (message: RelayIncomingMessage) => void;
 export type RelayStatusHandler = (status: RelayConnectionStatus) => void;
 
-export type RelayConnectionStatus =
-  | "disconnected"
-  | "connecting"
-  | "connected"
-  | "reconnecting";
+export type RelayConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'reconnecting';
 
 export type RelayIncomingMessage = {
   readonly type: string;
@@ -58,19 +54,18 @@ export function createRelayClient(options: RelayClientOptions): RelayClient {
     authToken,
     minReconnectDelay = 500,
     maxReconnectDelay = 8000,
-    heartbeatInterval = 15_000,
+    heartbeatInterval = 30_000,
     onMessage,
     onStatusChange,
   } = options;
 
   let ws: WebSocket | null = null;
-  let status: RelayConnectionStatus = "disconnected";
+  let status: RelayConnectionStatus = 'disconnected';
   let retryCount = 0;
   let retryTimer: ReturnType<typeof setTimeout> | null = null;
   let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
   let disposed = false;
-  let appStateSubscription: ReturnType<typeof AppState.addEventListener> | null =
-    null;
+  let appStateSubscription: ReturnType<typeof AppState.addEventListener> | null = null;
 
   function setStatus(next: RelayConnectionStatus) {
     if (status !== next) {
@@ -80,10 +75,7 @@ export function createRelayClient(options: RelayClientOptions): RelayClient {
   }
 
   function getDelay(): number {
-    const delay = Math.min(
-      minReconnectDelay * Math.pow(2, retryCount),
-      maxReconnectDelay,
-    );
+    const delay = Math.min(minReconnectDelay * Math.pow(2, retryCount), maxReconnectDelay);
     return delay + Math.random() * 200;
   }
 
@@ -91,7 +83,7 @@ export function createRelayClient(options: RelayClientOptions): RelayClient {
     stopHeartbeat();
     heartbeatTimer = setInterval(() => {
       if (ws?.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({ type: "ping" }));
+        ws.send(JSON.stringify({ type: 'ping' }));
       }
     }, heartbeatInterval);
   }
@@ -109,24 +101,22 @@ export function createRelayClient(options: RelayClientOptions): RelayClient {
 
     closeSocket();
 
-    const wsUrl = authToken
-      ? `${url}?authToken=${encodeURIComponent(authToken)}`
-      : url;
+    const wsUrl = authToken ? `${url}?authToken=${encodeURIComponent(authToken)}` : url;
 
-    setStatus(retryCount > 0 ? "reconnecting" : "connecting");
+    setStatus(retryCount > 0 ? 'reconnecting' : 'connecting');
 
     ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
       retryCount = 0;
-      setStatus("connected");
+      setStatus('connected');
       startHeartbeat();
     };
 
     ws.onmessage = (event: MessageEvent<string>) => {
       try {
         const parsed = JSON.parse(event.data) as RelayIncomingMessage;
-        if (parsed.type === "pong") return;
+        if (parsed.type === 'pong') return;
         onMessage?.(parsed);
       } catch {
         // Ignore malformed messages
@@ -141,7 +131,7 @@ export function createRelayClient(options: RelayClientOptions): RelayClient {
       stopHeartbeat();
       ws = null;
       if (!disposed) {
-        setStatus("disconnected");
+        setStatus('disconnected');
         scheduleReconnect();
       }
     };
@@ -178,14 +168,14 @@ export function createRelayClient(options: RelayClientOptions): RelayClient {
   }
 
   function handleAppState(nextState: AppStateStatus) {
-    if (nextState === "active") {
+    if (nextState === 'active') {
       if (!ws || ws.readyState !== WebSocket.OPEN) {
         connect();
       }
     } else {
       cancelRetry();
       closeSocket();
-      setStatus("disconnected");
+      setStatus('disconnected');
     }
   }
 
@@ -193,7 +183,7 @@ export function createRelayClient(options: RelayClientOptions): RelayClient {
     disposed = true;
     cancelRetry();
     closeSocket();
-    setStatus("disconnected");
+    setStatus('disconnected');
     appStateSubscription?.remove();
     appStateSubscription = null;
   }
@@ -205,7 +195,7 @@ export function createRelayClient(options: RelayClientOptions): RelayClient {
   }
 
   // Start listening for app state changes
-  appStateSubscription = AppState.addEventListener("change", handleAppState);
+  appStateSubscription = AppState.addEventListener('change', handleAppState);
 
   return {
     connect,

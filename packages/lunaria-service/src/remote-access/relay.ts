@@ -9,8 +9,8 @@
  * pings the room is closed and cleaned up.
  */
 
-import * as crypto from "node:crypto";
-import type { Device, RelayRoom } from "./types.js";
+import * as crypto from 'node:crypto';
+import type { Device, RelayRoom } from './types.js';
 
 /** Interval between heartbeat checks in milliseconds. */
 const HEARTBEAT_INTERVAL_MS = 30_000;
@@ -172,7 +172,7 @@ export function getActiveRelayRooms(): ReadonlyArray<RelayRoom> {
 // ---------------------------------------------------------------------------
 
 /** Called on each heartbeat tick for a room. */
-function tickHeartbeat(roomId: string): void {
+export function tickHeartbeat(roomId: string): void {
   const state = rooms.get(roomId);
   if (state === undefined) return;
 
@@ -183,4 +183,19 @@ function tickHeartbeat(roomId: string): void {
   } else {
     rooms.set(roomId, { ...state });
   }
+}
+
+/**
+ * Called when a ping is received from a mobile client.
+ * Resets the missed pings counter, preventing orphan cleanup.
+ *
+ * @param roomId - The relay room that received the ping.
+ */
+export function handlePing(roomId: string): void {
+  const state = rooms.get(roomId);
+  if (state === undefined) return;
+
+  state.room.lastActivity = new Date();
+  state.missedPings = 0;
+  rooms.set(roomId, { ...state });
 }

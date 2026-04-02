@@ -5,7 +5,7 @@
  * heartbeat, and app state awareness (disconnect on background).
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   createRelayClient,
@@ -13,7 +13,7 @@ import {
   type RelayConnectionStatus,
   type RelayIncomingMessage,
   type RelayOutgoingMessage,
-} from "@/lib/relay-client";
+} from '@/lib/relay-client';
 
 export type UseRelayConnectionOptions = {
   /** WebSocket URL of the relay server. */
@@ -34,19 +34,17 @@ export type UseRelayConnectionResult = {
   readonly send: (message: RelayOutgoingMessage) => void;
 };
 
-export function useRelayConnection(
-  options: UseRelayConnectionOptions,
-): UseRelayConnectionResult {
+export function useRelayConnection(options: UseRelayConnectionOptions): UseRelayConnectionResult {
   const { url, authToken, onMessage, autoConnect = true } = options;
 
-  const [status, setStatus] = useState<RelayConnectionStatus>("disconnected");
+  const [status, setStatus] = useState<RelayConnectionStatus>('disconnected');
   const clientRef = useRef<RelayClient | null>(null);
   const onMessageRef = useRef(onMessage);
   onMessageRef.current = onMessage;
 
   useEffect(() => {
     if (!url) {
-      setStatus("disconnected");
+      setStatus('disconnected');
       return;
     }
 
@@ -55,7 +53,7 @@ export function useRelayConnection(
       authToken,
       minReconnectDelay: 500,
       maxReconnectDelay: 8000,
-      heartbeatInterval: 15_000,
+      heartbeatInterval: 30_000,
       onMessage: (msg) => onMessageRef.current?.(msg),
       onStatusChange: setStatus,
     });
@@ -86,7 +84,7 @@ export function useRelayConnection(
 
   return {
     status,
-    isConnected: status === "connected",
+    isConnected: status === 'connected',
     connect,
     disconnect,
     send,
