@@ -4,6 +4,10 @@
   "private": true,
   "description": "Amoena desktop application — Electron + Vite + React",
   "license": "MIT",
+  "author": {
+    "name": "Amoena"
+  },
+  "productName": "Amoena",
   "repository": {
     "type": "git",
     "url": "https://github.com/AmoenaAi/amoena.git",
@@ -11,11 +15,12 @@
   },
   "type": "module",
   "main": "electron/main.js",
+  "resources": "resources",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "electron:dev": "electron .",
-    "electron:build": "vite build && electron-builder",
+    "electron:build": "electron-vite build && electron-builder",
     "test": "bunx vitest run",
     "type-check": "bunx tsc --noEmit -p tsconfig.json",
     "e2e": "bunx playwright test",
@@ -30,7 +35,6 @@
     "@lunaria/service": "workspace:*",
     "@lunaria/ui": "workspace:*",
     "ai": "^4.3",
-    "electron": "^36.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.13.1"
@@ -41,6 +45,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@vitejs/plugin-react": "^5.1.4",
     "autoprefixer": "^10.4.21",
+    "electron": "^36.0.0",
     "electron-builder": "^26.0.0",
     "happy-dom": "^20.8.3",
     "tailwindcss": "^3.4.17",
