@@ -20,7 +20,7 @@
  *   which bypasses auth with a local admin user (auth.ts:804).
  */
 
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type APIResponse, type Page } from '@playwright/test';
 
 /* ---------------------------------------------------------------------------
  * Shared base URL — all tests run against the same live server.
@@ -28,6 +28,48 @@ import { test, expect, type Page } from '@playwright/test';
  * running (bun run dev or bun run start) before executing tests.
  * --------------------------------------------------------------------------- */
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000';
+
+const RELEASE_CRITICAL_PAGES = ['/', '/login', '/remote', '/replay', '/autopilot'] as const;
+
+type WorkflowTemplate = {
+  id: number;
+  name: string;
+  model: string;
+  task_prompt: string;
+  timeout_seconds: number;
+  created_by: string;
+  created_at: number;
+  updated_at: number;
+  use_count: number;
+  last_used_at: number | null;
+  tags: string[];
+  description?: string | null;
+  agent_role?: string | null;
+};
+
+type WorkflowPipeline = {
+  id: number;
+  name: string;
+  description: string | null;
+  steps: Array<{ template_id: number; on_failure: 'stop' | 'continue' }>;
+};
+
+type PipelineRun = {
+  id: number;
+  pipeline_id: number;
+  status: string;
+  current_step: number;
+  steps_snapshot: Array<{
+    step_index: number;
+    template_id: number;
+    template_name: string;
+    status: 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
+    spawn_id: string | null;
+    started_at: number | null;
+    completed_at: number | null;
+    error: string | null;
+  }>;
+};
 
 /* ---------------------------------------------------------------------------
  * Helper: fetch JSON from the dashboard API with local-mode auth bypass.
@@ -48,6 +90,43 @@ async function apiFetch<T = unknown>(page: Page, path: string, options?: Request
     },
   });
   return response.json() as Promise<T>;
+}
+
+async function apiRequest<T = unknown>(
+  page: Page,
+  path: string,
+  options?: RequestInit,
+): Promise<{ response: APIResponse; body: T }> {
+  const url = path.startsWith('http') ? path : `${BASE_URL}${path}`;
+  const response = await page.request.fetch(url, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(process.env.AMOENA_LOCAL_MODE === 'true' ? { 'x-amoena-local-mode': 'true' } : {}),
+      ...options?.headers,
+    },
+  });
+
+  return {
+    response,
+    body: (await response.json()) as T,
+  };
+}
+
+async function gotoPage(page: Page, path: string) {
+  await page.goto(path.startsWith('http') ? path : `${BASE_URL}${path}`, {
+    waitUntil: 'domcontentloaded',
+  });
+  await expect(page.locator('body')).toBeVisible();
+}
+
+async function expectNoSupersetText(page: Page) {
+  const bodyText = await page.locator('body').innerText();
+  expect(bodyText).not.toMatch(/\bSuperset\b/i);
+}
+
+async function expectAmoenaBrandVisible(page: Page) {
+  await expect(page.getByRole('img', { name: /Amoena logo/i }).first()).toBeVisible();
 }
 
 /* ---------------------------------------------------------------------------
@@ -84,6 +163,16 @@ test.describe('Phase 6 — Remote Pairing Bootstrap', () => {
 
     /* Each call should generate a (statistically) new PIN */
     expect(first.pin).not.toBe(second.pin);
+  });
+
+  test('remote pairing page bootstraps a local PIN without Superset leakage', async ({ page }) => {
+    await gotoPage(page, '/remote');
+
+    await expect(page.getByRole('heading', { name: /Remote pairing/i })).toBeVisible();
+    await expect(page.getByTestId('remote-pairing-pin')).toHaveText(/^\d{6}$/);
+    await expect(page.getByRole('img', { name: /Pairing QR code/i })).toBeVisible();
+    await expectAmoenaBrandVisible(page);
+    await expectNoSupersetText(page);
   });
 });
 
@@ -149,6 +238,131 @@ test.describe('Phase 6 — Replay Listing', () => {
     const response = await page.request.fetch(`${BASE_URL}/api/replay?id=nonexistent-${nonce}`);
     expect(response.status()).toBe(404);
   });
+
+  test('replay page renders the Recordings panel without Superset leakage', async ({ page }) => {
+    await gotoPage(page, '/replay');
+
+    await expect(page.getByRole('heading', { name: 'Recordings' })).toBeVisible();
+    await expectAmoenaBrandVisible(page);
+    await expectNoSupersetText(page);
+  });
+});
+
+test.describe('Phase 6 — Autopilot Lifecycle', () => {
+  test('pipeline lifecycle advances from running to completed and is visible in autopilot UI', async ({
+    page,
+  }) => {
+    const nonce = Date.now();
+    const createdTemplateIds: number[] = [];
+    const createdPipelineIds: number[] = [];
+
+    try {
+      const templateBodies = await Promise.all([
+        apiRequest<{ template: WorkflowTemplate }>(page, '/api/workflows', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: `Release Harness Analyze ${nonce}`,
+            task_prompt: 'Summarize the active pipeline state.',
+            model: 'sonnet',
+            timeout_seconds: 30,
+            tags: ['release-harness', 'e2e'],
+          }),
+        }),
+        apiRequest<{ template: WorkflowTemplate }>(page, '/api/workflows', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: `Release Harness Verify ${nonce}`,
+            task_prompt: 'Confirm the pipeline reached its final stage.',
+            model: 'sonnet',
+            timeout_seconds: 30,
+            tags: ['release-harness', 'e2e'],
+          }),
+        }),
+      ]);
+
+      for (const template of templateBodies) {
+        expect(template.response.status()).toBe(201);
+        createdTemplateIds.push(template.body.template.id);
+      }
+
+      const pipeline = await apiRequest<{ pipeline: WorkflowPipeline }>(page, '/api/pipelines', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: `Release Harness Pipeline ${nonce}`,
+          description: 'Deterministic two-step autopilot lifecycle regression.',
+          steps: createdTemplateIds.map((templateId) => ({
+            template_id: templateId,
+            on_failure: 'stop',
+          })),
+        }),
+      });
+
+      expect(pipeline.response.status()).toBe(201);
+      createdPipelineIds.push(pipeline.body.pipeline.id);
+
+      const startedRun = await apiRequest<{ run: PipelineRun }>(page, '/api/pipelines/run', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'start',
+          pipeline_id: pipeline.body.pipeline.id,
+        }),
+      });
+
+      expect(startedRun.response.status()).toBe(201);
+      expect(startedRun.body.run.status).toBe('running');
+      expect(startedRun.body.run.steps_snapshot[0]?.status).toBe('running');
+      expect(startedRun.body.run.steps_snapshot[1]?.status).toBe('pending');
+
+      await gotoPage(page, '/autopilot');
+      await expect(page.getByRole('heading', { name: /Autopilot lifecycle/i })).toBeVisible();
+      await expect(page.getByText(`Release Harness Pipeline ${nonce}`)).toBeVisible();
+      await expectAmoenaBrandVisible(page);
+      await expectNoSupersetText(page);
+
+      const secondStep = await apiRequest<{ run: PipelineRun }>(page, '/api/pipelines/run', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'advance',
+          run_id: startedRun.body.run.id,
+          success: true,
+        }),
+      });
+
+      expect(secondStep.response.status()).toBe(200);
+      expect(secondStep.body.run.status).toBe('running');
+      expect(secondStep.body.run.current_step).toBe(1);
+      expect(secondStep.body.run.steps_snapshot[0]?.status).toBe('completed');
+      expect(secondStep.body.run.steps_snapshot[1]?.status).toBe('running');
+
+      const completedRun = await apiRequest<{ run: PipelineRun }>(page, '/api/pipelines/run', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'advance',
+          run_id: startedRun.body.run.id,
+          success: true,
+        }),
+      });
+
+      expect(completedRun.response.status()).toBe(200);
+      expect(completedRun.body.run.status).toBe('completed');
+      expect(completedRun.body.run.steps_snapshot[0]?.status).toBe('completed');
+      expect(completedRun.body.run.steps_snapshot[1]?.status).toBe('completed');
+    } finally {
+      for (const pipelineId of createdPipelineIds) {
+        await apiRequest(page, '/api/pipelines', {
+          method: 'DELETE',
+          body: JSON.stringify({ id: pipelineId }),
+        });
+      }
+
+      for (const templateId of createdTemplateIds) {
+        await apiRequest(page, '/api/workflows', {
+          method: 'DELETE',
+          body: JSON.stringify({ id: templateId }),
+        });
+      }
+    }
+  });
 });
 
 /* ---------------------------------------------------------------------------
@@ -163,27 +377,17 @@ test.describe('Phase 6 — Replay Listing', () => {
  * the UI (e.g., via copy-paste errors or forgotten text).
  * --------------------------------------------------------------------------- */
 test.describe('Phase 6 — Branding Regression', () => {
-  test("main page does NOT contain 'Superset' text", async ({ page }) => {
-    /* Navigate to the dashboard root — the auth bypass (AMOENA_LOCAL_MODE)
-       means we land directly on the dashboard without a login redirect. */
-    await page.goto(BASE_URL, { waitUntil: 'networkidle' });
-
-    /* Get all visible text on the page */
-    const pageContent = await page.textContent('body');
-
-    /* The word "Superset" must not appear anywhere in the rendered UI.
-       Case-insensitive check to catch variations like "superset" or "SUPERSET". */
-    const hasSuperset = pageContent?.toLowerCase().split(/\s+/).includes('superset');
-
-    expect(hasSuperset).toBe(false);
+  test('release-critical pages do not leak Superset branding', async ({ page }) => {
+    for (const path of RELEASE_CRITICAL_PAGES) {
+      await gotoPage(page, path);
+      await expectNoSupersetText(page);
+    }
   });
 
-  test("login page does NOT contain 'Superset' text", async ({ page }) => {
-    await page.goto(`${BASE_URL}/login`, { waitUntil: 'networkidle' });
-
-    const pageContent = await page.textContent('body');
-    const hasSuperset = pageContent?.toLowerCase().split(/\s+/).includes('superset');
-
-    expect(hasSuperset).toBe(false);
+  test('Amoena branding stays visible on key release pages', async ({ page }) => {
+    for (const path of ['/login', '/remote', '/replay', '/autopilot', '/'] as const) {
+      await gotoPage(page, path);
+      await expectAmoenaBrandVisible(page);
+    }
   });
 });
