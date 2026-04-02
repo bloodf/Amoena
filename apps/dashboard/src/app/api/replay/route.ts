@@ -3,15 +3,18 @@ import { requireRole } from "@/lib/auth";
 import { getDatabase } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { readLimiter } from "@/lib/rate-limit";
+import { getReplayStorageInfo } from "@/lib/cleanup";
 
 export async function GET(request: NextRequest) {
 	const auth = requireRole(request, "viewer");
-	if ("error" in auth)
+	if ("error" in auth) {
 		return NextResponse.json({ error: auth.error }, { status: auth.status });
+	}
 
 	const rateCheck = readLimiter(request);
-	if (rateCheck)
+	if (rateCheck) {
 		return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+	}
 
 	const { searchParams } = new URL(request.url);
 	const id = searchParams.get("id");
@@ -59,6 +62,20 @@ export async function GET(request: NextRequest) {
 			)
 			.all() as RecordingRow[];
 
+		// Get storage metadata for the recordings directory
+		let storageMetadata: {
+			recordingsDir: string;
+			retentionMs: number;
+			deleted: number;
+			kept: number;
+		} | null = null;
+
+		try {
+			storageMetadata = await getReplayStorageInfo();
+		} catch {
+			// Storage metadata is optional - don't fail the request if it can't be retrieved
+		}
+
 		return NextResponse.json({
 			recordings: rows.map((r) => ({
 				id: r.id,
@@ -69,6 +86,7 @@ export async function GET(request: NextRequest) {
 				startedAt: r.started_at,
 				finishedAt: r.finished_at ?? null,
 			})),
+			storage: storageMetadata,
 		});
 	} catch (error) {
 		logger.error({ err: error }, "Replay API error");

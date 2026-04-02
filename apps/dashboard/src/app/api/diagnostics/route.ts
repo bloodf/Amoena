@@ -7,6 +7,7 @@ import { config } from "@/lib/config";
 import { getDatabase } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { APP_VERSION } from "@/lib/version";
+import { getReplayStorageInfo } from "@/lib/cleanup";
 
 const INSECURE_PASSWORDS = new Set([
 	"admin",
@@ -18,11 +19,12 @@ const INSECURE_PASSWORDS = new Set([
 
 export async function GET(request: NextRequest) {
 	const auth = requireRole(request, "admin");
-	if ("error" in auth)
+	if ("error" in auth) {
 		return NextResponse.json({ error: auth.error }, { status: auth.status });
+	}
 
 	try {
-		const [version, security, database, agents, sessions, gateway] =
+		const [version, security, database, agents, sessions, gateway, replayStorage] =
 			await Promise.all([
 				getVersionInfo(),
 				getSecurityInfo(),
@@ -30,6 +32,7 @@ export async function GET(request: NextRequest) {
 				getAgentInfo(),
 				getSessionInfo(),
 				getGatewayInfo(),
+				getReplayStorageInfo(),
 			]);
 
 		return NextResponse.json({
@@ -48,6 +51,7 @@ export async function GET(request: NextRequest) {
 			sessions,
 			gateway,
 			retention: config.retention,
+			replayStorage,
 		});
 	} catch (error) {
 		logger.error({ err: error }, "Diagnostics API error");

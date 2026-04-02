@@ -43,6 +43,13 @@ interface RecordingDetail extends RecordingMeta {
 	annotations: Annotation[];
 }
 
+interface StorageMetadata {
+	recordingsDir: string;
+	retentionMs: number;
+	deleted: number;
+	kept: number;
+}
+
 function formatDuration(seconds: number): string {
 	const m = Math.floor(seconds / 60);
 	const s = Math.floor(seconds % 60);
@@ -56,6 +63,25 @@ function formatDate(unixSeconds: number): string {
 function formatCost(usd: number): string {
 	if (usd === 0) return "$0.00";
 	return `$${usd.toFixed(4)}`;
+}
+
+function formatRetention(days: number): string {
+	if (days === 1) return "1 day";
+	if (days < 30) return `${days} days`;
+	if (days === 30) return "30 days";
+	const months = Math.round(days / 30);
+	return `${months} month${months > 1 ? "s" : ""}`;
+}
+
+function formatPath(path: string): string {
+	// Shorten path for display
+	if (path.includes("/")) {
+		const parts = path.split("/");
+		if (parts.length > 3) {
+			return "…/" + parts.slice(-2).join("/");
+		}
+	}
+	return path;
 }
 
 const EVENT_TYPE_COLORS: Record<RecordingEvent["type"], string> = {
@@ -83,6 +109,7 @@ export function SessionReplayPanel() {
 	const [speed, setSpeed] = useState<Speed>(1);
 	const [newNote, setNewNote] = useState("");
 	const [annotations, setAnnotations] = useState<Annotation[]>([]);
+	const [storage, setStorage] = useState<StorageMetadata | null>(null);
 
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const terminalRef = useRef<HTMLDivElement>(null);
@@ -94,9 +121,11 @@ export function SessionReplayPanel() {
 			if (!res.ok) throw new Error("Failed to fetch recordings");
 			const data = await res.json();
 			setSessions(data.recordings ?? []);
+			setStorage(data.storage ?? null);
 		} catch (error) {
 			log.error("Failed to load recordings:", error);
 			setSessions([]);
+			setStorage(null);
 		} finally {
 			setIsLoadingSessions(false);
 		}
@@ -203,6 +232,8 @@ export function SessionReplayPanel() {
 
 	const selectedMeta = sessions.find((s) => s.id === selectedId) ?? null;
 
+	const retentionDays = storage ? Math.round(storage.retentionMs / (24 * 60 * 60 * 1000)) : 30;
+
 	return (
 		<div className="flex h-full p-6 gap-6">
 			{/* Session list sidebar */}
@@ -213,6 +244,31 @@ export function SessionReplayPanel() {
 						Recorded agent sessions
 					</p>
 				</div>
+
+				{/* Storage indicator */}
+				{storage && (
+					<div className="bg-card border border-border rounded-lg p-3 space-y-1.5">
+						<div className="flex items-center justify-between">
+							<span className="text-xs text-muted-foreground">Storage</span>
+							<span className="text-xs font-mono text-muted-foreground">
+								{formatRetention(retentionDays)} retention
+							</span>
+						</div>
+						<div className="flex items-center justify-between text-xs">
+							<span className="text-muted-foreground truncate" title={storage.recordingsDir}>
+								{formatPath(storage.recordingsDir)}
+							</span>
+						</div>
+						<div className="flex items-center gap-3 text-xs">
+							<span className="text-green-500">
+								{storage.kept} kept
+							</span>
+							<span className="text-red-400">
+								{storage.deleted} deleted
+							</span>
+						</div>
+					</div>
+				)}
 
 				{isLoadingSessions ? (
 					<Loader variant="panel" label="Loading sessions" />
