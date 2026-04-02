@@ -1,12 +1,13 @@
 # Amoena
 
-The AI Agent Operating System. Run, monitor, remember, orchestrate, evaluate, and evolve AI coding agents — all from one desktop app.
+The AI Agent Operating System. Run, monitor, remember, orchestrate, evaluate, and evolve AI coding agents from one Electron desktop app, with a paired mobile companion for remote access.
 
 ## What is Amoena?
 
-Amoena is a desktop IDE that orchestrates AI coding agents (Claude, Codex, Gemini, and more) with persistent memory, real-time evaluation, and an extension ecosystem. Each agent runs in an isolated git worktree so they never interfere with each other.
+Amoena is a desktop IDE that orchestrates AI coding agents (Claude, Codex, Gemini, and more) with persistent memory, real-time evaluation, and an extension ecosystem. Each agent runs in an isolated git worktree so they never interfere with each other. The desktop app runs on Electron, and the Expo mobile app can pair to a running desktop instance for remote monitoring and approvals.
 
 Built by merging three battle-tested open-source projects:
+
 - **[Mission Control](https://github.com/builderz-labs/mission-control)** — 40+ dashboard panels, agent orchestration
 - **[Superset](https://github.com/superset-sh/superset)** — Electron shell, terminal management, git worktrees
 - **[claude-mem](https://github.com/thedotmack/claude-mem)** — Persistent memory with FTS5 + vector search
@@ -14,30 +15,35 @@ Built by merging three battle-tested open-source projects:
 ## Features
 
 **Agent Management**
+
 - Run 10+ agents simultaneously in isolated git worktrees
 - Agent presets for Claude, Codex, Gemini, and any CLI agent
 - Real-time terminal monitoring with xterm.js WebGL
 - Weighted consensus voting for multi-agent decisions
 
 **Persistent Memory**
+
 - SQLite FTS5 full-text search + vector embeddings
 - Progressive disclosure (10x token savings)
 - Memory graph visualization
 - Automatic session compression
 
 **Orchestration**
+
 - 6-phase autopilot pipeline (analyze, plan, implement, test, review, merge)
 - 6 built-in agent recipes (PR review, bug fix, feature, refactor, tests, docs)
 - Smart cost advisor with model routing suggestions
 - .luna extension format + marketplace
 
 **Dashboard**
+
 - 44 panels: agents, tasks, cost tracking, security audit, eval framework
 - Memory Spotlight (Cmd+K global search)
 - Session replay with timeline scrubbing
 - Agent personality studio (SOUL editor)
 
 **Security & Observability**
+
 - Security posture scoring (0-100) with secret detection
 - 4-layer eval framework (output, trace, component, drift)
 - Cost tracking per model with trend analysis
@@ -53,10 +59,11 @@ git clone https://github.com/YOUR_ORG/amoena.git
 cd amoena
 bun install
 
-# Start the dashboard
-bun run dashboard:dev
+# Start the desktop app in development mode
+bun run desktop:dev
 
-# Open http://localhost:3456
+# Optional: start the Expo mobile companion
+bun run mobile:dev
 ```
 
 ## Architecture
@@ -91,15 +98,18 @@ amoena/
 ## Development
 
 ```bash
-# Dashboard dev server
-bun run dashboard:dev
+# Desktop app dev server
+bun run desktop:dev
 
 # Run tests (1,020 total)
 cd packages/amoena-service && bunx vitest run  # 125 tests
 cd apps/dashboard && bunx vitest run            # 895 tests
 
-# Electron build
-cd apps/desktop && npx electron-vite build
+# Desktop build
+bun run desktop:build
+
+# Package installers
+bun run --cwd apps/desktop electron:build
 
 # Production dashboard build
 cd apps/dashboard && bunx next build
@@ -122,15 +132,15 @@ NODE_ENV=development
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Desktop | Electron 40, electron-vite |
+| Layer     | Technology                     |
+| --------- | ------------------------------ |
+| Desktop   | Electron 40, electron-vite     |
 | Dashboard | Next.js 16, React 19, Tailwind |
-| Terminal | xterm.js WebGL, node-pty, Hono |
-| Memory | SQLite FTS5, vector embeddings |
-| State | Zustand 5, TanStack Query |
-| Testing | Vitest, Playwright |
-| Build | Bun, Turborepo, Biome |
+| Terminal  | xterm.js WebGL, node-pty, Hono |
+| Memory    | SQLite FTS5, vector embeddings |
+| State     | Zustand 5, TanStack Query      |
+| Testing   | Vitest, Playwright             |
+| Build     | Bun, Turborepo, Biome          |
 
 ## i18n
 

@@ -9,7 +9,7 @@ git clone https://github.com/AmoenaAi/amoena.git
 cd amoena
 bun install
 cd packages/ui && bun run build && cd ../..
-cd apps/desktop && cargo tauri dev
+bun run desktop:dev
 ```
 
 ## Project Structure
@@ -17,10 +17,9 @@ cd apps/desktop && cargo tauri dev
 ```
 amoena/
 ├── apps/
-│   ├── desktop/          # Tauri desktop app
-│   │   ├── src/          # React 19 frontend
-│   │   ├── src-tauri/    # Rust backend (Tauri + Axum)
-│   │   ├── worker/       # Bun AI worker (Vercel AI SDK)
+│   ├── desktop/          # Electron desktop app
+│   │   ├── src/          # React 19 frontend + Electron main/preload
+│   │   ├── resources/   # Icons, entitlements, sounds
 │   │   └── e2e/          # Playwright E2E tests
 │   └── mobile/           # React Native mobile app
 ├── packages/
@@ -33,15 +32,6 @@ amoena/
 ```
 
 ## Running Tests
-
-### Rust Tests
-
-```bash
-cd apps/desktop/src-tauri
-cargo test --no-fail-fast -- --test-threads=1
-```
-
-The Rust test suite covers all backend subsystems: repositories, session management, memory, hooks, agents, tools, and API handlers. Tests must run single-threaded due to SQLite state isolation.
 
 ### TypeScript / UI Tests
 
@@ -63,11 +53,11 @@ E2E tests require a running Amoena instance:
 
 ```bash
 # Terminal 1: start the app
-cd apps/desktop && cargo tauri dev
+bun run desktop:dev
 
 # Terminal 2: run E2E suite
 cd apps/desktop
-bun run test:e2e
+bun run e2e
 ```
 
 ### Type Checking
@@ -89,49 +79,18 @@ bun run dev:verify
 
 ## Debugging
 
-### Rust Backend
-
-Add `RUST_LOG=debug` before your command:
-
-```bash
-RUST_LOG=debug cargo tauri dev
-```
-
-Logs appear in the terminal. For persistent logging, check `~/.amoena/logs/amoena.log`.
-
-Use `tracing::debug!()`, `tracing::info!()`, and `tracing::error!()` in Rust code (not `println!`).
-
-### Bun AI Worker
-
-The worker runs as a Tauri sidecar. To debug it directly:
-
-```bash
-cd apps/desktop/worker
-RUST_LOG=debug bun run index.ts
-```
-
 ### React Frontend
 
-Open the Tauri webview DevTools:
+Open the Electron DevTools:
+
 - macOS: `⌘⌥I`
 - Windows/Linux: `Ctrl+Shift+I`
 
-Or use Tauri's `openDevTools` command in development builds.
-
-The frontend uses Zustand for state. Zustand devtools are enabled in development mode and work with the Redux DevTools browser extension (inside the webview).
+The frontend uses Zustand for state. Zustand devtools are enabled in development mode and work with the Redux DevTools browser extension.
 
 ### API Playground
 
 Enable `dev.enable_api_playground` in settings to expose an interactive API browser at `http://localhost:{port}/playground`. All 110+ endpoints are documented and testable from the playground.
-
-## Adding a New API Endpoint
-
-1. Add the handler in `apps/desktop/src-tauri/src/api/`
-2. Register the route in the Axum router
-3. Add the Tauri `invoke` command if the operation also needs to be callable from the webview directly
-4. Add a corresponding entry in `packages/runtime-client/` for TypeScript callers
-5. Write Rust tests for the handler
-6. Document the endpoint in `docs/api/`
 
 ## Adding a New UI Component
 

@@ -1,6 +1,6 @@
 # Remote Access API
 
-Remote access allows a paired mobile or desktop device to connect to a running Amoena instance over LAN or relay. The pairing flow uses a PIN-based handshake to exchange credentials without exposing the session token.
+Remote access allows a paired mobile or desktop device to connect to a running Amoena instance over LAN or relay. Today, the shipped mobile flow is desktop initiated and mobile completed: the desktop creates a pairing intent, then the mobile app enters the base URL, pairing token, and PIN to complete pairing. QR payload support exists in the API, but the current mobile UI still uses manual entry.
 
 Remote endpoints are available on both the loopback router (for local clients) and the LAN router (for remote devices over the network).
 
@@ -16,9 +16,22 @@ The following endpoints do **not** require a Bearer token — they are used duri
 
 ---
 
+## Pairing Flow
+
+Current release flow:
+
+1. Desktop enables remote access and creates a pairing intent.
+2. Desktop shows the `baseUrl`, `pairingToken`, and `pin`.
+3. Mobile app enters those values and calls `POST /api/v1/remote/pair/complete`.
+4. Mobile stores the returned access and refresh tokens, then uses them for session reads, permission approvals, and message sends.
+
+The mobile runtime subscribes to global events when available and falls back to polling for session and permission updates.
+
+---
+
 ## Create Pairing Intent
 
-Initiates a pairing flow. Returns a PIN, QR payload, and pairing token that the remote device needs to complete pairing.
+Initiates a pairing flow from the trusted desktop instance. Returns a PIN, QR payload, and pairing token that the remote device needs to complete pairing.
 
 ```
 POST /api/v1/remote/pairing/intents
@@ -34,10 +47,10 @@ Content-Type: application/json
 }
 ```
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `advertisedHost` | `string` | No | IP address to advertise to pairing devices |
-| `scopes` | `string[]` | No | Permission scopes to grant the remote device |
+| Field            | Type       | Required | Description                                  |
+| ---------------- | ---------- | -------- | -------------------------------------------- |
+| `advertisedHost` | `string`   | No       | IP address to advertise to pairing devices   |
+| `scopes`         | `string[]` | No       | Permission scopes to grant the remote device |
 
 **Response `200`**
 
@@ -64,7 +77,7 @@ curl -X POST http://127.0.0.1:PORT/api/v1/remote/pairing/intents \
 **TypeScript**
 
 ```typescript
-const intent = await client.createPairingIntent(["sessions.read", "messages.write"]);
+const intent = await client.createPairingIntent(['sessions.read', 'messages.write']);
 // Show intent.qrPayload as a QR code for the mobile device to scan
 ```
 
@@ -72,7 +85,7 @@ const intent = await client.createPairingIntent(["sessions.read", "messages.writ
 
 ## Complete Pairing
 
-Called by the remote device after scanning the QR code or entering the PIN. Returns an access token and refresh token for the remote device.
+Called by the remote device after scanning the QR code or, in the current mobile app, manually entering the base URL, pairing token, and PIN. Returns an access token and refresh token for the remote device.
 
 ```
 POST /api/v1/remote/pair/complete
@@ -92,14 +105,14 @@ Content-Type: application/json
 }
 ```
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `pairingToken` | `string` | Yes | Token from the pairing intent |
-| `pin` | `string` | Yes | PIN displayed on the desktop (also `pinCode` alias) |
-| `deviceName` | `string` | No | Human-readable device name |
-| `deviceType` | `string` | No | `"mobile"`, `"desktop"`, `"tablet"` |
-| `platform` | `string` | No | `"ios"`, `"android"`, `"macos"`, `"windows"`, `"linux"` |
-| `metadata` | `object` | No | Arbitrary device metadata |
+| Field          | Type     | Required | Description                                             |
+| -------------- | -------- | -------- | ------------------------------------------------------- |
+| `pairingToken` | `string` | Yes      | Token from the pairing intent                           |
+| `pin`          | `string` | Yes      | PIN displayed on the desktop (also `pinCode` alias)     |
+| `deviceName`   | `string` | No       | Human-readable device name                              |
+| `deviceType`   | `string` | No       | `"mobile"`, `"desktop"`, `"tablet"`                     |
+| `platform`     | `string` | No       | `"ios"`, `"android"`, `"macos"`, `"windows"`, `"linux"` |
+| `metadata`     | `object` | No       | Arbitrary device metadata                               |
 
 **Response `200`**
 
@@ -134,12 +147,12 @@ curl -X POST http://127.0.0.1:PORT/api/v1/remote/pair/complete \
 ```typescript
 const session = await client.completePairing({
   pairingToken: intent.pairingToken,
-  pin: "4829",
-  deviceName: "My Phone",
-  deviceType: "mobile",
-  platform: "ios",
+  pin: '4829',
+  deviceName: 'My Phone',
+  deviceType: 'mobile',
+  platform: 'ios',
 });
-// Store session.accessToken and session.refreshToken
+// Store session.accessToken and session.refreshToken for future API calls
 ```
 
 ---
@@ -291,8 +304,8 @@ curl -X POST http://127.0.0.1:PORT/api/v1/remote/sessions/sess_abc123/permission
 
 ```typescript
 await client.resolveRemotePermission(sessionId, {
-  requestId: "req_abc123",
-  decision: "approve",
+  requestId: 'req_abc123',
+  decision: 'approve',
 });
 ```
 
@@ -300,7 +313,7 @@ await client.resolveRemotePermission(sessionId, {
 
 ## Remote Status
 
-Returns the current remote access configuration and paired device count.
+Returns the current remote access configuration and paired device count. Use this to confirm whether LAN access is enabled and which base URL should be advertised to mobile clients.
 
 ```
 GET /api/v1/remote/status
@@ -326,9 +339,9 @@ Authorization: Bearer <token>
 
 Control LAN listener separately:
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/v1/remote/lan` | Get LAN listener status |
-| `POST /api/v1/remote/lan` | Set LAN listener enabled/disabled |
-| `POST /api/v1/remote/lan/enable` | Enable LAN listener |
-| `POST /api/v1/remote/lan/disable` | Disable LAN listener |
+| Endpoint                          | Description                       |
+| --------------------------------- | --------------------------------- |
+| `GET /api/v1/remote/lan`          | Get LAN listener status           |
+| `POST /api/v1/remote/lan`         | Set LAN listener enabled/disabled |
+| `POST /api/v1/remote/lan/enable`  | Enable LAN listener               |
+| `POST /api/v1/remote/lan/disable` | Disable LAN listener              |

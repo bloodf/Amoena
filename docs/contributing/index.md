@@ -4,14 +4,10 @@ Thank you for your interest in contributing to Amoena! This guide will help you 
 
 ## Prerequisites
 
-| Tool | Version | Install |
-|------|---------|---------|
-| **Rust** | 1.75+ | [rustup.rs](https://rustup.rs) |
-| **Node.js** | 20+ | [nodejs.org](https://nodejs.org) |
-| **Bun** | 1.1+ | [bun.sh](https://bun.sh) |
-| **Tauri CLI** | 2.x | `cargo install tauri-cli` |
-
-Platform-specific dependencies: see [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/).
+| Tool        | Version | Install                          |
+| ----------- | ------- | -------------------------------- |
+| **Node.js** | 20+     | [nodejs.org](https://nodejs.org) |
+| **Bun**     | 1.1+    | [bun.sh](https://bun.sh)         |
 
 ## Development Setup
 
@@ -27,7 +23,7 @@ bun install
 cd packages/ui && bun run build && cd ../..
 
 # Run the desktop app in development
-cd apps/desktop && cargo tauri dev
+bun run desktop:dev
 ```
 
 See [Development](/contributing/development) for a full breakdown of the dev workflow, test commands, and debugging.
@@ -43,10 +39,9 @@ See [Development](/contributing/development) for a full breakdown of the dev wor
 ### PR Checklist
 
 - [ ] Tests added/updated for new behaviour
-- [ ] No compile warnings (Rust + TypeScript)
+- [ ] No compile warnings (TypeScript)
 - [ ] i18n keys added for any new UI strings (no hardcoded English)
 - [ ] Documentation updated if applicable
-- [ ] `cargo fmt` and `cargo clippy` clean
 - [ ] `bun run type-check` passes
 
 ## Commit Message Format
@@ -62,6 +57,7 @@ Amoena uses [Conventional Commits](https://www.conventionalcommits.org/):
 Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `style`, `perf`, `ci`, `build`, `revert`
 
 Examples:
+
 ```
 feat(sessions): add parent session linking
 fix(memory): correct embedding batch size for large contexts
@@ -73,6 +69,7 @@ docs(api): document SSE event payload shapes
 Extensions use the `.luna` single-file binary format. See [Extensions](/extensions/) for the full guide.
 
 Quick start:
+
 1. Create an extension manifest (`manifest.json`)
 2. Add your UI panels, commands, hooks, tools, or providers
 3. Bundle as a `.luna` file
@@ -91,5 +88,5 @@ Please read our [Code of Conduct](https://github.com/AmoenaAi/amoena/blob/main/C
 ## Further Reading
 
 - [Development Setup](/contributing/development) — running tests, debugging, workspace setup
-- [Code Style](/contributing/code-style) — Rust, TypeScript, i18n, immutability rules
-- [Releasing](/contributing/releasing) — release process and Tauri build pipeline
+- [Code Style](/contributing/code-style) — TypeScript, i18n, immutability rules
+- [Releasing](/contributing/releasing) — release process

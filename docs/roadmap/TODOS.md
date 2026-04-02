@@ -4,6 +4,9 @@
 
 ### TODO-001: Consensus voting edge case — all agents abstain
 
+- **Status:** CLOSED, already satisfied in the current implementation
+- **Resolution:** `packages/lunaria-service/src/consensus/voting.ts` returns `Inconclusive` with `weightedScore: null` when total weight is zero, and the regression test lives in `packages/lunaria-service/src/consensus/voting.test.ts`.
+
 - **What:** Handle the case where all agents abstain from a consensus vote (total_weight == 0)
 - **Why:** Without handling, weighted average calculation divides by zero. Silent failure in a core orchestration feature.
 - **Pros:** Prevents crash, gives users clear feedback ("No agents voted — result inconclusive")
@@ -13,6 +16,8 @@
 - **Added:** 2026-03-19 via /plan-eng-review
 
 ### TODO-002: Autopilot phase timeout watchdog
+
+- **Status:** OPEN
 
 - **What:** Add configurable timeout per autopilot phase with automatic rollback on timeout
 - **Why:** If an agent hangs during implementation (infinite loop, network stall, etc.), the autopilot run stalls forever with no user feedback. Users have to manually kill the process.
@@ -24,6 +29,8 @@
 
 ### TODO-003: Remote relay graceful disconnection handling
 
+- **Status:** OPEN
+
 - **What:** Add heartbeat detection, orphaned room cleanup, user notification, and reconnection for WebSocket relay disconnections
 - **Why:** When a mobile device loses WiFi mid-relay session, the WebSocket dies silently. Desktop shows stale "connected" state. Orphaned relay rooms leak memory.
 - **Pros:** Reliable remote access experience, no memory leaks, users know when devices disconnect
@@ -33,6 +40,8 @@
 - **Added:** 2026-03-19 via /plan-eng-review
 
 ### TODO-004: Full app i18n string extraction
+
+- **Status:** OPEN
 
 - **What:** Wrap all hardcoded English strings across Superset-derived screens in `t()` calls and extract to translation files
 - **Why:** User chose full app i18n (not just Amoena screens). Superset has zero i18n — ~500+ strings across 90+ components need extraction.
@@ -46,6 +55,8 @@
 
 ### TODO-005: Session Replay storage cleanup policy
 
+- **Status:** OPEN
+
 - **What:** Auto-delete old session recordings to prevent disk bloat
 - **Why:** Each recording can be 15MB (compressed). 100 sessions = 1.5GB. Users will forget to clean up.
 - **Pros:** Prevents disk bloat, users don't have to manage storage manually
@@ -57,6 +68,8 @@
 - **Added:** 2026-03-19 via /plan-ceo-review
 
 ### TODO-006: CLI output parser versioning
+
+- **Status:** OPEN
 
 - **What:** Version-detect CLI agents (Claude Code, Codex, Gemini) and select the correct output parser
 - **Why:** Agent CLI tools change their output format between versions. A parser built for Claude Code v1.2 may break on v1.3.

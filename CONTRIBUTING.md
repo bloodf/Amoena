@@ -4,14 +4,8 @@ Thank you for your interest in contributing to Amoena! This guide covers everyth
 
 ## Prerequisites
 
-- **Rust** 1.75+ (via [rustup](https://rustup.rs))
 - **Node.js** 20+
 - **Bun** 1.1+ (via [bun.sh](https://bun.sh))
-- **Tauri CLI** (`cargo install tauri-cli`)
-- **Platform dependencies**: See [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/)
-  - macOS: Xcode Command Line Tools
-  - Linux: `libwebkit2gtk-4.1-dev`, `libgtk-3-dev`, `libayatana-appindicator3-dev`
-  - Windows: WebView2 (ships with Windows 11, installable on Windows 10)
 
 ## Development Setup
 
@@ -51,13 +45,10 @@ bun run desktop:dev
 ```
 amoena/
 +-- apps/
-|   +-- desktop/                   # Tauri desktop application
-|   |   +-- src/                   # React frontend (pages, components)
-|   |   +-- src-tauri/             # Rust backend
-|   |   |   +-- src/               # Runtime server, services, persistence
-|   |   |   +-- tests/             # Rust integration tests
+|   +-- desktop/                   # Electron desktop application
+|   |   +-- src/                   # React frontend + Electron main/preload
+|   |   +-- resources/             # Icons, entitlements, sounds
 |   |   +-- e2e/                   # Playwright E2E tests
-|   |   +-- worker/                # Bun AI worker bridge
 |   +-- mobile/                    # Expo React Native companion app
 |       +-- src/                   # Mobile screens and components
 +-- packages/
@@ -72,36 +63,7 @@ amoena/
 +-- scripts/                       # Build and code generation scripts
 ```
 
-### Key Backend Modules
-
-| Module        | Path (relative to `src-tauri/src/`) | Purpose                           |
-| ------------- | ----------------------------------- | --------------------------------- |
-| Runtime       | `runtime.rs`                        | Axum HTTP server, route setup     |
-| Orchestration | `orchestration.rs`                  | Agent spawning, teams, consensus  |
-| Memory        | `memory.rs`                         | Observation capture, retrieval    |
-| Hooks         | `hooks.rs`                          | Lifecycle event hooks             |
-| Routing       | `routing.rs`                        | Provider/model selection          |
-| Extensions    | `extensions/`                       | .luna format, loading, management |
-| Persistence   | `persistence/`                      | SQLite database, repositories     |
-| Providers     | `providers/`                        | AI provider adapters              |
-| Config        | `config/`                           | Settings, secrets, paths          |
-
 ## Running Tests
-
-### Rust Tests
-
-```bash
-cd apps/desktop/src-tauri
-
-# Run all tests (single-threaded for SQLite safety)
-cargo test --no-fail-fast -- --test-threads=1
-
-# Run a specific test module
-cargo test orchestration -- --test-threads=1
-
-# Run with output
-cargo test -- --test-threads=1 --nocapture
-```
 
 ### TypeScript / UI Tests
 
@@ -122,9 +84,8 @@ bun run test
 ### E2E Tests
 
 ```bash
-# Requires a running desktop app instance
 cd apps/desktop
-bun run test:e2e
+bun run e2e
 ```
 
 ### Smoke Test
@@ -142,14 +103,6 @@ bun run dev:verify
 ```
 
 ## Code Style
-
-### Rust
-
-- **Formatting**: `cargo fmt` (standard rustfmt)
-- **Linting**: Zero `cargo clippy` warnings
-- **Immutability**: Prefer immutable data patterns; create new structs rather than mutating
-- **Error handling**: Use `anyhow::Result` for application errors, `thiserror` for library errors
-- **Naming**: Snake_case for functions/variables, PascalCase for types
 
 ### TypeScript / React
 
@@ -203,7 +156,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 | `runtime-client` | @lunaria/runtime-client package  |
 | `tokens`         | @lunaria/tokens design tokens    |
 | `i18n`           | @lunaria/i18n translations       |
-| `backend`        | Rust backend services            |
+| `backend`        | Backend services                 |
 | `docs`           | Documentation                    |
 | `ci`             | CI/CD pipelines                  |
 
@@ -216,9 +169,8 @@ Commit messages are enforced by commitlint (configured in `commitlint.config.js`
 3. **Ensure all checks pass**:
    ```bash
    bun run dev:verify      # Types + tests
-   bun run format:check    # Formatting
-   bun run lint            # Linting
-   cargo clippy            # Rust linting
+   bun run format:check   # Formatting
+   bun run lint           # Linting
    ```
 4. **Update documentation** if your change affects user-facing behavior
 5. **Submit a PR** with a clear description of what changed and why
@@ -226,7 +178,7 @@ Commit messages are enforced by commitlint (configured in `commitlint.config.js`
 ### PR Checklist
 
 - [ ] Tests added or updated for new functionality
-- [ ] No compile warnings (Rust `cargo clippy` + TypeScript `type-check`)
+- [ ] No compile warnings (TypeScript `type-check`)
 - [ ] i18n keys added for any new UI strings
 - [ ] Documentation updated if applicable
 - [ ] Commit messages follow conventional commits format
