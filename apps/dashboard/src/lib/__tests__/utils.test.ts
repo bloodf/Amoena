@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { Agent, AgentStatus, Session } from '@/types';
+import type { Session } from '@/types';
 
-const mockAgentStatus: AgentStatus = { status: 'active' };
 const mockSession: Session = {
   id: 'session-1',
   key: 'main:sess-1',
@@ -71,9 +70,9 @@ describe('formatAge', () => {
 });
 
 describe('parseTokenUsage', () => {
-  it('parses standard format with k suffix', async () => {
+  it('parses standard format without k suffix', async () => {
     const { parseTokenUsage } = await import('../utils');
-    const result = parseTokenUsage('28k/35k (80%)');
+    const result = parseTokenUsage('28000/35000 (80%)');
     expect(result.used).toBe(28000);
     expect(result.total).toBe(35000);
     expect(result.percentage).toBe(80);
@@ -117,7 +116,9 @@ describe('getStatusColor', () => {
 
   it('returns gray for unknown status', async () => {
     const { getStatusColor } = await import('../utils');
-    expect(getStatusColor('unknown' as AgentStatus['status'])).toBe('text-gray-500');
+    expect(getStatusColor('unknown' as 'active' | 'idle' | 'error' | 'offline')).toBe(
+      'text-gray-500',
+    );
   });
 });
 

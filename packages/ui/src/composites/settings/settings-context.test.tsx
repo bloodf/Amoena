@@ -1,5 +1,5 @@
 import { act, render, renderHook } from '@testing-library/react';
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, mock, test } from 'bun:test';
 import * as React from 'react';
 
 import { SettingsProvider, useSettings, useSettingValue } from './settings-context';
@@ -42,7 +42,7 @@ describe('useSettings', () => {
   });
 
   test('onChange is called when settings change', () => {
-    const onChange = () => {};
+    const onChange = mock(() => {});
     const { result } = renderHook(() => useSettings(), {
       wrapper: ({ children }) => (
         <SettingsProvider values={{}} onChange={onChange}>
@@ -79,7 +79,6 @@ describe('useSettingValue', () => {
       ),
     });
     const [value] = result.current;
-    // settingDefaults["general.theme"] = "Dark", so fallback is used
     expect(value).toBe('Dark');
   });
 
@@ -96,7 +95,7 @@ describe('useSettingValue', () => {
   });
 
   test('setter calls onChange with correct key', () => {
-    const onChange = () => {};
+    const onChange = mock(() => {});
     const { result } = renderHook(() => useSettingValue('theme', 'dark'), {
       wrapper: ({ children }) => (
         <SettingsProvider values={{}} onChange={onChange}>
