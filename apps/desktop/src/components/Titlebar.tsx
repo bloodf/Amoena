@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
 type ElectronWindowBridge = {
@@ -16,6 +17,7 @@ function getWindowBridge(): ElectronWindowBridge | null {
 }
 
 function WindowControls() {
+  const { t } = useTranslation();
   const [isMaximized, setIsMaximized] = useState(false);
   const bridge = getWindowBridge();
 
@@ -39,19 +41,19 @@ function WindowControls() {
       <div className="flex items-center gap-2 pl-3">
         <button
           type="button"
-          aria-label="Close"
+          aria-label={t('desktop.close')}
           onClick={handleClose}
           className="h-3 w-3 rounded-full bg-[#ff5f56] hover:brightness-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
         />
         <button
           type="button"
-          aria-label="Minimize"
+          aria-label={t('desktop.minimize')}
           onClick={handleMinimize}
           className="h-3 w-3 rounded-full bg-[#ffbd2e] hover:brightness-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
         />
         <button
           type="button"
-          aria-label={isMaximized ? 'Restore' : 'Maximize'}
+          aria-label={isMaximized ? t('desktop.restore') : t('desktop.maximize')}
           onClick={handleMaximize}
           className="h-3 w-3 rounded-full bg-[#27c93f] hover:brightness-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400"
         />
@@ -64,7 +66,7 @@ function WindowControls() {
     <div className="ml-auto flex items-center">
       <button
         type="button"
-        aria-label="Minimize"
+        aria-label={t('desktop.minimize')}
         onClick={handleMinimize}
         className="flex h-full w-10 items-center justify-center text-foreground/70 hover:bg-foreground/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-foreground/30"
       >
@@ -74,7 +76,7 @@ function WindowControls() {
       </button>
       <button
         type="button"
-        aria-label={isMaximized ? 'Restore' : 'Maximize'}
+        aria-label={isMaximized ? t('desktop.restore') : t('desktop.maximize')}
         onClick={handleMaximize}
         className="flex h-full w-10 items-center justify-center text-foreground/70 hover:bg-foreground/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-foreground/30"
       >
@@ -113,7 +115,7 @@ function WindowControls() {
       </button>
       <button
         type="button"
-        aria-label="Close"
+        aria-label={t('desktop.close')}
         onClick={handleClose}
         className="flex h-full w-10 items-center justify-center text-foreground/70 hover:bg-red-600 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-400"
       >
@@ -134,6 +136,7 @@ function WindowControls() {
 }
 
 export function Titlebar() {
+  const { t } = useTranslation();
   const bridge = getWindowBridge();
   const isMacOS = bridge?.platform === 'darwin';
 
@@ -147,7 +150,7 @@ export function Titlebar() {
 
       {/* App name centered — pointer-events-none keeps drag working */}
       <span className="pointer-events-none flex-1 text-center text-xs font-medium text-foreground/60">
-        Amoena
+        {t('desktop.title')}
       </span>
 
       {/* Windows/Linux controls on the right */}

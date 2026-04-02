@@ -15,6 +15,6 @@ export const codexAdapter: CliAdapter = {
     const spawn = spawnProcess('codex', ['-p', options.task], {
       env: options.env ? ({ ...process.env, ...options.env } as NodeJS.ProcessEnv) : undefined,
     });
-    return new CodexAgentSession(spawn, options.timeout);
+    return new CodexAgentSession(spawn, 'codex', options.timeout);
   },
 };

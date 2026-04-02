@@ -15,6 +15,6 @@ export const geminiAdapter: CliAdapter = {
     const spawn = spawnProcess('gemini', ['-p', options.task], {
       env: options.env ? ({ ...process.env, ...options.env } as NodeJS.ProcessEnv) : undefined,
     });
-    return new GeminiAgentSession(spawn, options.timeout);
+    return new GeminiAgentSession(spawn, 'gemini', options.timeout);
   },
 };

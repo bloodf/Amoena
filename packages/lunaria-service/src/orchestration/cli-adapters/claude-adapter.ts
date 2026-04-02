@@ -15,6 +15,6 @@ export const claudeAdapter: CliAdapter = {
     const spawn = spawnProcess('claude', ['-p', options.task], {
       env: options.env ? ({ ...process.env, ...options.env } as NodeJS.ProcessEnv) : undefined,
     });
-    return new ClaudeAgentSession(spawn, options.timeout);
+    return new ClaudeAgentSession(spawn, 'claude-code', options.timeout);
   },
 };
