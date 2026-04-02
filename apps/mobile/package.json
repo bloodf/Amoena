@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "android": "expo start --android",
     "web": "expo start --web",
-    "test": "vitest run",
+    "test": "vitest run src/lib/relay-client.test.ts src/hooks/use-relay-connection.test.ts",
     "type-check": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {

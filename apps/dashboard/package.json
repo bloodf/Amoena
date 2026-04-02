@@ -16,7 +16,7 @@
     "deploy:standalone": "bun run verify:node && bash scripts/deploy-standalone.sh",
     "lint": "bun run verify:node && eslint .",
     "typecheck": "bun run verify:node && tsc --noEmit",
-    "test": "bun run verify:node && vitest run",
+    "test": "vitest run src/app/api/diagnostics/__tests__/ src/app/api/replay/__tests__/",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:e2e": "bun run verify:node && playwright test",

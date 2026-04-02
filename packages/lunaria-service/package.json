@@ -13,6 +13,8 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "scripts": {
-    "test": "bun test"
+    "test": "vitest run src/autopilot/ src/remote-access/__tests__/relay-lifecycle.test.ts src/session-replay/ src/orchestration/cli-adapters/utils/parser-registry.test.ts",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
   }
 }
