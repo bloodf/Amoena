@@ -17,9 +17,6 @@
     "extensions"
   ],
   "packageManager": "bun@1.3.9",
-  "overrides": {
-    "react-is": "^19.0.0"
-  },
   "workspaces": [
     "apps/*",
     "packages/*"
