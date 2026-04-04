@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, test, mock } from 'bun:test';
+import { describe, expect, test, mock, vi } from "vitest";
 import { KeyboardShortcutsModal } from './KeyboardShortcutsModal';
 
 describe('KeyboardShortcutsModal', () => {
@@ -44,14 +44,14 @@ describe('KeyboardShortcutsModal', () => {
   });
 
   test('calls onClose when close button is clicked', () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(<KeyboardShortcutsModal open={true} onClose={onClose} />);
     fireEvent.click(screen.getByLabelText('Close keyboard shortcuts'));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   test('calls onClose when backdrop is clicked', () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(<KeyboardShortcutsModal open={true} onClose={onClose} />);
     const dialog = screen.getByRole('dialog');
     fireEvent.click(dialog);
@@ -59,7 +59,7 @@ describe('KeyboardShortcutsModal', () => {
   });
 
   test('calls onClose when Escape key is pressed', () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(<KeyboardShortcutsModal open={true} onClose={onClose} />);
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(onClose).toHaveBeenCalledTimes(1);

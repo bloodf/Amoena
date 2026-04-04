@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { ComposerInputArea } from "./ComposerInputArea";
 
 function makeProps(overrides: Partial<Parameters<typeof ComposerInputArea>[0]> = {}) {
@@ -11,11 +11,11 @@ function makeProps(overrides: Partial<Parameters<typeof ComposerInputArea>[0]> =
     canSubmit: true,
     textareaRef: { current: null },
     canvasRef: { current: null },
-    onMessageChange: mock((_v: string) => {}),
-    onKeyDown: mock((_e: React.KeyboardEvent) => {}),
-    onPaste: mock((_e: React.ClipboardEvent) => {}),
-    onRecordingToggle: mock(() => {}),
-    onSubmit: mock(() => {}),
+    onMessageChange: vi.fn((_v: string) => {}),
+    onKeyDown: vi.fn((_e: React.KeyboardEvent) => {}),
+    onPaste: vi.fn((_e: React.ClipboardEvent) => {}),
+    onRecordingToggle: vi.fn(() => {}),
+    onSubmit: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -37,14 +37,14 @@ describe("ComposerInputArea", () => {
   });
 
   test("calls onMessageChange when typing", () => {
-    const onMessageChange = mock((_v: string) => {});
+    const onMessageChange = vi.fn((_v: string) => {});
     render(<ComposerInputArea {...makeProps({ onMessageChange })} />);
     fireEvent.change(screen.getByPlaceholderText(/Ask anything/), { target: { value: "hello" } });
     expect(onMessageChange).toHaveBeenCalledWith("hello");
   });
 
   test("calls onRecordingToggle when mic button clicked", () => {
-    const onRecordingToggle = mock(() => {});
+    const onRecordingToggle = vi.fn(() => {});
     render(<ComposerInputArea {...makeProps({ onRecordingToggle })} />);
     fireEvent.click(screen.getByLabelText("Start recording"));
     expect(onRecordingToggle).toHaveBeenCalled();
@@ -56,7 +56,7 @@ describe("ComposerInputArea", () => {
   });
 
   test("calls onSubmit when send button clicked", () => {
-    const onSubmit = mock(() => {});
+    const onSubmit = vi.fn(() => {});
     render(<ComposerInputArea {...makeProps({ onSubmit })} />);
     fireEvent.click(screen.getByLabelText("Send message"));
     expect(onSubmit).toHaveBeenCalled();

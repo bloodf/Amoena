@@ -1,13 +1,13 @@
-import { describe, expect, it, mock } from 'bun:test';
+import { describe, expect, it, vi } from 'vitest';
 import type { SimpleGit } from 'simple-git';
 import type { ChangedFile } from 'shared/changes-types';
 import { parseDiffNumstat } from './parse-status';
 
-const mockParseDiffNumstat = mock(
-  () => new Map<string, { additions: number; deletions: number }>(),
+const mockParseDiffNumstat = vi.hoisted(() =>
+  vi.fn(() => new Map<string, { additions: number; deletions: number }>()),
 );
 
-mock.module('./parse-status', () => ({
+vi.mock('./parse-status', () => ({
   parseDiffNumstat: mockParseDiffNumstat,
 }));
 
@@ -37,7 +37,7 @@ describe('apply-numstat', () => {
         { path: 'src/other.ts', status: 'modified', additions: 0, deletions: 0 },
       ];
       const git = {
-        raw: mock(() => Promise.resolve('10\t5\tsrc/index.ts')),
+        raw: vi.fn(() => Promise.resolve('10\t5\tsrc/index.ts')),
       } as unknown as SimpleGit;
 
       await applyNumstatToFiles(git, files, ['diff', '--numstat']);
@@ -54,7 +54,7 @@ describe('apply-numstat', () => {
       const files: ChangedFile[] = [
         { path: 'src/new.ts', status: 'added', additions: 0, deletions: 0 },
       ];
-      const git = { raw: mock(() => Promise.resolve('')) } as unknown as SimpleGit;
+      const git = { raw: vi.fn(() => Promise.resolve('')) } as unknown as SimpleGit;
 
       await applyNumstatToFiles(git, files, ['diff', '--numstat']);
 
@@ -69,7 +69,7 @@ describe('apply-numstat', () => {
         { path: 'src/index.ts', status: 'modified', additions: 0, deletions: 0 },
       ];
       const git = {
-        raw: mock(() => Promise.reject(new Error('git error'))),
+        raw: vi.fn(() => Promise.reject(new Error('git error'))),
       } as unknown as SimpleGit;
 
       await applyNumstatToFiles(git, files, ['diff', '--numstat']);

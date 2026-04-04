@@ -1,84 +1,83 @@
-import { describe, expect, it, mock } from "bun:test";
-import { EventEmitter } from "node:events";
+import { describe, expect, it, vi } from 'vitest';
+import { EventEmitter } from 'node:events';
 
-// Mock all terminal dependencies
 const mockTerminal = Object.assign(new EventEmitter(), {
-	createOrAttach: mock(() =>
-		Promise.resolve({
-			isNew: true,
-			scrollback: "",
-			wasRecovered: false,
-			isColdRestore: false,
-			previousCwd: null,
-			snapshot: null,
-		}),
-	),
-	cancelCreateOrAttach: mock(() => {}),
-	write: mock(() => {}),
-	resize: mock(() => {}),
-	signal: mock(() => {}),
-	kill: mock(() => Promise.resolve()),
-	detach: mock(() => {}),
-	clearScrollback: mock(() => Promise.resolve()),
-	ackColdRestore: mock(() => {}),
-	getSession: mock(() => Promise.resolve(null)),
-	capabilities: { daemon: true },
-	management: {
-		listSessions: mock(() => Promise.resolve({ sessions: [] })),
-		resetHistoryPersistence: mock(() => Promise.resolve()),
-	},
+  createOrAttach: vi.fn(() =>
+    Promise.resolve({
+      isNew: true,
+      scrollback: '',
+      wasRecovered: false,
+      isColdRestore: false,
+      previousCwd: null,
+      snapshot: null,
+    }),
+  ),
+  cancelCreateOrAttach: vi.fn(() => {}),
+  write: vi.fn(() => {}),
+  resize: vi.fn(() => {}),
+  signal: vi.fn(() => {}),
+  kill: vi.fn(() => Promise.resolve()),
+  detach: vi.fn(() => {}),
+  clearScrollback: vi.fn(() => Promise.resolve()),
+  ackColdRestore: vi.fn(() => {}),
+  getSession: vi.fn(() => Promise.resolve(null)),
+  capabilities: { daemon: true },
+  management: {
+    listSessions: vi.fn(() => Promise.resolve({ sessions: [] })),
+    resetHistoryPersistence: vi.fn(() => Promise.resolve()),
+  },
 });
 
-mock.module("main/lib/workspace-runtime", () => ({
-	getWorkspaceRuntimeRegistry: () => ({
-		getDefault: () => ({ terminal: mockTerminal }),
-	}),
+vi.mock('main/lib/workspace-runtime', () => ({
+  getWorkspaceRuntimeRegistry: () => ({
+    getDefault: () => ({ terminal: mockTerminal }),
+  }),
 }));
 
-mock.module("main/lib/app-state", () => ({
-	appState: { data: { themeState: null } },
+vi.mock('main/lib/app-state', () => ({
+  appState: { data: { themeState: null } },
 }));
 
-mock.module("main/lib/terminal", () => ({
-	restartDaemon: mock(() => Promise.resolve({ success: true })),
+vi.mock('main/lib/terminal', () => ({
+  restartDaemon: vi.fn(() => Promise.resolve({ success: true })),
 }));
 
-mock.module("main/lib/terminal/errors", () => ({
-	isTerminalAttachCanceledError: () => false,
-	TERMINAL_ATTACH_CANCELED_MESSAGE: "Attach canceled",
-	TERMINAL_SESSION_KILLED_MESSAGE: "Session killed",
-	TerminalKilledError: class extends Error {},
+vi.mock('main/lib/terminal/errors', () => ({
+  isTerminalAttachCanceledError: () => false,
+  TERMINAL_ATTACH_CANCELED_MESSAGE: 'Attach canceled',
+  TERMINAL_SESSION_KILLED_MESSAGE: 'Session killed',
+  TerminalKilledError: class extends Error {},
 }));
 
-mock.module("main/lib/terminal-host/client", () => ({
-	getTerminalHostClient: () => ({
-		listSessions: mock(() => Promise.resolve({ sessions: [] })),
-	}),
+vi.mock('main/lib/terminal-host/client', () => ({
+  getTerminalHostClient: () => ({
+    listSessions: vi.fn(() => Promise.resolve({ sessions: [] })),
+  }),
 }));
 
-mock.module("./theme-type", () => ({
-	resolveTerminalThemeType: mock(() => "dark"),
+vi.mock('./theme-type', () => ({
+  resolveTerminalThemeType: vi.fn(() => 'dark'),
 }));
 
-mock.module("./utils", () => ({
-	getWorkspaceTerminalContext: mock(() => ({
-		workspace: { name: "test-ws", type: "worktree" },
-		workspacePath: "/repo",
-		rootPath: "/repo",
-	})),
-	resolveCwd: mock((_override: string | undefined, path: string) => path),
+vi.mock('./utils', () => ({
+  getWorkspaceTerminalContext: vi.fn(() => ({
+    workspace: { name: 'test-ws', type: 'worktree' },
+    workspacePath: '/repo',
+    rootPath: '/repo',
+  })),
+  resolveCwd: vi.fn((_override: string | undefined, path: string) => path),
 }));
 
-mock.module("../workspaces/utils/usability", () => ({
-	assertWorkspaceUsable: mock(() => {}),
+vi.mock('../workspaces/utils/usability', () => ({
+  assertWorkspaceUsable: vi.fn(() => {}),
 }));
 
-const { createTerminalRouter } = await import("./terminal");
+const { createTerminalRouter } = await import('./terminal');
 
-describe("terminal router", () => {
-	it("creates a router with expected shape", () => {
-		const router = createTerminalRouter();
-		expect(router).toBeDefined();
-		expect(typeof router).toBe("object");
-	});
+describe('terminal router', () => {
+  it('creates a router with expected shape', () => {
+    const router = createTerminalRouter();
+    expect(router).toBeDefined();
+    expect(typeof router).toBe('object');
+  });
 });

@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { useSessionWorkspaceState } from "./useSessionWorkspaceState";
 
 describe("useSessionWorkspaceState", () => {
@@ -91,7 +91,7 @@ describe("useSessionWorkspaceState", () => {
     expect(initialTabs).toBeGreaterThan(1);
     const idToClose = "1";
     act(() => {
-      result.current.handleCloseTab(idToClose, { stopPropagation: mock(() => {}) } as unknown as React.MouseEvent);
+      result.current.handleCloseTab(idToClose, { stopPropagation: vi.fn(() => {}) } as unknown as React.MouseEvent);
     });
     expect(result.current.tabs.find((t) => t.id === idToClose)).toBeUndefined();
     expect(result.current.tabs.length).toBe(initialTabs - 1);
@@ -104,7 +104,7 @@ describe("useSessionWorkspaceState", () => {
     // Leave only the first by closing all others
     for (const tab of sessionTabs.slice(1)) {
       act(() => {
-        result.current.handleCloseTab(tab.id, { stopPropagation: mock(() => {}) } as unknown as React.MouseEvent);
+        result.current.handleCloseTab(tab.id, { stopPropagation: vi.fn(() => {}) } as unknown as React.MouseEvent);
       });
     }
     const remaining = result.current.tabs.filter((t) => t.type === "session");
@@ -113,7 +113,7 @@ describe("useSessionWorkspaceState", () => {
     // Attempting to close the last session tab should be a no-op
     const lastId = remaining[0].id;
     act(() => {
-      result.current.handleCloseTab(lastId, { stopPropagation: mock(() => {}) } as unknown as React.MouseEvent);
+      result.current.handleCloseTab(lastId, { stopPropagation: vi.fn(() => {}) } as unknown as React.MouseEvent);
     });
     expect(result.current.tabs.filter((t) => t.type === "session").length).toBe(1);
   });
@@ -159,7 +159,7 @@ describe("useSessionWorkspaceState", () => {
     act(() => { result.current.handleTabDragStart(0); });
     act(() => {
       result.current.handleTabDragOver(
-        { preventDefault: mock(() => {}) } as unknown as React.DragEvent,
+        { preventDefault: vi.fn(() => {}) } as unknown as React.DragEvent,
         2
       );
     });
@@ -171,7 +171,7 @@ describe("useSessionWorkspaceState", () => {
     act(() => { result.current.handleTabDragStart(1); });
     act(() => {
       result.current.handleTabDragOver(
-        { preventDefault: mock(() => {}) } as unknown as React.DragEvent,
+        { preventDefault: vi.fn(() => {}) } as unknown as React.DragEvent,
         1
       );
     });
@@ -184,7 +184,7 @@ describe("useSessionWorkspaceState", () => {
     act(() => { result.current.handleTabDragStart(0); });
     act(() => {
       result.current.handleTabDragOver(
-        { preventDefault: mock(() => {}) } as unknown as React.DragEvent,
+        { preventDefault: vi.fn(() => {}) } as unknown as React.DragEvent,
         2
       );
     });
@@ -207,7 +207,7 @@ describe("useSessionWorkspaceState", () => {
     act(() => { result.current.handleTabDragStart(0); });
     act(() => {
       result.current.handleTabDragOver(
-        { preventDefault: mock(() => {}) } as unknown as React.DragEvent,
+        { preventDefault: vi.fn(() => {}) } as unknown as React.DragEvent,
         1
       );
     });
@@ -224,8 +224,8 @@ describe("useSessionWorkspaceState", () => {
     act(() => {
       result.current.handleTabCloseKey(idToClose, {
         key: "Enter",
-        preventDefault: mock(() => {}),
-        stopPropagation: mock(() => {}),
+        preventDefault: vi.fn(() => {}),
+        stopPropagation: vi.fn(() => {}),
       } as unknown as React.KeyboardEvent);
     });
     expect(result.current.tabs.find((t) => t.id === idToClose)).toBeUndefined();
@@ -239,8 +239,8 @@ describe("useSessionWorkspaceState", () => {
     act(() => {
       result.current.handleTabCloseKey(idToClose, {
         key: " ",
-        preventDefault: mock(() => {}),
-        stopPropagation: mock(() => {}),
+        preventDefault: vi.fn(() => {}),
+        stopPropagation: vi.fn(() => {}),
       } as unknown as React.KeyboardEvent);
     });
     expect(result.current.tabs.find((t) => t.id === idToClose)).toBeUndefined();
@@ -252,7 +252,7 @@ describe("useSessionWorkspaceState", () => {
     act(() => {
       result.current.handleTabCloseKey("1", {
         key: "a",
-        preventDefault: mock(() => {}),
+        preventDefault: vi.fn(() => {}),
       } as unknown as React.KeyboardEvent);
     });
     expect(result.current.tabs.length).toBe(initialCount);

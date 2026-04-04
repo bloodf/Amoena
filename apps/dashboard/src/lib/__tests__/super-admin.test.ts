@@ -22,7 +22,7 @@ describe("super-admin", () => {
 				},
 				{
 					templateAmoenaJsonPath: "/etc/amoena/template.json",
-					gatewaySystemdTemplatePath: "/etc/systemd/amoena-gateway@.service",
+					gatewaySystemdTemplatePath: "/etc/systemd/lunaria-gateway@.service",
 				},
 			);
 

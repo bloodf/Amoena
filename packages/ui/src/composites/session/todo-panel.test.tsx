@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { TodoPanel } from "./TodoPanel";
 
 const tasks = [
@@ -12,8 +12,8 @@ const tasks = [
 
 function makeHandlers() {
   return {
-    onUpdateStatus: mock(() => {}),
-    onReorder: mock(() => {}),
+    onUpdateStatus: vi.fn(() => {}),
+    onReorder: vi.fn(() => {}),
   };
 }
 

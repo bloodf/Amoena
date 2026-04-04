@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { ContextDropzone } from "./ContextDropzone";
 import { ModelPicker } from "./ModelPicker";
@@ -36,7 +36,7 @@ describe("ProviderPicker", () => {
   });
 
   test("fires onSelect when clicking a provider", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     render(
       <ProviderPicker
         providers={newSessionProviders}
@@ -65,7 +65,7 @@ describe("FeaturedProviderCard", () => {
   });
 
   test("fires onSelect when clicked", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     render(<FeaturedProviderCard provider={provider} onSelect={onSelect} />);
     fireEvent.click(screen.getByText("Amoena AI"));
     expect(onSelect).toHaveBeenCalled();
@@ -83,7 +83,7 @@ describe("ExternalProviderCard", () => {
   });
 
   test("fires onSelect when clicked", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     render(<ExternalProviderCard provider={provider} onSelect={onSelect} />);
     fireEvent.click(screen.getByText("Claude Code"));
     expect(onSelect).toHaveBeenCalled();
@@ -105,7 +105,7 @@ describe("SessionOptionGrid", () => {
   });
 
   test("fires onSelect with the option id", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     render(
       <SessionOptionGrid
         options={newSessionWorkTargets}
@@ -131,7 +131,7 @@ describe("ModelPicker", () => {
   });
 
   test("fires onSelect with the model name", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     render(
       <ModelPicker models={models} selectedModel="Claude 4 Sonnet" onSelect={onSelect} />,
     );
@@ -156,7 +156,7 @@ describe("PermissionPresetPicker", () => {
   });
 
   test("fires onSelect with preset id", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     render(
       <PermissionPresetPicker
         presets={newSessionPermissionPresets}
@@ -187,7 +187,7 @@ describe("ReasoningControls", () => {
   });
 
   test("fires onDepthChange on depth button click", () => {
-    const onDepthChange = mock(() => {});
+    const onDepthChange = vi.fn(() => {});
     render(
       <ReasoningControls
         mode="auto"
@@ -202,7 +202,7 @@ describe("ReasoningControls", () => {
   });
 
   test("fires onModeChange when select changes", () => {
-    const onModeChange = mock(() => {});
+    const onModeChange = vi.fn(() => {});
     render(
       <ReasoningControls
         mode="auto"
@@ -238,7 +238,7 @@ describe("NewSessionModalHeader", () => {
   });
 
   test("fires onClose when close button is clicked", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(<NewSessionModalHeader onClose={onClose} />);
     fireEvent.click(screen.getByRole("button", { name: /close/i }));
     expect(onClose).toHaveBeenCalled();
@@ -253,14 +253,14 @@ describe("NewSessionModalFooter", () => {
   });
 
   test("fires onClose when cancel is clicked", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(<NewSessionModalFooter onClose={onClose} onCreate={() => {}} />);
     fireEvent.click(screen.getByText("Cancel"));
     expect(onClose).toHaveBeenCalled();
   });
 
   test("fires onCreate when create button is clicked", () => {
-    const onCreate = mock(() => {});
+    const onCreate = vi.fn(() => {});
     render(<NewSessionModalFooter onClose={() => {}} onCreate={onCreate} />);
     fireEvent.click(screen.getByText("Create Session"));
     expect(onCreate).toHaveBeenCalled();

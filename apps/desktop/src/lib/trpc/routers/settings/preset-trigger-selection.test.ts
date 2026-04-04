@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import type { TerminalPreset } from "@lunaria/local-db";
 import { getPresetsForTriggerField } from "./preset-trigger-selection";
 

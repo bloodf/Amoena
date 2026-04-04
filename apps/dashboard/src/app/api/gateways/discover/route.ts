@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 
 	const discovered: DiscoveredGateway[] = [];
 
-	// Parse systemd services for amoena-gateway instances
+	// Parse systemd services for lunaria-gateway instances
 	try {
 		const output = execFileSync(
 			"systemctl",
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
 			.filter((l) => l.includes("amoena") && l.includes("gateway"));
 
 		for (const line of gwLines) {
-			// e.g. "amoena-gateway@quant.service loaded active running Amoena Gateway (quant)"
+			// e.g. "lunaria-gateway@quant.service loaded active running Amoena Gateway (quant)"
 			const parts = line.trim().split(/\s+/);
 			const serviceName = parts[0] || "";
 			const state = parts[2] || ""; // active/inactive
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 
 			// Extract user from service name
 			let user = "";
-			const templateMatch = serviceName.match(/amoena-gateway@(\w+)\.service/);
+			const templateMatch = serviceName.match(/lunaria-gateway@(\w+)\.service/);
 			if (templateMatch) {
 				user = templateMatch[1];
 			} else {
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
 			}
 			if (!user) continue;
 
-			// Find the port by checking what amoena-gateway processes are listening on
+			// Find the port by checking what lunaria-gateway processes are listening on
 			let port = 0;
 			try {
 				const configPath = `/home/${user}/.amoena/amoena.json`;

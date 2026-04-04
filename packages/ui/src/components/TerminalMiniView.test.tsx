@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, test, mock } from "bun:test";
+import { describe, expect, test, mock, vi } from "vitest";
 import { TerminalMiniView } from "./TerminalMiniView";
 
 describe("TerminalMiniView — title bar", () => {
@@ -22,7 +22,7 @@ describe("TerminalMiniView — title bar", () => {
   });
 
   test("close button fires onClose callback when clicked", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
       <TerminalMiniView title="Terminal" onClose={onClose}>
         <span>output</span>

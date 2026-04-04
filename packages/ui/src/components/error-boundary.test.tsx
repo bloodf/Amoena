@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { ErrorBoundary } from "./ErrorBoundary";
 
 function ThrowingComponent({ shouldThrow }: { shouldThrow: boolean }) {
@@ -19,7 +19,7 @@ describe("ErrorBoundary", () => {
 
   test("renders error message when child throws", () => {
     // Suppress console.error for expected error
-    const spy = mock(() => {});
+    const spy = vi.fn(() => {});
     const orig = console.error;
     console.error = spy;
 
@@ -35,7 +35,7 @@ describe("ErrorBoundary", () => {
   });
 
   test("renders custom fallback when provided", () => {
-    const spy = mock(() => {});
+    const spy = vi.fn(() => {});
     const orig = console.error;
     console.error = spy;
 
@@ -50,7 +50,7 @@ describe("ErrorBoundary", () => {
   });
 
   test("renders Try Again button", () => {
-    const spy = mock(() => {});
+    const spy = vi.fn(() => {});
     const orig = console.error;
     console.error = spy;
 

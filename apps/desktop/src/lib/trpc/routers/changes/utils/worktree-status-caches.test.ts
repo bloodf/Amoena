@@ -1,17 +1,22 @@
-import { describe, expect, it, mock } from 'bun:test';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const mockClearGitHubCachesForWorktree = mock(() => {});
-const mockClearStatusCacheForWorktree = mock(() => {});
+const mockClearGitHubCachesForWorktree = vi.fn(() => {});
+const mockClearStatusCacheForWorktree = vi.fn(() => {});
 
-mock.module('../../workspaces/utils/github', () => ({
+vi.mock('../../workspaces/utils/github', () => ({
   clearGitHubCachesForWorktree: mockClearGitHubCachesForWorktree,
 }));
 
-mock.module('./status-cache', () => ({
+vi.mock('./status-cache', () => ({
   clearStatusCacheForWorktree: mockClearStatusCacheForWorktree,
 }));
 
 const { clearWorktreeStatusCaches } = await import('./worktree-status-caches');
+
+beforeEach(() => {
+  mockClearGitHubCachesForWorktree.mockClear();
+  mockClearStatusCacheForWorktree.mockClear();
+});
 
 describe('worktree-status-caches', () => {
   describe('clearWorktreeStatusCaches', () => {

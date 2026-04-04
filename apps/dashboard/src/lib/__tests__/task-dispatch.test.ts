@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 /**
- * task-dispatch.ts imports from "./amoena-gateway" which is a missing module
+ * task-dispatch.ts imports from "./lunaria-gateway" which is a missing module
  * (likely renamed to lunaria-gateway). Since we cannot modify source files,
  * we test the pure/extractable logic patterns here and verify the module's
  * contract through the scheduler integration tests.

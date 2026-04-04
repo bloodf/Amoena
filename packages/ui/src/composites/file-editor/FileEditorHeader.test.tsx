@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, mock, test } from 'bun:test';
+import { describe, expect, mock, test, vi } from "vitest";
 import { FileEditorHeader } from './FileEditorHeader';
 
 // Mock lucide-react icons
-mock('lucide-react', () => ({
+vi.fn('lucide-react', () => ({
   Edit: ({ size }: { size: number }) => (
     <span data-testid="edit-icon" style={{ width: size, height: size }}>
       Edit
@@ -22,7 +22,7 @@ mock('lucide-react', () => ({
 }));
 
 // Mock getFileIcon
-mock('../file-browser/utils', () => ({
+vi.fn('../file-browser/utils', () => ({
   getFileIcon: (name: string, size: number) => <span data-testid={`file-icon-${name}`}>icon</span>,
 }));
 
@@ -32,9 +32,9 @@ describe('FileEditorHeader', () => {
     filePath: '/src/test.ts',
     editMode: false,
     hasUnsaved: false,
-    onEdit: mock(() => {}),
-    onSave: mock(() => {}),
-    onCancel: mock(() => {}),
+    onEdit: vi.fn(() => {}),
+    onSave: vi.fn(() => {}),
+    onCancel: vi.fn(() => {}),
   });
 
   test('renders file name', () => {

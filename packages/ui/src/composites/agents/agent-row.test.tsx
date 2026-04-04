@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { AgentRow } from "./AgentRow";
 import type { ManagedAgent } from "./types";
 
@@ -22,8 +22,8 @@ function makeProps(overrides: Partial<Parameters<typeof AgentRow>[0]> = {}) {
     agent,
     depth: 0,
     expanded: false,
-    onToggle: mock(() => {}),
-    onOpenSettings: mock((_a: ManagedAgent) => {}),
+    onToggle: vi.fn(() => {}),
+    onOpenSettings: vi.fn((_a: ManagedAgent) => {}),
     ...overrides,
   };
 }
@@ -55,14 +55,14 @@ describe("AgentRow", () => {
   });
 
   test("calls onToggle when row clicked", () => {
-    const onToggle = mock(() => {});
+    const onToggle = vi.fn(() => {});
     render(<AgentRow {...makeProps({ onToggle })} />);
     fireEvent.click(screen.getByText("Claude 4 Sonnet"));
     expect(onToggle).toHaveBeenCalled();
   });
 
   test("calls onOpenSettings when settings button clicked", () => {
-    const onOpenSettings = mock((_a: ManagedAgent) => {});
+    const onOpenSettings = vi.fn((_a: ManagedAgent) => {});
     render(<AgentRow {...makeProps({ onOpenSettings })} />);
     fireEvent.click(screen.getByTitle("Agent Settings"));
     expect(onOpenSettings).toHaveBeenCalledWith(agent);

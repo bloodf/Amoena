@@ -1,4 +1,4 @@
-import { describe, expect, it, mock, beforeEach, afterEach } from 'bun:test';
+import { describe, expect, it, mock, beforeEach, afterEach , vi} from 'vitest';
 import { StringDecoder } from 'node:string_decoder';
 import { DataBatcher } from './data-batcher';
 
@@ -7,7 +7,7 @@ describe('DataBatcher', () => {
   let batcher: DataBatcher;
 
   beforeEach(() => {
-    flushCallback = mock((_data: string) => {});
+    flushCallback = vi.fn((_data: string) => {});
     batcher = new DataBatcher(flushCallback);
   });
 

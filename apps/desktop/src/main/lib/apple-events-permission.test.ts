@@ -1,10 +1,10 @@
-import { afterEach, beforeEach, describe, expect, it, mock } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const execFileMock = mock(() => {});
-const consoleLogMock = mock(() => {});
+const execFileMock = vi.hoisted(() => vi.fn(() => {}));
+const consoleLogMock = vi.hoisted(() => vi.fn(() => {}));
 let originalPlatform = process.platform;
 
-mock.module('node:child_process', () => ({
+vi.mock('node:child_process', () => ({
   execFile: execFileMock,
 }));
 

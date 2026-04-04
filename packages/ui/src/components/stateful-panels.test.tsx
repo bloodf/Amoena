@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { FileEditorTab } from "./FileEditorTab";
 import { MessageQueue } from "./MessageQueue";
@@ -219,7 +219,7 @@ describe("Amoena stateful panels", () => {
 
   test("terminal panel can add, close tabs, reorder, and close panel", async () => {
     const user = userEvent.setup();
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(<TerminalPanel onClose={onClose} />);
 
     await user.click(screen.getByLabelText(/add terminal tab/i));

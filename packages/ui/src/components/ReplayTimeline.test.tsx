@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, test, mock } from "bun:test";
+import { describe, expect, test, mock, vi } from "vitest";
 import { ReplayTimeline } from "./ReplayTimeline";
 
 describe("ReplayTimeline — time formatting", () => {
@@ -26,7 +26,7 @@ describe("ReplayTimeline — time formatting", () => {
 
 describe("ReplayTimeline — seek callback", () => {
   test("onSeek fires when ArrowRight key is pressed", () => {
-    const onSeek = mock(() => {});
+    const onSeek = vi.fn(() => {});
     render(<ReplayTimeline duration={60} currentTime={10} onSeek={onSeek} />);
     const track = screen.getByRole("slider", { name: "Seek" });
     fireEvent.keyDown(track, { key: "ArrowRight" });
@@ -34,7 +34,7 @@ describe("ReplayTimeline — seek callback", () => {
   });
 
   test("onSeek fires with currentTime + 5 on ArrowRight", () => {
-    const onSeek = mock((_t: number) => {});
+    const onSeek = vi.fn((_t: number) => {});
     render(<ReplayTimeline duration={60} currentTime={10} onSeek={onSeek} />);
     const track = screen.getByRole("slider", { name: "Seek" });
     fireEvent.keyDown(track, { key: "ArrowRight" });
@@ -42,7 +42,7 @@ describe("ReplayTimeline — seek callback", () => {
   });
 
   test("onSeek fires with currentTime - 5 on ArrowLeft", () => {
-    const onSeek = mock((_t: number) => {});
+    const onSeek = vi.fn((_t: number) => {});
     render(<ReplayTimeline duration={60} currentTime={10} onSeek={onSeek} />);
     const track = screen.getByRole("slider", { name: "Seek" });
     fireEvent.keyDown(track, { key: "ArrowLeft" });
@@ -50,7 +50,7 @@ describe("ReplayTimeline — seek callback", () => {
   });
 
   test("onSeek does not go below 0 on ArrowLeft at time 0", () => {
-    const onSeek = mock((_t: number) => {});
+    const onSeek = vi.fn((_t: number) => {});
     render(<ReplayTimeline duration={60} currentTime={0} onSeek={onSeek} />);
     const track = screen.getByRole("slider", { name: "Seek" });
     fireEvent.keyDown(track, { key: "ArrowLeft" });
@@ -58,7 +58,7 @@ describe("ReplayTimeline — seek callback", () => {
   });
 
   test("onSeek does not exceed duration on ArrowRight at end", () => {
-    const onSeek = mock((_t: number) => {});
+    const onSeek = vi.fn((_t: number) => {});
     render(<ReplayTimeline duration={60} currentTime={58} onSeek={onSeek} />);
     const track = screen.getByRole("slider", { name: "Seek" });
     fireEvent.keyDown(track, { key: "ArrowRight" });

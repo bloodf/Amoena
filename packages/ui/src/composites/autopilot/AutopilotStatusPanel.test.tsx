@@ -1,20 +1,20 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { AutopilotStatusPanel } from "./AutopilotStatusPanel";
 import type { AutopilotState } from "./types";
 
 function renderPanel(state: AutopilotState = "idle", enabled = true) {
   const handlers = {
-    onToggleEnabled: mock(() => {}),
-    onStart: mock(() => {}),
-    onPause: mock(() => {}),
-    onStop: mock(() => {}),
-    onResume: mock(() => {}),
-    onApprove: mock(() => {}),
-    onDeny: mock(() => {}),
-    onNewRun: mock(() => {}),
-    onUnblock: mock(() => {}),
+    onToggleEnabled: vi.fn(() => {}),
+    onStart: vi.fn(() => {}),
+    onPause: vi.fn(() => {}),
+    onStop: vi.fn(() => {}),
+    onResume: vi.fn(() => {}),
+    onApprove: vi.fn(() => {}),
+    onDeny: vi.fn(() => {}),
+    onNewRun: vi.fn(() => {}),
+    onUnblock: vi.fn(() => {}),
   };
   const result = render(
     <AutopilotStatusPanel enabled={enabled} state={state} {...handlers} />,

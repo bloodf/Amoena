@@ -2,15 +2,15 @@ import { describe, expect, it, vi } from 'vitest';
 
 import {
   authenticateLaunchContext,
-  isTauriRuntime,
+  isElectronRuntime,
   readDevLaunchContext,
   resolveLaunchContext,
   type LaunchContext,
 } from './runtime-bootstrap';
 
-describe('isTauriRuntime', () => {
-  it('returns false in test environment (no __TAURI_INTERNALS__)', () => {
-    expect(isTauriRuntime()).toBe(false);
+describe('isElectronRuntime', () => {
+  it('returns false in test environment (no window.amoena)', () => {
+    expect(isElectronRuntime()).toBe(false);
   });
 });
 
@@ -58,10 +58,8 @@ describe('readDevLaunchContext', () => {
 });
 
 describe('resolveLaunchContext', () => {
-  it('throws when not Tauri and no dev env', async () => {
-    await expect(resolveLaunchContext(vi.fn() as any, {})).rejects.toThrow(
-      'Missing Amoena launch context',
-    );
+  it('throws when not Electron and no dev env', async () => {
+    await expect(resolveLaunchContext({})).rejects.toThrow('Missing Amoena launch context');
   });
 
   it('returns dev launch context when env vars are set', async () => {
@@ -69,7 +67,7 @@ describe('resolveLaunchContext', () => {
       VITE_AMOENA_API_BASE_URL: 'http://localhost:3000',
       VITE_AMOENA_BOOTSTRAP_TOKEN: 'my-token',
     };
-    const result = await resolveLaunchContext(vi.fn() as any, env);
+    const result = await resolveLaunchContext(env);
     expect(result.apiBaseUrl).toBe('http://localhost:3000');
     expect(result.bootstrapToken).toBe('my-token');
   });

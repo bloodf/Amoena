@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { ComposerAttachmentDock } from "./ComposerAttachmentDock";
 import type { ComposerAttachment } from "./types";
 
@@ -18,27 +18,27 @@ const folderAttachment: ComposerAttachment = {
 
 describe("ComposerAttachmentDock", () => {
   test("renders nothing when attachments is empty", () => {
-    const { container } = render(<ComposerAttachmentDock attachments={[]} onRemove={mock(() => {})} />);
+    const { container } = render(<ComposerAttachmentDock attachments={[]} onRemove={vi.fn(() => {})} />);
     expect(container.firstChild).toBeNull();
   });
 
   test("renders file attachment with name", () => {
-    render(<ComposerAttachmentDock attachments={[fileAttachment]} onRemove={mock(() => {})} />);
+    render(<ComposerAttachmentDock attachments={[fileAttachment]} onRemove={vi.fn(() => {})} />);
     expect(screen.getByText("tokens.rs")).toBeTruthy();
   });
 
   test("renders folder attachment with path", () => {
-    render(<ComposerAttachmentDock attachments={[folderAttachment]} onRemove={mock(() => {})} />);
+    render(<ComposerAttachmentDock attachments={[folderAttachment]} onRemove={vi.fn(() => {})} />);
     expect(screen.getByText("src/auth")).toBeTruthy();
   });
 
   test("renders item count for folder", () => {
-    render(<ComposerAttachmentDock attachments={[folderAttachment]} onRemove={mock(() => {})} />);
+    render(<ComposerAttachmentDock attachments={[folderAttachment]} onRemove={vi.fn(() => {})} />);
     expect(screen.getByText("(5 items)")).toBeTruthy();
   });
 
   test("calls onRemove with path when remove button clicked", () => {
-    const onRemove = mock((_path: string) => {});
+    const onRemove = vi.fn((_path: string) => {});
     render(<ComposerAttachmentDock attachments={[fileAttachment]} onRemove={onRemove} />);
     const removeBtn = document.querySelector("button")!;
     fireEvent.click(removeBtn);
@@ -46,7 +46,7 @@ describe("ComposerAttachmentDock", () => {
   });
 
   test("renders multiple attachments", () => {
-    render(<ComposerAttachmentDock attachments={[fileAttachment, folderAttachment]} onRemove={mock(() => {})} />);
+    render(<ComposerAttachmentDock attachments={[fileAttachment, folderAttachment]} onRemove={vi.fn(() => {})} />);
     expect(screen.getByText("tokens.rs")).toBeTruthy();
     expect(screen.getByText("src/auth")).toBeTruthy();
   });

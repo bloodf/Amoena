@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { RateLimitsMenu } from "./RateLimitsMenu";
 import { getSeverity } from "./data";
 
@@ -8,8 +8,8 @@ describe("RateLimitsMenu", () => {
     render(
       <RateLimitsMenu
         open={false}
-        onToggle={mock(() => {})}
-        onClose={mock(() => {})}
+        onToggle={vi.fn(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     // Should render some usage numbers
@@ -19,9 +19,9 @@ describe("RateLimitsMenu", () => {
   });
 
   test("calls onToggle when button is clicked", () => {
-    const onToggle = mock(() => {});
+    const onToggle = vi.fn(() => {});
     render(
-      <RateLimitsMenu open={false} onToggle={onToggle} onClose={mock(() => {})} />,
+      <RateLimitsMenu open={false} onToggle={onToggle} onClose={vi.fn(() => {})} />,
     );
     fireEvent.click(screen.getAllByRole("button")[0]);
     expect(onToggle).toHaveBeenCalled();
@@ -31,8 +31,8 @@ describe("RateLimitsMenu", () => {
     render(
       <RateLimitsMenu
         open={true}
-        onToggle={mock(() => {})}
-        onClose={mock(() => {})}
+        onToggle={vi.fn(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Rate Limits by Provider")).toBeTruthy();
@@ -45,8 +45,8 @@ describe("RateLimitsMenu", () => {
     render(
       <RateLimitsMenu
         open={false}
-        onToggle={mock(() => {})}
-        onClose={mock(() => {})}
+        onToggle={vi.fn(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     expect(screen.queryByText("Rate Limits by Provider")).toBeNull();

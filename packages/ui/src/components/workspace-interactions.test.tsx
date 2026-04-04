@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, mock, test, vi } from "vitest";
 import { MemoryRouter } from 'react-router-dom';
 import { MessageQueue } from './MessageQueue';
 import { SessionSidePanel } from './SessionSidePanel';
@@ -70,7 +70,7 @@ describe('workspace shell interactions', () => {
   });
 
   test('terminal panel can add tabs, switch tabs, and close panel', async () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(<TerminalPanel onClose={onClose} />);
 
     fireEvent.click(screen.getByLabelText(/add terminal tab/i));
@@ -93,7 +93,7 @@ describe('workspace shell interactions', () => {
   });
 
   test('side panel files tab opens a file', async () => {
-    const onOpenFile = mock(() => {});
+    const onOpenFile = vi.fn(() => {});
     render(<SessionSidePanel onOpenFile={onOpenFile} />);
 
     const fileButton = screen

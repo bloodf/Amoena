@@ -3,7 +3,7 @@ import { requireRole } from "@/lib/auth";
 import { config } from "@/lib/config";
 import { getDetectedGatewayToken } from "@/lib/gateway-runtime";
 import { logger } from "@/lib/logger";
-import { callAmoenaGateway } from "@/lib/amoena-gateway";
+import { callAmoenaGateway } from "@/lib/lunaria-gateway";
 
 const gatewayInternalUrl = `http://${config.gatewayHost}:${config.gatewayPort}`;
 

@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import { AppShell } from "./AppShell";
 import { OpinionsScreen } from "@/screens/OpinionsScreen";
@@ -16,8 +16,8 @@ describe("Amoena mobile shell and opinions", () => {
       value: () => ({
         matches: true,
         media: "(max-width: 767px)",
-        addEventListener: mock(() => {}),
-        removeEventListener: mock(() => {}),
+        addEventListener: vi.fn(() => {}),
+        removeEventListener: vi.fn(() => {}),
       }),
       configurable: true,
     });
@@ -32,8 +32,8 @@ describe("Amoena mobile shell and opinions", () => {
       value: () => ({
         matches: true,
         media: "(max-width: 767px)",
-        addEventListener: mock(() => {}),
-        removeEventListener: mock(() => {}),
+        addEventListener: vi.fn(() => {}),
+        removeEventListener: vi.fn(() => {}),
       }),
       configurable: true,
     });
@@ -58,13 +58,13 @@ describe("Amoena mobile shell and opinions", () => {
       value: () => ({
         matches: false,
         media: "(max-width: 767px)",
-        addEventListener: mock(() => {}),
-        removeEventListener: mock(() => {}),
+        addEventListener: vi.fn(() => {}),
+        removeEventListener: vi.fn(() => {}),
       }),
       configurable: true,
     });
 
-    const onOpenCommandPalette = mock(() => {});
+    const onOpenCommandPalette = vi.fn(() => {});
     render(
       <MemoryRouter>
         <AppShell onOpenCommandPalette={onOpenCommandPalette}>
@@ -87,7 +87,7 @@ describe("Amoena mobile shell and opinions", () => {
         addEventListener: (_: string, handler: () => void) => {
           changeHandler = handler;
         },
-        removeEventListener: mock(() => {}),
+        removeEventListener: vi.fn(() => {}),
       }),
       configurable: true,
     });

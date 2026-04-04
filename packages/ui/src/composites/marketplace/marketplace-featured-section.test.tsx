@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MarketplaceFeaturedSection } from "./MarketplaceFeaturedSection";
 import type { MarketplaceItem } from "./types";
 
@@ -35,8 +35,8 @@ describe("MarketplaceFeaturedSection", () => {
     const { container } = render(
       <MarketplaceFeaturedSection
         items={[]}
-        onSelect={mock(() => {})}
-        onInstallRequest={mock(() => {})}
+        onSelect={vi.fn(() => {})}
+        onInstallRequest={vi.fn(() => {})}
       />,
     );
     expect(container.firstChild).toBeNull();
@@ -46,8 +46,8 @@ describe("MarketplaceFeaturedSection", () => {
     render(
       <MarketplaceFeaturedSection
         items={[item]}
-        onSelect={mock(() => {})}
-        onInstallRequest={mock(() => {})}
+        onSelect={vi.fn(() => {})}
+        onInstallRequest={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Super Linter")).toBeTruthy();
@@ -58,8 +58,8 @@ describe("MarketplaceFeaturedSection", () => {
     const { container } = render(
       <MarketplaceFeaturedSection
         items={[item]}
-        onSelect={mock(() => {})}
-        onInstallRequest={mock(() => {})}
+        onSelect={vi.fn(() => {})}
+        onInstallRequest={vi.fn(() => {})}
       />,
     );
     // trusted=true: CheckCircle svg should be present
@@ -71,15 +71,15 @@ describe("MarketplaceFeaturedSection", () => {
     const { container: c1 } = render(
       <MarketplaceFeaturedSection
         items={[item]}
-        onSelect={mock(() => {})}
-        onInstallRequest={mock(() => {})}
+        onSelect={vi.fn(() => {})}
+        onInstallRequest={vi.fn(() => {})}
       />,
     );
     const { container: c2 } = render(
       <MarketplaceFeaturedSection
         items={[untrustedItem]}
-        onSelect={mock(() => {})}
-        onInstallRequest={mock(() => {})}
+        onSelect={vi.fn(() => {})}
+        onInstallRequest={vi.fn(() => {})}
       />,
     );
     // Trusted item has more SVGs (CheckCircle) than untrusted
@@ -89,12 +89,12 @@ describe("MarketplaceFeaturedSection", () => {
   });
 
   test("calls onSelect when item card is clicked", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     render(
       <MarketplaceFeaturedSection
         items={[item]}
         onSelect={onSelect}
-        onInstallRequest={mock(() => {})}
+        onInstallRequest={vi.fn(() => {})}
       />,
     );
     fireEvent.click(screen.getByText("Super Linter").closest("div")!);
@@ -102,8 +102,8 @@ describe("MarketplaceFeaturedSection", () => {
   });
 
   test("calls onInstallRequest when Install button is clicked and stops propagation", () => {
-    const onInstallRequest = mock(() => {});
-    const onSelect = mock(() => {});
+    const onInstallRequest = vi.fn(() => {});
+    const onSelect = vi.fn(() => {});
     render(
       <MarketplaceFeaturedSection
         items={[item]}
@@ -126,8 +126,8 @@ describe("MarketplaceFeaturedSection", () => {
     render(
       <MarketplaceFeaturedSection
         items={items}
-        onSelect={mock(() => {})}
-        onInstallRequest={mock(() => {})}
+        onSelect={vi.fn(() => {})}
+        onInstallRequest={vi.fn(() => {})}
       />,
     );
     // Only first 4 should be rendered

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { AutopilotHistorySection } from "./AutopilotHistorySection";
 import type { AutopilotRunHistoryItem } from "./types";
 
@@ -17,9 +17,9 @@ const historyItem: AutopilotRunHistoryItem = {
 function makeProps(overrides: Partial<Parameters<typeof AutopilotHistorySection>[0]> = {}) {
   return {
     showHistory: true,
-    onToggle: mock(() => {}),
+    onToggle: vi.fn(() => {}),
     history: [historyItem],
-    onSelectRun: mock((_run: AutopilotRunHistoryItem) => {}),
+    onSelectRun: vi.fn((_run: AutopilotRunHistoryItem) => {}),
     ...overrides,
   };
 }
@@ -41,14 +41,14 @@ describe("AutopilotHistorySection", () => {
   });
 
   test("calls onToggle when toggle button clicked", () => {
-    const onToggle = mock(() => {});
+    const onToggle = vi.fn(() => {});
     render(<AutopilotHistorySection {...makeProps({ onToggle })} />);
     fireEvent.click(screen.getByText("Run History"));
     expect(onToggle).toHaveBeenCalled();
   });
 
   test("calls onSelectRun when a run entry is clicked", () => {
-    const onSelectRun = mock((_run: AutopilotRunHistoryItem) => {});
+    const onSelectRun = vi.fn((_run: AutopilotRunHistoryItem) => {});
     render(<AutopilotHistorySection {...makeProps({ onSelectRun })} />);
     fireEvent.click(screen.getByText("Fix WebSocket reconnect"));
     expect(onSelectRun).toHaveBeenCalledWith(historyItem);

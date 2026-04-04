@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { FileText, Settings, Terminal } from "lucide-react";
 
 import { CommandPaletteResults } from "./CommandPaletteResults";
@@ -20,8 +20,8 @@ const groups: Record<string, CommandPaletteItem[]> = {
 
 function renderResults(selectedIndex = 0) {
   const handlers = {
-    onHover: mock((_i: number) => {}),
-    onSelect: mock((_item: CommandPaletteItem) => {}),
+    onHover: vi.fn((_i: number) => {}),
+    onSelect: vi.fn((_item: CommandPaletteItem) => {}),
   };
   const result = render(
     <CommandPaletteResults
@@ -91,8 +91,8 @@ describe("CommandPaletteResults", () => {
       <CommandPaletteResults
         groups={{}}
         selectedIndex={0}
-        onHover={mock(() => {})}
-        onSelect={mock(() => {})}
+        onHover={vi.fn(() => {})}
+        onSelect={vi.fn(() => {})}
       />,
     );
     // Should render without crashing

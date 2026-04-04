@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { CommandPaletteSearch } from "./CommandPaletteSearch";
 
 function makeProps(overrides: Partial<Parameters<typeof CommandPaletteSearch>[0]> = {}) {
   return {
     query: "",
-    onQueryChange: mock((_v: string) => {}),
+    onQueryChange: vi.fn((_v: string) => {}),
     inputRef: { current: null },
     ...overrides,
   };
@@ -25,7 +25,7 @@ describe("CommandPaletteSearch", () => {
   });
 
   test("calls onQueryChange when input changes", () => {
-    const onQueryChange = mock((_v: string) => {});
+    const onQueryChange = vi.fn((_v: string) => {});
     render(<CommandPaletteSearch {...makeProps({ onQueryChange })} />);
     const input = screen.getByPlaceholderText(/Search commands/);
     fireEvent.change(input, { target: { value: "test" } });

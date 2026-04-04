@@ -1,14 +1,14 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { RuntimeMenu } from "./RuntimeMenu";
 import type { RuntimeLocation } from "./data";
 
 function renderMenu(open = false, runtimeLocation: RuntimeLocation = "local") {
   const handlers = {
-    onToggle: mock(() => {}),
-    onClose: mock(() => {}),
-    onSelect: mock((_loc: RuntimeLocation) => {}),
+    onToggle: vi.fn(() => {}),
+    onClose: vi.fn(() => {}),
+    onSelect: vi.fn((_loc: RuntimeLocation) => {}),
   };
   const result = render(
     <RuntimeMenu open={open} runtimeLocation={runtimeLocation} {...handlers} />,

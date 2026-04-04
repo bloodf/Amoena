@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MarketplaceSidebar } from "./MarketplaceSidebar";
 import type { MarketplaceCategory, MarketplaceItem } from "./types";
 
@@ -29,11 +29,11 @@ function makeProps(overrides: Partial<Parameters<typeof MarketplaceSidebar>[0]> 
     authorFilter: "all" as const,
     trustFilter: "all" as const,
     sortBy: "popular" as const,
-    onCategoryChange: mock((_c: MarketplaceCategory) => {}),
-    onInstalledSelect: mock(() => {}),
-    onAuthorFilterToggle: mock(() => {}),
-    onTrustFilterToggle: mock(() => {}),
-    onTopRatedToggle: mock(() => {}),
+    onCategoryChange: vi.fn((_c: MarketplaceCategory) => {}),
+    onInstalledSelect: vi.fn(() => {}),
+    onAuthorFilterToggle: vi.fn(() => {}),
+    onTrustFilterToggle: vi.fn(() => {}),
+    onTopRatedToggle: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -59,21 +59,21 @@ describe("MarketplaceSidebar", () => {
   });
 
   test("calls onCategoryChange when category clicked", () => {
-    const onCategoryChange = mock((_c: MarketplaceCategory) => {});
+    const onCategoryChange = vi.fn((_c: MarketplaceCategory) => {});
     render(<MarketplaceSidebar {...makeProps({ onCategoryChange })} />);
     fireEvent.click(screen.getByText("Extensions"));
     expect(onCategoryChange).toHaveBeenCalledWith("Extensions");
   });
 
   test("calls onInstalledSelect when Installed clicked", () => {
-    const onInstalledSelect = mock(() => {});
+    const onInstalledSelect = vi.fn(() => {});
     render(<MarketplaceSidebar {...makeProps({ onInstalledSelect })} />);
     fireEvent.click(screen.getByText("Installed"));
     expect(onInstalledSelect).toHaveBeenCalled();
   });
 
   test("calls onAuthorFilterToggle when Official Only clicked", () => {
-    const onAuthorFilterToggle = mock(() => {});
+    const onAuthorFilterToggle = vi.fn(() => {});
     render(<MarketplaceSidebar {...makeProps({ onAuthorFilterToggle })} />);
     fireEvent.click(screen.getByText("Official Only"));
     expect(onAuthorFilterToggle).toHaveBeenCalled();

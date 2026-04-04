@@ -6,7 +6,7 @@ import { config } from "@/lib/config";
 import { logAuditEvent } from "@/lib/db";
 import { scanForInjection } from "@/lib/injection-guard";
 import { logger } from "@/lib/logger";
-import { callAmoenaGateway } from "@/lib/amoena-gateway";
+import { callAmoenaGateway } from "@/lib/lunaria-gateway";
 import { heavyLimiter } from "@/lib/rate-limit";
 import { spawnAgentSchema, validateBody } from "@/lib/validation";
 

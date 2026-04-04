@@ -1,12 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { CommandPaletteFrame } from "./CommandPaletteFrame";
 
 function makeProps(overrides: Partial<Parameters<typeof CommandPaletteFrame>[0]> = {}) {
   return {
     isClosing: false,
-    onClose: mock(() => {}),
-    onKeyDown: mock((_e: React.KeyboardEvent) => {}),
+    onClose: vi.fn(() => {}),
+    onKeyDown: vi.fn((_e: React.KeyboardEvent) => {}),
     children: <span>palette content</span>,
     ...overrides,
   };
@@ -19,7 +19,7 @@ describe("CommandPaletteFrame", () => {
   });
 
   test("calls onClose when backdrop clicked", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { container } = render(<CommandPaletteFrame {...makeProps({ onClose })} />);
     // Click the outer overlay div
     const overlay = container.firstChild as HTMLElement;
@@ -28,7 +28,7 @@ describe("CommandPaletteFrame", () => {
   });
 
   test("does not call onClose when content clicked", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(<CommandPaletteFrame {...makeProps({ onClose })} />);
     fireEvent.click(screen.getByText("palette content"));
     expect(onClose).not.toHaveBeenCalled();

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { AgentsTab } from "@/composites/side-panel/AgentsTab";
 import { CommandPalette } from "./CommandPalette";
@@ -94,7 +94,7 @@ describe("Amoena auxiliary surfaces", () => {
 
   test("command palette shows grouped results and closes via action", async () => {
     const user = userEvent.setup();
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
 
     render(
       <MemoryRouter initialEntries={["/"]}>

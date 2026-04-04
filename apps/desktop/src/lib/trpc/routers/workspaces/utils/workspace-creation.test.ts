@@ -1,113 +1,117 @@
-import { describe, expect, it, mock } from "bun:test";
+import { describe, expect, it, vi } from 'vitest';
 
-mock.module("main/lib/analytics", () => ({
-	track: mock(() => {}),
+vi.mock('main/lib/analytics', () => ({
+  track: vi.fn(() => {}),
 }));
 
-mock.module("./db-helpers", () => ({
-	getMaxProjectChildTabOrder: mock(() => 0),
-	setLastActiveWorkspace: mock(() => {}),
-	activateProject: mock(() => {}),
-	touchWorkspace: mock(() => {}),
-	updateActiveWorkspaceIfRemoved: mock(() => {}),
+vi.mock('./db-helpers', () => ({
+  getMaxProjectChildTabOrder: vi.fn(() => 0),
+  setLastActiveWorkspace: vi.fn(() => {}),
+  activateProject: vi.fn(() => {}),
+  touchWorkspace: vi.fn(() => {}),
+  updateActiveWorkspaceIfRemoved: vi.fn(() => {}),
 }));
 
-mock.module("./base-branch", () => ({
-	resolveWorkspaceBaseBranch: mock(() => "main"),
+vi.mock('./base-branch', () => ({
+  resolveWorkspaceBaseBranch: vi.fn(() => 'main'),
 }));
 
-mock.module("./base-branch-config", () => ({
-	setBranchBaseConfig: mock(() => Promise.resolve()),
+vi.mock('./base-branch-config', () => ({
+  setBranchBaseConfig: vi.fn(() => Promise.resolve()),
 }));
 
-mock.module("./git", () => ({
-	listExternalWorktrees: mock(() => Promise.resolve([])),
-	worktreeExists: mock(() => Promise.resolve(true)),
-	listBranches: mock(() => Promise.resolve({ local: ["main"], remote: [] })),
+vi.mock('./git', () => ({
+  listExternalWorktrees: vi.fn(() => Promise.resolve([])),
+  worktreeExists: vi.fn(() => Promise.resolve(true)),
+  listBranches: vi.fn(() => Promise.resolve({ local: ['main'], remote: [] })),
 }));
 
-mock.module("./resolve-worktree-path", () => ({
-	resolveWorktreePath: mock(() => "/repo/worktrees/feature"),
+vi.mock('./resolve-worktree-path', () => ({
+  resolveWorktreePath: vi.fn(() => '/repo/worktrees/feature'),
 }));
 
-mock.module("./setup", () => ({
-	copyAmoenaConfigToWorktree: mock(() => {}),
-	loadSetupConfig: mock(() => null),
+vi.mock('./setup', () => ({
+  copyAmoenaConfigToWorktree: vi.fn(() => {}),
+  loadSetupConfig: vi.fn(() => null),
 }));
 
-const mockInsertReturningGet = mock(() => ({
-	id: "ws-1",
-	projectId: "p1",
-	worktreeId: "wt1",
-	type: "worktree",
-	branch: "feature",
-	name: "feature",
-	tabOrder: 1,
-}));
+const mockInsertReturningGet = vi.hoisted(() =>
+  vi.fn(() => ({
+    id: 'ws-1',
+    projectId: 'p1',
+    worktreeId: 'wt1',
+    type: 'worktree',
+    branch: 'feature',
+    name: 'feature',
+    tabOrder: 1,
+  })),
+);
 
-const mockSelectGet = mock(() => ({
-	id: "p1",
-	mainRepoPath: "/repo",
-	defaultBranch: "main",
-	workspaceBaseBranch: null,
-}));
+const mockSelectGet = vi.hoisted(() =>
+  vi.fn(() => ({
+    id: 'p1',
+    mainRepoPath: '/repo',
+    defaultBranch: 'main',
+    workspaceBaseBranch: null,
+  })),
+);
 
-mock.module("main/lib/local-db", () => ({
-	localDb: {
-		insert: () => ({
-			values: () => ({
-				returning: () => ({
-					get: mockInsertReturningGet,
-				}),
-			}),
-		}),
-		select: () => ({
-			from: () => ({
-				where: () => ({
-					get: mockSelectGet,
-				}),
-			}),
-		}),
-		update: () => ({
-			set: () => ({
-				where: () => ({
-					run: mock(() => {}),
-				}),
-			}),
-		}),
-		delete: () => ({
-			where: () => ({
-				run: mock(() => {}),
-			}),
-		}),
-	},
+vi.mock('main/lib/local-db', () => ({
+  localDb: {
+    insert: () => ({
+      values: () => ({
+        returning: () => ({
+          get: mockInsertReturningGet,
+        }),
+      }),
+    }),
+    select: () => ({
+      from: () => ({
+        where: () => ({
+          get: mockSelectGet,
+        }),
+      }),
+    }),
+    update: () => ({
+      set: () => ({
+        where: () => ({
+          run: vi.fn(() => {}),
+        }),
+      }),
+    }),
+    delete: () => ({
+      where: () => ({
+        run: vi.fn(() => {}),
+      }),
+    }),
+  },
 }));
 
 const { createWorkspaceFromWorktree, createWorkspaceFromExternalWorktree } =
-	await import("./workspace-creation");
+  await import('./workspace-creation');
 
-describe("workspace-creation", () => {
-	describe("createWorkspaceFromWorktree", () => {
-		it("creates a workspace and returns it", () => {
-			const result = createWorkspaceFromWorktree({
-				projectId: "p1",
-				worktreeId: "wt1",
-				branch: "feature",
-				name: "feature",
-			});
-			expect(result).toBeDefined();
-			expect(result.id).toBe("ws-1");
-		});
-	});
+describe('workspace-creation', () => {
+  describe('createWorkspaceFromWorktree', () => {
+    it('creates a workspace and returns it', () => {
+      const result = createWorkspaceFromWorktree({
+        projectId: 'p1',
+        worktreeId: 'wt1',
+        branch: 'feature',
+        name: 'feature',
+      });
+      expect(result).toBeDefined();
+      expect(result.id).toBe('ws-1');
+    });
+  });
 
-	describe("createWorkspaceFromExternalWorktree", () => {
-		it("returns undefined when no external worktree found", async () => {
-			const result = await createWorkspaceFromExternalWorktree({
-				projectId: "p1",
-				branch: "feature",
-				name: "feature",
-			});
-			expect(result).toBeUndefined();
-		});
-	});
+  describe('createWorkspaceFromExternalWorktree', () => {
+    it('returns undefined when no external worktree found', async () => {
+      const result = await createWorkspaceFromExternalWorktree({
+        projectId: 'p1',
+        branch: 'feature',
+        name: 'feature',
+      });
+      expect(result).toBeUndefined();
+    });
+  });
 });

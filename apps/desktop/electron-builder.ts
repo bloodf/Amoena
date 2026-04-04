@@ -3,169 +3,163 @@
  * @see https://www.electron.build/configuration/configuration
  */
 
-import { existsSync } from "node:fs";
-import { join } from "node:path";
-import type { Configuration } from "electron-builder";
-import pkg from "./package.json";
-import {
-	packagedAsarUnpackGlobs,
-	packagedNodeModuleCopies,
-} from "./runtime-dependencies";
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import type { Configuration } from 'electron-builder';
+import pkg from './package.json';
+import { packagedAsarUnpackGlobs, packagedNodeModuleCopies } from './runtime-dependencies';
 
 const currentYear = new Date().getFullYear();
 const author = pkg.author?.name ?? pkg.author;
 const productName = pkg.productName;
-const macIconPath = join(pkg.resources, "build/icons/icon.icns");
-const linuxIconPath = join(pkg.resources, "build/icons");
-const winIconPath = join(pkg.resources, "build/icons/icon.ico");
+const macIconPath = join(pkg.resources, 'build/icons/icon.icns');
+const linuxIconPath = join(pkg.resources, 'build/icons');
+const winIconPath = join(pkg.resources, 'build/icons/icon.ico');
 
 const config: Configuration = {
-	appId: "com.amoena.desktop",
-	productName,
-	copyright: `Copyright © ${currentYear} — ${author}`,
-	electronVersion: pkg.devDependencies.electron.replace(/^\^/, ""),
+  appId: 'com.amoena.desktop',
+  productName,
+  copyright: `Copyright © ${currentYear} — ${author}`,
+  electronVersion: pkg.devDependencies.electron.replace(/^\^/, ''),
 
-	// Generate update manifests for all channels (latest.yml, canary.yml, etc.)
-	// This enables proper channel-based auto-updates following electron-builder conventions
-	generateUpdatesFilesForAllChannels: true,
+  // Generate update manifests for all channels (latest.yml, canary.yml, etc.)
+  // This enables proper channel-based auto-updates following electron-builder conventions
+  generateUpdatesFilesForAllChannels: true,
 
-	// Generate latest-mac.yml for auto-update (workflow handles actual upload)
-	publish: {
-		provider: "github",
-		owner: "Amoena",
-		repo: "amoena",
-	},
+  // Generate latest-mac.yml for auto-update (workflow handles actual upload)
+  publish: {
+    provider: 'github',
+    owner: 'Amoena',
+    repo: 'amoena',
+  },
 
-	// Directories
-	directories: {
-		output: "release",
-		buildResources: join(pkg.resources, "build"),
-	},
+  // Directories
+  directories: {
+    output: 'release',
+    buildResources: join(pkg.resources, 'build'),
+  },
 
-	// ASAR configuration for native modules and external resources
-	asar: true,
-	asarUnpack: [
-		...packagedAsarUnpackGlobs,
-		// Sound files must be unpacked so external audio players (afplay, paplay, etc.) can access them
-		"**/resources/sounds/**/*",
-		// Tray icon must be unpacked so Electron Tray can load it
-		"**/resources/tray/**/*",
-	],
+  // ASAR configuration for native modules and external resources
+  asar: true,
+  asarUnpack: [
+    ...packagedAsarUnpackGlobs,
+    // Sound files must be unpacked so external audio players (afplay, paplay, etc.) can access them
+    '**/resources/sounds/**/*',
+    // Tray icon must be unpacked so Electron Tray can load it
+    '**/resources/tray/**/*',
+  ],
 
-	// Extra resources placed outside asar archive (accessible via process.resourcesPath)
-	extraResources: [
-		// Database migrations - must be outside asar for drizzle-orm to read
-		{
-			from: "dist/resources/migrations",
-			to: "resources/migrations",
-			filter: ["**/*"],
-		},
-		{
-			from: "dist/resources/host-migrations",
-			to: "resources/host-migrations",
-			filter: ["**/*"],
-		},
-		// Next.js dashboard standalone output - served by main process in production
-		{
-			from: "../dashboard/.next/standalone",
-			to: "dashboard",
-			filter: ["**/*"],
-		},
-		// Terminal host package - spawned as a child process for terminal persistence
-		{
-			from: "../../packages/terminal-host",
-			to: "terminal-host",
-			filter: ["**/*"],
-		},
-		// Memory package - used by the host service for workspace memory
-		{
-			from: "../../packages/memory",
-			to: "memory",
-			filter: ["**/*"],
-		},
-	],
+  // Extra resources placed outside asar archive (accessible via process.resourcesPath)
+  extraResources: [
+    // Database migrations - must be outside asar for drizzle-orm to read
+    {
+      from: 'dist/resources/migrations',
+      to: 'resources/migrations',
+      filter: ['**/*'],
+    },
+    {
+      from: 'dist/resources/host-migrations',
+      to: 'resources/host-migrations',
+      filter: ['**/*'],
+    },
+    // Next.js dashboard standalone output - served by main process in production
+    {
+      from: '../dashboard/.next/standalone',
+      to: 'dashboard',
+      filter: ['**/*'],
+    },
+    // Terminal host package - spawned as a child process for terminal persistence
+    {
+      from: '../../packages/terminal-host',
+      to: 'terminal-host',
+      filter: ['**/*'],
+    },
+    // Memory package - used by the host service for workspace memory
+    {
+      from: '../../packages/memory',
+      to: 'memory',
+      filter: ['**/*'],
+    },
+  ],
 
-	files: [
-		"dist/**/*",
-		"package.json",
-		{
-			from: pkg.resources,
-			to: "resources",
-			filter: ["**/*"],
-		},
-		// Runtime modules that stay external to the main bundle.
-		// bun creates symlinks for direct deps in workspace node_modules.
-		// The copy:native-modules script replaces symlinks with real files
-		// before building (required for Bun 1.3+ isolated installs).
-		...packagedNodeModuleCopies,
-		"!**/.DS_Store",
-	],
+  files: [
+    'dist/**/*',
+    'package.json',
+    {
+      from: pkg.resources,
+      to: 'resources',
+      filter: ['**/*'],
+    },
+    // Runtime modules that stay external to the main bundle.
+    // bun creates symlinks for direct deps in workspace node_modules.
+    // The copy:native-modules script replaces symlinks with real files
+    // before building (required for Bun 1.3+ isolated installs).
+    ...packagedNodeModuleCopies,
+    '!**/.DS_Store',
+  ],
 
-	// Rebuild native modules for Electron's Node.js version
-	npmRebuild: true,
+  // Rebuild native modules for Electron's Node.js version
+  npmRebuild: true,
 
-	// macOS
-	mac: {
-		...(existsSync(macIconPath) ? { icon: macIconPath } : {}),
-		category: "public.app-category.utilities",
-		target: "default",
-		hardenedRuntime: true,
-		gatekeeperAssess: false,
-		notarize: true,
-		entitlements: join(pkg.resources, "build/entitlements.mac.plist"),
-		entitlementsInherit: join(
-			pkg.resources,
-			"build/entitlements.mac.inherit.plist",
-		),
-		extendInfo: {
-			CFBundleName: productName,
-			CFBundleDisplayName: productName,
-			// Required for macOS microphone permission prompt
-			NSMicrophoneUsageDescription:
-				"Amoena needs microphone access so voice-enabled tools like Codex transcription can capture audio input.",
-			// Required for macOS local network permission prompt
-			NSLocalNetworkUsageDescription:
-				"Amoena needs access to your local network to discover and connect to development servers running on your network.",
-			// Bonjour service types to browse for (triggers the permission prompt)
-			NSBonjourServices: ["_http._tcp", "_https._tcp"],
-			// Required for Apple Events / Automation permission prompt
-			NSAppleEventsUsageDescription:
-				"Amoena needs to interact with other applications to run terminal commands and development tools.",
-		},
-	},
+  // macOS
+  mac: {
+    ...(existsSync(macIconPath) ? { icon: macIconPath } : {}),
+    category: 'public.app-category.utilities',
+    target: 'default',
+    hardenedRuntime: !!(process.env.APPLE_ID && process.env.APPLE_PASSWORD),
+    gatekeeperAssess: false,
+    notarize: !!(process.env.APPLE_ID && process.env.APPLE_PASSWORD),
+    entitlements: join(pkg.resources, 'build/entitlements.mac.plist'),
+    entitlementsInherit: join(pkg.resources, 'build/entitlements.mac.inherit.plist'),
+    extendInfo: {
+      CFBundleName: productName,
+      CFBundleDisplayName: productName,
+      // Required for macOS microphone permission prompt
+      NSMicrophoneUsageDescription:
+        'Amoena needs microphone access so voice-enabled tools like Codex transcription can capture audio input.',
+      // Required for macOS local network permission prompt
+      NSLocalNetworkUsageDescription:
+        'Amoena needs access to your local network to discover and connect to development servers running on your network.',
+      // Bonjour service types to browse for (triggers the permission prompt)
+      NSBonjourServices: ['_http._tcp', '_https._tcp'],
+      // Required for Apple Events / Automation permission prompt
+      NSAppleEventsUsageDescription:
+        'Amoena needs to interact with other applications to run terminal commands and development tools.',
+    },
+  },
 
-	// Deep linking protocol
-	protocols: {
-		name: productName,
-		schemes: ["amoena"],
-	},
+  // Deep linking protocol
+  protocols: {
+    name: productName,
+    schemes: ['amoena'],
+  },
 
-	// Linux
-	linux: {
-		...(existsSync(linuxIconPath) ? { icon: linuxIconPath } : {}),
-		category: "Utility",
-		synopsis: pkg.description,
-		target: ["AppImage"],
-		artifactName: `amoena-\${version}-\${arch}.\${ext}`,
-	},
+  // Linux
+  linux: {
+    ...(existsSync(linuxIconPath) ? { icon: linuxIconPath } : {}),
+    category: 'Utility',
+    synopsis: pkg.description,
+    target: ['AppImage'],
+    artifactName: `amoena-\${version}-\${arch}.\${ext}`,
+  },
 
-	// Windows
-	win: {
-		...(existsSync(winIconPath) ? { icon: winIconPath } : {}),
-		target: [
-			{
-				target: "nsis",
-				arch: ["x64"],
-			},
-		],
-		artifactName: `${productName}-${pkg.version}-\${arch}.\${ext}`,
-	},
+  // Windows
+  win: {
+    ...(existsSync(winIconPath) ? { icon: winIconPath } : {}),
+    target: [
+      {
+        target: 'nsis',
+        arch: ['x64'],
+      },
+    ],
+    artifactName: `${productName}-${pkg.version}-\${arch}.\${ext}`,
+  },
 
-	// NSIS installer (Windows)
-	nsis: {
-		oneClick: false,
-		allowToChangeInstallationDirectory: true,
-	},
+  // NSIS installer (Windows)
+  nsis: {
+    oneClick: false,
+    allowToChangeInstallationDirectory: true,
+  },
 };
 
 export default config;

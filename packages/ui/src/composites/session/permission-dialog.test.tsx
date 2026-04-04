@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { PermissionDialog } from "./PermissionDialog";
 
 const request = {
@@ -11,15 +11,15 @@ const request = {
 
 function makeHandlers() {
   return {
-    onApprove: mock(() => {}),
-    onDeny: mock(() => {}),
+    onApprove: vi.fn(() => {}),
+    onDeny: vi.fn(() => {}),
   };
 }
 
 describe("PermissionDialog", () => {
   test("renders nothing when request is null", () => {
     const { container } = render(
-      <PermissionDialog request={null} onApprove={mock(() => {})} onDeny={mock(() => {})} />,
+      <PermissionDialog request={null} onApprove={vi.fn(() => {})} onDeny={vi.fn(() => {})} />,
     );
     expect(container.firstChild).toBeNull();
   });

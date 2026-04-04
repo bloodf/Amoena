@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it } from 'vitest';
 import { createDefaultHotkeysState } from 'shared/hotkeys';
 import type { AppState, ThemeState, TabsState } from './schemas';
 import { defaultAppState } from './schemas';

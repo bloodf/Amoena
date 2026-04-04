@@ -1,5 +1,5 @@
 import { act, render, renderHook } from '@testing-library/react';
-import { describe, expect, mock, test } from 'bun:test';
+import { describe, expect, mock, test, vi } from "vitest";
 import * as React from 'react';
 
 import { SettingsProvider, useSettings, useSettingValue } from './settings-context';
@@ -42,7 +42,7 @@ describe('useSettings', () => {
   });
 
   test('onChange is called when settings change', () => {
-    const onChange = mock(() => {});
+    const onChange = vi.fn(() => {});
     const { result } = renderHook(() => useSettings(), {
       wrapper: ({ children }) => (
         <SettingsProvider values={{}} onChange={onChange}>
@@ -95,7 +95,7 @@ describe('useSettingValue', () => {
   });
 
   test('setter calls onChange with correct key', () => {
-    const onChange = mock(() => {});
+    const onChange = vi.fn(() => {});
     const { result } = renderHook(() => useSettingValue('theme', 'dark'), {
       wrapper: ({ children }) => (
         <SettingsProvider values={{}} onChange={onChange}>

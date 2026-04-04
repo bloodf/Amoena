@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { SessionTree } from "./SessionTree";
 
 const tree = {
@@ -23,14 +23,14 @@ const tree = {
 
 describe("SessionTree", () => {
   test("shows empty state when tree is null", () => {
-    render(<SessionTree tree={null} onSelectSession={mock(() => {})} />);
+    render(<SessionTree tree={null} onSelectSession={vi.fn(() => {})} />);
     // Component renders a paragraph with translation key sessionTree.empty
     const paras = document.querySelectorAll("p");
     expect(paras.length).toBeGreaterThan(0);
   });
 
   test("renders root node with children", () => {
-    render(<SessionTree tree={tree} onSelectSession={mock(() => {})} />);
+    render(<SessionTree tree={tree} onSelectSession={vi.fn(() => {})} />);
     // Node IDs are sliced to first 8 chars
     expect(screen.getByText("root-ses")).toBeTruthy();
     expect(screen.getByText("child-ab")).toBeTruthy();
@@ -39,7 +39,7 @@ describe("SessionTree", () => {
 
   test("highlights active session", () => {
     const { container } = render(
-      <SessionTree tree={tree} activeSessionId="child-abc123" onSelectSession={mock(() => {})} />,
+      <SessionTree tree={tree} activeSessionId="child-abc123" onSelectSession={vi.fn(() => {})} />,
     );
     const activeEl = container.querySelector(".bg-accent");
     expect(activeEl).toBeTruthy();
@@ -47,14 +47,14 @@ describe("SessionTree", () => {
   });
 
   test("calls onSelectSession when node clicked", () => {
-    const onSelectSession = mock(() => {});
+    const onSelectSession = vi.fn(() => {});
     render(<SessionTree tree={tree} onSelectSession={onSelectSession} />);
     fireEvent.click(screen.getByText("root-ses").closest("div[class]")!);
     expect(onSelectSession).toHaveBeenCalledWith("root-session");
   });
 
   test("toggles children expand/collapse", () => {
-    render(<SessionTree tree={tree} onSelectSession={mock(() => {})} />);
+    render(<SessionTree tree={tree} onSelectSession={vi.fn(() => {})} />);
     // child-xyz789 has children; find its collapse button (▾ symbol)
     const toggleButtons = screen.getAllByRole("button").filter(
       (b) => b.textContent === "▾" || b.textContent === "▸",

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { AgentRow } from "./AgentRow";
 import type { ManagedAgent } from "./types";
@@ -20,8 +20,8 @@ const baseAgent: ManagedAgent = {
 };
 
 function renderRow(overrides: Partial<ManagedAgent> = {}, expanded = false) {
-  const onToggle = mock(() => {});
-  const onOpenSettings = mock((_a: ManagedAgent) => {});
+  const onToggle = vi.fn(() => {});
+  const onOpenSettings = vi.fn((_a: ManagedAgent) => {});
   const agent = { ...baseAgent, ...overrides };
   const result = render(
     <AgentRow

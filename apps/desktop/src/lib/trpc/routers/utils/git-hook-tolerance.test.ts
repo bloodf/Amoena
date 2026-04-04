@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { runWithPostCheckoutHookTolerance } from "./git-hook-tolerance";
 
 describe("runWithPostCheckoutHookTolerance", () => {

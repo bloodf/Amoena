@@ -1,26 +1,26 @@
-import { afterEach, beforeEach, describe, expect, it, mock } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 type SocketMock = {
-  on: ReturnType<typeof mock>;
-  bind: ReturnType<typeof mock>;
-  send: ReturnType<typeof mock>;
-  close: ReturnType<typeof mock>;
+  on: ReturnType<typeof vi.fn>;
+  bind: ReturnType<typeof vi.fn>;
+  send: ReturnType<typeof vi.fn>;
+  close: ReturnType<typeof vi.fn>;
 };
 
-const consoleLogMock = mock(() => {});
+const consoleLogMock = vi.hoisted(() => vi.fn(() => {}));
 const createdSockets: SocketMock[] = [];
 let originalPlatform = process.platform;
 
-mock.module('node:dgram', () => ({
+vi.mock('node:dgram', () => ({
   default: {
-    createSocket: mock(() => {
+    createSocket: vi.fn(() => {
       const socket: SocketMock = {
-        on: mock((_event: string, _handler: (...args: any[]) => void) => {}),
-        bind: mock((cb?: () => void) => cb?.()),
-        send: mock((_msg, _offset, _length, _port, _address, cb?: (err?: Error | null) => void) =>
+        on: vi.fn((_event: string, _handler: (...args: any[]) => void) => {}),
+        bind: vi.fn((cb?: () => void) => cb?.()),
+        send: vi.fn((_msg, _offset, _length, _port, _address, cb?: (err?: Error | null) => void) =>
           cb?.(null),
         ),
-        close: mock(() => {}),
+        close: vi.fn(() => {}),
       };
       createdSockets.push(socket);
       return socket;

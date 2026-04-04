@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { AgentDetailSheet } from "./AgentDetailSheet";
 import type { ManagedAgent } from "./types";
 
@@ -20,10 +20,10 @@ const baseAgent: ManagedAgent = {
 function makeProps(overrides: Partial<Parameters<typeof AgentDetailSheet>[0]> = {}) {
   return {
     agent: baseAgent,
-    onClose: mock(() => {}),
-    onStatusChange: mock((_s: any) => {}),
-    onPermissionChange: mock((_p: string) => {}),
-    onDelete: mock(() => {}),
+    onClose: vi.fn(() => {}),
+    onStatusChange: vi.fn((_s: any) => {}),
+    onPermissionChange: vi.fn((_p: string) => {}),
+    onDelete: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -57,14 +57,14 @@ describe("AgentDetailSheet", () => {
   });
 
   test("calls onClose when close button clicked", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(<AgentDetailSheet {...makeProps({ onClose })} />);
     fireEvent.click(screen.getByLabelText("Close agent settings"));
     expect(onClose).toHaveBeenCalled();
   });
 
   test("calls onDelete when Remove Agent clicked", () => {
-    const onDelete = mock(() => {});
+    const onDelete = vi.fn(() => {});
     render(<AgentDetailSheet {...makeProps({ onDelete })} />);
     fireEvent.click(screen.getByText("Remove Agent"));
     expect(onDelete).toHaveBeenCalled();

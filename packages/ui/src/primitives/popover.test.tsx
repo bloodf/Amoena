@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 function renderPopover(open?: boolean) {

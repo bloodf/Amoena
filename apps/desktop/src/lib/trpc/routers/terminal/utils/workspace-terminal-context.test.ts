@@ -1,4 +1,4 @@
-import { describe, expect, it, mock } from 'bun:test';
+import { describe, expect, it, vi } from 'vitest';
 import { workspaces } from '@lunaria/local-db';
 
 const mockLocalDb = {
@@ -24,11 +24,11 @@ const mockLocalDb = {
   }),
 };
 
-mock.module('@lunaria/local-db', () => ({
+vi.mock('@lunaria/local-db', () => ({
   workspaces: {},
 }));
 
-mock.module('main/lib/local-db', () => ({
+vi.mock('main/lib/local-db', () => ({
   localDb: mockLocalDb,
 }));
 

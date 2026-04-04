@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 
 import { SidebarRail } from "./SidebarRail";
 
 function renderSidebar(props: Partial<Parameters<typeof SidebarRail>[0]> = {}) {
   const handlers = {
-    onOpenCommandPalette: mock(() => {}),
-    onNavigate: mock(() => {}),
+    onOpenCommandPalette: vi.fn(() => {}),
+    onNavigate: vi.fn(() => {}),
     ...props,
   };
   const result = render(

@@ -5,7 +5,7 @@ import { scanCodexSessions } from "@/lib/codex-sessions";
 import { db_helpers, getDatabase } from "@/lib/db";
 import { scanHermesSessions } from "@/lib/hermes-sessions";
 import { logger } from "@/lib/logger";
-import { callAmoenaGateway } from "@/lib/amoena-gateway";
+import { callAmoenaGateway } from "@/lib/lunaria-gateway";
 import { mutationLimiter } from "@/lib/rate-limit";
 import { getAllGatewaySessions } from "@/lib/sessions";
 

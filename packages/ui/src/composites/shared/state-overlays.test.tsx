@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { Box } from "lucide-react";
 
 import {
@@ -92,7 +92,7 @@ describe("EmptyState", () => {
   });
 
   test("renders action button and fires onAction", () => {
-    const onAction = mock(() => {});
+    const onAction = vi.fn(() => {});
     render(
       <EmptyState icon={Box} title="Empty" action="Add item" onAction={onAction} />,
     );
@@ -122,7 +122,7 @@ describe("ErrorState", () => {
   });
 
   test("fires onRetry callback", () => {
-    const onRetry = mock(() => {});
+    const onRetry = vi.fn(() => {});
     render(<ErrorState onRetry={onRetry} />);
     fireEvent.click(screen.getByText("Retry"));
     expect(onRetry).toHaveBeenCalled();

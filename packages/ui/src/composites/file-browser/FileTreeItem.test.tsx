@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, mock, test } from 'bun:test';
+import { describe, expect, mock, test, vi } from "vitest";
 import { FileTreeItem } from './FileTreeItem';
 import type { FileNode } from './types';
 
 // Mock lucide-react icons
-mock('lucide-react', () => ({
+vi.fn('lucide-react', () => ({
   ChevronDown: ({ size }: { size: number }) => (
     <span data-testid="chevron-down" style={{ width: size, height: size }}>
       ChevronDown
@@ -28,12 +28,12 @@ mock('lucide-react', () => ({
 }));
 
 // Mock cn utility
-mock('@/lib/utils', () => ({
+vi.fn('@/lib/utils', () => ({
   cn: (...classes: (string | boolean | undefined)[]) => classes.filter(Boolean).join(' '),
 }));
 
 // Mock getFileIcon
-mock('./utils', () => ({
+vi.fn('./utils', () => ({
   getFileIcon: (name: string, size: number) => (
     <span data-testid={`file-icon-${name}`}>{name}</span>
   ),
@@ -48,7 +48,7 @@ describe('FileTreeItem', () => {
       path: '/src/test.ts',
     } satisfies FileNode,
     depth: 0,
-    onOpenFile: mock(() => {}),
+    onOpenFile: vi.fn(() => {}),
     parentPath: '',
   });
 

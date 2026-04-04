@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { SearchField, ToolbarGroup, FilterGroup, CompactSelect, ViewModeToggle } from "./control-bar";
 
 describe("SearchField", () => {

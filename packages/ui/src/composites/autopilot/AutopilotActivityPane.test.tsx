@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { AutopilotActivityPane } from "./AutopilotActivityPane";
 import type { AutopilotActivityItem } from "./types";
@@ -12,9 +12,9 @@ const activityLog: AutopilotActivityItem[] = [
 
 function renderPane(log: AutopilotActivityItem[] = activityLog) {
   const handlers = {
-    onOpenTaskBoard: mock(() => {}),
-    onApprove: mock((_i: number) => {}),
-    onDeny: mock((_i: number) => {}),
+    onOpenTaskBoard: vi.fn(() => {}),
+    onApprove: vi.fn((_i: number) => {}),
+    onDeny: vi.fn((_i: number) => {}),
   };
   const result = render(
     <AutopilotActivityPane state="executing" activityLog={log} {...handlers} />,

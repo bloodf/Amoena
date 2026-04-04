@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { AgentDetailSheet } from "./AgentDetailSheet";
 import type { ManagedAgent } from "./types";
@@ -26,10 +26,10 @@ const agent: ManagedAgent = {
 
 function makeHandlers() {
   return {
-    onClose: mock(() => {}),
-    onStatusChange: mock(() => {}),
-    onPermissionChange: mock(() => {}),
-    onDelete: mock(() => {}),
+    onClose: vi.fn(() => {}),
+    onStatusChange: vi.fn(() => {}),
+    onPermissionChange: vi.fn(() => {}),
+    onDelete: vi.fn(() => {}),
   };
 }
 

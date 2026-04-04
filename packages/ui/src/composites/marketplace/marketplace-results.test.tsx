@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MarketplaceResults } from "./MarketplaceResults";
 import type { MarketplaceItem } from "./types";
 
@@ -31,10 +31,10 @@ function makeProps(overrides: Partial<Parameters<typeof MarketplaceResults>[0]> 
     showInstalled: false,
     hasActiveFilters: false,
     viewMode: "grid" as const,
-    onSelect: mock(() => {}),
-    onInstallRequest: mock(() => {}),
-    onUninstall: mock(() => {}),
-    onClearFilters: mock(() => {}),
+    onSelect: vi.fn(() => {}),
+    onInstallRequest: vi.fn(() => {}),
+    onUninstall: vi.fn(() => {}),
+    onClearFilters: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -78,7 +78,7 @@ describe("MarketplaceResults", () => {
   });
 
   test("shows Clear filters button when hasActiveFilters=true in empty state — branch line 41", () => {
-    const onClearFilters = mock(() => {});
+    const onClearFilters = vi.fn(() => {});
     render(
       <MarketplaceResults
         {...makeProps({ filtered: [], hasActiveFilters: true, onClearFilters })}

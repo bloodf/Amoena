@@ -1,8 +1,8 @@
 import { render } from "@testing-library/react";
-import { describe, expect, test, mock } from "bun:test";
+import { describe, expect, test, mock, vi } from "vitest";
 
 // Mock next-themes since it requires a provider
-mock.module("next-themes", () => ({
+vi.mock("next-themes", () => ({
   useTheme: () => ({ theme: "light" }),
 }));
 

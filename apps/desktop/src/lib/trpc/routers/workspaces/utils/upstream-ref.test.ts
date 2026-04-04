@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { parseUpstreamRef, resolveTrackingRemoteName } from "./upstream-ref";
 
 describe("upstream-ref", () => {

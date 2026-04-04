@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MemoryAddForm } from "./MemoryAddForm";
 import type { MemoryType } from "./types";
 
@@ -8,11 +8,11 @@ function makeProps(overrides: Partial<Parameters<typeof MemoryAddForm>[0]> = {})
     keyValue: "",
     value: "",
     type: "manual" as MemoryType,
-    onKeyChange: mock((_v: string) => {}),
-    onValueChange: mock((_v: string) => {}),
-    onTypeChange: mock((_v: MemoryType) => {}),
-    onAdd: mock(() => {}),
-    onCancel: mock(() => {}),
+    onKeyChange: vi.fn((_v: string) => {}),
+    onValueChange: vi.fn((_v: string) => {}),
+    onTypeChange: vi.fn((_v: MemoryType) => {}),
+    onAdd: vi.fn(() => {}),
+    onCancel: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -51,14 +51,14 @@ describe("MemoryAddForm", () => {
   });
 
   test("calls onCancel when Cancel clicked", () => {
-    const onCancel = mock(() => {});
+    const onCancel = vi.fn(() => {});
     render(<MemoryAddForm {...makeProps({ onCancel })} />);
     fireEvent.click(screen.getByText("Cancel"));
     expect(onCancel).toHaveBeenCalled();
   });
 
   test("calls onKeyChange when key input changes", () => {
-    const onKeyChange = mock((_v: string) => {});
+    const onKeyChange = vi.fn((_v: string) => {});
     render(<MemoryAddForm {...makeProps({ onKeyChange })} />);
     fireEvent.change(screen.getByPlaceholderText("memory.key"), { target: { value: "new.key" } });
     expect(onKeyChange).toHaveBeenCalledWith("new.key");

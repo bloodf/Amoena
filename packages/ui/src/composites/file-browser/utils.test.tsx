@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from "vitest";
 import { findFile, getFilePath, countItems, getFileIcon } from './utils';
 import type { FileNode } from './types';
 

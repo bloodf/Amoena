@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { EmptySessionState } from "./EmptySessionState";
 import { MessageTimeline } from "./MessageTimeline";
 import { RemoteAccessScreen } from "@/screens/RemoteAccessScreen";
@@ -9,7 +9,7 @@ import { allItems } from "@/composites/marketplace/data";
 
 describe("Amoena direct interactions", () => {
   test("empty session suggestions call back into the composer flow", () => {
-    const onSuggestionClick = mock(() => {});
+    const onSuggestionClick = vi.fn(() => {});
     render(
       <EmptySessionState
         provider="claude"
@@ -33,7 +33,7 @@ describe("Amoena direct interactions", () => {
     Object.defineProperty(scrollHost, "scrollHeight", { value: 500, configurable: true });
     Object.defineProperty(scrollHost, "clientHeight", { value: 100, configurable: true });
     Object.defineProperty(scrollHost, "scrollTop", { value: 0, configurable: true, writable: true });
-    Object.defineProperty(scrollHost, "scrollTo", { value: mock(() => {}), configurable: true });
+    Object.defineProperty(scrollHost, "scrollTo", { value: vi.fn(() => {}), configurable: true });
 
     fireEvent.scroll(scrollHost);
     fireEvent.click(screen.getByRole("button", { name: /scroll to latest message/i }));
@@ -70,8 +70,8 @@ describe("Amoena direct interactions", () => {
   });
 
   test("install review sheet handles close and confirm", () => {
-    const onClose = mock(() => {});
-    const onConfirm = mock(() => {});
+    const onClose = vi.fn(() => {});
+    const onConfirm = vi.fn(() => {});
     render(<InstallReviewSheet item={allItems[1]} onClose={onClose} onConfirm={onConfirm} />);
 
     fireEvent.click(screen.getByText("Review Installation").closest("div")!.parentElement!.parentElement!);
@@ -82,9 +82,9 @@ describe("Amoena direct interactions", () => {
   });
 
   test("marketplace item card supports select, install, and uninstall handlers", () => {
-    const onSelect = mock(() => {});
-    const onInstall = mock(() => {});
-    const onUninstall = mock(() => {});
+    const onSelect = vi.fn(() => {});
+    const onInstall = vi.fn(() => {});
+    const onUninstall = vi.fn(() => {});
 
     const { rerender } = render(
       <MarketplaceItemCard

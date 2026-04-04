@@ -6,7 +6,7 @@ import { db_helpers, getDatabase, type Message } from "@/lib/db";
 import { eventBus } from "@/lib/event-bus";
 import { scanForInjection } from "@/lib/injection-guard";
 import { logger } from "@/lib/logger";
-import { callAmoenaGateway } from "@/lib/amoena-gateway";
+import { callAmoenaGateway } from "@/lib/lunaria-gateway";
 import { getAllGatewaySessions } from "@/lib/sessions";
 
 type ForwardInfo = {

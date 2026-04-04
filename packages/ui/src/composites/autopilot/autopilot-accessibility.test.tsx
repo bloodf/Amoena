@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from "vitest";
 import { AutopilotActivityPane } from './AutopilotActivityPane';
 import { AutopilotStatusPanel } from './AutopilotStatusPanel';
 import type { AutopilotActivityItem } from './types';

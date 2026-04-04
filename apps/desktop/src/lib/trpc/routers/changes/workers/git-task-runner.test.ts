@@ -1,12 +1,12 @@
-import { describe, expect, it, mock } from 'bun:test';
+import { describe, expect, it, vi } from 'vitest';
 import { EventEmitter } from 'node:events';
 
 const mockWorkerTaskRunner = Object.assign(new EventEmitter(), {
-  runTask: mock(() => Promise.resolve({})),
-  dispose: mock(() => Promise.resolve()),
+  runTask: vi.fn(() => Promise.resolve({})),
+  dispose: vi.fn(() => Promise.resolve()),
 });
 
-mock.module('../../../workers/WorkerTaskRunner', () => ({
+vi.mock('../../../workers/WorkerTaskRunner', () => ({
   WorkerTaskRunner: class extends EventEmitter {
     constructor() {
       super();
@@ -16,7 +16,7 @@ mock.module('../../../workers/WorkerTaskRunner', () => ({
   },
 }));
 
-mock.module('electron', () => ({
+vi.mock('electron', () => ({
   app: {
     getAppPath: () => '/app/path',
     once: () => {},

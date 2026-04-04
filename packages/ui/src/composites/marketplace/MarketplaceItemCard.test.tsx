@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { MarketplaceItemCard } from "./MarketplaceItemCard";
 import type { MarketplaceItem } from "./types";
@@ -26,9 +26,9 @@ const baseItem: MarketplaceItem = {
 
 function renderCard(overrides: Partial<MarketplaceItem> = {}, isSelected = false) {
   const handlers = {
-    onSelect: mock(() => {}),
-    onInstall: mock(() => {}),
-    onUninstall: mock(() => {}),
+    onSelect: vi.fn(() => {}),
+    onInstall: vi.fn(() => {}),
+    onUninstall: vi.fn(() => {}),
   };
   const item = { ...baseItem, ...overrides };
   const result = render(

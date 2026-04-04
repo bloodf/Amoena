@@ -4,8 +4,8 @@ import { runAmoena } from "@/lib/command";
 import { config } from "@/lib/config";
 import { getDatabase } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { parseAmoenaDoctorOutput } from "@/lib/amoena-doctor";
-import { archiveOrphanTranscriptsForStateDir } from "@/lib/amoena-doctor-fix";
+import { parseAmoenaDoctorOutput } from "@/lib/lunaria-doctor";
+import { archiveOrphanTranscriptsForStateDir } from "@/lib/lunaria-doctor-fix";
 
 function getCommandDetail(error: unknown): {
 	detail: string;

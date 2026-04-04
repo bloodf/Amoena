@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, mock, test } from 'bun:test';
+import { describe, expect, mock, test, vi } from "vitest";
 import { HomeSystemHealthPanel } from './HomeSystemHealthPanel';
 import type { HomeProviderHealth } from './types';
 
-mock.module('lucide-react', () => ({
+vi.mock('lucide-react', () => ({
   Circle: ({ size }: { size: number }) => (
     <span data-testid="circle" style={{ width: size, height: size }} />
   ),
@@ -12,7 +12,7 @@ mock.module('lucide-react', () => ({
   ),
 }));
 
-mock.module('@/lib/utils', () => ({
+vi.mock('@/lib/utils', () => ({
   cn: (...classes: (string | boolean | undefined)[]) => classes.filter(Boolean).join(' '),
 }));
 
@@ -23,7 +23,7 @@ function makeProps(overrides: Partial<Parameters<typeof HomeSystemHealthPanel>[0
       { name: 'Codex', status: 'error', color: 'red' },
       { name: 'Gemini', status: 'disconnected', color: 'gray' },
     ] satisfies HomeProviderHealth[],
-    onOpenProvider: mock(() => {}),
+    onOpenProvider: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -38,7 +38,7 @@ describe('HomeSystemHealthPanel', () => {
   });
 
   test('calls onOpenProvider with the clicked provider', () => {
-    const onOpenProvider = mock(() => {});
+    const onOpenProvider = vi.fn(() => {});
     const props = makeProps({ onOpenProvider });
     render(<HomeSystemHealthPanel {...props} />);
     fireEvent.click(screen.getByRole('button', { name: /Claude connected/ }));

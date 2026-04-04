@@ -1,16 +1,16 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { createRef } from "react";
 
 import { ComposerInputArea } from "./ComposerInputArea";
 
 function renderInput(overrides: Partial<Parameters<typeof ComposerInputArea>[0]> = {}) {
   const handlers = {
-    onMessageChange: mock((_v: string) => {}),
-    onKeyDown: mock((_e: React.KeyboardEvent) => {}),
-    onPaste: mock((_e: React.ClipboardEvent) => {}),
-    onRecordingToggle: mock(() => {}),
-    onSubmit: mock(() => {}),
+    onMessageChange: vi.fn((_v: string) => {}),
+    onKeyDown: vi.fn((_e: React.KeyboardEvent) => {}),
+    onPaste: vi.fn((_e: React.ClipboardEvent) => {}),
+    onRecordingToggle: vi.fn(() => {}),
+    onSubmit: vi.fn(() => {}),
   };
   const props = {
     isRecording: false,

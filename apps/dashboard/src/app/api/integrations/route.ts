@@ -182,7 +182,7 @@ const INTEGRATIONS: IntegrationDef[] = [
 		name: "Gateway Auth",
 		category: "infra",
 		envVars: ["AMOENA_GATEWAY_TOKEN"],
-		vaultItem: "amoena-amoena-gateway-token",
+		vaultItem: "amoena-lunaria-gateway-token",
 	},
 
 	// Browser Automation

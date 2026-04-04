@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { RemoteDevicesPanel } from "./RemoteDevicesPanel";
 import type { RemoteDevice } from "./types";
 
@@ -27,10 +27,10 @@ function makeProps(overrides: Partial<Parameters<typeof RemoteDevicesPanel>[0]> 
   return {
     devices: [trustedDevice],
     confirmRevoke: null,
-    onToggleTrust: mock(() => {}),
-    onAskRevoke: mock(() => {}),
-    onCancelRevoke: mock(() => {}),
-    onConfirmRevoke: mock(() => {}),
+    onToggleTrust: vi.fn(() => {}),
+    onAskRevoke: vi.fn(() => {}),
+    onCancelRevoke: vi.fn(() => {}),
+    onConfirmRevoke: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -57,7 +57,7 @@ describe("RemoteDevicesPanel", () => {
   });
 
   test("calls onToggleTrust when trust button is clicked", () => {
-    const onToggleTrust = mock(() => {});
+    const onToggleTrust = vi.fn(() => {});
     render(<RemoteDevicesPanel {...makeProps({ onToggleTrust })} />);
     fireEvent.click(screen.getByText("Trusted").closest("button")!);
     expect(onToggleTrust).toHaveBeenCalledWith("iPhone 15");
@@ -86,7 +86,7 @@ describe("RemoteDevicesPanel", () => {
   });
 
   test("calls onAskRevoke when Revoke is clicked", () => {
-    const onAskRevoke = mock(() => {});
+    const onAskRevoke = vi.fn(() => {});
     render(<RemoteDevicesPanel {...makeProps({ onAskRevoke })} />);
     fireEvent.click(screen.getByText("Revoke"));
     expect(onAskRevoke).toHaveBeenCalledWith("iPhone 15");
@@ -101,7 +101,7 @@ describe("RemoteDevicesPanel", () => {
   });
 
   test("calls onConfirmRevoke when Confirm is clicked", () => {
-    const onConfirmRevoke = mock(() => {});
+    const onConfirmRevoke = vi.fn(() => {});
     render(
       <RemoteDevicesPanel
         {...makeProps({ confirmRevoke: "iPhone 15", onConfirmRevoke })}
@@ -112,7 +112,7 @@ describe("RemoteDevicesPanel", () => {
   });
 
   test("calls onCancelRevoke when Cancel is clicked", () => {
-    const onCancelRevoke = mock(() => {});
+    const onCancelRevoke = vi.fn(() => {});
     render(
       <RemoteDevicesPanel
         {...makeProps({ confirmRevoke: "iPhone 15", onCancelRevoke })}

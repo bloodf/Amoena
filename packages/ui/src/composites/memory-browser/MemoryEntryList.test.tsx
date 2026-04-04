@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { MemoryEntryList } from "./MemoryEntryList";
 import type { MemoryEntry } from "./types";
@@ -40,7 +40,7 @@ const entries: MemoryEntry[] = [
 ];
 
 function renderList(items: MemoryEntry[] = entries, selectedKey: string | null = null) {
-  const onSelect = mock((_key: string) => {});
+  const onSelect = vi.fn((_key: string) => {});
   const result = render(
     <MemoryEntryList entries={items} selectedKey={selectedKey} onSelect={onSelect} />,
   );

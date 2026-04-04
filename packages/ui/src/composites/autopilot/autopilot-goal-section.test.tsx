@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { AutopilotGoalSection } from "./AutopilotGoalSection";
 
 function makeProps(overrides: Partial<Parameters<typeof AutopilotGoalSection>[0]> = {}) {
   return {
     goalText: "Refactor JWT auth module",
     editingGoal: false,
-    onToggleEditing: mock(() => {}),
-    onChangeGoal: mock((_v: string) => {}),
+    onToggleEditing: vi.fn(() => {}),
+    onChangeGoal: vi.fn((_v: string) => {}),
     ...overrides,
   };
 }
@@ -36,14 +36,14 @@ describe("AutopilotGoalSection", () => {
   });
 
   test("calls onToggleEditing when Edit button clicked", () => {
-    const onToggleEditing = mock(() => {});
+    const onToggleEditing = vi.fn(() => {});
     render(<AutopilotGoalSection {...makeProps({ onToggleEditing })} />);
     fireEvent.click(screen.getByText("Edit"));
     expect(onToggleEditing).toHaveBeenCalled();
   });
 
   test("calls onChangeGoal when textarea value changes", () => {
-    const onChangeGoal = mock((_v: string) => {});
+    const onChangeGoal = vi.fn((_v: string) => {});
     render(<AutopilotGoalSection {...makeProps({ editingGoal: true, onChangeGoal })} />);
     const textarea = document.querySelector("textarea")!;
     fireEvent.change(textarea, { target: { value: "New goal" } });

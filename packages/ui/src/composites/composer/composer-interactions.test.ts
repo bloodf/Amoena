@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { useComposerInteractions } from "./useComposerInteractions";
 import type { ComposerAttachment } from "./types";
 import type { ComposerAgentVariant } from "./config";
@@ -14,11 +14,11 @@ function makeHook(overrides: {
   message?: string;
   attachments?: ComposerAttachment[];
 } = {}) {
-  const setMessage = mock((v: string) => {});
-  const setAttachments = mock((fn: unknown) => {});
-  const onCycleAgent = mock(() => {});
-  const onSelectAgent = mock((id: string) => {});
-  const onAutocompleteOpen = mock(() => {});
+  const setMessage = vi.fn((v: string) => {});
+  const setAttachments = vi.fn((fn: unknown) => {});
+  const onCycleAgent = vi.fn(() => {});
+  const onSelectAgent = vi.fn((id: string) => {});
+  const onAutocompleteOpen = vi.fn(() => {});
   const textareaRef = createRef<HTMLTextAreaElement | null>() as React.RefObject<HTMLTextAreaElement | null>;
 
   let message = overrides.message ?? "";
@@ -121,7 +121,7 @@ describe("useComposerInteractions", () => {
     act(() => { result.current.handleInput("@t"); });
     expect(result.current.selectedIndex).toBe(0);
     act(() => {
-      result.current.handleKeyDown({ key: "ArrowDown", preventDefault: mock(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleKeyDown({ key: "ArrowDown", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
     });
     expect(result.current.selectedIndex).toBe(1);
   });
@@ -130,7 +130,7 @@ describe("useComposerInteractions", () => {
     const { result } = makeHook();
     act(() => { result.current.handleInput("@t"); });
     act(() => {
-      result.current.handleKeyDown({ key: "ArrowUp", preventDefault: mock(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleKeyDown({ key: "ArrowUp", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
     });
     expect(result.current.selectedIndex).toBe(0);
   });
@@ -141,7 +141,7 @@ describe("useComposerInteractions", () => {
     // filteredFiles will be small, set index to max via many ArrowDowns
     for (let i = 0; i < 20; i++) {
       act(() => {
-        result.current.handleKeyDown({ key: "ArrowDown", preventDefault: mock(() => {}) } as unknown as React.KeyboardEvent);
+        result.current.handleKeyDown({ key: "ArrowDown", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
       });
     }
     expect(result.current.selectedIndex).toBeLessThanOrEqual(result.current.filteredFiles.length - 1);
@@ -151,7 +151,7 @@ describe("useComposerInteractions", () => {
     const { result } = makeHook();
     act(() => { result.current.handleInput("@tok"); });
     act(() => {
-      result.current.handleKeyDown({ key: "Escape", preventDefault: mock(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleKeyDown({ key: "Escape", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
     });
     expect(result.current.showFilePicker).toBe(false);
   });
@@ -160,7 +160,7 @@ describe("useComposerInteractions", () => {
     const { result, setMessage } = makeHook();
     act(() => { result.current.handleInput("@tok"); });
     act(() => {
-      result.current.handleKeyDown({ key: "Enter", preventDefault: mock(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleKeyDown({ key: "Enter", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
     });
     expect(result.current.showFilePicker).toBe(false);
   });
@@ -169,7 +169,7 @@ describe("useComposerInteractions", () => {
     const { result } = makeHook();
     act(() => { result.current.handleInput("@tok"); });
     act(() => {
-      result.current.handleKeyDown({ key: "Tab", preventDefault: mock(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleKeyDown({ key: "Tab", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
     });
     expect(result.current.showFilePicker).toBe(false);
   });
@@ -177,14 +177,14 @@ describe("useComposerInteractions", () => {
   test("handleKeyDown Tab with empty message and no picker calls onCycleAgent", () => {
     const { result, onCycleAgent } = makeHook({ message: "" });
     act(() => {
-      result.current.handleKeyDown({ key: "Tab", preventDefault: mock(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleKeyDown({ key: "Tab", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
     });
     expect(onCycleAgent).toHaveBeenCalled();
   });
 
   test("handleKeyDown Enter with no pickers and no shift prevents default", () => {
     const { result } = makeHook({ message: "hello" });
-    const preventDefault = mock(() => {});
+    const preventDefault = vi.fn(() => {});
     act(() => {
       result.current.handleKeyDown({ key: "Enter", shiftKey: false, preventDefault } as unknown as React.KeyboardEvent);
     });
@@ -193,7 +193,7 @@ describe("useComposerInteractions", () => {
 
   test("handleKeyDown Enter with shift does not prevent default", () => {
     const { result } = makeHook({ message: "hello" });
-    const preventDefault = mock(() => {});
+    const preventDefault = vi.fn(() => {});
     act(() => {
       result.current.handleKeyDown({ key: "Enter", shiftKey: true, preventDefault } as unknown as React.KeyboardEvent);
     });
@@ -212,7 +212,7 @@ describe("useComposerInteractions", () => {
     const { result } = makeHook();
     act(() => {
       result.current.handleDragOver({
-        preventDefault: mock(() => {}),
+        preventDefault: vi.fn(() => {}),
         dataTransfer: { dropEffect: "" },
       } as unknown as React.DragEvent);
     });
@@ -223,7 +223,7 @@ describe("useComposerInteractions", () => {
     const { result } = makeHook();
     act(() => {
       result.current.handleDragOver({
-        preventDefault: mock(() => {}),
+        preventDefault: vi.fn(() => {}),
         dataTransfer: { dropEffect: "" },
       } as unknown as React.DragEvent);
     });
@@ -240,7 +240,7 @@ describe("useComposerInteractions", () => {
     const { result } = makeHook();
     act(() => {
       result.current.handleDragOver({
-        preventDefault: mock(() => {}),
+        preventDefault: vi.fn(() => {}),
         dataTransfer: { dropEffect: "" },
       } as unknown as React.DragEvent);
     });
@@ -257,7 +257,7 @@ describe("useComposerInteractions", () => {
     const { result, setAttachments } = makeHook();
     act(() => {
       result.current.handleDrop({
-        preventDefault: mock(() => {}),
+        preventDefault: vi.fn(() => {}),
         dataTransfer: {
           getData: (type: string) =>
             type === "amoena/file"
@@ -275,7 +275,7 @@ describe("useComposerInteractions", () => {
     expect(() => {
       act(() => {
         result.current.handleDrop({
-          preventDefault: mock(() => {}),
+          preventDefault: vi.fn(() => {}),
           dataTransfer: {
             getData: () => "not-valid-json",
             files: [],
@@ -290,7 +290,7 @@ describe("useComposerInteractions", () => {
     const file = new File(["content"], "readme.md");
     act(() => {
       result.current.handleDrop({
-        preventDefault: mock(() => {}),
+        preventDefault: vi.fn(() => {}),
         dataTransfer: {
           getData: () => "",
           files: [file],
@@ -305,7 +305,7 @@ describe("useComposerInteractions", () => {
     const file = new File(["content"], "image.png");
     act(() => {
       result.current.handlePaste({
-        preventDefault: mock(() => {}),
+        preventDefault: vi.fn(() => {}),
         clipboardData: {
           items: [{ kind: "file", getAsFile: () => file }],
         },
@@ -318,7 +318,7 @@ describe("useComposerInteractions", () => {
     const { result, setAttachments } = makeHook();
     act(() => {
       result.current.handlePaste({
-        preventDefault: mock(() => {}),
+        preventDefault: vi.fn(() => {}),
         clipboardData: {
           items: [{ kind: "string", getAsFile: () => null }],
         },
@@ -392,11 +392,11 @@ describe("useComposerInteractions", () => {
 
   test("addAttachment does not add duplicate path", () => {
     const existingAttachment: ComposerAttachment = { type: "file", name: "tokens.rs", path: "src/auth/tokens.rs" };
-    const setAttachments = mock(() => {});
-    const setMessage = mock(() => {});
-    const onCycleAgent = mock(() => {});
-    const onSelectAgent = mock(() => {});
-    const onAutocompleteOpen = mock(() => {});
+    const setAttachments = vi.fn(() => {});
+    const setMessage = vi.fn(() => {});
+    const onCycleAgent = vi.fn(() => {});
+    const onSelectAgent = vi.fn(() => {});
+    const onAutocompleteOpen = vi.fn(() => {});
     const textareaRef = createRef<HTMLTextAreaElement | null>() as React.RefObject<HTMLTextAreaElement | null>;
 
     const { result } = renderHook(() =>
@@ -415,7 +415,7 @@ describe("useComposerInteractions", () => {
 
     act(() => { result.current.handleInput("@tok"); });
     act(() => {
-      result.current.handleKeyDown({ key: "Enter", preventDefault: mock(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleKeyDown({ key: "Enter", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
     });
     // setAttachments should not have been called because the path already exists
     expect(setAttachments).not.toHaveBeenCalled();

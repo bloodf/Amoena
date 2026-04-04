@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { useIsMobile } from "./use-mobile";
 
 describe("useIsMobile", () => {

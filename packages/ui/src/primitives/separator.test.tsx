@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { Separator } from "./separator";
 
 describe("Separator", () => {

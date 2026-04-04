@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, mock, test } from 'bun:test';
+import { describe, expect, mock, test, vi } from "vitest";
 import { HomeRecentSessionsPanel } from './HomeRecentSessionsPanel';
 
-mock.module('lucide-react', () => ({
+vi.mock('lucide-react', () => ({
   ArrowRight: ({ size }: { size: number }) => (
     <span data-testid="arrow-right" style={{ width: size, height: size }} />
   ),
@@ -14,14 +14,14 @@ mock.module('lucide-react', () => ({
   ),
 }));
 
-mock.module('@/lib/utils', () => ({
+vi.mock('@/lib/utils', () => ({
   cn: (...classes: (string | boolean | undefined)[]) => classes.filter(Boolean).join(' '),
 }));
 
 function makeProps(overrides: Partial<Parameters<typeof HomeRecentSessionsPanel>[0]> = {}) {
   return {
     searchQuery: 'claude',
-    onSearchChange: mock(() => {}),
+    onSearchChange: vi.fn(() => {}),
     sessions: [
       {
         title: 'Session Alpha',
@@ -40,7 +40,7 @@ function makeProps(overrides: Partial<Parameters<typeof HomeRecentSessionsPanel>
         model: 'codex',
       },
     ],
-    onOpenSession: mock(() => {}),
+    onOpenSession: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -54,7 +54,7 @@ describe('HomeRecentSessionsPanel', () => {
   });
 
   test('calls onSearchChange when the filter input changes', () => {
-    const onSearchChange = mock(() => {});
+    const onSearchChange = vi.fn(() => {});
     render(<HomeRecentSessionsPanel {...makeProps({ onSearchChange })} />);
     fireEvent.change(screen.getByPlaceholderText('Filter sessions...'), {
       target: { value: 'beta' },
@@ -63,7 +63,7 @@ describe('HomeRecentSessionsPanel', () => {
   });
 
   test('calls onOpenSession with the clicked session', () => {
-    const onOpenSession = mock(() => {});
+    const onOpenSession = vi.fn(() => {});
     const props = makeProps({ onOpenSession });
     render(<HomeRecentSessionsPanel {...props} />);
     fireEvent.click(screen.getByRole('button', { name: /Session Alpha/ }));

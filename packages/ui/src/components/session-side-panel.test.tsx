@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { SessionSidePanel } from "./SessionSidePanel";
 
 describe("SessionSidePanel", () => {
@@ -10,7 +10,7 @@ describe("SessionSidePanel", () => {
   });
 
   test("renders with onOpenFile prop — branch line 33 (truthy path)", () => {
-    const onOpenFile = mock((_fileName: string) => {});
+    const onOpenFile = vi.fn((_fileName: string) => {});
     render(<SessionSidePanel onOpenFile={onOpenFile} />);
     expect(document.body).toBeTruthy();
   });

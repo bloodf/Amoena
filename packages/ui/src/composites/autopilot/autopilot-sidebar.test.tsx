@@ -1,38 +1,38 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { AutopilotSidebar } from "./AutopilotSidebar";
 
 function makeProps(overrides: Partial<Parameters<typeof AutopilotSidebar>[0]> = {}) {
   return {
     enabled: true,
     state: "idle" as const,
-    onToggleEnabled: mock(() => {}),
-    onStart: mock(() => {}),
-    onPause: mock(() => {}),
-    onStop: mock(() => {}),
-    onResume: mock(() => {}),
-    onApprove: mock(() => {}),
-    onDeny: mock(() => {}),
-    onNewRun: mock(() => {}),
-    onUnblock: mock(() => {}),
+    onToggleEnabled: vi.fn(() => {}),
+    onStart: vi.fn(() => {}),
+    onPause: vi.fn(() => {}),
+    onStop: vi.fn(() => {}),
+    onResume: vi.fn(() => {}),
+    onApprove: vi.fn(() => {}),
+    onDeny: vi.fn(() => {}),
+    onNewRun: vi.fn(() => {}),
+    onUnblock: vi.fn(() => {}),
     goalText: "Build authentication",
     editingGoal: false,
-    onToggleEditingGoal: mock(() => {}),
-    onChangeGoal: mock((_v: string) => {}),
+    onToggleEditingGoal: vi.fn(() => {}),
+    onChangeGoal: vi.fn((_v: string) => {}),
     storySteps: [
       { label: "Step 1", status: "done" as const, tokens: "1k" },
       { label: "Step 2", status: "pending" as const, tokens: "—" },
     ],
     allowedActions: { file_edits: true, terminal: true, git: false },
-    onToggleAction: mock(() => {}),
+    onToggleAction: vi.fn(() => {}),
     maxTokens: "10000",
-    onMaxTokensChange: mock((_v: string) => {}),
+    onMaxTokensChange: vi.fn((_v: string) => {}),
     timeLimit: "15 minutes",
-    onTimeLimitChange: mock((_v: string) => {}),
+    onTimeLimitChange: vi.fn((_v: string) => {}),
     showHistory: false,
-    onToggleHistory: mock(() => {}),
+    onToggleHistory: vi.fn(() => {}),
     history: [],
-    onSelectRun: mock(() => {}),
+    onSelectRun: vi.fn(() => {}),
     ...overrides,
   };
 }

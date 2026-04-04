@@ -10,8 +10,15 @@
     "directory": "packages/amoena-service"
   },
   "type": "module",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./remote-access": "./src/remote-access/index.ts",
+    "./remote-access/pairing": "./src/remote-access/pairing.ts",
+    "./remote-access/pairing-service": "./src/remote-access/pairing-service.ts",
+    "./remote-access/relay": "./src/remote-access/relay.ts"
+  },
   "scripts": {
     "test": "vitest run src/autopilot/ src/remote-access/__tests__/relay-lifecycle.test.ts src/session-replay/ src/orchestration/cli-adapters/utils/parser-registry.test.ts",
     "test:watch": "vitest",

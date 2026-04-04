@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { CommandPaletteResults } from "./CommandPaletteResults";
 import type { CommandPaletteItem } from "./data";
 import { FileText, Settings } from "lucide-react";
@@ -28,8 +28,8 @@ describe("CommandPaletteResults", () => {
       <CommandPaletteResults
         groups={makeGroups([itemWithDesc])}
         selectedIndex={0}
-        onHover={mock(() => {})}
-        onSelect={mock(() => {})}
+        onHover={vi.fn(() => {})}
+        onSelect={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Open File")).toBeTruthy();
@@ -40,8 +40,8 @@ describe("CommandPaletteResults", () => {
       <CommandPaletteResults
         groups={makeGroups([itemWithDesc])}
         selectedIndex={0}
-        onHover={mock(() => {})}
-        onSelect={mock(() => {})}
+        onHover={vi.fn(() => {})}
+        onSelect={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Open a file in the editor")).toBeTruthy();
@@ -52,8 +52,8 @@ describe("CommandPaletteResults", () => {
       <CommandPaletteResults
         groups={makeGroups([itemNoExtras])}
         selectedIndex={0}
-        onHover={mock(() => {})}
-        onSelect={mock(() => {})}
+        onHover={vi.fn(() => {})}
+        onSelect={vi.fn(() => {})}
       />,
     );
     // No description element
@@ -65,8 +65,8 @@ describe("CommandPaletteResults", () => {
       <CommandPaletteResults
         groups={makeGroups([itemWithDesc])}
         selectedIndex={0}
-        onHover={mock(() => {})}
-        onSelect={mock(() => {})}
+        onHover={vi.fn(() => {})}
+        onSelect={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("⌘O")).toBeTruthy();
@@ -77,8 +77,8 @@ describe("CommandPaletteResults", () => {
       <CommandPaletteResults
         groups={makeGroups([itemNoExtras])}
         selectedIndex={0}
-        onHover={mock(() => {})}
-        onSelect={mock(() => {})}
+        onHover={vi.fn(() => {})}
+        onSelect={vi.fn(() => {})}
       />,
     );
     expect(screen.queryByText("⌘O")).toBeNull();
@@ -89,8 +89,8 @@ describe("CommandPaletteResults", () => {
       <CommandPaletteResults
         groups={makeGroups([itemWithDesc])}
         selectedIndex={0}
-        onHover={mock(() => {})}
-        onSelect={mock(() => {})}
+        onHover={vi.fn(() => {})}
+        onSelect={vi.fn(() => {})}
       />,
     );
     const btn = container.querySelector("button");
@@ -102,8 +102,8 @@ describe("CommandPaletteResults", () => {
       <CommandPaletteResults
         groups={makeGroups([itemWithDesc])}
         selectedIndex={99}
-        onHover={mock(() => {})}
-        onSelect={mock(() => {})}
+        onHover={vi.fn(() => {})}
+        onSelect={vi.fn(() => {})}
       />,
     );
     const btn = container.querySelector("button");
@@ -111,12 +111,12 @@ describe("CommandPaletteResults", () => {
   });
 
   test("calls onSelect when item is clicked", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     render(
       <CommandPaletteResults
         groups={makeGroups([itemWithDesc])}
         selectedIndex={0}
-        onHover={mock(() => {})}
+        onHover={vi.fn(() => {})}
         onSelect={onSelect}
       />,
     );
@@ -125,13 +125,13 @@ describe("CommandPaletteResults", () => {
   });
 
   test("calls onHover when mouse enters item", () => {
-    const onHover = mock(() => {});
+    const onHover = vi.fn(() => {});
     render(
       <CommandPaletteResults
         groups={makeGroups([itemWithDesc])}
         selectedIndex={0}
         onHover={onHover}
-        onSelect={mock(() => {})}
+        onSelect={vi.fn(() => {})}
       />,
     );
     fireEvent.mouseEnter(screen.getByText("Open File").closest("button")!);
@@ -145,15 +145,15 @@ describe("CommandPaletteResults", () => {
       <CommandPaletteResults
         groups={unknownGroups}
         selectedIndex={0}
-        onHover={mock(() => {})}
-        onSelect={mock(() => {})}
+        onHover={vi.fn(() => {})}
+        onSelect={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("unknowntype")).toBeTruthy();
   });
 
   test("tracks flat indices correctly across multiple groups", () => {
-    const onHover = mock(() => {});
+    const onHover = vi.fn(() => {});
     const groups = {
       action: [itemWithDesc],
       file: [itemNoExtras],
@@ -163,7 +163,7 @@ describe("CommandPaletteResults", () => {
         groups={groups}
         selectedIndex={1}
         onHover={onHover}
-        onSelect={mock(() => {})}
+        onSelect={vi.fn(() => {})}
       />,
     );
     // Second item (index 1) should have active style

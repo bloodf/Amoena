@@ -1,38 +1,38 @@
-import { describe, expect, it, mock } from "bun:test";
+import { describe, expect, it, vi } from 'vitest';
 
-mock.module("./security/path-validation", () => ({
-	assertRegisteredWorktree: () => {},
+vi.mock('./security/path-validation', () => ({
+  assertRegisteredWorktree: () => {},
 }));
 
-mock.module("./utils/status-cache", () => ({
-	clearStatusCacheForWorktree: mock(() => {}),
-	getCachedStatus: mock(() => null),
-	getInFlightStatus: mock(() => null),
-	makeStatusCacheKey: mock((p: string, b: string) => `${p}:${b}`),
-	setCachedStatus: mock(() => {}),
-	setInFlightStatus: mock(() => {}),
-	clearInFlightStatus: mock(() => {}),
+vi.mock('./utils/status-cache', () => ({
+  clearStatusCacheForWorktree: vi.fn(() => {}),
+  getCachedStatus: vi.fn(() => null),
+  getInFlightStatus: vi.fn(() => null),
+  makeStatusCacheKey: vi.fn((p: string, b: string) => `${p}:${b}`),
+  setCachedStatus: vi.fn(() => {}),
+  setInFlightStatus: vi.fn(() => {}),
+  clearInFlightStatus: vi.fn(() => {}),
 }));
 
-mock.module("./workers/git-task-runner", () => ({
-	runGitTask: mock(() =>
-		Promise.resolve({
-			staged: [],
-			unstaged: [],
-			untracked: [],
-			commits: [],
-			stashCount: 0,
-			branch: "main",
-		}),
-	),
+vi.mock('./workers/git-task-runner', () => ({
+  runGitTask: vi.fn(() =>
+    Promise.resolve({
+      staged: [],
+      unstaged: [],
+      untracked: [],
+      commits: [],
+      stashCount: 0,
+      branch: 'main',
+    }),
+  ),
 }));
 
-const { createStatusRouter } = await import("./status");
+const { createStatusRouter } = await import('./status');
 
-describe("status router", () => {
-	it("creates a router with expected procedures", () => {
-		const router = createStatusRouter();
-		expect(router).toBeDefined();
-		expect(typeof router).toBe("object");
-	});
+describe('status router', () => {
+  it('creates a router with expected procedures', () => {
+    const router = createStatusRouter();
+    expect(router).toBeDefined();
+    expect(typeof router).toBe('object');
+  });
 });

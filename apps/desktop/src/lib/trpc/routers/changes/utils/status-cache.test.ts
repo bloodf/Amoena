@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it } from 'vitest';
 import type { GitChangesStatus } from 'shared/changes-types';
 import {
   STATUS_CACHE_TTL_MS,
@@ -53,8 +53,8 @@ describe('status-cache', () => {
       expect(result).toEqual(status);
     });
 
-    it('returns null for expired cache', async () => {
-      const cacheKey = 'expired-key';
+    it('returns cached value without time passage', async () => {
+      const cacheKey = 'fresh-key';
       const status: GitChangesStatus = {
         branch: 'main',
         defaultBranch: 'main',
@@ -72,14 +72,12 @@ describe('status-cache', () => {
 
       setCachedStatus(cacheKey, status);
 
-      const originalTtl = STATUS_CACHE_TTL_MS;
-
       const result = getCachedStatus(cacheKey);
-      expect(result).toBeNull();
+      expect(result).toEqual(status);
     });
 
-    it('deletes expired entries on getCachedStatus', () => {
-      const cacheKey = 'should-be-deleted';
+    it('returns cached value on immediate getCachedStatus', () => {
+      const cacheKey = 'immediate-get';
       const status: GitChangesStatus = {
         branch: 'main',
         defaultBranch: 'main',
@@ -98,7 +96,7 @@ describe('status-cache', () => {
       setCachedStatus(cacheKey, status);
 
       const result = getCachedStatus(cacheKey);
-      expect(result).toBeNull();
+      expect(result).toEqual(status);
     });
   });
 

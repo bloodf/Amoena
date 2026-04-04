@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { ExtensionPanel } from "./ExtensionPanel";
 
 const extensions = [
@@ -9,9 +9,9 @@ const extensions = [
 
 function makeHandlers() {
   return {
-    onToggle: mock(() => {}),
-    onUninstall: mock(() => {}),
-    onInstall: mock(() => {}),
+    onToggle: vi.fn(() => {}),
+    onUninstall: vi.fn(() => {}),
+    onInstall: vi.fn(() => {}),
   };
 }
 

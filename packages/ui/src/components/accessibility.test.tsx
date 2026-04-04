@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from "vitest";
 import { MemoryRouter } from 'react-router-dom';
 import { StatusBar } from './StatusBar';
 import { AppShell } from './AppShell';

@@ -1,37 +1,36 @@
-import { describe, expect, it, mock } from "bun:test";
+import { describe, expect, it, vi } from 'vitest';
 
-// Mock all procedure modules
-mock.module("./procedures/create", () => ({
-	createCreateProcedures: () => ({}),
+vi.mock('./procedures/create', () => ({
+  createCreateProcedures: () => ({}),
 }));
-mock.module("./procedures/delete", () => ({
-	createDeleteProcedures: () => ({}),
+vi.mock('./procedures/delete', () => ({
+  createDeleteProcedures: () => ({}),
 }));
-mock.module("./procedures/generate-branch-name", () => ({
-	createGenerateBranchNameProcedures: () => ({}),
+vi.mock('./procedures/generate-branch-name', () => ({
+  createGenerateBranchNameProcedures: () => ({}),
 }));
-mock.module("./procedures/git-status", () => ({
-	createGitStatusProcedures: () => ({}),
+vi.mock('./procedures/git-status', () => ({
+  createGitStatusProcedures: () => ({}),
 }));
-mock.module("./procedures/init", () => ({
-	createInitProcedures: () => ({}),
+vi.mock('./procedures/init', () => ({
+  createInitProcedures: () => ({}),
 }));
-mock.module("./procedures/query", () => ({
-	createQueryProcedures: () => ({}),
+vi.mock('./procedures/query', () => ({
+  createQueryProcedures: () => ({}),
 }));
-mock.module("./procedures/sections", () => ({
-	createSectionsProcedures: () => ({}),
+vi.mock('./procedures/sections', () => ({
+  createSectionsProcedures: () => ({}),
 }));
-mock.module("./procedures/status", () => ({
-	createStatusProcedures: () => ({}),
+vi.mock('./procedures/status', () => ({
+  createStatusProcedures: () => ({}),
 }));
 
-const { createWorkspacesRouter } = await import("./workspaces");
+const { createWorkspacesRouter } = await import('./workspaces');
 
-describe("workspaces router", () => {
-	it("creates a merged router", () => {
-		const router = createWorkspacesRouter();
-		expect(router).toBeDefined();
-		expect(typeof router).toBe("object");
-	});
+describe('workspaces router', () => {
+  it('creates a merged router', () => {
+    const router = createWorkspacesRouter();
+    expect(router).toBeDefined();
+    expect(typeof router).toBe('object');
+  });
 });

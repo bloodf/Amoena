@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, mock, test } from 'bun:test';
+import { describe, expect, mock, test, vi } from "vitest";
 import { HighlightedCode } from './HighlightedCode';
 
 // Mock useTheme hook
-mock('@/hooks/use-theme', () => ({
+vi.fn('@/hooks/use-theme', () => ({
   useTheme: () => ({ theme: 'dark' }),
 }));
 
 // Mock prismjs
-mock('prismjs', () => ({
+vi.fn('prismjs', () => ({
   default: {
     languages: {
       typescript: {},

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 
 describe("ToggleGroup", () => {

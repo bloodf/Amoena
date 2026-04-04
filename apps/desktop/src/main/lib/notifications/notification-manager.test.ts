@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, mock } from "bun:test";
+import { beforeEach, describe, expect, it, mock , vi} from "vitest";
 import type {
 	AgentLifecycleEvent,
 	NotificationIds,
@@ -18,9 +18,9 @@ function createMockNotification(): MockNotification {
 	const handlers: Record<string, (() => void)[]> = {};
 	return {
 		handlers,
-		show: mock(() => {}),
-		close: mock(() => {}),
-		on: mock((event: string, handler: () => void) => {
+		show: vi.fn(() => {}),
+		close: vi.fn(() => {}),
+		on: vi.fn((event: string, handler: () => void) => {
 			handlers[event] ??= [];
 			handlers[event].push(handler);
 		}),
@@ -50,7 +50,7 @@ function createDeps(
 			notifications.push(n);
 			return n;
 		},
-		playSound: mock(() => {}),
+		playSound: vi.fn(() => {}),
 		onNotificationClick: (ids) => clickedIds.push(ids),
 		getVisibilityContext: () => ({
 			isFocused: false,
@@ -284,7 +284,7 @@ describe("NotificationManager", () => {
 
 	describe("notification content", () => {
 		it("uses permission request title/body for PermissionRequest events", () => {
-			const createNotification = mock(
+			const createNotification = vi.fn(
 				(_opts: { title: string; body: string; silent: boolean }) =>
 					createMockNotification(),
 			);
@@ -304,7 +304,7 @@ describe("NotificationManager", () => {
 		});
 
 		it("uses completion title/body for Stop events", () => {
-			const createNotification = mock(
+			const createNotification = vi.fn(
 				(_opts: { title: string; body: string; silent: boolean }) =>
 					createMockNotification(),
 			);

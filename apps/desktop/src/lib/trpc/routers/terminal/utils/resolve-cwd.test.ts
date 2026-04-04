@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { mkdirSync, rmSync } from "node:fs";
 import os from "node:os";
 import { join } from "node:path";

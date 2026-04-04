@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { ItemDetailPanel } from "./ItemDetailPanel";
 import type { MarketplaceItem } from "./types";
 
@@ -27,9 +27,9 @@ describe("ItemDetailPanel", () => {
     render(
       <ItemDetailPanel
         item={baseItem}
-        onInstall={mock(() => {})}
-        onUninstall={mock(() => {})}
-        onClose={mock(() => {})}
+        onInstall={vi.fn(() => {})}
+        onUninstall={vi.fn(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Lint Pack")).toBeTruthy();
@@ -40,9 +40,9 @@ describe("ItemDetailPanel", () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, installed: false }}
-        onInstall={mock(() => {})}
-        onUninstall={mock(() => {})}
-        onClose={mock(() => {})}
+        onInstall={vi.fn(() => {})}
+        onUninstall={vi.fn(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Install")).toBeTruthy();
@@ -52,22 +52,22 @@ describe("ItemDetailPanel", () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, installed: true }}
-        onInstall={mock(() => {})}
-        onUninstall={mock(() => {})}
-        onClose={mock(() => {})}
+        onInstall={vi.fn(() => {})}
+        onUninstall={vi.fn(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Uninstall")).toBeTruthy();
   });
 
   test("calls onInstall when Install button clicked", () => {
-    const onInstall = mock(() => {});
+    const onInstall = vi.fn(() => {});
     render(
       <ItemDetailPanel
         item={{ ...baseItem, installed: false }}
         onInstall={onInstall}
-        onUninstall={mock(() => {})}
-        onClose={mock(() => {})}
+        onUninstall={vi.fn(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     fireEvent.click(screen.getByText("Install"));
@@ -75,13 +75,13 @@ describe("ItemDetailPanel", () => {
   });
 
   test("calls onUninstall when Uninstall button clicked", () => {
-    const onUninstall = mock(() => {});
+    const onUninstall = vi.fn(() => {});
     render(
       <ItemDetailPanel
         item={{ ...baseItem, installed: true }}
-        onInstall={mock(() => {})}
+        onInstall={vi.fn(() => {})}
         onUninstall={onUninstall}
-        onClose={mock(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     fireEvent.click(screen.getByText("Uninstall"));
@@ -92,9 +92,9 @@ describe("ItemDetailPanel", () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, trusted: true }}
-        onInstall={mock(() => {})}
-        onUninstall={mock(() => {})}
-        onClose={mock(() => {})}
+        onInstall={vi.fn(() => {})}
+        onUninstall={vi.fn(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Trusted")).toBeTruthy();
@@ -104,9 +104,9 @@ describe("ItemDetailPanel", () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, trusted: false }}
-        onInstall={mock(() => {})}
-        onUninstall={mock(() => {})}
-        onClose={mock(() => {})}
+        onInstall={vi.fn(() => {})}
+        onUninstall={vi.fn(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Unverified")).toBeTruthy();
@@ -116,9 +116,9 @@ describe("ItemDetailPanel", () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, signed: true }}
-        onInstall={mock(() => {})}
-        onUninstall={mock(() => {})}
-        onClose={mock(() => {})}
+        onInstall={vi.fn(() => {})}
+        onUninstall={vi.fn(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Yes")).toBeTruthy();
@@ -128,9 +128,9 @@ describe("ItemDetailPanel", () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, signed: false }}
-        onInstall={mock(() => {})}
-        onUninstall={mock(() => {})}
-        onClose={mock(() => {})}
+        onInstall={vi.fn(() => {})}
+        onUninstall={vi.fn(() => {})}
+        onClose={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("No")).toBeTruthy();

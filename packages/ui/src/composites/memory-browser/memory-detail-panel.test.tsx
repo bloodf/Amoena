@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MemoryDetailPanel } from "./MemoryDetailPanel";
 import type { MemoryEntry } from "./types";
 
@@ -18,12 +18,12 @@ function makeProps(overrides: Partial<Parameters<typeof MemoryDetailPanel>[0]> =
   return {
     entry,
     confirmDelete: null,
-    onTogglePin: mock((_key: string) => {}),
-    onExport: mock(() => {}),
-    onAskDelete: mock((_key: string) => {}),
-    onCancelDelete: mock(() => {}),
-    onConfirmDelete: mock((_key: string) => {}),
-    onConvertToPersistent: mock((_key: string) => {}),
+    onTogglePin: vi.fn((_key: string) => {}),
+    onExport: vi.fn(() => {}),
+    onAskDelete: vi.fn((_key: string) => {}),
+    onCancelDelete: vi.fn(() => {}),
+    onConfirmDelete: vi.fn((_key: string) => {}),
+    onConvertToPersistent: vi.fn((_key: string) => {}),
     ...overrides,
   };
 }
@@ -60,7 +60,7 @@ describe("MemoryDetailPanel", () => {
   });
 
   test("calls onConvertToPersistent when clicked", () => {
-    const onConvertToPersistent = mock((_key: string) => {});
+    const onConvertToPersistent = vi.fn((_key: string) => {});
     render(<MemoryDetailPanel {...makeProps({ onConvertToPersistent })} />);
     fireEvent.click(screen.getByText("Convert to Persistent Memory"));
     expect(onConvertToPersistent).toHaveBeenCalledWith("auth.jwt.structure");

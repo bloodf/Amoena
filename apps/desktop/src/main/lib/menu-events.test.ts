@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import { EventEmitter } from "node:events";
 import type { OpenSettingsEvent, OpenWorkspaceEvent, SettingsSection } from "./menu-events";
 import { menuEmitter } from "./menu-events";

@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
 import { config } from "@/lib/config";
 import { logger } from "@/lib/logger";
-import { callAmoenaGateway } from "@/lib/amoena-gateway";
+import { callAmoenaGateway } from "@/lib/lunaria-gateway";
 
 const GATEWAY_TIMEOUT = 5000;
 

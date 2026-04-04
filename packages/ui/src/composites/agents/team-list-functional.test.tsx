@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { TeamListPane } from "./TeamListPane";
 import type { AgentTeam } from "./types";
@@ -82,7 +82,7 @@ describe("TeamListPane - functional tests", () => {
   });
 
   test("calls onSelectTeam when a team is clicked", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     render(<TeamListPane teams={teams} selectedTeamId="team-1" onSelectTeam={onSelect} />);
     fireEvent.click(screen.getByText("Beta Team"));
     expect(onSelect).toHaveBeenCalledWith("team-2");

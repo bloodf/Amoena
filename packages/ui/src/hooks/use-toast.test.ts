@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from "vitest";
 import * as React from 'react';
 
 import { reducer, amoenaToast, useToast } from './use-toast';

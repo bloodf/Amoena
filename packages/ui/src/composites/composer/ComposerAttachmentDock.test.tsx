@@ -1,15 +1,15 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, mock, test } from 'bun:test';
+import { describe, expect, mock, test, vi } from "vitest";
 
 const Icon = () => <svg data-testid="icon" />;
 
-mock.module('lucide-react', () => ({
+vi.mock('lucide-react', () => ({
   File: Icon,
   Folder: Icon,
   X: Icon,
 }));
 
-mock.module('@/lib/utils', () => ({
+vi.mock('@/lib/utils', () => ({
   cn: (...values: unknown[]) => values.flat(Infinity).filter(Boolean).join(' '),
 }));
 
@@ -19,7 +19,7 @@ import type { ComposerAttachment } from './types';
 function makeProps(overrides: Partial<Parameters<typeof ComposerAttachmentDock>[0]> = {}) {
   return {
     attachments: [],
-    onRemove: mock(() => {}),
+    onRemove: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -63,7 +63,7 @@ describe('ComposerAttachmentDock', () => {
   });
 
   test('calls onRemove with the attachment path', () => {
-    const onRemove = mock((_path: string) => {});
+    const onRemove = vi.fn((_path: string) => {});
     render(<ComposerAttachmentDock {...makeProps({ attachments: [fileAttachment], onRemove })} />);
     fireEvent.click(screen.getByRole('button'));
     expect(onRemove).toHaveBeenCalledWith('src/auth/tokens.rs');

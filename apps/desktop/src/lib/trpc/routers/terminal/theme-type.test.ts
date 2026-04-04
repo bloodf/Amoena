@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import type { ThemeState } from "main/lib/app-state/schemas";
 import { builtInThemes } from "shared/themes";
 import { resolveTerminalThemeType } from "./theme-type";

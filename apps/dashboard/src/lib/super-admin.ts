@@ -210,12 +210,12 @@ export function buildBootstrapPlan(
 		},
 		{
 			key: "install-gateway-systemd-template",
-			title: "Install amoena-gateway@.service template",
+			title: "Install lunaria-gateway@.service template",
 			command: [
 				"/usr/bin/cp",
 				"-n",
 				opts.gatewaySystemdTemplatePath,
-				"/etc/systemd/system/amoena-gateway@.service",
+				"/etc/systemd/system/lunaria-gateway@.service",
 			],
 			requires_root: true,
 			timeout_ms: 5000,
@@ -226,7 +226,7 @@ export function buildBootstrapPlan(
 			command: [
 				"/usr/bin/cp",
 				"-f",
-				`${artifactDir}/amoena-gateway.env`,
+				`${artifactDir}/lunaria-gateway.env`,
 				`/etc/amoena-tenants/${tenant.linux_user}.env`,
 			],
 			requires_root: true,
@@ -241,12 +241,12 @@ export function buildBootstrapPlan(
 		},
 		{
 			key: "enable-start-gateway",
-			title: `Enable/start amoena-gateway@${tenant.linux_user}.service`,
+			title: `Enable/start lunaria-gateway@${tenant.linux_user}.service`,
 			command: [
 				"/usr/bin/systemctl",
 				"enable",
 				"--now",
-				`amoena-gateway@${tenant.linux_user}.service`,
+				`lunaria-gateway@${tenant.linux_user}.service`,
 			],
 			requires_root: true,
 			timeout_ms: 5000,
@@ -272,12 +272,12 @@ export function buildDecommissionPlan(
 	const plan: ProvisionStep[] = [
 		{
 			key: "disable-stop-gateway",
-			title: `Disable/stop amoena-gateway@${tenant.linux_user}.service`,
+			title: `Disable/stop lunaria-gateway@${tenant.linux_user}.service`,
 			command: [
 				"/usr/bin/systemctl",
 				"disable",
 				"--now",
-				`amoena-gateway@${tenant.linux_user}.service`,
+				`lunaria-gateway@${tenant.linux_user}.service`,
 			],
 			requires_root: true,
 			timeout_ms: 10000,
@@ -382,7 +382,7 @@ function ensureProvisionArtifacts(job: any) {
 		"",
 	].join("\n");
 
-	fs.writeFileSync(path.join(artifactDir, "amoena-gateway.env"), gatewayEnv, {
+	fs.writeFileSync(path.join(artifactDir, "lunaria-gateway.env"), gatewayEnv, {
 		mode: 0o600,
 	});
 }
@@ -505,7 +505,7 @@ export function createTenantAndBootstrapJob(
 		repoRoot,
 		"ops",
 		"templates",
-		"amoena-gateway@.service",
+		"lunaria-gateway@.service",
 	);
 
 	const slug = normalizeSlug(request.slug);

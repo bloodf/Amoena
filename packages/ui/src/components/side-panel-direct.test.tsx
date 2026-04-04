@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { AgentsTab } from "@/composites/side-panel/AgentsTab";
 import { MemoryTab } from "@/composites/side-panel/MemoryTab";
 import { TimelineTab } from "@/composites/side-panel/TimelineTab";

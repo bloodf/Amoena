@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { StatusBarDropdown } from "./StatusBarDropdown";
 
 describe("StatusBarDropdown", () => {
   test("renders nothing when closed", () => {
     const { container } = render(
-      <StatusBarDropdown open={false} onClose={mock(() => {})}>
+      <StatusBarDropdown open={false} onClose={vi.fn(() => {})}>
         <span>content</span>
       </StatusBarDropdown>,
     );
@@ -14,7 +14,7 @@ describe("StatusBarDropdown", () => {
 
   test("renders children when open", () => {
     render(
-      <StatusBarDropdown open={true} onClose={mock(() => {})}>
+      <StatusBarDropdown open={true} onClose={vi.fn(() => {})}>
         <span>visible content</span>
       </StatusBarDropdown>,
     );
@@ -22,7 +22,7 @@ describe("StatusBarDropdown", () => {
   });
 
   test("calls onClose when clicking outside", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
       <StatusBarDropdown open={true} onClose={onClose}>
         <span>inside</span>
@@ -33,7 +33,7 @@ describe("StatusBarDropdown", () => {
   });
 
   test("does not call onClose when clicking inside", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
       <StatusBarDropdown open={true} onClose={onClose}>
         <span>inside</span>
@@ -45,7 +45,7 @@ describe("StatusBarDropdown", () => {
 
   test("applies custom className", () => {
     const { container } = render(
-      <StatusBarDropdown open={true} onClose={mock(() => {})} className="custom-class">
+      <StatusBarDropdown open={true} onClose={vi.fn(() => {})} className="custom-class">
         <span>test</span>
       </StatusBarDropdown>,
     );

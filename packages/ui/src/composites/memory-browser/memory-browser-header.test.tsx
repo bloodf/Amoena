@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MemoryBrowserHeader } from "./MemoryBrowserHeader";
 
 function makeProps(overrides: Partial<Parameters<typeof MemoryBrowserHeader>[0]> = {}) {
   return {
     viewMode: "list" as const,
-    onAdd: mock(() => {}),
-    onExport: mock(() => {}),
-    onViewModeChange: mock((_mode: "list" | "graph") => {}),
+    onAdd: vi.fn(() => {}),
+    onExport: vi.fn(() => {}),
+    onViewModeChange: vi.fn((_mode: "list" | "graph") => {}),
     ...overrides,
   };
 }
@@ -29,7 +29,7 @@ describe("MemoryBrowserHeader", () => {
   });
 
   test("calls onAdd when Add Memory clicked", () => {
-    const onAdd = mock(() => {});
+    const onAdd = vi.fn(() => {});
     render(<MemoryBrowserHeader {...makeProps({ onAdd })} />);
     fireEvent.click(screen.getByText("Add Memory"));
     expect(onAdd).toHaveBeenCalled();
@@ -42,7 +42,7 @@ describe("MemoryBrowserHeader", () => {
   });
 
   test("calls onViewModeChange with graph when Graph clicked", () => {
-    const onViewModeChange = mock((_mode: "list" | "graph") => {});
+    const onViewModeChange = vi.fn((_mode: "list" | "graph") => {});
     render(<MemoryBrowserHeader {...makeProps({ onViewModeChange })} />);
     fireEvent.click(screen.getByText("Graph"));
     expect(onViewModeChange).toHaveBeenCalledWith("graph");

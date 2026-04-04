@@ -1,27 +1,28 @@
-import { describe, expect, it, mock } from 'bun:test';
+import { describe, expect, it, vi } from 'vitest';
 
-// Mock collectResourceMetrics
-const mockCollectResourceMetrics = mock(() =>
-  Promise.resolve({
-    cpu: {
-      usage: 45.5,
-      cores: 8,
-      speed: 3.5,
-    },
-    memory: {
-      total: 16384,
-      used: 8192,
-      free: 8192,
-      usedPercent: 50,
-    },
-    process: {
-      memory: 512,
-      cpu: 12.5,
-    },
-  }),
+const mockCollectResourceMetrics = vi.hoisted(() =>
+  vi.fn(() =>
+    Promise.resolve({
+      cpu: {
+        usage: 45.5,
+        cores: 8,
+        speed: 3.5,
+      },
+      memory: {
+        total: 16384,
+        used: 8192,
+        free: 8192,
+        usedPercent: 50,
+      },
+      process: {
+        memory: 512,
+        cpu: 12.5,
+      },
+    }),
+  ),
 );
 
-mock.module('main/lib/resource-metrics', () => ({
+vi.mock('main/lib/resource-metrics', () => ({
   collectResourceMetrics: mockCollectResourceMetrics,
 }));
 

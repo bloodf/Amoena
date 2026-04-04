@@ -1,15 +1,15 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { AutopilotConstraintsSection } from "./AutopilotConstraintsSection";
 
 function makeProps(overrides: Partial<Parameters<typeof AutopilotConstraintsSection>[0]> = {}) {
   return {
     allowedActions: { file_edits: true, terminal: true, git: false },
-    onToggleAction: mock((_key: "file_edits" | "terminal" | "git") => {}),
+    onToggleAction: vi.fn((_key: "file_edits" | "terminal" | "git") => {}),
     maxTokens: "10000",
-    onMaxTokensChange: mock((_v: string) => {}),
+    onMaxTokensChange: vi.fn((_v: string) => {}),
     timeLimit: "15 minutes",
-    onTimeLimitChange: mock((_v: string) => {}),
+    onTimeLimitChange: vi.fn((_v: string) => {}),
     ...overrides,
   };
 }
@@ -34,7 +34,7 @@ describe("AutopilotConstraintsSection", () => {
   });
 
   test("calls onMaxTokensChange when token input changes", () => {
-    const onMaxTokensChange = mock((_v: string) => {});
+    const onMaxTokensChange = vi.fn((_v: string) => {});
     render(<AutopilotConstraintsSection {...makeProps({ onMaxTokensChange })} />);
     const input = document.querySelector("input")!;
     fireEvent.change(input, { target: { value: "20000" } });
@@ -48,7 +48,7 @@ describe("AutopilotConstraintsSection", () => {
   });
 
   test("calls onTimeLimitChange when time limit changes", () => {
-    const onTimeLimitChange = mock((_v: string) => {});
+    const onTimeLimitChange = vi.fn((_v: string) => {});
     render(<AutopilotConstraintsSection {...makeProps({ onTimeLimitChange })} />);
     const select = document.querySelector("select")!;
     fireEvent.change(select, { target: { value: "30 minutes" } });
@@ -56,7 +56,7 @@ describe("AutopilotConstraintsSection", () => {
   });
 
   test("calls onToggleAction with correct key when toggle clicked", () => {
-    const onToggleAction = mock((_key: "file_edits" | "terminal" | "git") => {});
+    const onToggleAction = vi.fn((_key: "file_edits" | "terminal" | "git") => {});
     render(<AutopilotConstraintsSection {...makeProps({ onToggleAction })} />);
     // Click the first toggle button (File edits)
     const toggleButtons = document.querySelectorAll("button");

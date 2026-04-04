@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { InstallReviewSheet } from "./InstallReviewSheet";
 import type { MarketplaceItem } from "./types";
 
@@ -28,8 +28,8 @@ describe("InstallReviewSheet", () => {
     render(
       <InstallReviewSheet
         item={baseItem}
-        onClose={mock(() => {})}
-        onConfirm={mock(() => {})}
+        onClose={vi.fn(() => {})}
+        onConfirm={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Git Tools")).toBeTruthy();
@@ -41,8 +41,8 @@ describe("InstallReviewSheet", () => {
     render(
       <InstallReviewSheet
         item={baseItem}
-        onClose={mock(() => {})}
-        onConfirm={mock(() => {})}
+        onClose={vi.fn(() => {})}
+        onConfirm={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Trusted")).toBeTruthy();
@@ -53,8 +53,8 @@ describe("InstallReviewSheet", () => {
     render(
       <InstallReviewSheet
         item={untrustedItem}
-        onClose={mock(() => {})}
-        onConfirm={mock(() => {})}
+        onClose={vi.fn(() => {})}
+        onConfirm={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Unverified")).toBeTruthy();
@@ -64,8 +64,8 @@ describe("InstallReviewSheet", () => {
     render(
       <InstallReviewSheet
         item={baseItem}
-        onClose={mock(() => {})}
-        onConfirm={mock(() => {})}
+        onClose={vi.fn(() => {})}
+        onConfirm={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Signed")).toBeTruthy();
@@ -76,8 +76,8 @@ describe("InstallReviewSheet", () => {
     render(
       <InstallReviewSheet
         item={unsignedItem}
-        onClose={mock(() => {})}
-        onConfirm={mock(() => {})}
+        onClose={vi.fn(() => {})}
+        onConfirm={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Unsigned")).toBeTruthy();
@@ -86,9 +86,9 @@ describe("InstallReviewSheet", () => {
   });
 
   test("calls onClose when backdrop is clicked", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { container } = render(
-      <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={mock(() => {})} />,
+      <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={vi.fn(() => {})} />,
     );
     // The outermost div is the backdrop
     fireEvent.click(container.firstChild as Element);
@@ -96,9 +96,9 @@ describe("InstallReviewSheet", () => {
   });
 
   test("does not call onClose when inner dialog is clicked (stopPropagation)", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
-      <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={mock(() => {})} />,
+      <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={vi.fn(() => {})} />,
     );
     fireEvent.click(screen.getByText("Review Installation").closest("div")!.parentElement!);
     // Click on the dialog content itself should not close
@@ -106,27 +106,27 @@ describe("InstallReviewSheet", () => {
   });
 
   test("calls onClose when Close button is clicked", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
-      <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={mock(() => {})} />,
+      <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={vi.fn(() => {})} />,
     );
     fireEvent.click(screen.getByLabelText("Close"));
     expect(onClose).toHaveBeenCalled();
   });
 
   test("calls onClose when Cancel button is clicked", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
-      <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={mock(() => {})} />,
+      <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={vi.fn(() => {})} />,
     );
     fireEvent.click(screen.getByText("Cancel"));
     expect(onClose).toHaveBeenCalled();
   });
 
   test("calls onConfirm when Install button is clicked", () => {
-    const onConfirm = mock(() => {});
+    const onConfirm = vi.fn(() => {});
     render(
-      <InstallReviewSheet item={baseItem} onClose={mock(() => {})} onConfirm={onConfirm} />,
+      <InstallReviewSheet item={baseItem} onClose={vi.fn(() => {})} onConfirm={onConfirm} />,
     );
     fireEvent.click(screen.getByText("Install"));
     expect(onConfirm).toHaveBeenCalled();
@@ -136,8 +136,8 @@ describe("InstallReviewSheet", () => {
     render(
       <InstallReviewSheet
         item={baseItem}
-        onClose={mock(() => {})}
-        onConfirm={mock(() => {})}
+        onClose={vi.fn(() => {})}
+        onConfirm={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("read:fs")).toBeTruthy();

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { waitFor } from "@testing-library/react";
 import { SessionComposer } from "./SessionComposer";
 
@@ -12,7 +12,7 @@ const session = {
 
 describe("SessionComposer", () => {
   test("injects external message and consumes callback", () => {
-    const consumed = mock(() => {});
+    const consumed = vi.fn(() => {});
     render(
       <SessionComposer
         provider="opencode"
@@ -59,7 +59,7 @@ describe("SessionComposer", () => {
   });
 
   test("updates work target, permission, branch, reasoning, and agent via pickers", () => {
-    const onUpdateSession = mock(() => {});
+    const onUpdateSession = vi.fn(() => {});
     render(
       <SessionComposer
         provider="opencode"
@@ -174,11 +174,11 @@ describe("SessionComposer", () => {
 
   test("supports recording start/stop and ctrl+t agent cycling", async () => {
     let frameCallback: FrameRequestCallback | undefined;
-    const requestAnimationFrameMock = mock((callback: FrameRequestCallback) => {
+    const requestAnimationFrameMock = vi.fn((callback: FrameRequestCallback) => {
       frameCallback = callback;
       return 1;
     });
-    const cancelAnimationFrameMock = mock(() => {});
+    const cancelAnimationFrameMock = vi.fn(() => {});
 
     Object.defineProperty(window, "requestAnimationFrame", { value: requestAnimationFrameMock, configurable: true });
     Object.defineProperty(window, "cancelAnimationFrame", { value: cancelAnimationFrameMock, configurable: true });
@@ -195,10 +195,10 @@ describe("SessionComposer", () => {
       configurable: true,
     });
 
-    const stream = { getTracks: () => [{ stop: mock(() => {}) }] } as unknown as MediaStream;
+    const stream = { getTracks: () => [{ stop: vi.fn(() => {}) }] } as unknown as MediaStream;
     Object.defineProperty(navigator, "mediaDevices", {
       value: {
-        getUserMedia: mock(async () => stream),
+        getUserMedia: vi.fn(async () => stream),
       },
       configurable: true,
     });
@@ -262,7 +262,7 @@ describe("SessionComposer", () => {
   });
 
   test("submits message payload with attachments and reasoning state", async () => {
-    const onSubmit = mock(() => {});
+    const onSubmit = vi.fn(() => {});
     render(<SessionComposer provider="opencode" session={session} onSubmit={onSubmit} />);
 
     const input = screen.getByPlaceholderText(/Ask anything\.\.\./i);

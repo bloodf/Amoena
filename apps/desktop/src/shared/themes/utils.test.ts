@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import { stripHash, toHex, toHex8, toHexAuto, withAlpha } from "./utils";
 
 describe("toHex", () => {

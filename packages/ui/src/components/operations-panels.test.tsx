@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { MessageQueue } from "./MessageQueue";
 import { ProviderSetupScreen } from "@/screens/ProviderSetupScreen";
 import { TerminalPanel } from "./TerminalPanel";

@@ -1,8 +1,7 @@
-import { describe, expect, it, mock } from 'bun:test';
+import { describe, expect, it, vi } from 'vitest';
 import { EventEmitter } from 'node:events';
 import { workspaces } from '@lunaria/local-db';
 
-// Mock localDb
 const mockLocalDb = {
   select: () => ({
     from: () => ({
@@ -17,24 +16,23 @@ const mockLocalDb = {
   }),
 };
 
-// Mock portManager
 const mockPortManager = Object.assign(new EventEmitter(), {
-  getAllPorts: mock(() => [
+  getAllPorts: vi.fn(() => [
     { workspaceId: 'ws-1', port: 3000, pid: 1234 },
     { workspaceId: 'ws-1', port: 8080, pid: 5678 },
   ]),
-  killPort: mock(() => Promise.resolve({ success: true })),
+  killPort: vi.fn(() => Promise.resolve({ success: true })),
 });
 
-mock.module('main/lib/local-db', () => ({
+vi.mock('main/lib/local-db', () => ({
   localDb: mockLocalDb,
 }));
 
-mock.module('main/lib/terminal/port-manager', () => ({
+vi.mock('main/lib/terminal/port-manager', () => ({
   portManager: mockPortManager,
 }));
 
-mock.module('main/lib/static-ports', () => ({
+vi.mock('main/lib/static-ports', () => ({
   loadStaticPorts: () => ({
     exists: true,
     ports: [
@@ -44,11 +42,11 @@ mock.module('main/lib/static-ports', () => ({
   }),
 }));
 
-mock.module('@lunaria/local-db', () => ({
+vi.mock('@lunaria/local-db', () => ({
   workspaces: {},
 }));
 
-mock.module('../workspaces/utils/worktree', () => ({
+vi.mock('../workspaces/utils/worktree', () => ({
   getWorkspacePath: () => '/Users/test/repo',
 }));
 

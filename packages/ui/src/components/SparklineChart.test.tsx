@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { SparklineChart } from "./SparklineChart";
 
 describe("SparklineChart — empty data", () => {

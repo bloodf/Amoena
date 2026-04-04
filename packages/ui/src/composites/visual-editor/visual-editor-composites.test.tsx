@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { ComponentTreePane } from "./ComponentTreePane";
 import { EditorCanvas } from "./EditorCanvas";
@@ -51,7 +51,7 @@ describe("EditorCanvas", () => {
 });
 
 describe("ComponentTreePane", () => {
-  const onSelect = mock(() => {});
+  const onSelect = vi.fn(() => {});
 
   const defaultProps = {
     nodes: visualEditorComponentTree,
@@ -79,7 +79,7 @@ describe("ComponentTreePane", () => {
   });
 
   test("calls onSelect when a node is clicked", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<ComponentTreePane {...defaultProps} onSelect={handler} />);
     fireEvent.click(screen.getByText("Header"));
     expect(handler).toHaveBeenCalledWith("Header");
@@ -105,12 +105,12 @@ describe("ComponentTreePane", () => {
 });
 
 describe("EditorToolbar", () => {
-  const onSelectTool = mock(() => {});
-  const onSelectViewport = mock(() => {});
-  const onZoomOut = mock(() => {});
-  const onZoomIn = mock(() => {});
-  const onResetZoom = mock(() => {});
-  const onViewModeChange = mock(() => {});
+  const onSelectTool = vi.fn(() => {});
+  const onSelectViewport = vi.fn(() => {});
+  const onZoomOut = vi.fn(() => {});
+  const onZoomIn = vi.fn(() => {});
+  const onResetZoom = vi.fn(() => {});
+  const onViewModeChange = vi.fn(() => {});
 
   const defaultProps = {
     tools: visualEditorTools,
@@ -146,7 +146,7 @@ describe("EditorToolbar", () => {
   });
 
   test("calls onSelectTool when a tool button is clicked", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<EditorToolbar {...defaultProps} onSelectTool={handler} />);
     // Tools are icon-only buttons with title attributes
     const moveButton = screen.getByTitle("Move");
@@ -155,14 +155,14 @@ describe("EditorToolbar", () => {
   });
 
   test("calls onSelectViewport when viewport button is clicked", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<EditorToolbar {...defaultProps} onSelectViewport={handler} />);
     fireEvent.click(screen.getByText("768px"));
     expect(handler).toHaveBeenCalledWith("tablet");
   });
 
   test("calls onZoomIn when zoom in is clicked", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<EditorToolbar {...defaultProps} onZoomIn={handler} />);
     // ZoomIn button is between the zoom text and reset button
     const buttons = screen.getAllByRole("button");
@@ -178,21 +178,21 @@ describe("EditorToolbar", () => {
   });
 
   test("calls onViewModeChange when Code button is clicked", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<EditorToolbar {...defaultProps} onViewModeChange={handler} />);
     fireEvent.click(screen.getByText("Code"));
     expect(handler).toHaveBeenCalledWith("code");
   });
 
   test("calls onViewModeChange with preview when Preview is clicked", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<EditorToolbar {...defaultProps} viewMode="code" onViewModeChange={handler} />);
     fireEvent.click(screen.getByText("Preview"));
     expect(handler).toHaveBeenCalledWith("preview");
   });
 
   test("calls onResetZoom when reset button is clicked", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<EditorToolbar {...defaultProps} onResetZoom={handler} />);
     const resetButton = screen.getByTitle("Reset zoom");
     fireEvent.click(resetButton);
@@ -201,9 +201,9 @@ describe("EditorToolbar", () => {
 });
 
 describe("PropertiesPanel", () => {
-  const onPropChange = mock(() => {});
-  const onStartEditing = mock(() => {});
-  const onStopEditing = mock(() => {});
+  const onPropChange = vi.fn(() => {});
+  const onStartEditing = vi.fn(() => {});
+  const onStopEditing = vi.fn(() => {});
 
   const propValues: Record<string, string> = {
     width: "100%",
@@ -274,7 +274,7 @@ describe("PropertiesPanel", () => {
   });
 
   test("calls onPropChange when text input value changes", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<PropertiesPanel {...defaultProps} onPropChange={handler} />);
     const widthInput = screen.getByDisplayValue("100%");
     fireEvent.change(widthInput, { target: { value: "50%" } });
@@ -282,7 +282,7 @@ describe("PropertiesPanel", () => {
   });
 
   test("calls onStartEditing on input focus", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<PropertiesPanel {...defaultProps} onStartEditing={handler} />);
     const widthInput = screen.getByDisplayValue("100%");
     fireEvent.focus(widthInput);
@@ -290,7 +290,7 @@ describe("PropertiesPanel", () => {
   });
 
   test("calls onStopEditing on input blur", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<PropertiesPanel {...defaultProps} onStopEditing={handler} />);
     const widthInput = screen.getByDisplayValue("100%");
     fireEvent.blur(widthInput);

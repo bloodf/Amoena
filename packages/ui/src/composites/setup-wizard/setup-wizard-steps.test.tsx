@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { SetupWizardWelcomeStep } from "./WelcomeStep";
 import { SetupWizardProviderStep } from "./ProviderStep";
@@ -34,9 +34,9 @@ describe("SetupWizardProviderStep", () => {
     selectedProvider: 0,
     apiKey: "",
     testStatus: "idle" as const,
-    onSelectProvider: mock(() => {}),
-    onApiKeyChange: mock(() => {}),
-    onTest: mock(() => {}),
+    onSelectProvider: vi.fn(() => {}),
+    onApiKeyChange: vi.fn(() => {}),
+    onTest: vi.fn(() => {}),
   };
 
   test("renders heading and provider buttons", () => {
@@ -48,7 +48,7 @@ describe("SetupWizardProviderStep", () => {
   });
 
   test("fires onSelectProvider when clicking a provider", () => {
-    const onSelectProvider = mock(() => {});
+    const onSelectProvider = vi.fn(() => {});
     render(<SetupWizardProviderStep {...defaultProps} onSelectProvider={onSelectProvider} />);
     fireEvent.click(screen.getByText("OpenAI"));
     expect(onSelectProvider).toHaveBeenCalledWith(1);
@@ -80,7 +80,7 @@ describe("SetupWizardModelStep", () => {
     render(
       <SetupWizardModelStep
         defaultModel="claude-4-sonnet"
-        onDefaultModelChange={mock(() => {})}
+        onDefaultModelChange={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Choose a Default Model")).toBeTruthy();
@@ -91,7 +91,7 @@ describe("SetupWizardModelStep", () => {
 describe("SetupWizardBackendStep", () => {
   const defaultProps = {
     mode: "native",
-    onModeChange: mock(() => {}),
+    onModeChange: vi.fn(() => {}),
   };
 
   test("renders heading and mode buttons", () => {
@@ -110,7 +110,7 @@ describe("SetupWizardBackendStep", () => {
   });
 
   test("fires onModeChange when clicking mode button", () => {
-    const onModeChange = mock(() => {});
+    const onModeChange = vi.fn(() => {});
     render(<SetupWizardBackendStep {...defaultProps} onModeChange={onModeChange} />);
     fireEvent.click(screen.getByText("wrapper"));
     expect(onModeChange).toHaveBeenCalledWith("wrapper");
@@ -122,7 +122,7 @@ describe("SetupWizardMemoryStep", () => {
     render(
       <SetupWizardMemoryStep
         memoryEnabled={true}
-        onMemoryEnabledChange={mock(() => {})}
+        onMemoryEnabledChange={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Memory System")).toBeTruthy();
@@ -133,7 +133,7 @@ describe("SetupWizardMemoryStep", () => {
     render(
       <SetupWizardMemoryStep
         memoryEnabled={false}
-        onMemoryEnabledChange={mock(() => {})}
+        onMemoryEnabledChange={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText(/Persist observations/)).toBeTruthy();
@@ -145,9 +145,9 @@ describe("SetupWizardProfileStep", () => {
     theme: "dark",
     reasoningMode: "auto",
     keybindingPreset: "Default",
-    onThemeChange: mock(() => {}),
-    onReasoningModeChange: mock(() => {}),
-    onKeybindingPresetChange: mock(() => {}),
+    onThemeChange: vi.fn(() => {}),
+    onReasoningModeChange: vi.fn(() => {}),
+    onKeybindingPresetChange: vi.fn(() => {}),
   };
 
   test("renders heading", () => {
@@ -165,14 +165,14 @@ describe("SetupWizardProfileStep", () => {
 
 describe("SetupWizardCompatStep", () => {
   test("renders heading and compatibility info", () => {
-    const onLaunch = mock(() => {});
+    const onLaunch = vi.fn(() => {});
     render(<SetupWizardCompatStep onLaunch={onLaunch} />);
     expect(screen.getByText("Ecosystem Compatibility")).toBeTruthy();
     expect(screen.getByText("Compatibility scan")).toBeTruthy();
   });
 
   test("fires onLaunch when clicking launch button", () => {
-    const onLaunch = mock(() => {});
+    const onLaunch = vi.fn(() => {});
     render(<SetupWizardCompatStep onLaunch={onLaunch} />);
     fireEvent.click(screen.getByText("Launch Amoena"));
     expect(onLaunch).toHaveBeenCalled();
@@ -183,8 +183,8 @@ describe("SetupWizardFooter", () => {
   const defaultProps = {
     currentStep: 1,
     lastStep: 6,
-    onBack: mock(() => {}),
-    onNext: mock(() => {}),
+    onBack: vi.fn(() => {}),
+    onNext: vi.fn(() => {}),
   };
 
   test("renders back and next buttons", () => {
@@ -216,14 +216,14 @@ describe("SetupWizardFooter", () => {
   });
 
   test("fires onBack callback", () => {
-    const onBack = mock(() => {});
+    const onBack = vi.fn(() => {});
     render(<SetupWizardFooter {...defaultProps} onBack={onBack} currentStep={2} />);
     fireEvent.click(screen.getByText("Back"));
     expect(onBack).toHaveBeenCalled();
   });
 
   test("fires onNext callback", () => {
-    const onNext = mock(() => {});
+    const onNext = vi.fn(() => {});
     render(<SetupWizardFooter {...defaultProps} onNext={onNext} />);
     fireEvent.click(screen.getByText("Next"));
     expect(onNext).toHaveBeenCalled();
@@ -233,14 +233,14 @@ describe("SetupWizardFooter", () => {
 describe("SetupWizardProgress", () => {
   test("renders step dots", () => {
     const { container } = render(
-      <SetupWizardProgress currentStep={0} onSelect={mock(() => {})} />,
+      <SetupWizardProgress currentStep={0} onSelect={vi.fn(() => {})} />,
     );
     const dots = container.querySelectorAll(".rounded-full");
     expect(dots.length).toBe(7);
   });
 
   test("fires onSelect for completed step", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     const { container } = render(
       <SetupWizardProgress currentStep={3} onSelect={onSelect} />,
     );
@@ -256,10 +256,10 @@ describe("SetupWizardPreferencesStep", () => {
     theme: "dark",
     reasoningMode: "auto",
     keybindingPreset: "Default",
-    onDefaultModelChange: mock(() => {}),
-    onThemeChange: mock(() => {}),
-    onReasoningModeChange: mock(() => {}),
-    onKeybindingPresetChange: mock(() => {}),
+    onDefaultModelChange: vi.fn(() => {}),
+    onThemeChange: vi.fn(() => {}),
+    onReasoningModeChange: vi.fn(() => {}),
+    onKeybindingPresetChange: vi.fn(() => {}),
   };
 
   test("renders heading", () => {
@@ -276,14 +276,14 @@ describe("SetupWizardPreferencesStep", () => {
   });
 
   test("fires onThemeChange when clicking theme button", () => {
-    const onThemeChange = mock(() => {});
+    const onThemeChange = vi.fn(() => {});
     render(<SetupWizardPreferencesStep {...defaultProps} onThemeChange={onThemeChange} />);
     fireEvent.click(screen.getByText("light"));
     expect(onThemeChange).toHaveBeenCalledWith("light");
   });
 
   test("fires onReasoningModeChange when clicking reasoning button", () => {
-    const onReasoningModeChange = mock(() => {});
+    const onReasoningModeChange = vi.fn(() => {});
     render(<SetupWizardPreferencesStep {...defaultProps} onReasoningModeChange={onReasoningModeChange} />);
     fireEvent.click(screen.getByText("off"));
     expect(onReasoningModeChange).toHaveBeenCalledWith("off");
@@ -295,7 +295,7 @@ describe("SetupWizardReadyStep", () => {
     selectedProviderName: "Anthropic",
     workspacePath: "/home/user/projects",
     defaultModel: "claude-4-sonnet",
-    onLaunch: mock(() => {}),
+    onLaunch: vi.fn(() => {}),
   };
 
   test("renders ready heading and summary", () => {
@@ -307,7 +307,7 @@ describe("SetupWizardReadyStep", () => {
   });
 
   test("fires onLaunch when clicking launch button", () => {
-    const onLaunch = mock(() => {});
+    const onLaunch = vi.fn(() => {});
     render(<SetupWizardReadyStep {...defaultProps} onLaunch={onLaunch} />);
     fireEvent.click(screen.getByText("Launch Amoena"));
     expect(onLaunch).toHaveBeenCalled();
@@ -317,8 +317,8 @@ describe("SetupWizardReadyStep", () => {
 describe("SetupWizardWorkspaceStep", () => {
   const defaultProps = {
     workspacePath: "/home/user/projects",
-    onWorkspacePathChange: mock(() => {}),
-    onBrowse: mock(() => {}),
+    onWorkspacePathChange: vi.fn(() => {}),
+    onBrowse: vi.fn(() => {}),
   };
 
   test("renders heading and workspace path", () => {
@@ -328,7 +328,7 @@ describe("SetupWizardWorkspaceStep", () => {
   });
 
   test("fires onBrowse when clicking browse button", () => {
-    const onBrowse = mock(() => {});
+    const onBrowse = vi.fn(() => {});
     render(<SetupWizardWorkspaceStep {...defaultProps} onBrowse={onBrowse} />);
     fireEvent.click(screen.getByText("Browse"));
     expect(onBrowse).toHaveBeenCalled();

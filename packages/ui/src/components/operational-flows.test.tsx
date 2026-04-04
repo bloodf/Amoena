@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { MarketplaceScreen } from "@/screens/MarketplaceScreen";

@@ -12,7 +12,7 @@
  * terminal sessions across app restarts.
  */
 
-import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { DEFAULT_MODES } from "./types";
 
 if (typeof window === "undefined") {

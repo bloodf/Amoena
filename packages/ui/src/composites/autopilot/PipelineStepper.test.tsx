@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 
 import { PipelineStepper } from "./PipelineStepper";
 import type { AutopilotPipelinePhase } from "./types";

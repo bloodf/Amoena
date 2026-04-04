@@ -1,49 +1,53 @@
-import { describe, expect, it, mock } from 'bun:test';
+import { describe, expect, it, vi } from 'vitest';
 import { BrowserWindow } from 'electron';
 
-// Mock window getter
-let mockWindow: BrowserWindow | null = new BrowserWindow();
-
-// Mock electron modules
-const mockDialog = {
-  showOpenDialog: mock(() =>
+const mockDialog = vi.hoisted(() =>
+  vi.fn(() =>
     Promise.resolve({
       canceled: false,
       filePaths: ['/Users/test/selected'],
     }),
   ),
-};
+);
 
-mock.module('electron', () => ({
-  dialog: mockDialog,
+vi.mock('electron', () => ({
+  dialog: {
+    showOpenDialog: mockDialog,
+  },
   default: {
-    dialog: mockDialog,
+    dialog: {
+      showOpenDialog: mockDialog,
+    },
+  },
+  BrowserWindow: vi.fn().mockImplementation(() => ({
+    minimize: vi.fn(),
+    maximize: vi.fn(),
+    unmaximize: vi.fn(),
+    close: vi.fn(),
+    isMaximized: vi.fn(() => false),
+  })),
+}));
+
+vi.mock('node:fs/promises', () => ({
+  default: {
+    stat: vi.fn(() => Promise.resolve({ isDirectory: () => true })),
+    readFile: vi.fn(() => Promise.resolve(Buffer.from('fakeimage'))),
   },
 }));
 
-mock.module('node:fs/promises', () => ({
-  default: {
-    stat: mock(() => Promise.resolve({ isDirectory: () => true })),
-    readFile: mock(() => Promise.resolve(Buffer.from('fakeimage'))),
-  },
-}));
-
-mock.module('node:os', () => ({
+vi.mock('node:os', () => ({
   default: {
     homedir: () => '/Users/test',
   },
 }));
 
-mock.module('node:path', () => ({
-  default: {
-    extname: () => '.png',
-  },
-  default: {
-    extname: () => '.png',
-    join: (a: string, b: string) => `${a}/${b}`,
-    resolve: (a: string, b: string) => `${a}/${b}`,
-  },
+vi.mock('node:path', () => ({
+  extname: () => '.png',
+  join: (a: string, b: string) => `${a}/${b}`,
+  resolve: (a: string, b: string) => `${a}/${b}`,
 }));
+
+let mockWindow: BrowserWindow | null = null;
 
 const { createWindowRouter } = await import('./window');
 
@@ -61,7 +65,7 @@ describe('window router', () => {
       const router = createWindowRouter(getWindow);
       const caller = router.createCaller({});
 
-      const mockMinimize = mock(() => {});
+      const mockMinimize = vi.fn(() => {});
       mockWindow!.minimize = mockMinimize;
 
       const result = caller.mutation('window.minimize', {});
@@ -84,8 +88,8 @@ describe('window router', () => {
       const router = createWindowRouter(getWindow);
       const caller = router.createCaller({});
 
-      const mockIsMaximized = mock(() => false);
-      const mockMaximize = mock(() => {});
+      const mockIsMaximized = vi.fn(() => false);
+      const mockMaximize = vi.fn(() => {});
       mockWindow!.isMaximized = mockIsMaximized;
       mockWindow!.maximize = mockMaximize;
 
@@ -98,8 +102,8 @@ describe('window router', () => {
       const router = createWindowRouter(getWindow);
       const caller = router.createCaller({});
 
-      const mockIsMaximized = mock(() => true);
-      const mockUnmaximize = mock(() => {});
+      const mockIsMaximized = vi.fn(() => true);
+      const mockUnmaximize = vi.fn(() => {});
       mockWindow!.isMaximized = mockIsMaximized;
       mockWindow!.unmaximize = mockUnmaximize;
 
@@ -115,7 +119,7 @@ describe('window router', () => {
       const router = createWindowRouter(getWindow);
       const caller = router.createCaller({});
 
-      const mockClose = mock(() => {});
+      const mockClose = vi.fn(() => {});
       mockWindow!.close = mockClose;
 
       const result = caller.mutation('window.close', {});
@@ -138,7 +142,7 @@ describe('window router', () => {
       const router = createWindowRouter(getWindow);
       const caller = router.createCaller({});
 
-      const mockIsMaximized = mock(() => true);
+      const mockIsMaximized = vi.fn(() => true);
       mockWindow!.isMaximized = mockIsMaximized;
 
       const result = caller.query('window.isMaximized', {});
@@ -195,7 +199,7 @@ describe('window router', () => {
       const caller = router.createCaller({});
 
       // Mock stat to throw for non-existent path
-      const mockStat = mock(() => Promise.reject(new Error('ENOENT')));
+      const mockStat = vi.fn(() => Promise.reject(new Error('ENOENT')));
 
       const result = await caller.query('window.getDirectoryStatus', {
         path: '/non/existent',
@@ -220,7 +224,7 @@ describe('window router', () => {
     });
 
     it('returns canceled when dialog is canceled', async () => {
-      mockDialog.showOpenDialog = mock(() =>
+      mockDialog.showOpenDialog = vi.fn(() =>
         Promise.resolve({
           canceled: true,
           filePaths: [],
@@ -257,7 +261,7 @@ describe('window router', () => {
     });
 
     it('returns canceled when dialog is canceled', async () => {
-      mockDialog.showOpenDialog = mock(() =>
+      mockDialog.showOpenDialog = vi.fn(() =>
         Promise.resolve({
           canceled: true,
           filePaths: [],

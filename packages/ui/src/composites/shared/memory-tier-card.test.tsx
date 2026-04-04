@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { MemoryTierCard, categoryConfig } from "./MemoryTierCard";
 
@@ -29,8 +29,8 @@ describe("MemoryTierCard", () => {
   });
 
   test("renders duplicate actions and empty L1/L2 branches safely", () => {
-    const onMerge = mock(() => {});
-    const onDismiss = mock(() => {});
+    const onMerge = vi.fn(() => {});
+    const onDismiss = vi.fn(() => {});
     render(
       <MemoryTierCard
         id="memory-2"
@@ -121,7 +121,7 @@ describe("MemoryTierCard", () => {
 
   // Branch: isDuplicate=true but onMerge=undefined — no Merge button
   test("does not render Merge button when onMerge is absent — branch line 85", () => {
-    const onDismiss = mock(() => {});
+    const onDismiss = vi.fn(() => {});
     render(
       <MemoryTierCard
         id="memory-6"
@@ -140,7 +140,7 @@ describe("MemoryTierCard", () => {
 
   // Branch: isDuplicate=true but onDismiss=undefined — no dismiss button
   test("does not render Dismiss button when onDismiss is absent — branch line 93", () => {
-    const onMerge = mock(() => {});
+    const onMerge = vi.fn(() => {});
     render(
       <MemoryTierCard
         id="memory-7"

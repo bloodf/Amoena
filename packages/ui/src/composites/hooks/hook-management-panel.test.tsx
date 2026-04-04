@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { HookManagementPanel } from "./HookManagementPanel";
 
 const hooks = [
@@ -10,8 +10,8 @@ const hooks = [
 
 function makeHandlers() {
   return {
-    onDelete: mock(() => {}),
-    onFire: mock(() => {}),
+    onDelete: vi.fn(() => {}),
+    onFire: vi.fn(() => {}),
   };
 }
 

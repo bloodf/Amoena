@@ -1,9 +1,9 @@
-import { describe, expect, it, mock } from "bun:test";
+import { describe, expect, it, vi } from "vitest";
 import { resolve } from "node:path";
 import type { ChangedFile, GitChangesStatus } from "shared/changes-types";
 import type { SimpleGit, StatusResult } from "simple-git";
 
-const mockGetStatusNoLock = mock(() =>
+const mockGetStatusNoLock = vi.fn(() =>
 	Promise.resolve({
 		branch: "main",
 		current: "main",
@@ -17,10 +17,10 @@ const mockGetStatusNoLock = mock(() =>
 	} as StatusResult),
 );
 
-const mockGetSimpleGitWithShellPath = mock(() =>
+const mockGetSimpleGitWithShellPath = vi.fn(() =>
 	Promise.resolve({
-		raw: mock(() => Promise.resolve("")),
-		branch: mock(() =>
+		raw: vi.fn(() => Promise.resolve("")),
+		branch: vi.fn(() =>
 			Promise.resolve({
 				branches: {
 					main: { current: true, name: "main" },
@@ -30,11 +30,11 @@ const mockGetSimpleGitWithShellPath = mock(() =>
 	}),
 );
 
-mock.module("../../workspaces/utils/git", () => ({
+vi.mock("../../workspaces/utils/git", () => ({
 	getStatusNoLock: mockGetStatusNoLock,
 }));
 
-mock.module("../../workspaces/utils/git-client", () => ({
+vi.mock("../../workspaces/utils/git-client", () => ({
 	getSimpleGitWithShellPath: mockGetSimpleGitWithShellPath,
 }));
 
@@ -44,8 +44,8 @@ describe("git-task-handlers", () => {
 	describe("executeGitTask", () => {
 		it("executes getStatus task", async () => {
 			mockGetSimpleGitWithShellPath.mockResolvedValue({
-				raw: mock(() => Promise.resolve("")),
-				branch: mock(() =>
+				raw: vi.fn(() => Promise.resolve("")),
+				branch: vi.fn(() =>
 					Promise.resolve({
 						branches: {
 							main: { current: true, name: "main" },
@@ -79,7 +79,7 @@ describe("git-task-handlers", () => {
 
 		it("executes getCommitFiles task", async () => {
 			mockGetSimpleGitWithShellPath.mockResolvedValue({
-				raw: mock(() =>
+				raw: vi.fn(() =>
 					Promise.resolve("M\tsrc/index.ts\nA\tsrc/new.ts"),
 			} as unknown as SimpleGit);
 

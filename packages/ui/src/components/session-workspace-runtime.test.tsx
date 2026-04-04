@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, mock } from "bun:test";
+import { describe, expect, it, mock, vi } from "vitest";
 
 import { MessageTimeline } from "./MessageTimeline";
 import { SessionComposer } from "./SessionComposer";
@@ -9,7 +9,7 @@ import type { ManagedAgent } from "@/composites/agents/types";
 
 describe("runtime-ready workspace surfaces", () => {
   it("submits composer payloads with attachments and reasoning choices", async () => {
-    const onSubmit = mock(async () => undefined);
+    const onSubmit = vi.fn(async () => undefined);
 
     render(
       <SessionComposer
@@ -68,8 +68,8 @@ describe("runtime-ready workspace surfaces", () => {
   });
 
   it("renders runtime timeline messages and routes permission decisions through callbacks", () => {
-    const onApprovePermission = mock(() => {});
-    const onDenyPermission = mock(() => {});
+    const onApprovePermission = vi.fn(() => {});
+    const onDenyPermission = vi.fn(() => {});
 
     render(
       <MessageTimeline

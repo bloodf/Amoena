@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { MarketplaceScreen } from "@/screens/MarketplaceScreen";
@@ -109,7 +109,7 @@ describe("Amoena coverage hardening", () => {
     expect(findFile([{ name: "src", type: "folder", children: [] }], "missing.rs")).toBeNull();
     expect(getFilePath([{ name: "src", type: "folder", children: [] }], "missing.rs")).toBe("");
 
-    const onOpenFile = mock(() => {});
+    const onOpenFile = vi.fn(() => {});
     render(<FilesTab onOpenFile={onOpenFile} />);
 
     const folderButton = screen.getByRole("button", { name: /src/i });
@@ -121,8 +121,8 @@ describe("Amoena coverage hardening", () => {
       .find((button) => button.getAttribute("draggable") === "true" && button.textContent?.includes("tokens.rs"));
     expect(fileButton).toBeTruthy();
 
-    const setData = mock(() => {});
-    const setDragImage = mock(() => {});
+    const setData = vi.fn(() => {});
+    const setDragImage = vi.fn(() => {});
     fireEvent.dragStart(fileButton!, {
       dataTransfer: {
         setData,
@@ -136,8 +136,8 @@ describe("Amoena coverage hardening", () => {
     expect(onOpenFile).toHaveBeenCalledWith("tokens.rs", "src/auth/tokens.rs");
 
     const folderDragButton = screen.getByRole("button", { name: /src/i });
-    const folderSetData = mock(() => {});
-    const folderSetDragImage = mock(() => {});
+    const folderSetData = vi.fn(() => {});
+    const folderSetDragImage = vi.fn(() => {});
     fireEvent.dragStart(folderDragButton, {
       dataTransfer: {
         setData: folderSetData,

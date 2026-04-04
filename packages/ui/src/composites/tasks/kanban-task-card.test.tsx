@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { KanbanTaskCard } from "./KanbanTaskCard";
 import type { KanbanTask } from "./types";
 
@@ -18,7 +18,7 @@ function makeProps(overrides: Partial<Parameters<typeof KanbanTaskCard>[0]> = {}
   return {
     task,
     isDragging: false,
-    onDragStart: mock(() => {}),
+    onDragStart: vi.fn(() => {}),
     ...overrides,
   };
 }

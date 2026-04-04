@@ -1,35 +1,33 @@
-import { describe, expect, it, mock } from 'bun:test';
+import { describe, expect, it, vi } from 'vitest';
 
-// Mock electron modules before importing
 const mockShell = {
-  openExternal: mock(() => Promise.resolve()),
+  openExternal: vi.fn(() => Promise.resolve()),
 };
 
 const mockSystemPreferences = {
-  isTrustedAccessibilityClient: mock(() => false),
-  getMediaAccessStatus: mock(() => 'granted'),
-  askForMediaAccess: mock(() => Promise.resolve(true)),
+  isTrustedAccessibilityClient: vi.fn(() => false),
+  getMediaAccessStatus: vi.fn(() => 'granted'),
+  askForMediaAccess: vi.fn(() => Promise.resolve(true)),
 };
 
-mock.module('electron', () => ({
+vi.mock('electron', () => ({
   shell: mockShell,
   systemPreferences: mockSystemPreferences,
 }));
 
-// Mock node:fs
-mock.module('node:fs', () => ({
+vi.mock('node:fs', () => ({
   default: {
-    accessSync: mock(() => {
+    accessSync: vi.fn(() => {
       throw new Error('Access denied');
     }),
   },
 }));
 
-mock.module('node:os', () => ({
+vi.mock('node:os', () => ({
   homedir: () => '/Users/testuser',
 }));
 
-mock.module('node:path', () => ({
+vi.mock('node:path', () => ({
   default: {
     join: (a: string, b: string) => `${a}/${b}`,
   },

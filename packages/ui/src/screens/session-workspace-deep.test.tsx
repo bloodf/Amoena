@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { SessionWorkspace } from "./SessionWorkspace";
 

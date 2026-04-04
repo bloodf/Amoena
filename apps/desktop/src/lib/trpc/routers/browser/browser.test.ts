@@ -1,39 +1,37 @@
-import { describe, expect, it, mock } from 'bun:test';
+import { describe, expect, it, vi } from 'vitest';
 import { EventEmitter } from 'node:events';
 
-// Mock browserManager
 const mockBrowserManager = Object.assign(new EventEmitter(), {
-  register: mock(() => {}),
-  unregister: mock(() => {}),
-  navigate: mock(() => {}),
-  getWebContents: mock(() => ({
+  register: vi.fn(() => {}),
+  unregister: vi.fn(() => {}),
+  navigate: vi.fn(() => {}),
+  getWebContents: vi.fn(() => ({
     canGoBack: () => true,
     canGoForward: () => true,
-    goBack: mock(() => {}),
-    goForward: mock(() => {}),
-    reload: mock(() => {}),
-    reloadIgnoringCache: mock(() => {}),
+    goBack: vi.fn(() => {}),
+    goForward: vi.fn(() => {}),
+    reload: vi.fn(() => {}),
+    reloadIgnoringCache: vi.fn(() => {}),
     getURL: () => 'https://example.com',
     getTitle: () => 'Example',
     isLoading: () => false,
   })),
-  screenshot: mock(() => Promise.resolve('base64screenshot')),
-  evaluateJS: mock(() => Promise.resolve({ result: 'success' })),
-  getConsoleLogs: mock(() => [{ level: 'log', message: 'test', timestamp: Date.now() }]),
-  openDevTools: mock(() => {}),
-  getDevToolsUrl: mock(() => Promise.resolve('devtools://test')),
+  screenshot: vi.fn(() => Promise.resolve('base64screenshot')),
+  evaluateJS: vi.fn(() => Promise.resolve({ result: 'success' })),
+  getConsoleLogs: vi.fn(() => [{ level: 'log', message: 'test', timestamp: Date.now() }]),
+  openDevTools: vi.fn(() => {}),
+  getDevToolsUrl: vi.fn(() => Promise.resolve('devtools://test')),
 });
 
-mock.module('main/lib/browser/browser-manager', () => ({
+vi.mock('main/lib/browser/browser-manager', () => ({
   browserManager: mockBrowserManager,
 }));
 
-// Mock electron session
-mock.module('electron', () => ({
+vi.mock('electron', () => ({
   session: {
     fromPartition: () => ({
-      clearStorageData: mock(() => Promise.resolve()),
-      clearCache: mock(() => Promise.resolve()),
+      clearStorageData: vi.fn(() => Promise.resolve()),
+      clearCache: vi.fn(() => Promise.resolve()),
     }),
   },
 }));
@@ -202,7 +200,7 @@ describe('browser router', () => {
     });
 
     it('returns null for unknown pane', async () => {
-      mockBrowserManager.getWebContents = mock(() => null);
+      mockBrowserManager.getWebContents = vi.fn(() => null);
 
       const router = createBrowserRouter();
       const caller = router.createCaller({});

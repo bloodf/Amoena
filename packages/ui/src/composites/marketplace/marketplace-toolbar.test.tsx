@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MarketplaceToolbar, sortLabels } from "./MarketplaceToolbar";
 import type { AuthorFilter, SortOption, TrustFilter } from "./types";
 
@@ -12,13 +12,13 @@ function makeProps(overrides: Partial<Parameters<typeof MarketplaceToolbar>[0]> 
     trustFilter: "all" as TrustFilter,
     authorFilter: "all" as AuthorFilter,
     viewMode: "grid" as "grid" | "list",
-    onSearchChange: mock(() => {}),
-    onToggleFilters: mock(() => {}),
-    onSortChange: mock(() => {}),
-    onTrustFilterChange: mock(() => {}),
-    onAuthorFilterChange: mock(() => {}),
-    onViewModeChange: mock(() => {}),
-    onClearFilters: mock(() => {}),
+    onSearchChange: vi.fn(() => {}),
+    onToggleFilters: vi.fn(() => {}),
+    onSortChange: vi.fn(() => {}),
+    onTrustFilterChange: vi.fn(() => {}),
+    onAuthorFilterChange: vi.fn(() => {}),
+    onViewModeChange: vi.fn(() => {}),
+    onClearFilters: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -30,7 +30,7 @@ describe("MarketplaceToolbar", () => {
   });
 
   test("calls onSearchChange when typing in search input", () => {
-    const onSearchChange = mock(() => {});
+    const onSearchChange = vi.fn(() => {});
     render(<MarketplaceToolbar {...makeProps({ onSearchChange })} />);
     const input = screen.getByPlaceholderText(/search plugins/i);
     fireEvent.change(input, { target: { value: "git" } });
@@ -46,7 +46,7 @@ describe("MarketplaceToolbar", () => {
   });
 
   test("shows clear button when searchQuery is non-empty and clears on click", () => {
-    const onSearchChange = mock(() => {});
+    const onSearchChange = vi.fn(() => {});
     render(<MarketplaceToolbar {...makeProps({ searchQuery: "git", onSearchChange })} />);
     // X clear button should appear
     const buttons = screen.getAllByRole("button");
@@ -60,7 +60,7 @@ describe("MarketplaceToolbar", () => {
   });
 
   test("calls onToggleFilters when Filters button is clicked", () => {
-    const onToggleFilters = mock(() => {});
+    const onToggleFilters = vi.fn(() => {});
     render(<MarketplaceToolbar {...makeProps({ onToggleFilters })} />);
     fireEvent.click(screen.getByText("Filters"));
     expect(onToggleFilters).toHaveBeenCalled();
@@ -86,7 +86,7 @@ describe("MarketplaceToolbar", () => {
   });
 
   test("calls onViewModeChange(grid) when grid button is clicked", () => {
-    const onViewModeChange = mock(() => {});
+    const onViewModeChange = vi.fn(() => {});
     render(<MarketplaceToolbar {...makeProps({ onViewModeChange, viewMode: "list" })} />);
     const buttons = screen.getAllByRole("button");
     // Grid button is second-to-last
@@ -95,7 +95,7 @@ describe("MarketplaceToolbar", () => {
   });
 
   test("calls onViewModeChange(list) when list button is clicked", () => {
-    const onViewModeChange = mock(() => {});
+    const onViewModeChange = vi.fn(() => {});
     render(<MarketplaceToolbar {...makeProps({ onViewModeChange, viewMode: "grid" })} />);
     const buttons = screen.getAllByRole("button");
     fireEvent.click(buttons[buttons.length - 1]);
@@ -139,7 +139,7 @@ describe("MarketplaceToolbar", () => {
   });
 
   test("calls onClearFilters when Clear all is clicked", () => {
-    const onClearFilters = mock(() => {});
+    const onClearFilters = vi.fn(() => {});
     render(<MarketplaceToolbar {...makeProps({ showFilters: true, hasActiveFilters: true, onClearFilters })} />);
     fireEvent.click(screen.getByText("Clear all"));
     expect(onClearFilters).toHaveBeenCalled();

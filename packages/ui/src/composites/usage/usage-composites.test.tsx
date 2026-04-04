@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
-mock.module("@/primitives/chart", () => ({
+vi.mock("@/primitives/chart", () => ({
   RechartsResponsiveContainer: ({ children }: any) => <div data-testid="responsive-container">{children}</div>,
   ChartTooltip: () => <div data-testid="tooltip" />,
   ChartLegend: () => <div data-testid="legend" />,
@@ -38,7 +38,7 @@ import {
 
 describe("UsageTabs", () => {
   test("renders all tab labels", () => {
-    const onChange = mock(() => {});
+    const onChange = vi.fn(() => {});
     render(<UsageTabs tabs={[...usageTabs]} activeTab="overview" onChange={onChange} />);
     expect(screen.getByText("Overview")).toBeTruthy();
     expect(screen.getByText("By Session")).toBeTruthy();
@@ -47,21 +47,21 @@ describe("UsageTabs", () => {
   });
 
   test("calls onChange when a tab is clicked", () => {
-    const onChange = mock(() => {});
+    const onChange = vi.fn(() => {});
     render(<UsageTabs tabs={[...usageTabs]} activeTab="overview" onChange={onChange} />);
     fireEvent.click(screen.getByText("By Session"));
     expect(onChange).toHaveBeenCalledWith("sessions");
   });
 
   test("highlights the active tab", () => {
-    const onChange = mock(() => {});
+    const onChange = vi.fn(() => {});
     const { container } = render(<UsageTabs tabs={[...usageTabs]} activeTab="sessions" onChange={onChange} />);
     const activeButton = screen.getByText("By Session").closest("button");
     expect(activeButton?.className).toContain("border-primary");
   });
 
   test("inactive tabs have transparent border", () => {
-    const onChange = mock(() => {});
+    const onChange = vi.fn(() => {});
     render(<UsageTabs tabs={[...usageTabs]} activeTab="overview" onChange={onChange} />);
     const inactiveButton = screen.getByText("By Platform").closest("button");
     expect(inactiveButton?.className).toContain("border-transparent");
@@ -203,8 +203,8 @@ describe("UsageSessionsPanel", () => {
 });
 
 describe("UsageApiLogPanel", () => {
-  const onProviderFilterChange = mock(() => {});
-  const onSessionFilterChange = mock(() => {});
+  const onProviderFilterChange = vi.fn(() => {});
+  const onSessionFilterChange = vi.fn(() => {});
   const sessionOptions = ["JWT Auth Refactor", "Rate Limiter Design", "API Routes"];
 
   const defaultProps = {
@@ -241,7 +241,7 @@ describe("UsageApiLogPanel", () => {
   });
 
   test("calls onProviderFilterChange when provider select changes", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<UsageApiLogPanel {...defaultProps} onProviderFilterChange={handler} />);
     const selects = screen.getAllByRole("combobox");
     fireEvent.change(selects[0], { target: { value: "Anthropic" } });
@@ -249,7 +249,7 @@ describe("UsageApiLogPanel", () => {
   });
 
   test("calls onSessionFilterChange when session select changes", () => {
-    const handler = mock(() => {});
+    const handler = vi.fn(() => {});
     render(<UsageApiLogPanel {...defaultProps} onSessionFilterChange={handler} />);
     const selects = screen.getAllByRole("combobox");
     fireEvent.change(selects[1], { target: { value: "API Routes" } });

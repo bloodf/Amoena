@@ -448,7 +448,7 @@ async function getGatewayStatus() {
 		const match = stdout
 			.split("\n")
 			.find((line) =>
-				/clawdbot-gateway|amoena-gateway|amoena.*gateway/i.test(line),
+				/clawdbot-gateway|lunaria-gateway|amoena.*gateway/i.test(line),
 			);
 		if (match) {
 			const parts = match.trim().split(/\s+/);

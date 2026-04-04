@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it } from 'vitest';
 import type { GitTaskPayloadMap, GitTaskResultMap } from './git-task-types';
 
 describe('git-task-types', () => {

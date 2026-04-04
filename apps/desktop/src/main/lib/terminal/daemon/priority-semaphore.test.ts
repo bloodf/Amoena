@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import { TERMINAL_ATTACH_CANCELED_MESSAGE } from "../errors";
 import { PrioritySemaphore } from "./priority-semaphore";
 

@@ -1,12 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { RateLimitsMenu } from "./RateLimitsMenu";
 
 function renderMenu(open = false) {
   const handlers = {
-    onToggle: mock(() => {}),
-    onClose: mock(() => {}),
+    onToggle: vi.fn(() => {}),
+    onClose: vi.fn(() => {}),
   };
   const result = render(<RateLimitsMenu open={open} {...handlers} />);
   return { ...result, ...handlers };

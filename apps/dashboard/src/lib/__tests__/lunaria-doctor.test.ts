@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseAmoenaDoctorOutput } from "@/lib/amoena-doctor";
+import { parseAmoenaDoctorOutput } from "@/lib/lunaria-doctor";
 
 describe("parseAmoenaDoctorOutput", () => {
 	it("marks warning output as fixable and extracts bullet issues", () => {

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MemoryFilters } from "./MemoryFilters";
 
 function makeProps(overrides: Partial<Parameters<typeof MemoryFilters>[0]> = {}) {
@@ -8,10 +8,10 @@ function makeProps(overrides: Partial<Parameters<typeof MemoryFilters>[0]> = {})
     filterType: "all",
     filterSource: "all",
     filterScope: "all",
-    onSearchChange: mock((_v: string) => {}),
-    onTypeChange: mock((_v: string) => {}),
-    onSourceChange: mock((_v: string) => {}),
-    onScopeChange: mock((_v: string) => {}),
+    onSearchChange: vi.fn((_v: string) => {}),
+    onTypeChange: vi.fn((_v: string) => {}),
+    onSourceChange: vi.fn((_v: string) => {}),
+    onScopeChange: vi.fn((_v: string) => {}),
     ...overrides,
   };
 }
@@ -23,7 +23,7 @@ describe("MemoryFilters", () => {
   });
 
   test("calls onSearchChange when typing", () => {
-    const onSearchChange = mock((_v: string) => {});
+    const onSearchChange = vi.fn((_v: string) => {});
     render(<MemoryFilters {...makeProps({ onSearchChange })} />);
     fireEvent.change(screen.getByPlaceholderText("Search memory..."), { target: { value: "jwt" } });
     expect(onSearchChange).toHaveBeenCalledWith("jwt");

@@ -1,14 +1,14 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, mock, test } from 'bun:test';
+import { describe, expect, mock, test, vi } from "vitest";
 import { HomeWorkspacesPanel } from './HomeWorkspacesPanel';
 
-mock.module('lucide-react', () => ({
+vi.mock('lucide-react', () => ({
   Circle: ({ size }: { size: number }) => (
     <span data-testid="circle" style={{ width: size, height: size }} />
   ),
 }));
 
-mock.module('@/lib/utils', () => ({
+vi.mock('@/lib/utils', () => ({
   cn: (...classes: (string | boolean | undefined)[]) => classes.filter(Boolean).join(' '),
 }));
 
@@ -18,8 +18,8 @@ function makeProps(overrides: Partial<Parameters<typeof HomeWorkspacesPanel>[0]>
       { name: 'app-shell', branch: 'main', disk: '1.2 GB', pending: true },
       { name: 'feature-a', branch: 'feat/a', disk: '860 MB', pending: false },
     ],
-    onViewAll: mock(() => {}),
-    onOpenWorkspace: mock(() => {}),
+    onViewAll: vi.fn(() => {}),
+    onOpenWorkspace: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -36,14 +36,14 @@ describe('HomeWorkspacesPanel', () => {
   });
 
   test('calls onViewAll when the header action is clicked', () => {
-    const onViewAll = mock(() => {});
+    const onViewAll = vi.fn(() => {});
     render(<HomeWorkspacesPanel {...makeProps({ onViewAll })} />);
     fireEvent.click(screen.getByRole('button', { name: 'View all →' }));
     expect(onViewAll).toHaveBeenCalled();
   });
 
   test('calls onOpenWorkspace with the clicked workspace', () => {
-    const onOpenWorkspace = mock(() => {});
+    const onOpenWorkspace = vi.fn(() => {});
     const props = makeProps({ onOpenWorkspace });
     render(<HomeWorkspacesPanel {...props} />);
     fireEvent.click(screen.getByRole('button', { name: /app-shell main 1.2 GB/ }));

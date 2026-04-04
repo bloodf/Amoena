@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { OpinionAddForm } from "./OpinionAddForm";
 
 function makeProps(overrides: Partial<Parameters<typeof OpinionAddForm>[0]> = {}) {
@@ -7,11 +7,11 @@ function makeProps(overrides: Partial<Parameters<typeof OpinionAddForm>[0]> = {}
     title: "",
     description: "",
     value: "",
-    onTitleChange: mock((_v: string) => {}),
-    onDescriptionChange: mock((_v: string) => {}),
-    onValueChange: mock((_v: string) => {}),
-    onAdd: mock(() => {}),
-    onCancel: mock(() => {}),
+    onTitleChange: vi.fn((_v: string) => {}),
+    onDescriptionChange: vi.fn((_v: string) => {}),
+    onValueChange: vi.fn((_v: string) => {}),
+    onAdd: vi.fn(() => {}),
+    onCancel: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -45,14 +45,14 @@ describe("OpinionAddForm", () => {
   });
 
   test("calls onCancel when Cancel clicked", () => {
-    const onCancel = mock(() => {});
+    const onCancel = vi.fn(() => {});
     render(<OpinionAddForm {...makeProps({ onCancel })} />);
     fireEvent.click(screen.getByText("Cancel"));
     expect(onCancel).toHaveBeenCalled();
   });
 
   test("calls onTitleChange when title typed", () => {
-    const onTitleChange = mock((_v: string) => {});
+    const onTitleChange = vi.fn((_v: string) => {});
     render(<OpinionAddForm {...makeProps({ onTitleChange })} />);
     fireEvent.change(screen.getByPlaceholderText("Opinion title..."), { target: { value: "New" } });
     expect(onTitleChange).toHaveBeenCalledWith("New");

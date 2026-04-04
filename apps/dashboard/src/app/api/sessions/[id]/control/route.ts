@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
 import { db_helpers } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { callAmoenaGateway } from "@/lib/amoena-gateway";
+import { callAmoenaGateway } from "@/lib/lunaria-gateway";
 import { mutationLimiter } from "@/lib/rate-limit";
 
 // Only allow alphanumeric, hyphens, and underscores in session IDs

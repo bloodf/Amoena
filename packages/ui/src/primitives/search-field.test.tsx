@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, test, mock } from "bun:test";
+import { describe, expect, test, mock, vi } from "vitest";
 import { SearchField } from "./search-field";
 
 describe("SearchField", () => {
@@ -14,7 +14,7 @@ describe("SearchField", () => {
   });
 
   test("calls onChange when typing", () => {
-    const handleChange = mock(() => {});
+    const handleChange = vi.fn(() => {});
     render(<SearchField value="" onChange={handleChange} />);
     const input = screen.getByPlaceholderText("Search…");
     fireEvent.change(input, { target: { value: "hello" } });
@@ -32,14 +32,14 @@ describe("SearchField", () => {
   });
 
   test("clear button calls onChange with empty string", () => {
-    const handleChange = mock(() => {});
+    const handleChange = vi.fn(() => {});
     render(<SearchField value="test" onChange={handleChange} />);
     fireEvent.click(screen.getByLabelText("Clear search"));
     expect(handleChange).toHaveBeenCalledWith("");
   });
 
   test("clear button calls onClear when provided", () => {
-    const handleClear = mock(() => {});
+    const handleClear = vi.fn(() => {});
     render(<SearchField value="test" onChange={() => {}} onClear={handleClear} />);
     fireEvent.click(screen.getByLabelText("Clear search"));
     expect(handleClear).toHaveBeenCalled();

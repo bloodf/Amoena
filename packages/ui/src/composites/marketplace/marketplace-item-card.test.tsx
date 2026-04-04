@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MarketplaceItemCard } from "./MarketplaceItemCard";
 import type { MarketplaceItem } from "./types";
 
@@ -26,9 +26,9 @@ function makeProps(overrides: Partial<Parameters<typeof MarketplaceItemCard>[0]>
   return {
     item,
     isSelected: false,
-    onSelect: mock(() => {}),
-    onInstall: mock(() => {}),
-    onUninstall: mock(() => {}),
+    onSelect: vi.fn(() => {}),
+    onInstall: vi.fn(() => {}),
+    onUninstall: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -70,7 +70,7 @@ describe("MarketplaceItemCard", () => {
   });
 
   test("calls onSelect when card clicked", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     render(<MarketplaceItemCard {...makeProps({ onSelect })} />);
     fireEvent.click(screen.getByText("Git Tools"));
     expect(onSelect).toHaveBeenCalled();

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { Monitor } from "lucide-react";
 
 import { ComposerDropdown, ComposerToolbar } from "./ComposerToolbar";
@@ -50,15 +50,15 @@ const closedMenus = {
 
 function makeHandlers() {
   return {
-    onToggleMenu: mock((_menu: string) => {}),
-    onCloseMenu: mock((_menu: string) => {}),
-    onTogglePlanMode: mock(() => {}),
-    onSelectAgent: mock((_id: string) => {}),
-    onSelectModel: mock((_id: string) => {}),
-    onSelectReasoning: mock((_id: string) => {}),
-    onSelectContinueIn: mock((_id: string) => {}),
-    onSelectPermission: mock((_id: string) => {}),
-    onSelectBranch: mock((_branch: string) => {}),
+    onToggleMenu: vi.fn((_menu: string) => {}),
+    onCloseMenu: vi.fn((_menu: string) => {}),
+    onTogglePlanMode: vi.fn(() => {}),
+    onSelectAgent: vi.fn((_id: string) => {}),
+    onSelectModel: vi.fn((_id: string) => {}),
+    onSelectReasoning: vi.fn((_id: string) => {}),
+    onSelectContinueIn: vi.fn((_id: string) => {}),
+    onSelectPermission: vi.fn((_id: string) => {}),
+    onSelectBranch: vi.fn((_branch: string) => {}),
   };
 }
 
@@ -99,7 +99,7 @@ function renderToolbar(
 describe("ComposerDropdown", () => {
   test("renders nothing when open is false", () => {
     const { container } = render(
-      <ComposerDropdown open={false} onClose={mock(() => {})}>
+      <ComposerDropdown open={false} onClose={vi.fn(() => {})}>
         <span>content</span>
       </ComposerDropdown>,
     );
@@ -108,7 +108,7 @@ describe("ComposerDropdown", () => {
 
   test("renders children when open is true", () => {
     render(
-      <ComposerDropdown open={true} onClose={mock(() => {})}>
+      <ComposerDropdown open={true} onClose={vi.fn(() => {})}>
         <span>visible</span>
       </ComposerDropdown>,
     );
@@ -116,7 +116,7 @@ describe("ComposerDropdown", () => {
   });
 
   test("calls onClose when mousedown outside", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
       <ComposerDropdown open={true} onClose={onClose}>
         <span>inside</span>
@@ -127,7 +127,7 @@ describe("ComposerDropdown", () => {
   });
 
   test("does not call onClose when mousedown inside", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
       <ComposerDropdown open={true} onClose={onClose}>
         <span>inside</span>

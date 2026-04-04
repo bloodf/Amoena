@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { ReasoningControls } from "./ReasoningControls";
 
 const depths = [
@@ -13,8 +13,8 @@ function makeProps(overrides: Partial<Parameters<typeof ReasoningControls>[0]> =
     mode: "auto",
     depth: "medium",
     depths,
-    onModeChange: mock((_v: string) => {}),
-    onDepthChange: mock((_v: string) => {}),
+    onModeChange: vi.fn((_v: string) => {}),
+    onDepthChange: vi.fn((_v: string) => {}),
     ...overrides,
   };
 }
@@ -40,14 +40,14 @@ describe("ReasoningControls", () => {
   });
 
   test("calls onModeChange when select changes", () => {
-    const onModeChange = mock((_v: string) => {});
+    const onModeChange = vi.fn((_v: string) => {});
     const { container } = render(<ReasoningControls {...makeProps({ onModeChange })} />);
     fireEvent.change(container.querySelector("select")!, { target: { value: "always" } });
     expect(onModeChange).toHaveBeenCalledWith("always");
   });
 
   test("calls onDepthChange when depth button clicked", () => {
-    const onDepthChange = mock((_v: string) => {});
+    const onDepthChange = vi.fn((_v: string) => {});
     render(<ReasoningControls {...makeProps({ onDepthChange })} />);
     fireEvent.click(screen.getByText("High"));
     expect(onDepthChange).toHaveBeenCalledWith("high");

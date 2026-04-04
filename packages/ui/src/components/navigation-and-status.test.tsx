@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { CommandPalette } from "./CommandPalette";
 import { HomeScreen } from "@/screens/HomeScreen";
@@ -69,7 +69,7 @@ describe("navigation and status surfaces", () => {
   });
 
   test("command palette filters and closes on escape", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
       <MemoryRouter initialEntries={["/"]}>
         <Routes>
@@ -91,7 +91,7 @@ describe("navigation and status surfaces", () => {
   });
 
   test("command palette enter selects highlighted result", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
       <MemoryRouter initialEntries={["/"]}>
         <Routes>
@@ -120,7 +120,7 @@ describe("navigation and status surfaces", () => {
   });
 
   test("command palette shows empty state and closes when clicking backdrop", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
       <MemoryRouter initialEntries={["/"]}>
         <Routes>
@@ -143,7 +143,7 @@ describe("navigation and status surfaces", () => {
   });
 
   test("command palette keyboard navigation can trigger a command action", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     render(
       <MemoryRouter initialEntries={["/"]}>
         <Routes>
@@ -214,7 +214,7 @@ describe("navigation and status surfaces", () => {
     ];
 
     for (const item of cases) {
-      const onClose = mock(() => {});
+      const onClose = vi.fn(() => {});
       const view = render(
         <MemoryRouter initialEntries={["/"]}>
           <Routes>
@@ -261,7 +261,7 @@ describe("navigation and status surfaces", () => {
     ] as const;
 
     for (const [label, path] of actionableLabels) {
-      const onClose = mock(() => {});
+      const onClose = vi.fn(() => {});
       const view = render(
         <MemoryRouter initialEntries={["/"]}>
           <Routes>

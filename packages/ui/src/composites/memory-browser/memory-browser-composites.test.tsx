@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { MemoryAddForm } from "./MemoryAddForm";
 import { MemoryBrowserHeader } from "./MemoryBrowserHeader";
@@ -39,7 +39,7 @@ describe("MemoryBrowserHeader", () => {
   });
 
   test("fires onAdd when add button is clicked", () => {
-    const onAdd = mock(() => {});
+    const onAdd = vi.fn(() => {});
     render(
       <MemoryBrowserHeader
         viewMode="list"
@@ -53,7 +53,7 @@ describe("MemoryBrowserHeader", () => {
   });
 
   test("fires onExport when export button is clicked", () => {
-    const onExport = mock(() => {});
+    const onExport = vi.fn(() => {});
     render(
       <MemoryBrowserHeader
         viewMode="list"
@@ -67,7 +67,7 @@ describe("MemoryBrowserHeader", () => {
   });
 
   test("fires onViewModeChange when view toggle is clicked", () => {
-    const onViewModeChange = mock(() => {});
+    const onViewModeChange = vi.fn(() => {});
     render(
       <MemoryBrowserHeader
         viewMode="list"
@@ -105,7 +105,7 @@ describe("MemoryEntryList", () => {
   });
 
   test("fires onSelect when an entry is clicked", () => {
-    const onSelect = mock(() => {});
+    const onSelect = vi.fn(() => {});
     render(
       <MemoryEntryList
         entries={initialMemoryEntries}
@@ -226,7 +226,7 @@ describe("MemoryDetailPanel", () => {
   });
 
   test("fires onTogglePin callback", () => {
-    const onTogglePin = mock(() => {});
+    const onTogglePin = vi.fn(() => {});
     const { container } = render(
       <MemoryDetailPanel
         entry={sampleEntry}
@@ -247,7 +247,7 @@ describe("MemoryDetailPanel", () => {
   });
 
   test("fires onConvertToPersistent callback", () => {
-    const onConvert = mock(() => {});
+    const onConvert = vi.fn(() => {});
     render(
       <MemoryDetailPanel
         entry={sampleEntry}
@@ -320,7 +320,7 @@ describe("MemoryAddForm", () => {
   });
 
   test("fires onKeyChange on input change", () => {
-    const onKeyChange = mock(() => {});
+    const onKeyChange = vi.fn(() => {});
     render(
       <MemoryAddForm
         keyValue=""
@@ -340,7 +340,7 @@ describe("MemoryAddForm", () => {
   });
 
   test("fires onCancel when cancel is clicked", () => {
-    const onCancel = mock(() => {});
+    const onCancel = vi.fn(() => {});
     render(
       <MemoryAddForm
         keyValue=""
@@ -376,7 +376,7 @@ describe("MemoryFilters", () => {
   });
 
   test("fires onSearchChange on input change", () => {
-    const onSearchChange = mock(() => {});
+    const onSearchChange = vi.fn(() => {});
     render(
       <MemoryFilters
         searchQuery=""

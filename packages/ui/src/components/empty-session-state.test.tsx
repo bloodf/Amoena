@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { EmptySessionState } from "./EmptySessionState";
 
 describe("EmptySessionState", () => {
@@ -25,7 +25,7 @@ describe("EmptySessionState", () => {
   });
 
   test("calls onSuggestionClick when suggestion clicked", () => {
-    const onClick = mock(() => {});
+    const onClick = vi.fn(() => {});
     render(<EmptySessionState provider="claude" model="sonnet-4" sessionName="S" onSuggestionClick={onClick} />);
     fireEvent.click(screen.getByText("Refactor a module"));
     expect(onClick).toHaveBeenCalledWith("Refactor the authentication module to use JWT tokens");

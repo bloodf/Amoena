@@ -15,7 +15,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.join(dirname, 'src'),
-      'bun:test': path.join(dirname, 'src/test/bun-test-shim.ts'),
       'react-i18next': path.join(dirname, 'src/test/react-i18next-mock.ts'),
     },
   },

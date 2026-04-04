@@ -1,62 +1,61 @@
-import { describe, expect, it, mock } from "bun:test";
+import { describe, expect, it, vi } from 'vitest';
 
-// Mock all dependencies
-mock.module("./security/git-commands", () => ({
-	gitStageFile: mock(() => Promise.resolve()),
-	gitUnstageFile: mock(() => Promise.resolve()),
-	gitCheckoutFile: mock(() => Promise.resolve()),
-	gitStageFiles: mock(() => Promise.resolve()),
-	gitUnstageFiles: mock(() => Promise.resolve()),
-	gitStageAll: mock(() => Promise.resolve()),
-	gitUnstageAll: mock(() => Promise.resolve()),
-	gitDiscardAllUnstaged: mock(() => Promise.resolve()),
-	gitDiscardAllStaged: mock(() => Promise.resolve()),
-	gitStash: mock(() => Promise.resolve()),
-	gitStashIncludeUntracked: mock(() => Promise.resolve()),
-	gitStashPop: mock(() => Promise.resolve()),
+vi.mock('./security/git-commands', () => ({
+  gitStageFile: vi.fn(() => Promise.resolve()),
+  gitUnstageFile: vi.fn(() => Promise.resolve()),
+  gitCheckoutFile: vi.fn(() => Promise.resolve()),
+  gitStageFiles: vi.fn(() => Promise.resolve()),
+  gitUnstageFiles: vi.fn(() => Promise.resolve()),
+  gitStageAll: vi.fn(() => Promise.resolve()),
+  gitUnstageAll: vi.fn(() => Promise.resolve()),
+  gitDiscardAllUnstaged: vi.fn(() => Promise.resolve()),
+  gitDiscardAllStaged: vi.fn(() => Promise.resolve()),
+  gitStash: vi.fn(() => Promise.resolve()),
+  gitStashIncludeUntracked: vi.fn(() => Promise.resolve()),
+  gitStashPop: vi.fn(() => Promise.resolve()),
 }));
 
-mock.module("./security/path-validation", () => ({
-	assertRegisteredWorktree: () => {},
+vi.mock('./security/path-validation', () => ({
+  assertRegisteredWorktree: () => {},
 }));
 
-mock.module("./utils/status-cache", () => ({
-	clearStatusCacheForWorktree: mock(() => {}),
+vi.mock('./utils/status-cache', () => ({
+  clearStatusCacheForWorktree: vi.fn(() => {}),
 }));
 
-mock.module("./utils/parse-status", () => ({
-	parseGitStatus: mock(() => ({
-		staged: [],
-		unstaged: [],
-		untracked: [],
-	})),
+vi.mock('./utils/parse-status', () => ({
+  parseGitStatus: vi.fn(() => ({
+    staged: [],
+    unstaged: [],
+    untracked: [],
+  })),
 }));
 
-mock.module("../workspaces/utils/git-client", () => ({
-	getSimpleGitWithShellPath: () =>
-		Promise.resolve({
-			status: mock(() =>
-				Promise.resolve({
-					files: [],
-					staged: [],
-					not_added: [],
-				}),
-			),
-		}),
+vi.mock('../workspaces/utils/git-client', () => ({
+  getSimpleGitWithShellPath: () =>
+    Promise.resolve({
+      status: vi.fn(() =>
+        Promise.resolve({
+          files: [],
+          staged: [],
+          not_added: [],
+        }),
+      ),
+    }),
 }));
 
-mock.module("../workspace-fs-service", () => ({
-	getServiceForRootPath: () => ({
-		deletePath: mock(() => Promise.resolve()),
-	}),
+vi.mock('../workspace-fs-service', () => ({
+  getServiceForRootPath: () => ({
+    deletePath: vi.fn(() => Promise.resolve()),
+  }),
 }));
 
-const { createStagingRouter } = await import("./staging");
+const { createStagingRouter } = await import('./staging');
 
-describe("staging router", () => {
-	it("creates a router with expected procedures", () => {
-		const router = createStagingRouter();
-		expect(router).toBeDefined();
-		expect(typeof router).toBe("object");
-	});
+describe('staging router', () => {
+  it('creates a router with expected procedures', () => {
+    const router = createStagingRouter();
+    expect(router).toBeDefined();
+    expect(typeof router).toBe('object');
+  });
 });

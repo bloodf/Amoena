@@ -1,25 +1,33 @@
-import { describe, expect, it, mock, beforeEach } from 'bun:test';
+import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { EventEmitter } from 'node:events';
 import type { ChildProcess } from 'node:child_process';
 
-const mockTreeKill = mock((_pid: number, _signal: string, callback: (err?: Error) => void) => {
-  callback();
-});
+// Mutable mock implementations that can be swapped per test
+const mockTreeKillDefault = vi.fn(
+  (_pid: number, _signal: string, callback: (err?: Error) => void) => {
+    callback();
+  },
+);
 
-const mockTreeKillWithError = mock(
+const mockTreeKillWithError = vi.fn(
   (_pid: number, _signal: string, callback: (err?: Error) => void) => {
     callback(new Error('Process not found'));
   },
 );
 
-const mockProcessKill = mock((_pid: number, _signal: number) => {
+const mockProcessKill = vi.fn((_pid: number, _signal: number) => {
   throw Object.assign(new Error(' ESRCH'), { code: 'ESRCH' });
 });
 
-const mockProcessKillAlive = mock((_pid: number, _signal: number) => true);
+const mockProcessKillAlive = vi.fn((_pid: number, _signal: number) => true);
 
-mock.module('tree-kill', () => ({
-  default: mockTreeKill,
+// The actual mock implementation that delegates to whichever mock is currently active
+const activeMock = vi.fn((_pid: number, _signal: string, callback: (err?: Error) => void) => {
+  callback();
+});
+
+vi.mock('tree-kill', () => ({
+  default: activeMock,
 }));
 
 // Store original process.kill
@@ -27,10 +35,14 @@ const origProcessKill = process.kill;
 
 describe('tree-kill', () => {
   beforeEach(() => {
-    mockTreeKill.mockClear();
+    // Reset to default mock
+    activeMock.mockImplementation(mockTreeKillDefault);
+    mockTreeKillDefault.mockClear();
     mockTreeKillWithError.mockClear();
     mockProcessKill.mockClear();
     mockProcessKillAlive.mockClear();
+    // Restore original process.kill
+    process.kill = origProcessKill;
   });
 
   describe('treeKillAsync', () => {
@@ -38,14 +50,12 @@ describe('tree-kill', () => {
       const { treeKillAsync } = await import('./tree-kill');
       await treeKillAsync(12345, 'SIGTERM');
 
-      expect(mockTreeKill).toHaveBeenCalledWith(12345, 'SIGTERM', expect.any(Function));
+      expect(activeMock).toHaveBeenCalledWith(12345, 'SIGTERM', expect.any(Function));
     });
 
     it('resolves even when treeKill returns an error', async () => {
-      // Re-import to rebind mocks
-      mock.module('tree-kill', () => ({
-        default: mockTreeKillWithError,
-      }));
+      // Override mock for this specific test
+      activeMock.mockImplementation(mockTreeKillWithError);
       const { treeKillAsync } = await import('./tree-kill');
 
       await expect(treeKillAsync(99999, 'SIGTERM')).resolves.toBeUndefined();
@@ -61,13 +71,11 @@ describe('tree-kill', () => {
   describe('treeKillWithEscalation', () => {
     it('returns success when process dies immediately', async () => {
       // Override mock for this specific test
-      const quickKillMock = mock((_pid: number, _signal: string, cb: (err?: Error) => void) => {
+      const quickKillMock = vi.fn((_pid: number, _signal: string, cb: (err?: Error) => void) => {
         process.kill = mockProcessKillAlive;
         cb();
       });
-      mock.module('tree-kill', () => ({
-        default: quickKillMock,
-      }));
+      activeMock.mockImplementation(quickKillMock);
 
       const { treeKillWithEscalation } = await import('./tree-kill');
       const result = await treeKillWithEscalation({ pid: 12345 });
@@ -76,12 +84,10 @@ describe('tree-kill', () => {
     });
 
     it('returns success when process not found error occurs', async () => {
-      const notFoundMock = mock((_pid: number, _signal: string, cb: (err?: Error) => void) => {
+      const notFoundMock = vi.fn((_pid: number, _signal: string, cb: (err?: Error) => void) => {
         cb(Object.assign(new Error('No such process'), { code: 'ESRCH' }));
       });
-      mock.module('tree-kill', () => ({
-        default: notFoundMock,
-      }));
+      activeMock.mockImplementation(notFoundMock);
 
       const { treeKillWithEscalation } = await import('./tree-kill');
       const result = await treeKillWithEscalation({ pid: 99999 });
@@ -90,13 +96,11 @@ describe('tree-kill', () => {
     });
 
     it('uses SIGTERM by default', async () => {
-      const sigtermMock = mock((_pid: number, signal: string, cb: (err?: Error) => void) => {
+      const sigtermMock = vi.fn((_pid: number, signal: string, cb: (err?: Error) => void) => {
         process.kill = mockProcessKillAlive;
         cb();
       });
-      mock.module('tree-kill', () => ({
-        default: sigtermMock,
-      }));
+      activeMock.mockImplementation(sigtermMock);
 
       const { treeKillWithEscalation } = await import('./tree-kill');
       await treeKillWithEscalation({ pid: 12345 });
@@ -105,13 +109,11 @@ describe('tree-kill', () => {
     });
 
     it('uses custom signal when provided', async () => {
-      const sigkillMock = mock((_pid: number, signal: string, cb: (err?: Error) => void) => {
+      const sigkillMock = vi.fn((_pid: number, signal: string, cb: (err?: Error) => void) => {
         process.kill = mockProcessKillAlive;
         cb();
       });
-      mock.module('tree-kill', () => ({
-        default: sigkillMock,
-      }));
+      activeMock.mockImplementation(sigkillMock);
 
       const { treeKillWithEscalation } = await import('./tree-kill');
       await treeKillWithEscalation({ pid: 12345, signal: 'SIGINT' });
@@ -121,7 +123,7 @@ describe('tree-kill', () => {
 
     it('escalates to SIGKILL after timeout if process survives', async () => {
       let callCount = 0;
-      const escalationMock = mock((_pid: number, signal: string, cb: (err?: Error) => void) => {
+      const escalationMock = vi.fn((_pid: number, signal: string, cb: (err?: Error) => void) => {
         callCount++;
         if (signal === 'SIGTERM') {
           // Process still alive
@@ -132,9 +134,7 @@ describe('tree-kill', () => {
           cb();
         }
       });
-      mock.module('tree-kill', () => ({
-        default: escalationMock,
-      }));
+      activeMock.mockImplementation(escalationMock);
 
       const { treeKillWithEscalation } = await import('./tree-kill');
       const result = await treeKillWithEscalation({
@@ -150,18 +150,18 @@ describe('tree-kill', () => {
 
     it('returns error when SIGKILL fails', async () => {
       let callCount = 0;
-      const failEscalationMock = mock((_pid: number, signal: string, cb: (err?: Error) => void) => {
-        callCount++;
-        if (signal === 'SIGTERM') {
-          process.kill = mockProcessKillAlive;
-          cb();
-        } else {
-          cb(new Error('Operation not permitted'));
-        }
-      });
-      mock.module('tree-kill', () => ({
-        default: failEscalationMock,
-      }));
+      const failEscalationMock = vi.fn(
+        (_pid: number, signal: string, cb: (err?: Error) => void) => {
+          callCount++;
+          if (signal === 'SIGTERM') {
+            process.kill = mockProcessKillAlive;
+            cb();
+          } else {
+            cb(new Error('Operation not permitted'));
+          }
+        },
+      );
+      activeMock.mockImplementation(failEscalationMock);
 
       const { treeKillWithEscalation } = await import('./tree-kill');
       const result = await treeKillWithEscalation({

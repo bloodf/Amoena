@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { TeamCommunicationFlow } from "./TeamCommunicationFlow";
 import { TeamListPane } from "./TeamListPane";
@@ -55,7 +55,7 @@ const teams: AgentTeam[] = [
 
 describe("team list and communication flow", () => {
   test("selects teams and renders status pills for different lifecycle states", () => {
-    const onSelectTeam = mock(() => {});
+    const onSelectTeam = vi.fn(() => {});
     render(<TeamListPane teams={teams} selectedTeamId="team-1" onSelectTeam={onSelectTeam} />);
 
     fireEvent.click(screen.getByText("Docs Team"));

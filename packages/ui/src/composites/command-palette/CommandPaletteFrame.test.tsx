@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import { CommandPaletteFrame } from "./CommandPaletteFrame";
 
 function renderFrame(isClosing = false) {
-  const onClose = mock(() => {});
-  const onKeyDown = mock((_e: React.KeyboardEvent) => {});
+  const onClose = vi.fn(() => {});
+  const onKeyDown = vi.fn((_e: React.KeyboardEvent) => {});
   const result = render(
     <CommandPaletteFrame isClosing={isClosing} onClose={onClose} onKeyDown={onKeyDown}>
       <div data-testid="child-content">Content</div>

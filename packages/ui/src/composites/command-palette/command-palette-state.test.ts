@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { describe, expect, mock, test, vi } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 
 import type { CommandPaletteItem } from "./data";
 import { useCommandPaletteState } from "./useCommandPaletteState";
@@ -14,7 +14,7 @@ function makeItem(overrides: Partial<CommandPaletteItem> = {}): CommandPaletteIt
     icon: (() => null) as any,
     label: "New Session",
     description: "Start a new session",
-    action: mock(() => {}),
+    action: vi.fn(() => {}),
     ...overrides,
   };
 }
@@ -32,31 +32,31 @@ const items: CommandPaletteItem[] = [
 
 describe("useCommandPaletteState initial state", () => {
   test("query starts empty", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
     expect(result.current.query).toBe("");
   });
 
   test("selectedIndex starts at 0", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
     expect(result.current.selectedIndex).toBe(0);
   });
 
   test("isClosing starts false", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
     expect(result.current.isClosing).toBe(false);
   });
 
   test("filtered contains all items when query is empty", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
     expect(result.current.filtered.length).toBe(items.length);
   });
 
   test("groups are keyed by type", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
     expect(Object.keys(result.current.groups)).toContain("command");
     expect(Object.keys(result.current.groups)).toContain("navigation");
@@ -70,7 +70,7 @@ describe("useCommandPaletteState initial state", () => {
 
 describe("useCommandPaletteState filtering", () => {
   test("filters by label (case-insensitive)", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.setQuery("session"); });
@@ -80,7 +80,7 @@ describe("useCommandPaletteState filtering", () => {
   });
 
   test("filters by description", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.setQuery("entry point"); });
@@ -90,7 +90,7 @@ describe("useCommandPaletteState filtering", () => {
   });
 
   test("returns empty array when no match", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.setQuery("zzznomatch"); });
@@ -99,7 +99,7 @@ describe("useCommandPaletteState filtering", () => {
   });
 
   test("filter is case-insensitive for query", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.setQuery("TERMINAL"); });
@@ -109,7 +109,7 @@ describe("useCommandPaletteState filtering", () => {
   });
 
   test("groups update to reflect filtered results", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.setQuery("Manage agents"); });
@@ -126,7 +126,7 @@ describe("useCommandPaletteState filtering", () => {
 describe("useCommandPaletteState handleClose", () => {
   test("sets isClosing to true immediately on handleClose", () => {
     vi.useFakeTimers();
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.handleClose(); });
@@ -137,7 +137,7 @@ describe("useCommandPaletteState handleClose", () => {
 
   test("calls onClose after 150ms and resets isClosing", () => {
     vi.useFakeTimers();
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.handleClose(); });
@@ -158,8 +158,8 @@ describe("useCommandPaletteState handleClose", () => {
 describe("useCommandPaletteState runAction", () => {
   test("calls the provided action", () => {
     vi.useFakeTimers();
-    const onClose = mock(() => {});
-    const action = mock(() => {});
+    const onClose = vi.fn(() => {});
+    const action = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.runAction(action); });
@@ -170,7 +170,7 @@ describe("useCommandPaletteState runAction", () => {
 
   test("works when no action is provided (undefined)", () => {
     vi.useFakeTimers();
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     expect(() => {
@@ -181,10 +181,10 @@ describe("useCommandPaletteState runAction", () => {
 
   test("also triggers handleClose (sets isClosing)", () => {
     vi.useFakeTimers();
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.runAction(mock(() => {})); });
+    act(() => { result.current.runAction(vi.fn(() => {})); });
 
     expect(result.current.isClosing).toBe(true);
     vi.useRealTimers();
@@ -197,12 +197,12 @@ describe("useCommandPaletteState runAction", () => {
 
 describe("useCommandPaletteState handleKeyDown", () => {
   function makeKeyEvent(key: string): React.KeyboardEvent {
-    return { key, preventDefault: mock(() => {}) } as unknown as React.KeyboardEvent;
+    return { key, preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent;
   }
 
   test("Escape calls handleClose (isClosing becomes true)", () => {
     vi.useFakeTimers();
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.handleKeyDown(makeKeyEvent("Escape")); });
@@ -212,7 +212,7 @@ describe("useCommandPaletteState handleKeyDown", () => {
   });
 
   test("ArrowDown increments selectedIndex", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.handleKeyDown(makeKeyEvent("ArrowDown")); });
@@ -221,7 +221,7 @@ describe("useCommandPaletteState handleKeyDown", () => {
   });
 
   test("ArrowDown clamps at last item", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => {
@@ -234,7 +234,7 @@ describe("useCommandPaletteState handleKeyDown", () => {
   });
 
   test("ArrowUp decrements selectedIndex", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => {
@@ -247,7 +247,7 @@ describe("useCommandPaletteState handleKeyDown", () => {
   });
 
   test("ArrowUp clamps at 0", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.handleKeyDown(makeKeyEvent("ArrowUp")); });
@@ -257,8 +257,8 @@ describe("useCommandPaletteState handleKeyDown", () => {
 
   test("Enter runs action of currently selected item", () => {
     vi.useFakeTimers();
-    const onClose = mock(() => {});
-    const action = mock(() => {});
+    const onClose = vi.fn(() => {});
+    const action = vi.fn(() => {});
     const testItems = [makeItem({ label: "Item A", action })];
     const { result } = renderHook(() => useCommandPaletteState(testItems, onClose));
 
@@ -270,7 +270,7 @@ describe("useCommandPaletteState handleKeyDown", () => {
 
   test("Enter does nothing when selected item has no action", () => {
     vi.useFakeTimers();
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const testItems = [makeItem({ label: "No Action", action: undefined })];
     const { result } = renderHook(() => useCommandPaletteState(testItems, onClose));
 
@@ -282,7 +282,7 @@ describe("useCommandPaletteState handleKeyDown", () => {
 
   test("Enter does nothing when filtered list is empty", () => {
     vi.useFakeTimers();
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.setQuery("zzznomatch"); });
@@ -293,7 +293,7 @@ describe("useCommandPaletteState handleKeyDown", () => {
   });
 
   test("unrecognized key does nothing", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
     const before = result.current.selectedIndex;
 
@@ -304,7 +304,7 @@ describe("useCommandPaletteState handleKeyDown", () => {
   });
 
   test("setSelectedIndex updates selectedIndex directly", () => {
-    const onClose = mock(() => {});
+    const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => { result.current.setSelectedIndex(2); });

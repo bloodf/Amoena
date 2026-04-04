@@ -21,7 +21,7 @@ const bootstrapSession = {
   tokenType: 'Bearer',
 };
 
-vi.mock('./bootstrap/runtime-bootstrap', () => ({
+vi.vi.fn('./bootstrap/runtime-bootstrap', () => ({
   resolveLaunchContext: vi.fn(async () => launchContext),
   authenticateLaunchContext: vi.fn(async () => bootstrapSession),
 }));

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test, vi } from "vitest";
 import { MessageTimeline, type TimelineMessage } from "./MessageTimeline";
 
 const systemMsg: TimelineMessage = {
@@ -162,8 +162,8 @@ describe("MessageTimeline", () => {
       <MessageTimeline
         messages={[permissionMsg]}
         isStreaming={false}
-        onApprovePermission={mock(() => {})}
-        onDenyPermission={mock(() => {})}
+        onApprovePermission={vi.fn(() => {})}
+        onDenyPermission={vi.fn(() => {})}
       />,
     );
     expect(screen.getByText("Delete file: old.rs")).toBeTruthy();
@@ -172,13 +172,13 @@ describe("MessageTimeline", () => {
   });
 
   test("calls onApprovePermission with requestId when Approve clicked — branch line 194", () => {
-    const onApprovePermission = mock((_id: string) => {});
+    const onApprovePermission = vi.fn((_id: string) => {});
     render(
       <MessageTimeline
         messages={[permissionMsg]}
         isStreaming={false}
         onApprovePermission={onApprovePermission}
-        onDenyPermission={mock(() => {})}
+        onDenyPermission={vi.fn(() => {})}
       />,
     );
     fireEvent.click(screen.getByText("Approve"));
@@ -186,12 +186,12 @@ describe("MessageTimeline", () => {
   });
 
   test("calls onDenyPermission with requestId when Deny clicked — branch line 202", () => {
-    const onDenyPermission = mock((_id: string) => {});
+    const onDenyPermission = vi.fn((_id: string) => {});
     render(
       <MessageTimeline
         messages={[permissionMsg]}
         isStreaming={false}
-        onApprovePermission={mock(() => {})}
+        onApprovePermission={vi.fn(() => {})}
         onDenyPermission={onDenyPermission}
       />,
     );
@@ -200,14 +200,14 @@ describe("MessageTimeline", () => {
   });
 
   test("does not call onApprovePermission when requestId is absent — branch line 194", () => {
-    const onApprovePermission = mock((_id: string) => {});
+    const onApprovePermission = vi.fn((_id: string) => {});
     const msgNoId: TimelineMessage = { ...permissionMsg, requestId: undefined };
     render(
       <MessageTimeline
         messages={[msgNoId]}
         isStreaming={false}
         onApprovePermission={onApprovePermission}
-        onDenyPermission={mock(() => {})}
+        onDenyPermission={vi.fn(() => {})}
       />,
     );
     fireEvent.click(screen.getByText("Approve"));
@@ -215,13 +215,13 @@ describe("MessageTimeline", () => {
   });
 
   test("does not call onDenyPermission when requestId is absent — branch line 202", () => {
-    const onDenyPermission = mock((_id: string) => {});
+    const onDenyPermission = vi.fn((_id: string) => {});
     const msgNoId: TimelineMessage = { ...permissionMsg, requestId: undefined };
     render(
       <MessageTimeline
         messages={[msgNoId]}
         isStreaming={false}
-        onApprovePermission={mock(() => {})}
+        onApprovePermission={vi.fn(() => {})}
         onDenyPermission={onDenyPermission}
       />,
     );
