@@ -4,6 +4,7 @@ import { StatusBar } from './StatusBar';
 import { Breadcrumb } from './Breadcrumb';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Menu, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
 export function AppShell({
@@ -13,6 +14,7 @@ export function AppShell({
   children: ReactNode;
   onOpenCommandPalette?: () => void;
 }) {
+  const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -56,7 +58,7 @@ export function AppShell({
           <main
             className="flex-1 overflow-hidden bg-surface-1"
             role="main"
-            aria-label="Application content"
+            aria-label={t('ui.applicationContent')}
           >
             {children}
           </main>

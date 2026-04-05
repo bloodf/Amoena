@@ -5,47 +5,53 @@
  * with a search bar for filtering by description.
  */
 
-import { useCallback, useMemo, useState } from "react";
-import { router } from "expo-router";
-import { RefreshControl, ScrollView, Text, TextInput, View } from "react-native";
+import { useCallback, useMemo, useState } from 'react';
+import { router } from 'expo-router';
+import { RefreshControl, ScrollView, Text, TextInput, View } from 'react-native';
 
-import { useRuntime } from "@/runtime/provider";
-import { RunCard } from "@/components/RunCard";
-import { styles } from "@/theme/styles";
-import { tokens } from "@/theme/tokens";
+import { useAmoenaTranslation } from '@lunaria/i18n';
+import { useRuntime } from '@/runtime/provider';
+import { RunCard } from '@/components/RunCard';
+import { styles } from '@/theme/styles';
+import { tokens } from '@/theme/tokens';
 
-type StatusFilter = "all" | "running" | "completed" | "failed";
+type StatusFilter = 'all' | 'running' | 'completed' | 'failed' | 'partial_failure' | 'cancelled';
 
-const FILTER_OPTIONS: readonly { key: StatusFilter; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "running", label: "Running" },
-  { key: "completed", label: "Completed" },
-  { key: "failed", label: "Failed" },
-];
+function getFilterOptions(t: (key: string) => string) {
+  return [
+    { key: 'all' as StatusFilter, label: t('mobile.all') },
+    { key: 'running' as StatusFilter, label: t('mobile.statusRunning') },
+    { key: 'completed' as StatusFilter, label: t('mobile.statusCompleted') },
+    { key: 'failed' as StatusFilter, label: t('mobile.statusFailed') },
+  ];
+}
 
 export function HistoryScreen() {
+  const { t } = useAmoenaTranslation();
   const { sessions, refreshSessions, auth } = useRuntime();
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [refreshing, setRefreshing] = useState(false);
 
   // Map sessions to run-like records for display
-  const runs = useMemo(() => {
-    return sessions.map((session) => ({
-      goalId: session.id,
-      description: session.workingDir.split("/").pop() || session.id,
-      status: mapSessionStatus(session.status),
-      startedAt: session.startedAt ? new Date(session.startedAt).getTime() : Date.now(),
-      completedAt: session.completedAt ? new Date(session.completedAt).getTime() : undefined,
-      totalCostUsd: session.metadata?.totalCostUsd as number | undefined,
-      taskCount: session.metadata?.taskCount as number | undefined,
-    }));
-  }, [sessions]);
+  const runs = useMemo(
+    () =>
+      sessions.map((session) => ({
+        goalId: session.id,
+        description: session.workingDir.split('/').pop() || session.id,
+        status: mapSessionStatus(session.status),
+        startedAt: session.startedAt ? new Date(session.startedAt).getTime() : Date.now(),
+        completedAt: session.completedAt ? new Date(session.completedAt).getTime() : undefined,
+        totalCostUsd: session.metadata?.totalCostUsd as number | undefined,
+        taskCount: session.metadata?.taskCount as number | undefined,
+      })),
+    [sessions],
+  );
 
   const filteredRuns = useMemo(() => {
     let result = runs;
 
-    if (statusFilter !== "all") {
+    if (statusFilter !== 'all') {
       result = result.filter((r) => r.status === statusFilter);
     }
 
@@ -66,10 +72,20 @@ export function HistoryScreen() {
 
   if (!auth) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: tokens.colorBackground, padding: tokens.spacing6 }}>
-        <Text style={[styles.screenTitle, { textAlign: "center" }]}>Not Connected</Text>
-        <Text style={[styles.mutedText, { textAlign: "center", marginTop: tokens.spacing2 }]}>
-          Pair with a desktop instance to view run history.
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: tokens.colorBackground,
+          padding: tokens.spacing6,
+        }}
+      >
+        <Text style={[styles.screenTitle, { textAlign: 'center' }]}>
+          {t('mobile.notConnected')}
+        </Text>
+        <Text style={[styles.mutedText, { textAlign: 'center', marginTop: tokens.spacing2 }]}>
+          {t('mobile.pairToViewHistory')}
         </Text>
       </View>
     );
@@ -80,16 +96,20 @@ export function HistoryScreen() {
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={styles.scrollContent}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={tokens.colorTextSecondary} />
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={tokens.colorTextSecondary}
+        />
       }
     >
-      <Text style={styles.screenTitle}>History</Text>
+      <Text style={styles.screenTitle}>{t('mobile.history')}</Text>
 
       {/* Search */}
       <TextInput
         value={search}
         onChangeText={setSearch}
-        placeholder="Search runs..."
+        placeholder={t('mobile.searchRuns')}
         placeholderTextColor={tokens.colorTextTertiary}
         autoCapitalize="none"
         autoCorrect={false}
@@ -98,14 +118,11 @@ export function HistoryScreen() {
 
       {/* Filter chips */}
       <View style={chipRow}>
-        {FILTER_OPTIONS.map((opt) => (
+        {getFilterOptions(t).map((opt) => (
           <View key={opt.key}>
             <Text
               onPress={() => setStatusFilter(opt.key)}
-              style={[
-                chipText,
-                statusFilter === opt.key ? chipActive : chipInactive,
-              ]}
+              style={[chipText, statusFilter === opt.key ? chipActive : chipInactive]}
             >
               {opt.label}
             </Text>
@@ -117,9 +134,9 @@ export function HistoryScreen() {
       {filteredRuns.length === 0 ? (
         <View style={styles.card}>
           <Text style={styles.mutedText}>
-            {search || statusFilter !== "all"
-              ? "No runs match your filters."
-              : "No run history yet."}
+            {search || statusFilter !== 'all'
+              ? t('mobile.noRunsMatchFilters')
+              : t('mobile.noRunsYet')}
           </Text>
         </View>
       ) : (
@@ -145,30 +162,30 @@ export function HistoryScreen() {
 
 function mapSessionStatus(
   status: string,
-): "running" | "completed" | "partial_failure" | "failed" | "cancelled" {
+): 'running' | 'completed' | 'partial_failure' | 'failed' | 'cancelled' {
   switch (status) {
-    case "active":
-    case "running":
-      return "running";
-    case "completed":
-    case "done":
-      return "completed";
-    case "failed":
-    case "error":
-      return "failed";
-    case "cancelled":
-      return "cancelled";
+    case 'active':
+    case 'running':
+      return 'running';
+    case 'completed':
+    case 'done':
+      return 'completed';
+    case 'failed':
+    case 'error':
+      return 'failed';
+    case 'cancelled':
+      return 'cancelled';
     default:
-      return "completed";
+      return 'completed';
   }
 }
 
 // ─── Local styles ────────────────────────────────────────────────────────────
 
 const chipRow = {
-  flexDirection: "row" as const,
+  flexDirection: 'row' as const,
   gap: tokens.spacing2,
-  flexWrap: "wrap" as const,
+  flexWrap: 'wrap' as const,
 };
 
 const chipText = {
@@ -176,8 +193,8 @@ const chipText = {
   paddingVertical: tokens.spacing2,
   borderRadius: tokens.radiusFull,
   fontSize: tokens.fontSizeSm,
-  fontWeight: "600" as const,
-  overflow: "hidden" as const,
+  fontWeight: '600' as const,
+  overflow: 'hidden' as const,
 };
 
 const chipActive = {

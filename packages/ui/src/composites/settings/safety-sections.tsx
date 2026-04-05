@@ -5,39 +5,83 @@ import {
   SettingsSelect,
   SettingsToggle,
   SettingsWarningBanner,
-} from "@/components/settings-controls";
-import { Trash2 } from "lucide-react";
+} from '@/components/settings-controls';
+import { Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function PrivacySettingsSection() {
+  const { t } = useTranslation();
   return (
     <div>
-      <SettingsWarningBanner>Changes to privacy settings take effect immediately for new sessions. Existing sessions retain their current settings.</SettingsWarningBanner>
-      <SettingsSectionTitle title="Telemetry" />
-      <SettingsRow label="Usage analytics" description="Send anonymized usage statistics">
+      <SettingsWarningBanner>{t('ui.privacySettingsBanner')}</SettingsWarningBanner>
+      <SettingsSectionTitle title={t('ui.telemetry')} />
+      <SettingsRow
+        label={t('ui.usageAnalytics')}
+        description={t('ui.sendAnonymizedUsageStatistics')}
+      >
         <SettingsToggle on />
       </SettingsRow>
-      <SettingsRow label="Crash reporting" description="Send crash reports to help improve Amoena">
+      <SettingsRow
+        label={t('ui.crashReporting')}
+        description={t('ui.sendCrashReportsToHelpImproveAmoena')}
+      >
         <SettingsToggle on />
       </SettingsRow>
 
-      <SettingsSectionTitle title="Data Handling" />
-      <SettingsRow label="Sensitive content handling" description="How to treat files marked as sensitive">
-        <SettingsSelect options={["Redact before sending", "Warn before sending", "Block entirely", "No restrictions"]} />
+      <SettingsSectionTitle title={t('ui.dataHandling')} />
+      <SettingsRow
+        label={t('ui.sensitiveContentHandling')}
+        description={t('ui.howToTreatFilesMarkedAsSensitive')}
+      >
+        <SettingsSelect
+          options={[
+            { value: 'redact', label: t('ui.redactBeforeSending') },
+            { value: 'warn', label: t('ui.warnBeforeSending') },
+            { value: 'block', label: t('ui.blockEntirely') },
+            { value: 'none', label: t('ui.noRestrictions') },
+          ]}
+        />
       </SettingsRow>
-      <SettingsRow label="Data retention" description="How long session data is stored locally">
-        <SettingsSelect options={["7 days", "30 days", "90 days", "1 year", "Forever"]} defaultValue="30 days" />
+      <SettingsRow
+        label={t('ui.dataRetention')}
+        description={t('ui.howLongSessionDataIsStoredLocally')}
+      >
+        <SettingsSelect
+          options={[
+            { value: '7', label: t('ui.sevenDays') },
+            { value: '30', label: t('ui.thirtyDays') },
+            { value: '90', label: t('ui.ninetyDays') },
+            { value: '365', label: t('ui.oneYear') },
+            { value: '0', label: t('ui.forever') },
+          ]}
+          defaultValue="30"
+        />
       </SettingsRow>
-      <SettingsRow label="Auto-redact secrets" description="Automatically redact API keys, tokens, and passwords">
+      <SettingsRow
+        label={t('ui.autoRedactSecrets')}
+        description={t('ui.automaticallyRedactApiKeysTokensAndPasswords')}
+      >
         <SettingsToggle on />
       </SettingsRow>
-      <SettingsRow label="Redaction patterns" description="Custom regex patterns for content redaction">
-        <button className="text-[11px] text-primary hover:text-primary/80">Configure →</button>
+      <SettingsRow
+        label={t('ui.redactionPatterns')}
+        description={t('ui.customRegexPatternsForContentRedaction')}
+      >
+        <button type="button" className="text-[11px] text-primary hover:text-primary/80">
+          {t('ui.configure')} →
+        </button>
       </SettingsRow>
 
-      <SettingsSectionTitle title="Cleanup" />
-      <SettingsRow label="Clear all session history" description="Permanently delete all stored sessions">
-        <button className="flex items-center gap-1 rounded border border-destructive/40 px-2.5 py-1 text-[11px] text-destructive transition-colors hover:bg-destructive/10">
-          <Trash2 size={10} /> Clear
+      <SettingsSectionTitle title={t('ui.cleanup')} />
+      <SettingsRow
+        label={t('ui.clearAllSessionHistory')}
+        description={t('ui.permanentlyDeleteAllStoredSessions')}
+      >
+        <button
+          type="button"
+          className="flex items-center gap-1 rounded border border-destructive/40 px-2.5 py-1 text-[11px] text-destructive transition-colors hover:bg-destructive/10"
+        >
+          <Trash2 size={10} /> {t('ui.clear')}
         </button>
       </SettingsRow>
     </div>
@@ -45,40 +89,70 @@ export function PrivacySettingsSection() {
 }
 
 export function AdvancedSettingsSection() {
+  const { t } = useTranslation();
   return (
     <div>
-      <SettingsWarningBanner>Advanced settings can affect stability. Only change these if you know what you're doing.</SettingsWarningBanner>
-      <SettingsSectionTitle title="Developer" />
-      <SettingsRow label="Developer mode" description="Show debug information and extra diagnostics">
+      <SettingsWarningBanner>{t('ui.advancedSettingsBanner')}</SettingsWarningBanner>
+      <SettingsSectionTitle title={t('ui.developer')} />
+      <SettingsRow
+        label={t('ui.developerMode')}
+        description={t('ui.showDebugInformationAndExtraDiagnostics')}
+      >
         <SettingsToggle />
       </SettingsRow>
-      <SettingsRow label="Runtime diagnostics" description="Show runtime performance metrics in status bar">
+      <SettingsRow
+        label={t('ui.runtimeDiagnostics')}
+        description={t('ui.showRuntimePerformanceMetricsInStatusBar')}
+      >
         <SettingsToggle />
       </SettingsRow>
-      <SettingsRow label="Verbose logging" description="Enable detailed debug logging to console">
+      <SettingsRow
+        label={t('ui.verboseLogging')}
+        description={t('ui.enableDetailedDebugLoggingToConsole')}
+      >
         <SettingsToggle />
       </SettingsRow>
 
-      <SettingsSectionTitle title="Experimental" />
-      <SettingsRow label="Experimental features" description="Enable features that may be unstable">
+      <SettingsSectionTitle title={t('ui.experimental')} />
+      <SettingsRow
+        label={t('ui.experimentalFeatures')}
+        description={t('ui.enableFeaturesThatMayBeUnstable')}
+      >
         <SettingsToggle />
       </SettingsRow>
-      <SettingsRow label="Canvas rendering" description="Use canvas-based rendering for timeline">
+      <SettingsRow
+        label={t('ui.canvasRendering')}
+        description={t('ui.useCanvasBasedRenderingForTimeline')}
+      >
         <SettingsToggle />
       </SettingsRow>
-      <SettingsRow label="Streaming responses" description="Show agent responses as they stream">
+      <SettingsRow
+        label={t('ui.streamingResponses')}
+        description={t('ui.showAgentResponsesAsTheyStream')}
+      >
         <SettingsToggle on />
       </SettingsRow>
 
-      <SettingsSectionTitle title="Backend" />
-      <SettingsRow label="Axum runtime port" description="Local runtime server port">
+      <SettingsSectionTitle title={t('ui.backend')} />
+      <SettingsRow label={t('ui.axumRuntimePort')} description={t('ui.localRuntimeServerPort')}>
         <SettingsNumberInput defaultValue={3847} width="w-20" />
       </SettingsRow>
-      <SettingsRow label="Max concurrent agents" description="Maximum agents running simultaneously">
+      <SettingsRow
+        label={t('ui.maxConcurrentAgents')}
+        description={t('ui.maximumAgentsRunningSimultaneously')}
+      >
         <SettingsNumberInput defaultValue={4} />
       </SettingsRow>
-      <SettingsRow label="Request timeout" description="Timeout for provider API calls">
-        <SettingsSelect options={["30s", "60s", "120s", "300s"]} defaultValue="60s" />
+      <SettingsRow label={t('ui.requestTimeout')} description={t('ui.timeoutForProviderApiCalls')}>
+        <SettingsSelect
+          options={[
+            { value: '30', label: '30s' },
+            { value: '60', label: '60s' },
+            { value: '120', label: '120s' },
+            { value: '300', label: '300s' },
+          ]}
+          defaultValue="60"
+        />
       </SettingsRow>
     </div>
   );

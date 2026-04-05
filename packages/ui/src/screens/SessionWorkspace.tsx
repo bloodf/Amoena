@@ -1,15 +1,16 @@
-import { useNavigate, useLocation } from "react-router-dom";
-import { SessionSidePanel } from "@/components/SessionSidePanel";
-import { TerminalPanel } from "@/components/TerminalPanel";
-import { MessageTimeline } from "@/components/MessageTimeline";
-import { SessionComposer } from "@/components/SessionComposer";
-import { EmptySessionState } from "@/components/EmptySessionState";
-import { MessageQueue } from "@/components/MessageQueue";
-import { FileEditorTab } from "@/components/FileEditorTab";
-import { PanelRightOpen, PanelRightClose } from "lucide-react";
-import { WorkspaceResizeHandle } from "@/composites/session/WorkspaceResizeHandle";
-import { WorkspaceTabs } from "@/composites/session/WorkspaceTabs";
-import { useSessionWorkspaceState } from "@/composites/session/useSessionWorkspaceState";
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { SessionSidePanel } from '@/components/SessionSidePanel';
+import { TerminalPanel } from '@/components/TerminalPanel';
+import { MessageTimeline } from '@/components/MessageTimeline';
+import { SessionComposer } from '@/components/SessionComposer';
+import { EmptySessionState } from '@/components/EmptySessionState';
+import { MessageQueue } from '@/components/MessageQueue';
+import { FileEditorTab } from '@/components/FileEditorTab';
+import { PanelRightOpen, PanelRightClose } from 'lucide-react';
+import { WorkspaceResizeHandle } from '@/composites/session/WorkspaceResizeHandle';
+import { WorkspaceTabs } from '@/composites/session/WorkspaceTabs';
+import { useSessionWorkspaceState } from '@/composites/session/useSessionWorkspaceState';
 
 export function SessionWorkspace() {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ export function SessionWorkspace() {
     startTerminalResize,
     startSidePanelResize,
   } = useSessionWorkspaceState(location.state);
+  const { t } = useTranslation();
 
   return (
     <div className="flex h-full">
@@ -61,25 +63,26 @@ export function SessionWorkspace() {
           onTabDragOver={handleTabDragOver}
           onTabDragEnd={handleTabDragEnd}
           onDragLeave={handleTabDragLeave}
-          onNewSession={() => navigate("/session/new")}
+          onNewSession={() => navigate('/session/new')}
         />
         <div className="flex items-center h-9 border-b border-border bg-surface-0 flex-shrink-0 px-0">
           <div className="flex-1" />
           <button
             onClick={() => setSidePanelOpen(!sidePanelOpen)}
             className="flex items-center justify-center h-9 w-9 flex-shrink-0 cursor-pointer text-muted-foreground hover:text-foreground hover:bg-surface-2/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors"
-            aria-label={sidePanelOpen ? "Hide side panel" : "Show side panel"}
+            aria-label={sidePanelOpen ? 'Hide side panel' : 'Show side panel'}
           >
             {sidePanelOpen ? <PanelRightClose size={14} /> : <PanelRightOpen size={14} />}
           </button>
         </div>
 
         {/* Content area — session or file editor */}
-        {activeTab?.type === "file" ? (
+        {activeTab?.type === 'file' && (
           <div className="flex-1 overflow-hidden">
             <FileEditorTab fileName={activeTab.fileName} />
           </div>
-        ) : activeSession ? (
+        )}
+        {activeSession && (
           <>
             <div className="flex-1 overflow-hidden">
               {activeSession.isEmpty ? (
@@ -101,10 +104,10 @@ export function SessionWorkspace() {
               session={activeSession}
               onUpdateSession={(updates) => updateSession(activeTabId, updates)}
               externalMessage={composerMessage}
-              onExternalMessageConsumed={() => setComposerMessage("")}
+              onExternalMessageConsumed={() => setComposerMessage('')}
             />
           </>
-        ) : null}
+        )}
 
         {/* Terminal */}
         {terminalOpen && (
@@ -120,7 +123,7 @@ export function SessionWorkspace() {
           <button
             onClick={() => setTerminalOpen(true)}
             className="h-6 border-t border-border bg-surface-0 text-[11px] font-mono text-muted-foreground hover:text-foreground hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer transition-colors flex items-center justify-center"
-            aria-label="Open terminal"
+            aria-label={t('ui.openTerminal')}
           >
             Terminal
           </button>

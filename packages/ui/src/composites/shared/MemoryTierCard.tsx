@@ -1,8 +1,15 @@
-import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronRight, AlertTriangle, Merge, X } from "lucide-react";
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils';
+import { ChevronDown, ChevronRight, AlertTriangle, Merge, X } from 'lucide-react';
 
-export type MemoryCategory = "profile" | "preference" | "entity" | "pattern" | "tool_usage" | "skill";
+export type MemoryCategory =
+  | 'profile'
+  | 'preference'
+  | 'entity'
+  | 'pattern'
+  | 'tool_usage'
+  | 'skill';
 
 export interface MemoryTierCardProps {
   id: string;
@@ -18,16 +25,49 @@ export interface MemoryTierCardProps {
   onDismiss?: () => void;
 }
 
-const categoryConfig: Record<MemoryCategory, { label: string; color: string; bgClass: string; textClass: string }> = {
-  profile: { label: "Profile", color: "#3B82F6", bgClass: "bg-[#3B82F6]/15", textClass: "text-[#3B82F6]" },
-  preference: { label: "Preference", color: "#7C3AED", bgClass: "bg-[#7C3AED]/15", textClass: "text-[#7C3AED]" },
-  entity: { label: "Entity", color: "#0891B2", bgClass: "bg-[#0891B2]/15", textClass: "text-[#0891B2]" },
-  pattern: { label: "Pattern", color: "#D97706", bgClass: "bg-[#D97706]/15", textClass: "text-[#D97706]" },
-  tool_usage: { label: "Tool Usage", color: "#16A34A", bgClass: "bg-[#16A34A]/15", textClass: "text-[#16A34A]" },
-  skill: { label: "Skill", color: "#B800B8", bgClass: "bg-[#B800B8]/15", textClass: "text-[#B800B8]" },
+const categoryConfig: Record<
+  MemoryCategory,
+  { label: string; color: string; bgClass: string; textClass: string }
+> = {
+  profile: {
+    label: 'Profile',
+    color: '#3B82F6',
+    bgClass: 'bg-[#3B82F6]/15',
+    textClass: 'text-[#3B82F6]',
+  },
+  preference: {
+    label: 'Preference',
+    color: '#7C3AED',
+    bgClass: 'bg-[#7C3AED]/15',
+    textClass: 'text-[#7C3AED]',
+  },
+  entity: {
+    label: 'Entity',
+    color: '#0891B2',
+    bgClass: 'bg-[#0891B2]/15',
+    textClass: 'text-[#0891B2]',
+  },
+  pattern: {
+    label: 'Pattern',
+    color: '#D97706',
+    bgClass: 'bg-[#D97706]/15',
+    textClass: 'text-[#D97706]',
+  },
+  tool_usage: {
+    label: 'Tool Usage',
+    color: '#16A34A',
+    bgClass: 'bg-[#16A34A]/15',
+    textClass: 'text-[#16A34A]',
+  },
+  skill: {
+    label: 'Skill',
+    color: '#B800B8',
+    bgClass: 'bg-[#B800B8]/15',
+    textClass: 'text-[#B800B8]',
+  },
 };
 
-type TierLevel = "l0" | "l1" | "l2";
+type TierLevel = 'l0' | 'l1' | 'l2';
 
 export function MemoryTierCard({
   title,
@@ -41,17 +81,18 @@ export function MemoryTierCard({
   onMerge,
   onDismiss,
 }: MemoryTierCardProps) {
-  const [tier, setTier] = useState<TierLevel>("l0");
+  const { t } = useTranslation();
+  const [tier, setTier] = useState<TierLevel>('l0');
   const config = categoryConfig[category];
 
   const expand = () => {
-    if (tier === "l0" && l1Summary) setTier("l1");
-    else if (tier === "l1" && l2Content) setTier("l2");
+    if (tier === 'l0' && l1Summary) setTier('l1');
+    else if (tier === 'l1' && l2Content) setTier('l2');
   };
 
   const collapse = () => {
-    if (tier === "l2") setTier("l1");
-    else if (tier === "l1") setTier("l0");
+    if (tier === 'l2') setTier('l1');
+    else if (tier === 'l1') setTier('l0');
   };
 
   return (
@@ -59,16 +100,22 @@ export function MemoryTierCard({
       {/* L0 — Always visible */}
       <div className="flex items-center gap-2 px-2.5 py-2">
         <button
-          onClick={tier === "l0" ? expand : collapse}
+          onClick={tier === 'l0' ? expand : collapse}
           className="flex-shrink-0 rounded p-0.5 text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
-          aria-label={tier === "l0" ? "Expand" : "Collapse"}
+          aria-label={tier === 'l0' ? 'Expand' : 'Collapse'}
         >
-          {tier === "l0" ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+          {tier === 'l0' ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
         </button>
 
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <span className="truncate text-[12px] font-medium text-foreground">{title}</span>
-          <span className={cn("flex-shrink-0 rounded px-1.5 py-0.5 text-[9px] font-medium", config.bgClass, config.textClass)}>
+          <span
+            className={cn(
+              'flex-shrink-0 rounded px-1.5 py-0.5 text-[9px] font-medium',
+              config.bgClass,
+              config.textClass,
+            )}
+          >
             {config.label}
           </span>
         </div>
@@ -94,7 +141,7 @@ export function MemoryTierCard({
               <button
                 onClick={onDismiss}
                 className="rounded p-0.5 text-[#D97706] transition-colors hover:bg-[#D97706]/20"
-                aria-label="Dismiss duplicate"
+                aria-label={t('ui.dismissDuplicate')}
               >
                 <X size={10} />
               </button>
@@ -111,12 +158,12 @@ export function MemoryTierCard({
       </div>
 
       {/* L1 — Expanded details */}
-      {tier !== "l0" && l1Summary ? (
+      {tier !== 'l0' && l1Summary ? (
         <div className="border-t border-border px-2.5 py-2">
           <div className="text-[11px] leading-relaxed text-foreground/80">{l1Summary}</div>
-          {tier === "l1" && l2Content ? (
+          {tier === 'l1' && l2Content ? (
             <button
-              onClick={() => setTier("l2")}
+              onClick={() => setTier('l2')}
               className="mt-1.5 text-[10px] text-primary transition-colors hover:text-primary/80"
             >
               Full details
@@ -126,7 +173,7 @@ export function MemoryTierCard({
       ) : null}
 
       {/* L1 expand button when at L0 */}
-      {tier === "l0" && l1Summary ? (
+      {tier === 'l0' && l1Summary ? (
         <div className="border-t border-border px-2.5 py-1.5">
           <button
             onClick={expand}
@@ -138,9 +185,11 @@ export function MemoryTierCard({
       ) : null}
 
       {/* L2 — Full content */}
-      {tier === "l2" && l2Content ? (
+      {tier === 'l2' && l2Content ? (
         <div className="border-t border-border bg-surface-2/50 px-2.5 py-2">
-          <div className="whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-foreground/90">{l2Content}</div>
+          <div className="whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-foreground/90">
+            {l2Content}
+          </div>
         </div>
       ) : null}
     </div>

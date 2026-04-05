@@ -1,38 +1,40 @@
 import { X } from 'lucide-react';
 import { useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ShortcutEntry {
   keys: string[];
   description: string;
+  i18nKey?: string;
 }
 
 const shortcutSections: { title: string; shortcuts: ShortcutEntry[] }[] = [
   {
     title: 'General',
     shortcuts: [
-      { keys: ['Cmd', 'K'], description: 'Open command palette' },
-      { keys: ['Cmd', 'P'], description: 'Quick file open' },
-      { keys: ['Cmd', ','], description: 'Open settings' },
-      { keys: ['?'], description: 'Show keyboard shortcuts' },
-      { keys: ['Escape'], description: 'Close modal / cancel' },
+      { keys: ['Cmd', 'K'], description: 'Open command palette', i18nKey: 'openCommandPalette' },
+      { keys: ['Cmd', 'P'], description: 'Quick file open', i18nKey: 'quickFileOpen' },
+      { keys: ['Cmd', ','], description: 'Open settings', i18nKey: 'openSettings' },
+      { keys: ['?'], description: 'Show keyboard shortcuts', i18nKey: 'showKeyboardShortcuts' },
+      { keys: ['Escape'], description: 'Close modal / cancel', i18nKey: 'closeModalCancel' },
     ],
   },
   {
     title: 'Session',
     shortcuts: [
-      { keys: ['Cmd', 'Enter'], description: 'Send message' },
-      { keys: ['Cmd', 'N'], description: 'New session' },
+      { keys: ['Cmd', 'Enter'], description: 'Send message', i18nKey: 'sendMessageShortcut' },
+      { keys: ['Cmd', 'N'], description: 'New session', i18nKey: 'newSessionShortcut' },
       { keys: ['Cmd', 'Shift', 'A'], description: 'Toggle autopilot' },
     ],
   },
   {
     title: 'Navigation',
     shortcuts: [
-      { keys: ['Cmd', '1-9'], description: 'Switch to screen N' },
-      { keys: ['Cmd', '['], description: 'Go back' },
-      { keys: ['Cmd', ']'], description: 'Go forward' },
-      { keys: ['Tab'], description: 'Move focus forward' },
-      { keys: ['Shift', 'Tab'], description: 'Move focus backward' },
+      { keys: ['Cmd', '1-9'], description: 'Switch to screen N', i18nKey: 'switchToScreenN' },
+      { keys: ['Cmd', '['], description: 'Go back', i18nKey: 'goBack' },
+      { keys: ['Cmd', ']'], description: 'Go forward', i18nKey: 'goForward' },
+      { keys: ['Tab'], description: 'Move focus forward', i18nKey: 'moveFocusForward' },
+      { keys: ['Shift', 'Tab'], description: 'Move focus backward', i18nKey: 'moveFocusBackward' },
     ],
   },
   {
@@ -46,6 +48,7 @@ const shortcutSections: { title: string; shortcuts: ShortcutEntry[] }[] = [
 ];
 
 export function KeyboardShortcutsModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { t } = useTranslation();
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -68,17 +71,17 @@ export function KeyboardShortcutsModal({ open, onClose }: { open: boolean; onClo
       className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
-      aria-label="Keyboard shortcuts"
+      aria-label={t('ui.keyboardShortcuts')}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div className="w-full max-w-lg rounded-xl border border-border bg-surface-0 shadow-2xl">
         <div className="flex items-center justify-between border-b border-border p-4">
-          <h2 className="text-[15px] font-semibold text-foreground">Keyboard Shortcuts</h2>
+          <h2 className="text-[15px] font-semibold text-foreground">{t('ui.keyboardShortcuts')}</h2>
           <button
             onClick={onClose}
-            aria-label="Close keyboard shortcuts"
+            aria-label={t('ui.closeKeyboardShortcuts')}
             className="flex items-center justify-center rounded p-1.5 text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring min-h-[44px] min-w-[44px]"
           >
             <X size={16} aria-hidden="true" />
@@ -88,7 +91,7 @@ export function KeyboardShortcutsModal({ open, onClose }: { open: boolean; onClo
           {shortcutSections.map((section) => (
             <div key={section.title}>
               <h3 className="mb-2 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                {section.title}
+                {t(`ui.shortcuts${section.title}` as const)}
               </h3>
               <div className="space-y-1">
                 {section.shortcuts.map((shortcut) => (
@@ -96,7 +99,11 @@ export function KeyboardShortcutsModal({ open, onClose }: { open: boolean; onClo
                     key={shortcut.description}
                     className="flex items-center justify-between py-1.5"
                   >
-                    <span className="text-[13px] text-foreground">{shortcut.description}</span>
+                    <span className="text-[13px] text-foreground">
+                      {shortcut.i18nKey
+                        ? t(`ui.${shortcut.i18nKey}` as const)
+                        : shortcut.description}
+                    </span>
                     <div className="flex items-center gap-1">
                       {shortcut.keys.map((key) => (
                         <kbd
@@ -114,13 +121,7 @@ export function KeyboardShortcutsModal({ open, onClose }: { open: boolean; onClo
           ))}
         </div>
         <div className="border-t border-border px-4 py-3 text-center">
-          <span className="text-[11px] text-muted-foreground">
-            Press{' '}
-            <kbd className="rounded border border-border bg-surface-2 px-1 py-0.5 font-mono text-[10px]">
-              ?
-            </kbd>{' '}
-            to toggle this help
-          </span>
+          <span className="text-[11px] text-muted-foreground">{t('ui.pressToToggleHelp')}</span>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { Plus, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import type { AgentTeam } from './types';
 
@@ -26,21 +27,22 @@ interface TeamListPaneProps {
 }
 
 export function TeamListPane({ teams, selectedTeamId, onSelectTeam }: TeamListPaneProps) {
+  const { t } = useTranslation();
   return (
     <nav
       className="flex w-[300px] flex-shrink-0 flex-col border-r border-border"
-      aria-label="Agent teams"
+      aria-label={t('ui.agentTeams')}
     >
       <div className="flex items-center justify-between border-b border-border p-3">
         <h2 id="team-list-heading" className="text-[13px] font-semibold text-foreground">
-          Agent Teams
+          {t('ui.agentTeams')}
         </h2>
         <button
-          aria-label="Create new team"
+          aria-label={t('ui.createNewTeam')}
           className="flex items-center gap-1 rounded border border-primary px-2 py-1 text-[11px] text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 min-h-[44px] min-w-[44px]"
         >
           <Plus size={11} aria-hidden="true" />
-          New Team
+          {t('ui.newTeam')}
         </button>
       </div>
 
@@ -73,11 +75,11 @@ export function TeamListPane({ teams, selectedTeamId, onSelectTeam }: TeamListPa
             <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
               <span className="flex items-center gap-1">
                 <Users size={10} />
-                {team.agents.length} agents
+                {t('ui.agentsCount', { count: team.agents.length })}
               </span>
               <span className="font-mono">{team.totalTokens}</span>
               <span>
-                {team.completedTasks}/{team.totalTasks} tasks
+                {t('ui.tasksProgress', { completed: team.completedTasks, total: team.totalTasks })}
               </span>
             </div>
             <div className="mt-2 h-1 overflow-hidden rounded-full bg-surface-3">

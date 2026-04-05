@@ -1,13 +1,14 @@
-import { Search, X } from "lucide-react";
+import { Search, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
-import { Input } from "@/primitives/input";
+import { Input } from '@/primitives/input';
 
 export function SearchField({
   value,
   onChange,
-  placeholder = "Search…",
+  placeholder = 'Search…',
   onClear,
   className,
 }: {
@@ -17,9 +18,13 @@ export function SearchField({
   onClear?: () => void;
   className?: string;
 }) {
+  const { t } = useTranslation();
   return (
-    <div className={cn("relative", className)}>
-      <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+    <div className={cn('relative', className)}>
+      <Search
+        size={14}
+        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+      />
       <Input
         value={value}
         onChange={(event) => onChange(event.target.value)}
@@ -29,9 +34,9 @@ export function SearchField({
       {value ? (
         <button
           type="button"
-          onClick={onClear ?? (() => onChange(""))}
+          onClick={onClear ?? (() => onChange(''))}
           className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-          aria-label="Clear search"
+          aria-label={t('ui.clearSearch')}
         >
           <X size={13} />
         </button>

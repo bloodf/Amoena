@@ -2,18 +2,14 @@
  * Settings screen — Paired devices, notification preferences, theme toggle.
  */
 
-import { useCallback, useEffect, useState } from "react";
-import { Pressable, ScrollView, Switch, Text, View } from "react-native";
+import { useCallback, useEffect, useState } from 'react';
+import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
 
-import { useAmoenaTranslation } from "@lunaria/i18n";
-import { useRuntime } from "@/runtime/provider";
-import {
-  loadPreferences,
-  savePreferences,
-  type AppPreferences,
-} from "@/lib/storage";
-import { styles } from "@/theme/styles";
-import { tokens } from "@/theme/tokens";
+import { useAmoenaTranslation } from '@lunaria/i18n';
+import { useRuntime } from '@/runtime/provider';
+import { loadPreferences, savePreferences, type AppPreferences } from '@/lib/storage';
+import { styles } from '@/theme/styles';
+import { tokens } from '@/theme/tokens';
 
 export function SettingsScreen() {
   const { t } = useAmoenaTranslation();
@@ -42,20 +38,22 @@ export function SettingsScreen() {
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={styles.scrollContent}
     >
-      <Text style={styles.screenTitle}>{t("mobile.settings")}</Text>
+      <Text style={styles.screenTitle}>{t('mobile.settings')}</Text>
 
       {/* Paired Devices */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Paired Device</Text>
+        <Text style={styles.sectionTitle}>{t('mobile.pairedDevice')}</Text>
         {auth ? (
           <View style={{ gap: tokens.spacing2 }}>
             <View style={deviceRow}>
               <View style={{ flex: 1 }}>
                 <Text style={styles.bodyText}>{auth.deviceId}</Text>
-                <Text style={styles.mutedText} numberOfLines={1}>{auth.baseUrl}</Text>
+                <Text style={styles.mutedText} numberOfLines={1}>
+                  {auth.baseUrl}
+                </Text>
               </View>
               <View style={connectedBadge}>
-                <Text style={connectedBadgeText}>Connected</Text>
+                <Text style={connectedBadgeText}>{t('mobile.connectedBadge')}</Text>
               </View>
             </View>
             <Pressable
@@ -63,51 +61,49 @@ export function SettingsScreen() {
               style={styles.secondaryButton}
               accessibilityRole="button"
             >
-              <Text style={styles.secondaryButtonText}>Forget device</Text>
+              <Text style={styles.secondaryButtonText}>{t('mobile.forgetDevice')}</Text>
             </Pressable>
           </View>
         ) : (
-          <Text style={styles.mutedText}>
-            No device paired. Go to the Home tab to pair with a desktop instance.
-          </Text>
+          <Text style={styles.mutedText}>{t('mobile.noDevices')}</Text>
         )}
       </View>
 
       {/* Notification Preferences */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Notifications</Text>
+        <Text style={styles.sectionTitle}>{t('mobile.notifications')}</Text>
 
         <SettingToggle
-          label="Push notifications"
-          description="Get notified when a run needs approval or completes"
+          label={t('mobile.pushNotifications')}
+          description={t('mobile.notifyDescription')}
           value={preferences.notificationsEnabled}
-          onToggle={(v) => void updatePreference("notificationsEnabled", v)}
+          onToggle={(v) => void updatePreference('notificationsEnabled', v)}
         />
       </View>
 
       {/* Appearance */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Appearance</Text>
+        <Text style={styles.sectionTitle}>{t('mobile.appearance')}</Text>
 
         <SettingToggle
-          label="Dark mode"
-          description="Use dark color scheme throughout the app"
+          label={t('mobile.darkMode')}
+          description={t('mobile.darkModeDescription')}
           value={preferences.darkMode}
-          onToggle={(v) => void updatePreference("darkMode", v)}
+          onToggle={(v) => void updatePreference('darkMode', v)}
         />
       </View>
 
       {/* Cost Alerts */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Cost Alerts</Text>
+        <Text style={styles.sectionTitle}>{t('mobile.costAlerts')}</Text>
         <Text style={styles.descriptionText}>
-          Current threshold: ${preferences.costAlertThreshold.toFixed(2)}
+          {t('mobile.currentThreshold')}: ${preferences.costAlertThreshold.toFixed(2)}
         </Text>
-        <View style={{ flexDirection: "row", gap: tokens.spacing2 }}>
+        <View style={{ flexDirection: 'row', gap: tokens.spacing2 }}>
           {[0.1, 0.5, 1.0, 5.0].map((threshold) => (
             <Pressable
               key={threshold}
-              onPress={() => void updatePreference("costAlertThreshold", threshold)}
+              onPress={() => void updatePreference('costAlertThreshold', threshold)}
               style={[
                 thresholdChip,
                 preferences.costAlertThreshold === threshold
@@ -133,9 +129,9 @@ export function SettingsScreen() {
 
       {/* App Info */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>About</Text>
-        <Text style={styles.mutedText}>Amoena Mobile v0.0.1</Text>
-        <Text style={styles.mutedText}>Companion app for Amoena Desktop</Text>
+        <Text style={styles.sectionTitle}>{t('mobile.about')}</Text>
+        <Text style={styles.mutedText}>{t('mobile.amoenaMobileVersion')}</Text>
+        <Text style={styles.mutedText}>{t('mobile.companionApp')}</Text>
       </View>
     </ScrollView>
   );
@@ -173,13 +169,13 @@ function SettingToggle({
 // ─── Local styles ────────────────────────────────────────────────────────────
 
 const deviceRow = {
-  flexDirection: "row" as const,
-  alignItems: "center" as const,
+  flexDirection: 'row' as const,
+  alignItems: 'center' as const,
   gap: tokens.spacing3,
 };
 
 const connectedBadge = {
-  backgroundColor: tokens.colorSuccess + "20",
+  backgroundColor: `${tokens.colorSuccess}20`,
   paddingHorizontal: tokens.spacing2_5,
   paddingVertical: tokens.spacing1_5,
   borderRadius: tokens.radiusFull,
@@ -188,13 +184,13 @@ const connectedBadge = {
 const connectedBadgeText = {
   color: tokens.colorSuccess,
   fontSize: tokens.fontSizeXs,
-  fontWeight: "700" as const,
+  fontWeight: '700' as const,
 };
 
 const toggleRow = {
-  flexDirection: "row" as const,
-  justifyContent: "space-between" as const,
-  alignItems: "center" as const,
+  flexDirection: 'row' as const,
+  justifyContent: 'space-between' as const,
+  alignItems: 'center' as const,
   gap: tokens.spacing3,
 };
 
@@ -214,7 +210,7 @@ const thresholdChipInactive = {
 
 const thresholdChipText = {
   fontSize: tokens.fontSizeSm,
-  fontWeight: "600" as const,
+  fontWeight: '600' as const,
 };
 
 const thresholdChipTextActive = {

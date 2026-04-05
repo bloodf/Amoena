@@ -1,4 +1,5 @@
 import { Check, Pause, PlayCircle, RefreshCw, Square, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { AutopilotState } from './types';
 
 function getStatusBorderClasses(state: AutopilotState): string {
@@ -37,6 +38,7 @@ export function AutopilotStatusPanel({
   onNewRun: () => void;
   onUnblock: () => void;
 }) {
+  const { t } = useTranslation();
   const sc = autopilotStateConfig[state];
 
   return (
@@ -45,7 +47,11 @@ export function AutopilotStatusPanel({
         <h1 id="autopilot-heading" className="text-lg font-semibold text-foreground">
           Autopilot
         </h1>
-        <Switch checked={enabled} onCheckedChange={onToggleEnabled} aria-label="Enable autopilot" />
+        <Switch
+          checked={enabled}
+          onCheckedChange={onToggleEnabled}
+          aria-label={t('ui.enableAutopilot')}
+        />
       </div>
 
       <div

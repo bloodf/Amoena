@@ -474,7 +474,8 @@
     "workspace": "Workspace",
     "workspaceAccess": "Workspace Access",
     "workspaceFiles": "Workspace Files",
-    "workspaceFilesDesc": "Files available in the agent's workspace"
+    "workspaceFilesDesc": "Files available in the agent's workspace",
+    "agentPerformanceTrendChart": "Agent performance trend chart"
   },
   "agentHistory": {
     "title": "Agent History",
@@ -971,7 +972,8 @@
     "statusDenied": "Denied",
     "statusExpired": "Expired",
     "viewAllowlist": "View Allowlist",
-    "viewApprovals": "View Approvals"
+    "viewApprovals": "View Approvals",
+    "executionApprovalRequired": "Execution approval required"
   },
   "gatewayConfig": {
     "allSettings": "All Settings",
@@ -993,7 +995,10 @@
     "unsavedChangesCount": "{count} unsaved changes",
     "updateSystem": "Update System",
     "updating": "Updating...",
-    "viewPendingChanges": "View pending changes"
+    "viewPendingChanges": "View pending changes",
+    "invalidJson": "Invalid JSON",
+    "configAppliedHotReload": "Config applied (hot reload)",
+    "systemUpdateInitiated": "System update initiated"
   },
   "githubSync": {
     "title": "GitHub Sync",
@@ -1408,7 +1413,15 @@
     "taskStatActive": "Active",
     "taskStatAssigned": "Assigned",
     "taskStatDone": "Done",
-    "taskStatTotal": "Total"
+    "taskStatTotal": "Total",
+    "habiLanes": "Habi Lanes",
+    "opsAutomation": "Ops Automation",
+    "loungeRug": "Lounge Rug",
+    "clickWorkerToInspectSession": "Click worker to inspect session",
+    "useActionButtonsInAgentModal": "Use action buttons in agent modal"
+  },
+  "memorySpotlight": {
+    "searchEverything": "Search everything"
   },
   "onboarding": {
     "title": "Welcome to Amoena",
@@ -2182,7 +2195,19 @@
     "taskId": "Task ID",
     "ticket": "Ticket",
     "timeoutSeconds": "Timeout (seconds)",
-    "unassigned": "Unassigned"
+    "unassigned": "Unassigned",
+    "waitingOn": "waiting on",
+    "needsHuman": "needs human",
+    "manualAction": "manual action",
+    "accountCreation": "account creation",
+    "browserLogin": "browser login",
+    "approvalNeeded": "approval needed",
+    "ownerAction": "owner action",
+    "humanRequired": "human required",
+    "blockedOnOwner": "blocked on owner",
+    "awaitingOwner": "awaiting owner",
+    "awaitingHuman": "awaiting human",
+    "needsOwner": "needs owner"
   },
   "tokenDashboard": {
     "title": "Token Dashboard",
@@ -2514,5 +2539,14 @@
       "emptyTitle": "Select two runs to compare",
       "emptyDescription": "Choose two completed goal runs from the list above."
     }
+  },
+  "settingsPanel": {
+    "apiKeyRotatedSuccessfully": "API key rotated successfully",
+    "onboardingResetWizardWillAppear": "Onboarding reset — wizard will appear on next page load",
+    "failedToResetOnboarding": "Failed to reset onboarding",
+    "failedToSaveHookProfile": "Failed to save hook profile"
+  },
+  "connectionStatus": {
+    "gatewayOptionalStandalone": "Gateway Optional (Standalone)"
   }
 }

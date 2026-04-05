@@ -1,10 +1,12 @@
-import { Tabs } from "expo-router";
-import { Text } from "react-native";
+import { useAmoenaTranslation } from '@lunaria/i18n';
+import { Tabs } from 'expo-router';
+import { Text } from 'react-native';
 
-import { usePermissions } from "@/runtime/hooks/use-permissions";
-import { tokens } from "@/theme/tokens";
+import { usePermissions } from '@/runtime/hooks/use-permissions';
+import { tokens } from '@/theme/tokens';
 
 export default function TabLayout() {
+  const { t } = useAmoenaTranslation('mobile');
   const { data: permissions } = usePermissions();
   const badgeCount = permissions.length;
 
@@ -23,30 +25,38 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20, fontFamily: "monospace" }}>{`>`}</Text>,
+          title: t('mobile.home'),
+          tabBarIcon: ({ color }) => (
+            <Text style={{ color, fontSize: 20, fontFamily: 'monospace' }}>{`>`}</Text>
+          ),
         }}
       />
       <Tabs.Screen
         name="history"
         options={{
-          title: "History",
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20, fontFamily: "monospace" }}>#</Text>,
+          title: t('mobile.history'),
+          tabBarIcon: ({ color }) => (
+            <Text style={{ color, fontSize: 20, fontFamily: 'monospace' }}>#</Text>
+          ),
         }}
       />
       <Tabs.Screen
         name="permissions"
         options={{
-          title: "Approvals",
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20, fontFamily: "monospace" }}>!</Text>,
+          title: t('mobile.tabApprovals'),
+          tabBarIcon: ({ color }) => (
+            <Text style={{ color, fontSize: 20, fontFamily: 'monospace' }}>!</Text>
+          ),
           tabBarBadge: badgeCount > 0 ? badgeCount : undefined,
         }}
       />
       <Tabs.Screen
         name="more"
         options={{
-          title: "More",
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20, fontFamily: "monospace" }}>...</Text>,
+          title: t('mobile.tabMore'),
+          tabBarIcon: ({ color }) => (
+            <Text style={{ color, fontSize: 20, fontFamily: 'monospace' }}>...</Text>
+          ),
         }}
       />
     </Tabs>

@@ -5,36 +5,126 @@ import {
   SettingsSectionTitle,
   SettingsSelect,
   SettingsToggle,
-} from "@/components/settings-controls";
+} from '@/components/settings-controls';
+import { useTranslation } from 'react-i18next';
 
 export function SessionSettingsSection() {
+  const { t } = useTranslation();
   return (
     <div>
-      <SettingsSectionTitle title="Defaults" />
-      <SettingsRow label="Default model" description="Model used for new sessions">
-        <SettingsSelect options={["Claude 4 Sonnet", "Claude 4 Opus", "GPT-5.4", "Gemini 2.5 Pro"]} />
+      <SettingsSectionTitle title={t('ui.defaults')} />
+      <SettingsRow label={t('ui.defaultModel')} description={t('ui.modelUsedForNewSessions')}>
+        <SettingsSelect
+          options={[
+            { value: 'sonnet', label: 'Claude 4 Sonnet' },
+            { value: 'opus', label: 'Claude 4 Opus' },
+            { value: 'gpt', label: 'GPT-5.4' },
+            { value: 'gemini', label: 'Gemini 2.5 Pro' },
+          ]}
+        />
       </SettingsRow>
-      <SettingsRow label="Default reasoning mode" description="Reasoning behavior for new sessions">
-        <SettingsSelect options={["Auto", "Always On", "Off"]} />
+      <SettingsRow
+        label={t('ui.defaultReasoningMode')}
+        description={t('ui.reasoningBehaviorForNewSessions')}
+      >
+        <SettingsSelect
+          options={[
+            { value: 'auto', label: 'Auto' },
+            { value: 'on', label: t('ui.alwaysOn') },
+            { value: 'off', label: 'Off' },
+          ]}
+        />
       </SettingsRow>
-      <SettingsRow label="Default reasoning depth">
-        <SettingsSelect options={["Low", "Medium", "High", "Extra High"]} defaultValue="High" />
+      <SettingsRow label={t('ui.defaultReasoningDepth')}>
+        <SettingsSelect
+          options={[
+            { value: 'low', label: 'Low' },
+            { value: 'medium', label: 'Medium' },
+            { value: 'high', label: 'High' },
+            { value: 'extra', label: t('ui.extraHigh') },
+          ]}
+          defaultValue="high"
+        />
       </SettingsRow>
-      <SettingsRow label="Default permission preset">
-        <SettingsSelect options={["Default (ask before risky)", "Full access", "Plan only", "Read only"]} />
+      <SettingsRow label={t('ui.defaultPermissionPreset')}>
+        <SettingsSelect
+          options={[
+            { value: 'ask', label: t('ui.defaultAskBeforeRisky') },
+            { value: 'full', label: t('ui.fullAccess') },
+            { value: 'plan', label: t('ui.planOnly') },
+            { value: 'read', label: t('ui.readOnly') },
+          ]}
+        />
       </SettingsRow>
-      <SettingsRow label="Default work target">
-        <SettingsSelect options={["Local project", "New worktree", "Cloud"]} />
+      <SettingsRow label={t('ui.defaultWorkTarget')}>
+        <SettingsSelect
+          options={[
+            { value: 'local', label: t('ui.localProject') },
+            { value: 'worktree', label: t('ui.newWorktree') },
+            { value: 'cloud', label: t('ui.cloud') },
+          ]}
+        />
+      </SettingsRow>
+      <SettingsRow
+        label={t('ui.defaultReasoningMode')}
+        description={t('ui.reasoningBehaviorForNewSessions')}
+      >
+        <SettingsSelect
+          options={[
+            { value: 'auto', label: 'Auto' },
+            { value: 'on', label: t('ui.alwaysOn') },
+            { value: 'off', label: 'Off' },
+          ]}
+        />
+      </SettingsRow>
+      <SettingsRow label={t('ui.defaultReasoningDepth')}>
+        <SettingsSelect
+          options={[
+            { value: 'low', label: 'Low' },
+            { value: 'medium', label: 'Medium' },
+            { value: 'high', label: 'High' },
+            { value: 'extra', label: t('ui.extraHigh') },
+          ]}
+          defaultValue="High"
+        />
+      </SettingsRow>
+      <SettingsRow label={t('ui.defaultPermissionPreset')}>
+        <SettingsSelect
+          options={[
+            { value: 'ask', label: t('ui.defaultAskBeforeRisky') },
+            { value: 'full', label: t('ui.fullAccess') },
+            { value: 'plan', label: t('ui.planOnly') },
+            { value: 'read', label: t('ui.readOnly') },
+          ]}
+        />
+      </SettingsRow>
+      <SettingsRow label={t('ui.defaultWorkTarget')}>
+        <SettingsSelect
+          options={[
+            { value: 'local', label: t('ui.localProject') },
+            { value: 'worktree', label: t('ui.newWorktree') },
+            { value: 'cloud', label: t('ui.cloud') },
+          ]}
+        />
       </SettingsRow>
 
-      <SettingsSectionTitle title="New Session Behavior" />
-      <SettingsRow label="Auto-include open files" description="Attach open editor files to new sessions">
+      <SettingsSectionTitle title={t('ui.newSessionBehavior')} />
+      <SettingsRow
+        label={t('ui.autoIncludeOpenFiles')}
+        description={t('ui.attachOpenEditorFilesToNewSessions')}
+      >
         <SettingsToggle />
       </SettingsRow>
-      <SettingsRow label="Include IDE context" description="Pass editor selection and open tabs">
+      <SettingsRow
+        label={t('ui.includeIDEContext')}
+        description={t('ui.passEditorSelectionAndOpenTabs')}
+      >
         <SettingsToggle on />
       </SettingsRow>
-      <SettingsRow label="Max context tokens" description="Soft limit for context injection">
+      <SettingsRow
+        label={t('ui.maxContextTokens')}
+        description={t('ui.softLimitForContextInjection')}
+      >
         <SettingsNumberInput defaultValue={32000} width="w-20" />
       </SettingsRow>
     </div>
@@ -42,67 +132,170 @@ export function SessionSettingsSection() {
 }
 
 export function MemorySettingsSection() {
+  const { t } = useTranslation();
   return (
     <div>
-      <SettingsSectionTitle title="Observation" />
-      <SettingsRow label="Observation retention" description="How long auto-captured observations are kept">
-        <SettingsSelect options={["Session only", "7 days", "30 days", "Forever"]} defaultValue="30 days" />
+      <SettingsSectionTitle title={t('ui.observation')} />
+      <SettingsRow
+        label={t('ui.observationRetention')}
+        description={t('ui.howLongAutoCapturedObservationsAreKept')}
+      >
+        <SettingsSelect
+          options={[
+            { value: 'session', label: t('ui.sessionOnly') },
+            { value: '7', label: t('ui.sevenDays') },
+            { value: '30', label: t('ui.thirtyDays') },
+            { value: 'forever', label: t('ui.forever') },
+          ]}
+          defaultValue="30"
+        />
       </SettingsRow>
-      <SettingsRow label="Auto-summarize sessions" description="Generate memory summaries after sessions end">
+      <SettingsRow
+        label={t('ui.autoSummarizeSessions')}
+        description={t('ui.generateMemorySummariesAfterSessionsEnd')}
+      >
         <SettingsToggle on />
       </SettingsRow>
-      <SettingsRow label="Summary generation model" description="Model used for memory summarization">
-        <SettingsSelect options={["Same as session", "Claude 4 Haiku", "GPT-5.3-Codex-Spark", "Gemini 2.5 Flash"]} />
+      <SettingsRow
+        label={t('ui.summaryGenerationModel')}
+        description={t('ui.modelUsedForMemorySummarization')}
+      >
+        <SettingsSelect
+          options={[
+            { value: 'same', label: 'Same as session' },
+            { value: 'haiku', label: 'Claude 4 Haiku' },
+            { value: 'gpt', label: 'GPT-5.3-Codex-Spark' },
+            { value: 'flash', label: 'Gemini 2.5 Flash' },
+          ]}
+        />
       </SettingsRow>
 
-      <SettingsSectionTitle title="Injection" />
-      <SettingsRow label="Auto-inject relevant memory" description="Automatically include relevant memories in context">
+      <SettingsSectionTitle title={t('ui.injection')} />
+      <SettingsRow
+        label={t('ui.autoInjectRelevantMemory')}
+        description={t('ui.automaticallyIncludeRelevantMemoriesInContext')}
+      >
         <SettingsToggle on />
       </SettingsRow>
-      <SettingsRow label="Max injected tokens" description="Token budget for memory injection">
+      <SettingsRow
+        label={t('ui.maxInjectedTokens')}
+        description={t('ui.tokenBudgetForMemoryInjection')}
+      >
         <SettingsNumberInput defaultValue={4000} width="w-20" />
       </SettingsRow>
-      <SettingsRow label="Injection strategy" description="How memory is selected for injection">
-        <SettingsSelect options={["Relevance-based", "Recency-based", "Hybrid"]} defaultValue="Hybrid" />
+      <SettingsRow
+        label={t('ui.injectionStrategy')}
+        description={t('ui.howMemoryIsSelectedForInjection')}
+      >
+        <SettingsSelect
+          options={[
+            { value: 'relevance', label: t('ui.relevanceBased') },
+            { value: 'recency', label: t('ui.recencyBased') },
+            { value: 'hybrid', label: t('ui.hybrid') },
+          ]}
+          defaultValue="hybrid"
+        />
       </SettingsRow>
 
-      <SettingsSectionTitle title="Data" />
+      <SettingsSectionTitle title={t('ui.data')} />
       <div className="mt-2 flex items-center gap-2">
-        <button className="flex items-center gap-1.5 rounded border border-border px-3 py-1.5 text-[12px] text-foreground transition-colors hover:bg-surface-2">Export Memory</button>
-        <button className="flex items-center gap-1.5 rounded border border-border px-3 py-1.5 text-[12px] text-foreground transition-colors hover:bg-surface-2">Import Memory</button>
-        <button className="flex items-center gap-1.5 rounded border border-destructive/40 px-3 py-1.5 text-[12px] text-destructive transition-colors hover:bg-destructive/10">Clear All</button>
+        <button
+          type="button"
+          className="flex items-center gap-1.5 rounded border border-border px-3 py-1.5 text-[12px] text-foreground transition-colors hover:bg-surface-2"
+        >
+          {t('ui.exportMemory')}
+        </button>
+        <button
+          type="button"
+          className="flex items-center gap-1.5 rounded border border-border px-3 py-1.5 text-[12px] text-foreground transition-colors hover:bg-surface-2"
+        >
+          {t('ui.importMemory')}
+        </button>
+        <button
+          type="button"
+          className="flex items-center gap-1.5 rounded border border-destructive/40 px-3 py-1.5 text-[12px] text-destructive transition-colors hover:bg-destructive/10"
+        >
+          {t('ui.clearAll')}
+        </button>
       </div>
     </div>
   );
 }
 
 export function PermissionsSettingsSection() {
+  const { t } = useTranslation();
   return (
     <div>
-      <SettingsSectionTitle title="Default Behavior" />
-      <SettingsRow label="Default approval mode" description="How permission requests are handled by default">
-        <SettingsSelect options={["Ask before risky actions", "Ask for everything", "Auto-approve all", "Plan only (never apply)"]} />
+      <SettingsSectionTitle title={t('ui.defaultBehavior')} />
+      <SettingsRow
+        label={t('ui.defaultApprovalMode')}
+        description={t('ui.howPermissionRequestsAreHandledByDefault')}
+      >
+        <SettingsSelect
+          options={[
+            { value: 'ask', label: t('ui.askBeforeRiskyActions') },
+            { value: 'everything', label: t('ui.askForEverything') },
+            { value: 'approve', label: t('ui.autoApproveAll') },
+            { value: 'plan', label: t('ui.planOnlyNeverApply') },
+          ]}
+        />
       </SettingsRow>
-      <SettingsRow label="Remember approval choices" description="Remember per-action approval decisions">
+      <SettingsRow
+        label={t('ui.rememberApprovalChoices')}
+        description={t('ui.rememberPerActionApprovalDecisions')}
+      >
         <SettingsToggle on />
       </SettingsRow>
 
-      <SettingsSectionTitle title="High-Risk Actions" />
-      <SettingsRow label="File deletion" description="Policy for deleting files">
-        <SettingsSelect options={["Always ask", "Allow in full-access mode", "Always block"]} />
+      <SettingsSectionTitle title={t('ui.highRiskActions')} />
+      <SettingsRow label={t('ui.fileDeletion')} description={t('ui.policyForDeletingFiles')}>
+        <SettingsSelect
+          options={[
+            { value: 'ask', label: 'Always ask' },
+            { value: 'full', label: t('ui.allowInFullAccessMode') },
+            { value: 'block', label: t('ui.alwaysBlock') },
+          ]}
+        />
       </SettingsRow>
-      <SettingsRow label="Terminal execution" description="Policy for running terminal commands">
-        <SettingsSelect options={["Always ask", "Allow safe commands", "Allow all", "Block"]} />
+      <SettingsRow
+        label={t('ui.terminalExecution')}
+        description={t('ui.policyForRunningTerminalCommands')}
+      >
+        <SettingsSelect
+          options={[
+            { value: 'ask', label: 'Always ask' },
+            { value: 'safe', label: t('ui.allowSafeCommands') },
+            { value: 'all', label: t('ui.allowAll') },
+            { value: 'block', label: 'Block' },
+          ]}
+        />
       </SettingsRow>
-      <SettingsRow label="Git operations" description="Policy for git push, force-push, etc.">
-        <SettingsSelect options={["Always ask", "Allow non-destructive", "Allow all", "Block"]} />
+      <SettingsRow label={t('ui.gitOperations')} description={t('ui.policyForGitPushForcePushEtc')}>
+        <SettingsSelect
+          options={[
+            { value: 'ask', label: 'Always ask' },
+            { value: 'safe', label: t('ui.allowNonDestructive') },
+            { value: 'all', label: t('ui.allowAll') },
+            { value: 'block', label: 'Block' },
+          ]}
+        />
       </SettingsRow>
-      <SettingsRow label="Network requests" description="Policy for outbound network calls">
-        <SettingsSelect options={["Always ask", "Allow known hosts", "Allow all", "Block"]} />
+      <SettingsRow
+        label={t('ui.networkRequests')}
+        description={t('ui.policyForOutboundNetworkCalls')}
+      >
+        <SettingsSelect
+          options={[
+            { value: 'ask', label: 'Always ask' },
+            { value: 'hosts', label: t('ui.allowKnownHosts') },
+            { value: 'all', label: t('ui.allowAll') },
+            { value: 'block', label: 'Block' },
+          ]}
+        />
       </SettingsRow>
 
-      <SettingsSectionTitle title="Per-Workspace Overrides" />
-      <SettingsInfoBanner>Per-workspace permission overrides can be configured in individual workspace settings.</SettingsInfoBanner>
+      <SettingsSectionTitle title={t('ui.perWorkspaceOverrides')} />
+      <SettingsInfoBanner>{t('ui.perWorkspacePermissionOverrides')}</SettingsInfoBanner>
     </div>
   );
 }

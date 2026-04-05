@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown, GitBranch, Plus, Shield, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ProviderLogo } from '../shared/ProviderLogo';
@@ -113,13 +114,14 @@ export function ComposerToolbar({
   onSelectPermission,
   onSelectBranch,
 }: ComposerToolbarProps) {
+  const { t } = useTranslation();
   const ContinueIcon = continueOptions.find((option) => option.id === session?.continueIn)?.icon;
 
   return (
     <div className="relative flex flex-wrap items-center gap-0.5 px-2 pb-2">
       <div className="relative">
         <button
-          aria-label="Open composer actions"
+          aria-label={t('ui.openComposerActions')}
           onClick={() => onToggleMenu('plus')}
           className="flex h-7 w-7 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
         >
@@ -142,7 +144,7 @@ export function ComposerToolbar({
 
       <div className="relative">
         <button
-          aria-label="Open agent picker"
+          aria-label={t('ui.openAgentPicker')}
           onClick={() => onToggleMenu('agent')}
           className="flex h-7 items-center gap-1 rounded px-1.5 font-mono text-[11px] transition-colors hover:bg-surface-2"
         >
@@ -160,7 +162,7 @@ export function ComposerToolbar({
 
       <div className="relative">
         <button
-          aria-label="Open model picker"
+          aria-label={t('ui.openModelPicker')}
           onClick={() => onToggleMenu('model')}
           className="flex h-7 items-center gap-1 rounded px-1.5 font-mono text-[11px] text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
         >
@@ -179,7 +181,7 @@ export function ComposerToolbar({
 
       <div className="relative">
         <button
-          aria-label="Open reasoning picker"
+          aria-label={t('ui.openReasoningPicker')}
           onClick={() => onToggleMenu('reasoning')}
           className={cn(
             'flex h-7 items-center gap-1 rounded px-1.5 font-mono text-[10px] transition-colors hover:bg-surface-2',
@@ -206,7 +208,7 @@ export function ComposerToolbar({
         <>
           <div className="relative">
             <button
-              aria-label="Open work target picker"
+              aria-label={t('ui.openWorkTargetPicker')}
               onClick={() => onToggleMenu('continueIn')}
               className="flex h-7 items-center gap-1 rounded px-1.5 font-mono text-[10px] text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
             >
@@ -227,7 +229,7 @@ export function ComposerToolbar({
 
           <div className="relative">
             <button
-              aria-label="Open permission picker"
+              aria-label={t('ui.openPermissionPicker')}
               onClick={() => onToggleMenu('permission')}
               className={cn(
                 'flex h-7 items-center gap-1 rounded px-1.5 font-mono text-[10px] transition-colors',
@@ -253,7 +255,7 @@ export function ComposerToolbar({
 
           <div className="relative">
             <button
-              aria-label="Open branch picker"
+              aria-label={t('ui.openBranchPicker')}
               onClick={() => onToggleMenu('branch')}
               className="flex h-7 items-center gap-1 rounded px-1.5 font-mono text-[10px] text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
             >

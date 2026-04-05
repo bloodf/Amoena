@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { X, Plus, Circle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
 interface TerminalTab {
@@ -19,6 +20,7 @@ export function TerminalPanel({
   output?: string;
   onInput?: (data: string) => void;
 }) {
+  const { t } = useTranslation();
   const [tabs, setTabs] = useState<TerminalTab[]>([
     { id: '1', label: 'bash', active: true, hasProcess: false },
     { id: '2', label: 'node', active: false, hasProcess: true, processLabel: 'cargo build' },
@@ -122,14 +124,14 @@ export function TerminalPanel({
           ))}
           <button
             onClick={addTab}
-            aria-label="Add terminal tab"
+            aria-label={t('ui.addTerminalTab')}
             className="flex items-center justify-center w-5 h-5 text-muted-foreground hover:text-foreground transition-colors"
           >
             <Plus size={11} />
           </button>
         </div>
         <button
-          aria-label="Close terminal panel"
+          aria-label={t('ui.closeTerminalPanel')}
           onClick={onClose}
           className="flex items-center justify-center w-5 h-5 text-muted-foreground hover:text-foreground transition-colors"
         >

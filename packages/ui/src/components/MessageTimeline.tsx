@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDown, ChevronDown, Circle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/utils';
 
@@ -89,6 +90,7 @@ export function MessageTimeline({
   onApprovePermission?: (requestId: string) => void;
   onDenyPermission?: (requestId: string) => void;
 }) {
+  const { t } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [atBottom, setAtBottom] = useState(true);
   const [collapsedReasoning, setCollapsedReasoning] = useState<Record<string, boolean>>({});
@@ -240,7 +242,7 @@ export function MessageTimeline({
         })}
 
         {isStreaming ? (
-          <div aria-label="Assistant is streaming" className="flex items-center gap-2 py-2">
+          <div aria-label={t('ui.assistantIsStreaming')} className="flex items-center gap-2 py-2">
             <div className="h-[2px] flex-1 animate-pulse-magenta bg-gradient-to-r from-transparent via-primary to-transparent" />
           </div>
         ) : null}
@@ -248,7 +250,7 @@ export function MessageTimeline({
 
       {!atBottom ? (
         <button
-          aria-label="Scroll to latest message"
+          aria-label={t('ui.scrollToLatestMessage')}
           onClick={() => {
             scrollRef.current?.scrollTo({
               top: scrollRef.current.scrollHeight,

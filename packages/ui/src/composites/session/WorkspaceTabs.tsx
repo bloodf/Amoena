@@ -1,4 +1,5 @@
 import { Circle, Plus, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { getFileIcon } from '../file-browser/utils';
 import type { SessionRecord, WorkspaceTabItem } from './types';
@@ -44,6 +45,7 @@ export function WorkspaceTabs({
   onDragLeave,
   onNewSession,
 }: WorkspaceTabsProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center h-9 border-b border-border bg-surface-0 flex-shrink-0">
       <div className="flex items-center flex-1 min-w-0 overflow-x-auto" onDragLeave={onDragLeave}>
@@ -122,8 +124,8 @@ export function WorkspaceTabs({
       <button
         onClick={onNewSession}
         className="flex items-center justify-center h-9 w-9 flex-shrink-0 text-muted-foreground hover:text-foreground hover:bg-surface-2/50 transition-colors"
-        title="New Session"
-        aria-label="New Session"
+        title={t('ui.newSession')}
+        aria-label={t('ui.newSession')}
       >
         <Plus size={14} />
       </button>

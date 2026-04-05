@@ -1,4 +1,5 @@
 import { Check, Circle, ClipboardList, Clock, PlayCircle, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { autopilotStateConfig } from './config';
 import { initialAutopilotSubAgents } from './data';
@@ -125,6 +126,7 @@ export function AutopilotActivityPane({
   onApprove: (index: number) => void;
   onDeny: (index: number) => void;
 }) {
+  const { t } = useTranslation();
   const sc = autopilotStateConfig[state];
 
   return (
@@ -139,7 +141,7 @@ export function AutopilotActivityPane({
         <div className="flex items-center gap-3">
           <button
             onClick={onOpenTaskBoard}
-            aria-label="Open task board"
+            aria-label={t('ui.openTaskBoard')}
             className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium text-primary border border-primary/30 rounded cursor-pointer hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 transition-colors min-h-[44px]"
           >
             <ClipboardList size={12} aria-hidden="true" />
@@ -185,7 +187,7 @@ export function AutopilotActivityPane({
       {/* MiroFish-inspired sub-agent swarm grid */}
       <SubAgentSwarmGrid agents={initialAutopilotSubAgents} />
 
-      <div className="space-y-1" role="log" aria-live="polite" aria-label="Activity log">
+      <div className="space-y-1" role="log" aria-live="polite" aria-label={t('ui.activityLog')}>
         {activityLog.map((item, index) => (
           <div
             key={`${item.time}-${item.target}-${index}`}

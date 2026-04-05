@@ -1,4 +1,5 @@
 import { Circle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 function getSeverityLabel(percent: number): string {
   if (percent > 80) return 'high';
@@ -18,6 +19,7 @@ import { RateLimitsMenu } from '@/composites/status-bar/RateLimitsMenu';
 import { useState } from 'react';
 
 export function StatusBar() {
+  const { t } = useTranslation();
   const [showRateLimits, setShowRateLimits] = useState(false);
   const [runtimeLocation, setRuntimeLocation] = useState<RuntimeLocation>('local');
   const [showRuntimeMenu, setShowRuntimeMenu] = useState(false);
@@ -29,7 +31,7 @@ export function StatusBar() {
   return (
     <div
       role="status"
-      aria-label="Application status bar"
+      aria-label={t('ui.applicationStatusBar')}
       className="flex h-7 flex-shrink-0 items-center gap-1 border-t border-border bg-surface-0 px-3 font-mono text-[11px] select-none"
     >
       <RuntimeMenu
@@ -86,20 +88,20 @@ export function StatusBar() {
 
       <div
         className="flex items-center gap-1.5 px-2 py-1 text-muted-foreground"
-        aria-label="3 agents connected"
+        aria-label={t('ui.agentsConnected', { count: 3 })}
       >
         <Circle size={5} className="fill-green text-green" aria-hidden="true" />
-        <span className="text-[10px]">3 agents</span>
+        <span className="text-[10px]">{t('ui.agentsConnected', { count: 3 })}</span>
       </div>
 
       <div className="h-3.5 w-px bg-border" aria-hidden="true" />
 
       <div
         className="flex items-center gap-1.5 px-2 py-1 text-muted-foreground"
-        aria-label="1 device connected"
+        aria-label={t('ui.devicesConnected', { count: 1 })}
       >
         <Circle size={5} className="fill-green text-green" aria-hidden="true" />
-        <span className="text-[10px]">1 device</span>
+        <span className="text-[10px]">{t('ui.devicesConnected', { count: 1 })}</span>
       </div>
     </div>
   );

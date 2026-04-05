@@ -2,12 +2,13 @@
  * Card for a goal run showing title, status, duration, cost, and agent count.
  */
 
-import { Pressable, Text, View, StyleSheet } from "react-native";
+import { useAmoenaTranslation } from '@lunaria/i18n';
+import { Pressable, Text, View, StyleSheet } from 'react-native';
 
-import { CostBadge } from "./CostBadge";
-import { tokens } from "@/theme/tokens";
+import { CostBadge } from './CostBadge';
+import { tokens } from '@/theme/tokens';
 
-type RunStatus = "running" | "completed" | "partial_failure" | "failed" | "cancelled";
+type RunStatus = 'running' | 'completed' | 'partial_failure' | 'failed' | 'cancelled';
 
 type RunCardProps = {
   readonly goalId: string;
@@ -21,18 +22,10 @@ type RunCardProps = {
   readonly onPress?: () => void;
 };
 
-const STATUS_LABELS: Record<RunStatus, string> = {
-  running: "Running",
-  completed: "Completed",
-  partial_failure: "Partial Failure",
-  failed: "Failed",
-  cancelled: "Cancelled",
-};
-
 const STATUS_COLORS: Record<RunStatus, string> = {
   running: tokens.colorPrimary,
   completed: tokens.colorSuccess,
-  partial_failure: tokens.colorWarning ?? "#F59E0B",
+  partial_failure: tokens.colorWarning ?? '#F59E0B',
   failed: tokens.colorDestructive,
   cancelled: tokens.colorTextTertiary,
 };
@@ -50,15 +43,33 @@ function formatDuration(startedAt: number, completedAt?: number): string {
   return `${hours}h ${remainingMinutes}m`;
 }
 
-function formatTimeAgo(timestamp: number): string {
+function formatTimeAgo(
+  timestamp: number,
+  t: (key: string, values?: Record<string, number>) => string,
+): string {
   const diff = Date.now() - timestamp;
   const minutes = Math.floor(diff / 60_000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 1) return t('mobile.justNow');
+  if (minutes < 60) return t('mobile.minutesAgo', { count: minutes });
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return t('mobile.hoursAgo', { count: hours });
   const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return t('mobile.daysAgo', { count: days });
+}
+
+function getStatusLabel(status: RunStatus, t: (key: string) => string): string {
+  switch (status) {
+    case 'running':
+      return t('mobile.statusRunning');
+    case 'completed':
+      return t('mobile.statusCompleted');
+    case 'partial_failure':
+      return t('mobile.statusPartialFailure');
+    case 'failed':
+      return t('mobile.statusFailed');
+    case 'cancelled':
+      return t('mobile.statusCancelled');
+  }
 }
 
 export function RunCard({
@@ -71,39 +82,29 @@ export function RunCard({
   agentCount,
   onPress,
 }: RunCardProps) {
+  const { t } = useAmoenaTranslation('mobile');
   const content = (
     <View style={localStyles.card}>
       <View style={localStyles.headerRow}>
         <Text style={localStyles.title} numberOfLines={2}>
           {description}
         </Text>
-        <View
-          style={[
-            localStyles.statusBadge,
-            { backgroundColor: STATUS_COLORS[status] + "20" },
-          ]}
-        >
-          <Text
-            style={[localStyles.statusText, { color: STATUS_COLORS[status] }]}
-          >
-            {STATUS_LABELS[status]}
+        <View style={[localStyles.statusBadge, { backgroundColor: `${STATUS_COLORS[status]}20` }]}>
+          <Text style={[localStyles.statusText, { color: STATUS_COLORS[status] }]}>
+            {getStatusLabel(status, t)}
           </Text>
         </View>
       </View>
 
       <View style={localStyles.metaRow}>
-        <Text style={localStyles.metaText}>
-          {formatDuration(startedAt, completedAt)}
-        </Text>
+        <Text style={localStyles.metaText}>{formatDuration(startedAt, completedAt)}</Text>
         <Text style={localStyles.metaSep}>|</Text>
-        <Text style={localStyles.metaText}>
-          {formatTimeAgo(startedAt)}
-        </Text>
+        <Text style={localStyles.metaText}>{formatTimeAgo(startedAt, t)}</Text>
         {taskCount !== undefined && (
           <>
             <Text style={localStyles.metaSep}>|</Text>
             <Text style={localStyles.metaText}>
-              {taskCount} task{taskCount !== 1 ? "s" : ""}
+              {taskCount} {taskCount === 1 ? t('mobile.task') : t('mobile.taskPlural')}
             </Text>
           </>
         )}
@@ -111,7 +112,7 @@ export function RunCard({
           <>
             <Text style={localStyles.metaSep}>|</Text>
             <Text style={localStyles.metaText}>
-              {agentCount} agent{agentCount !== 1 ? "s" : ""}
+              {agentCount} {agentCount === 1 ? t('mobile.agent') : t('mobile.agentPlural')}
             </Text>
           </>
         )}
@@ -144,15 +145,15 @@ const localStyles = StyleSheet.create({
     borderColor: tokens.colorBorder,
   },
   headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     gap: tokens.spacing2,
   },
   title: {
     color: tokens.colorTextPrimary,
     fontSize: tokens.fontSizeBase,
-    fontWeight: "600",
+    fontWeight: '600',
     flex: 1,
   },
   statusBadge: {
@@ -162,13 +163,13 @@ const localStyles = StyleSheet.create({
   },
   statusText: {
     fontSize: tokens.fontSizeXs,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   metaRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: tokens.spacing2,
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
   },
   metaText: {
     color: tokens.colorTextSecondary,
