@@ -11,14 +11,17 @@ export abstract class BaseAgentSession implements AgentSession {
 
   protected readonly spawn: SpawnResult;
   private readonly exitPromise: Promise<number>;
-  /** The resolved parser for this session, based on detected version. */
-  protected readonly parser: OutputParser;
+  /** The resolved parser for this session, based on detected version. Lazily resolved on first use. */
+  protected _parser: OutputParser | undefined;
+  /** The agent ID used for parser resolution. Stored in constructor (not abstract) to keep adapters constructible. */
+  private readonly agentId: string;
 
   constructor(spawn: SpawnResult, agentId: string, timeoutMs = DEFAULT_SESSION_TIMEOUT_MS) {
     this.id = randomUUID();
     this.status = 'running';
     this.output = [];
     this.spawn = spawn;
+    this.agentId = agentId;
 
     spawn.onStdout((line) => {
       this.output.push(line);
@@ -28,9 +31,9 @@ export abstract class BaseAgentSession implements AgentSession {
       this.output.push(line);
     });
 
-    // Detect version from captured output lines
-    const detectedVersion = this.detectVersion(agentId);
-    this.parser = parserRegistry.resolve(agentId, detectedVersion);
+    // NOTE: Version detection is intentionally deferred to first parseLine() call.
+    // At construction time output[] is empty because the spawn callbacks haven't
+    // fired yet. The lazy getter ensures detection runs after startup output arrives.
 
     this.exitPromise = withTimeout(
       new Promise<number>((resolve) => {
@@ -49,10 +52,23 @@ export abstract class BaseAgentSession implements AgentSession {
   }
 
   /**
+   * Lazy getter that resolves the parser on first use.
+   * Version detection is deferred until here because parseLine() is called
+   * only after startup output has arrived (containing the version banner).
+   */
+  protected get parser(): OutputParser {
+    if (this._parser === undefined) {
+      const version = this.detectVersion();
+      this._parser = parserRegistry.resolve(this.agentId, version);
+    }
+    return this._parser;
+  }
+
+  /**
    * Scans captured output lines to detect the CLI version.
    * Returns `null` if no version was detected.
    */
-  private detectVersion(_agentId: string): string | null {
+  private detectVersion(): string | null {
     for (const line of this.output) {
       const version = detectVersionFromLine(line);
       if (version !== null) {

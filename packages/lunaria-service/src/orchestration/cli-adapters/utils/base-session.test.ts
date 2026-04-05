@@ -107,13 +107,15 @@ class TestableVersionedSession {
   output: string[];
   protected readonly spawn: SpawnResult;
   private readonly exitPromise: Promise<number>;
-  protected readonly parser: (line: string) => Record<string, unknown>;
+  protected _parser: ((line: string) => Record<string, unknown>) | undefined;
+  protected readonly agentId: string;
 
   constructor(spawn: SpawnResult, agentId: string, _timeoutMs = 5000) {
     this.id = `test-session-${Math.random().toString(36).slice(2)}`;
     this.status = 'running';
     this.output = [];
     this.spawn = spawn;
+    this.agentId = agentId;
 
     spawn.onStdout((line: string) => {
       this.output.push(line);
@@ -122,11 +124,6 @@ class TestableVersionedSession {
     spawn.onStderr((line: string) => {
       this.output.push(line);
     });
-
-    // Mirrors BaseAgentSession constructor lines 32-34:
-    // detect version from captured output lines, then resolve parser
-    const detectedVersion = this.detectVersion();
-    this.parser = this.resolveParser(agentId, detectedVersion);
 
     this.exitPromise = new Promise<number>((resolve) => {
       spawn.onExit((code: number) => {
@@ -138,6 +135,14 @@ class TestableVersionedSession {
       spawn.kill();
       throw err;
     });
+  }
+
+  protected get parser(): (line: string) => Record<string, unknown> {
+    if (this._parser === undefined) {
+      const detectedVersion = this.detectVersion();
+      this._parser = this.resolveParser(this.agentId, detectedVersion);
+    }
+    return this._parser;
   }
 
   private detectVersion(): string | null {
@@ -165,6 +170,12 @@ class TestableVersionedSession {
         return {};
       };
     }
+    // Unknown or missing version — fall back to raw mode with warning (mirrors parser-registry behavior)
+    process.stderr.write(
+      `[parser-registry] WARNING: no parser found for agent="${agentId}" ` +
+        `version=${version === null ? '<unknown>' : JSON.stringify(version)}. ` +
+        `Falling back to raw output mode.\n`,
+    );
     return (_line: string) => ({});
   }
 
@@ -408,5 +419,56 @@ describe('Version detection and parser selection', () => {
     const session = new TestableVersionedSession(mockSpawnResult, 'claude-code');
 
     expect(session.parseLine('{ "type": "result" }')).toEqual({ isCompletion: true });
+  });
+
+  test('delayed version detection resolves parser correctly when parseLine called after output arrives', () => {
+    // Simulate async output arrival: handler registered but not yet fired
+    mockSpawnResult.onStdout = vi.fn((_handler) => {
+      // Handler stored for later invocation (simulates async output)
+    });
+
+    const session = new TestableVersionedSession(mockSpawnResult, 'claude-code');
+
+    // Verify version not yet detected (output still empty at detection time)
+    expect(session.output).toEqual([]);
+
+    // Simulate async arrival of version banner
+    const stdoutHandler = mockSpawnResult.onStdout.mock.calls[0]?.[0];
+    stdoutHandler?.('Claude Code 4.5.6');
+
+    // Now version should be detected lazily when parseLine is called
+    expect(session.parseLine('{ "type": "result" }')).toEqual({ isCompletion: true });
+  });
+
+  test('unknown version falls back to raw mode parser', () => {
+    const stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
+
+    mockSpawnResult.onStdout = vi.fn((handler) => {
+      handler('some-unknown-agent 9.9.9');
+    });
+
+    const session = new TestableVersionedSession(mockSpawnResult, 'unknown-agent');
+
+    expect(session.parseLine('{ "type": "result" }')).toEqual({});
+    expect(stderrSpy).toHaveBeenCalledWith(expect.stringContaining('WARNING'));
+  });
+
+  test('multiple parseLine calls use same resolved parser', () => {
+    mockSpawnResult.onStdout = vi.fn((handler) => {
+      handler('Claude Code 5.0.0');
+    });
+
+    const session = new TestableVersionedSession(mockSpawnResult, 'claude-code');
+
+    // First parseLine triggers lazy detection
+    const result1 = session.parseLine('{ "type": "result" }');
+    expect(result1).toEqual({ isCompletion: true });
+
+    // Subsequent calls use same resolved parser
+    const result2 = session.parseLine('{ "type": "result" }');
+    expect(result2).toEqual({ isCompletion: true });
+
+    // Non-result lines still return empty
+    expect(session.parseLine('plain text')).toEqual({});
   });
 });
