@@ -55,6 +55,8 @@ export interface AutopilotRun {
   /** The phase currently being executed. */
   readonly currentPhase: AutopilotPhase;
   readonly status: AutopilotStatus;
+  /** Per-phase timeout overrides in milliseconds (used when advancing phases). */
+  readonly phaseTimeouts: PhaseTimeouts;
 }
 
 /** Per-phase timeout overrides.  Missing phases use the default. */
@@ -115,9 +117,10 @@ function indexOfPhase(phase: AutopilotPhase): number {
 async function runPhaseWithTimeout<T>(
   phaseExecution: () => Promise<T>,
   timeoutMs: number,
+  phase: AutopilotPhase,
 ): Promise<{ timedOut: boolean }> {
   const timeoutPromise = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new PhaseTimeoutError(AutopilotPhase.Analysis, timeoutMs)), timeoutMs),
+    setTimeout(() => reject(new PhaseTimeoutError(phase, timeoutMs)), timeoutMs),
   );
 
   try {
@@ -161,6 +164,7 @@ export async function startAutopilot(
     phases: [initialPhaseRecord],
     currentPhase: firstPhase,
     status: 'running',
+    phaseTimeouts: options.phaseTimeouts ?? {},
   };
 
   runStore.set(run.id, run);
@@ -204,9 +208,13 @@ export async function advancePhase(
 
   // If phaseExecution is provided, race it against the current phase's timeout.
   if (phaseExecution) {
-    const currentPhaseTimeoutMs = run.phases[run.phases.length - 1].timeoutMs;
+    const currentPhaseTimeoutMs = run.phases[run.phases.length - 1]!.timeoutMs;
 
-    const { timedOut } = await runPhaseWithTimeout(phaseExecution, currentPhaseTimeoutMs);
+    const { timedOut } = await runPhaseWithTimeout(
+      phaseExecution,
+      currentPhaseTimeoutMs,
+      run.currentPhase,
+    );
 
     if (timedOut) {
       // Timeout expired before phase execution completed.
@@ -235,12 +243,12 @@ export async function advancePhase(
     return completed;
   }
 
-  const nextPhase = PHASE_ORDER[currentIndex + 1];
+  const nextPhase = PHASE_ORDER[currentIndex + 1]!;
   const nextPhaseRecord: PhaseRecord = {
     phase: nextPhase,
     startedAt: now,
     endedAt: null,
-    timeoutMs: DEFAULT_PHASE_TIMEOUT_MS,
+    timeoutMs: resolveTimeout(nextPhase, run.phaseTimeouts),
   };
 
   const advanced: AutopilotRun = {
@@ -283,7 +291,7 @@ export async function rollbackPhase(runId: string): Promise<AutopilotRun> {
     throw new AutopilotRollbackError(run.currentPhase);
   }
 
-  const previousPhase = PHASE_ORDER[currentIndex - 1];
+  const previousPhase = PHASE_ORDER[currentIndex - 1]!;
 
   // Drop the current (incomplete) phase record and re-open the previous one.
   const truncated = run.phases.filter((p) => p.phase !== run.currentPhase);
