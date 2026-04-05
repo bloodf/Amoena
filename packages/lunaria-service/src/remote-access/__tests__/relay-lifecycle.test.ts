@@ -8,6 +8,7 @@ import {
   closeRelayRoom,
   getActiveRelayRooms,
   tickHeartbeat,
+  onRelayDisconnect,
 } from '../relay.js';
 
 function makeDevice(id: string): Device {
@@ -68,6 +69,20 @@ describe('relay lifecycle', () => {
       expect(closedCount).toBe(0);
       expect(getActiveRelayRooms().some((r) => r.id === room.id)).toBe(true);
     });
+
+    it('propagates timeout reason when room closes due to missed pings', () => {
+      const room = createTrackedRoom();
+      let closeReason: string | undefined;
+      onRoomClose(room.id, (reason) => {
+        closeReason = reason;
+      });
+
+      tickHeartbeat(room.id);
+      tickHeartbeat(room.id);
+      tickHeartbeat(room.id);
+
+      expect(closeReason).toBe('timeout');
+    });
   });
 
   describe('repeated disconnects', () => {
@@ -119,6 +134,72 @@ describe('relay lifecycle', () => {
 
       tickHeartbeat(room.id);
       expect(getActiveRelayRooms().some((r) => r.id === room.id)).toBe(true);
+    });
+  });
+
+  describe('onRelayDisconnect global handler', () => {
+    it('notifies global handler with timeout reason when room times out', () => {
+      const room = createTrackedRoom();
+      const disconnectEvents: Array<{ roomId: string; reason: string }> = [];
+      const unsubscribe = onRelayDisconnect((roomId, reason) => {
+        disconnectEvents.push({ roomId, reason });
+      });
+
+      tickHeartbeat(room.id);
+      tickHeartbeat(room.id);
+      tickHeartbeat(room.id);
+
+      expect(disconnectEvents).toHaveLength(1);
+      expect(disconnectEvents[0].roomId).toBe(room.id);
+      expect(disconnectEvents[0].reason).toBe('timeout');
+
+      unsubscribe();
+    });
+
+    it('notifies global handler with explicit reason on explicit close', () => {
+      const room = createTrackedRoom();
+      const disconnectEvents: Array<{ roomId: string; reason: string }> = [];
+      const unsubscribe = onRelayDisconnect((roomId, reason) => {
+        disconnectEvents.push({ roomId, reason });
+      });
+
+      closeRelayRoom(room.id);
+      roomIds.splice(roomIds.indexOf(room.id), 1);
+
+      expect(disconnectEvents).toHaveLength(1);
+      expect(disconnectEvents[0].roomId).toBe(room.id);
+      expect(disconnectEvents[0].reason).toBe('explicit');
+
+      unsubscribe();
+    });
+
+    it('allows multiple global handlers to be registered', () => {
+      const room = createTrackedRoom();
+      const handler1Events: string[] = [];
+      const handler2Events: string[] = [];
+      const unsub1 = onRelayDisconnect((roomId) => handler1Events.push(roomId));
+      const unsub2 = onRelayDisconnect((roomId) => handler2Events.push(roomId));
+
+      closeRelayRoom(room.id);
+      roomIds.splice(roomIds.indexOf(room.id), 1);
+
+      expect(handler1Events).toHaveLength(1);
+      expect(handler2Events).toHaveLength(1);
+
+      unsub1();
+      unsub2();
+    });
+
+    it('unsubscribe removes handler from notifications', () => {
+      const room = createTrackedRoom();
+      const events: string[] = [];
+      const unsubscribe = onRelayDisconnect((roomId) => events.push(roomId));
+
+      unsubscribe();
+      closeRelayRoom(room.id);
+      roomIds.splice(roomIds.indexOf(room.id), 1);
+
+      expect(events).toHaveLength(0);
     });
   });
 });

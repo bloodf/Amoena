@@ -19,11 +19,11 @@ class MockWebSocket {
   onopen: (() => void) | null = null;
   onmessage: ((event: { data: string }) => void) | null = null;
   onerror: (() => void) | null = null;
-  onclose: (() => void) | null = null;
+  onclose: ((event?: CloseEvent) => void) | null = null;
   send = vi.fn();
-  close = vi.fn(() => {
+  close = vi.fn((code?: number) => {
     this.readyState = MockWebSocket.CLOSED;
-    this.onclose?.();
+    this.onclose?.({ code: code ?? 1000 } as CloseEvent);
   });
 
   constructor(url: string) {

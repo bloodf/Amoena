@@ -8,7 +8,10 @@
 import { AppState, type AppStateStatus } from 'react-native';
 
 export type RelayMessageHandler = (message: RelayIncomingMessage) => void;
-export type RelayStatusHandler = (status: RelayConnectionStatus) => void;
+export type RelayStatusHandler = (status: RelayConnectionStatus, reason?: RoomCloseReason) => void;
+
+/** Reason the connection was closed, mirroring RoomCloseReason from relay.ts */
+export type RoomCloseReason = 'explicit' | 'timeout' | 'error';
 
 export type RelayConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'reconnecting';
 
@@ -67,10 +70,10 @@ export function createRelayClient(options: RelayClientOptions): RelayClient {
   let disposed = false;
   let appStateSubscription: ReturnType<typeof AppState.addEventListener> | null = null;
 
-  function setStatus(next: RelayConnectionStatus) {
+  function setStatus(next: RelayConnectionStatus, reason?: RoomCloseReason) {
     if (status !== next) {
       status = next;
-      onStatusChange?.(next);
+      onStatusChange?.(next, reason);
     }
   }
 
@@ -127,11 +130,19 @@ export function createRelayClient(options: RelayClientOptions): RelayClient {
       // onerror is always followed by onclose in RN
     };
 
-    ws.onclose = () => {
+    ws.onclose = (event: CloseEvent) => {
       stopHeartbeat();
       ws = null;
       if (!disposed) {
-        setStatus('disconnected');
+        let reason: RoomCloseReason;
+        if (event?.code === 1000) {
+          reason = 'explicit';
+        } else if (event?.code === 1006) {
+          reason = 'timeout';
+        } else {
+          reason = 'error';
+        }
+        setStatus('disconnected', reason);
         scheduleReconnect();
       }
     };

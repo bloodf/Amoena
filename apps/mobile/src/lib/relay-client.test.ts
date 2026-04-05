@@ -17,11 +17,11 @@ class MockWebSocket {
   onopen: (() => void) | null = null;
   onmessage: ((event: { data: string }) => void) | null = null;
   onerror: (() => void) | null = null;
-  onclose: (() => void) | null = null;
+  onclose: ((event?: CloseEvent) => void) | null = null;
   send = vi.fn();
-  close = vi.fn(() => {
+  close = vi.fn((code?: number) => {
     this.readyState = MockWebSocket.CLOSED;
-    this.onclose?.();
+    this.onclose?.({ code: code ?? 1000 } as CloseEvent);
   });
 
   constructor(url: string) {
@@ -72,8 +72,8 @@ describe('createRelayClient', () => {
     const ws = MockWebSocket.latest()!;
     ws.simulateOpen();
 
-    expect(onStatusChange).toHaveBeenCalledWith('connecting');
-    expect(onStatusChange).toHaveBeenCalledWith('connected');
+    expect(onStatusChange).toHaveBeenCalledWith('connecting', undefined);
+    expect(onStatusChange).toHaveBeenCalledWith('connected', undefined);
   });
 
   it('appends authToken as query parameter', () => {
@@ -148,7 +148,7 @@ describe('createRelayClient', () => {
     client.disconnect();
 
     expect(ws.close).toHaveBeenCalled();
-    expect(onStatusChange).toHaveBeenLastCalledWith('disconnected');
+    expect(onStatusChange).toHaveBeenCalledWith('disconnected', undefined);
   });
 
   it('getStatus returns current status', () => {
@@ -226,6 +226,6 @@ describe('createRelayClient', () => {
 
     ws.close();
 
-    expect(onStatusChange).toHaveBeenCalledWith('disconnected');
+    expect(onStatusChange).toHaveBeenCalledWith('disconnected', 'explicit');
   });
 });

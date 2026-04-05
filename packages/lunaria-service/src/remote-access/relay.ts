@@ -22,6 +22,12 @@ interface MutableRelayRoom extends RelayRoom {
   lastActivity: Date;
 }
 
+/** Reason a relay room was closed. */
+export type RoomCloseReason = 'explicit' | 'timeout' | 'error';
+
+/** Callback invoked when a room is closed with its close reason. */
+export type RoomCloseCallback = (roomId: string, reason: RoomCloseReason) => void;
+
 interface RoomState {
   readonly room: MutableRelayRoom;
   missedPings: number;
@@ -31,7 +37,33 @@ interface RoomState {
   /** Callback to invoke when a message arrives for the mobile. */
   onMobileMessage: ((data: string) => void) | null;
   /** Callback invoked when the room is closed. */
-  onClose: (() => void) | null;
+  onClose: ((reason: RoomCloseReason) => void) | null;
+}
+
+/** Global disconnect handlers registered by desktop UI. */
+const disconnectHandlers = new Set<RoomCloseCallback>();
+
+/**
+ * Registers a handler to be notified when any relay room is closed.
+ * Useful for desktop UI to surface disconnect state.
+ *
+ * @param handler - Callback invoked with roomId and close reason.
+ * @returns Unsubscribe function.
+ */
+export function onRelayDisconnect(handler: RoomCloseCallback): () => void {
+  disconnectHandlers.add(handler);
+  return () => disconnectHandlers.delete(handler);
+}
+
+/** Notifies all registered disconnect handlers. */
+function notifyDisconnect(roomId: string, reason: RoomCloseReason): void {
+  for (const handler of disconnectHandlers) {
+    try {
+      handler(roomId, reason);
+    } catch {
+      // Ignore handler errors
+    }
+  }
 }
 
 /** Active relay rooms keyed by room ID. */
@@ -135,9 +167,9 @@ export function onMobileMessage(roomId: string, callback: (data: string) => void
  * Registers a callback invoked when a relay room is closed.
  *
  * @param roomId   - Target relay room.
- * @param callback - Invoked with no arguments when the room closes.
+ * @param callback - Invoked with close reason when the room closes.
  */
-export function onRoomClose(roomId: string, callback: () => void): void {
+export function onRoomClose(roomId: string, callback: (reason: RoomCloseReason) => void): void {
   const state = rooms.get(roomId);
   if (state !== undefined) {
     rooms.set(roomId, { ...state, onClose: callback });
@@ -151,11 +183,17 @@ export function onRoomClose(roomId: string, callback: () => void): void {
  * @returns `true` if the room existed and was closed.
  */
 export function closeRelayRoom(roomId: string): boolean {
+  return closeRelayRoomWithReason(roomId, 'explicit');
+}
+
+/** Internal close with reason for tracking disconnect source. */
+function closeRelayRoomWithReason(roomId: string, reason: RoomCloseReason): boolean {
   const state = rooms.get(roomId);
   if (state === undefined) return false;
 
   clearInterval(state.intervalId);
-  state.onClose?.();
+  state.onClose?.(reason);
+  notifyDisconnect(roomId, reason);
   rooms.delete(roomId);
   return true;
 }
@@ -179,7 +217,7 @@ export function tickHeartbeat(roomId: string): void {
   state.missedPings += 1;
 
   if (state.missedPings >= MAX_MISSED_PINGS) {
-    closeRelayRoom(roomId);
+    closeRelayRoomWithReason(roomId, 'timeout');
   } else {
     rooms.set(roomId, { ...state });
   }
