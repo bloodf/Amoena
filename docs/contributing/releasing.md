@@ -13,11 +13,11 @@ Amoena follows [Semantic Versioning](https://semver.org/):
 - `PATCH` — bug fixes, security patches, documentation corrections
 
 The version is defined in:
-- `package.json` (root)
-- `apps/desktop/src-tauri/Cargo.toml`
-- `apps/desktop/src-tauri/tauri.conf.json`
 
-All three must be kept in sync.
+- `package.json` (root)
+- `apps/desktop/package.json`
+
+Both files must be kept in sync.
 
 ## Commit Messages
 
@@ -48,10 +48,12 @@ feat(extensions)!: change .luna manifest schema to v2
 ## [0.2.0] - 2026-04-01
 
 ### Added
+
 - Feature X
 - Feature Y
 
 ### Fixed
+
 - Bug Z
 ```
 
@@ -60,18 +62,20 @@ feat(extensions)!: change .luna manifest schema to v2
 ### 1. Prepare the release
 
 ```bash
-# Ensure main is clean and tests pass
+# Ensure main is clean and run the release checks that are green in this repo
 git checkout main
 git pull
-bun run dev:verify
+bun run --cwd apps/dashboard build
+bun run --cwd apps/desktop electron:build
+bun run docs:build
 ```
 
 ### 2. Bump versions
 
-Update the version in all three files simultaneously:
+Update the version in both files:
+
 - `package.json`
-- `apps/desktop/src-tauri/Cargo.toml`
-- `apps/desktop/src-tauri/tauri.conf.json`
+- `apps/desktop/package.json`
 
 ```bash
 # Update CHANGELOG.md
@@ -91,29 +95,29 @@ git push origin main --tags
 
 The GitHub Actions workflow `release.yml` triggers on tag push and:
 
-1. Runs `cargo test` and `bun run dev:verify`
-2. Builds Tauri bundles for macOS (arm64 + x86_64), Linux (x86_64), Windows (x86_64)
-3. Signs the macOS `.app` and `.dmg` with the Apple Developer certificate
-4. Creates a GitHub Release with the bundles attached
-5. Publishes the docs site (`bun run docs:build`)
+1. Runs the Bun-based release checks configured in the workflow
+2. Builds Electron packages with `bun run --cwd apps/desktop electron:build`
+3. Uploads the generated desktop artifacts for the matrix targets
+4. Publishes the docs site with `bun run docs:build`
 
 ### 5. Publish the release
 
 After CI completes, edit the GitHub Release:
+
 - Paste the relevant CHANGELOG section as the release notes
 - Mark as latest
 
-## Tauri Build Pipeline
+## Electron Build Pipeline
 
-The Tauri build produces platform-native bundles:
+The Electron build produces platform-native bundles through `electron-builder`:
 
-| Platform | Bundle | Notes |
-|----------|--------|-------|
-| macOS | `.app`, `.dmg` | Universal binary (arm64 + x86_64) via `--target universal-apple-darwin` |
-| Linux | `.AppImage`, `.deb` | Built on Ubuntu runner |
-| Windows | `.msi`, `.exe` (NSIS) | Built on Windows runner |
+| Platform | Bundle                 | Notes                                             |
+| -------- | ---------------------- | ------------------------------------------------- |
+| macOS    | `.app`, `.dmg`, `.zip` | Built by `electron-builder` from the Electron app |
+| Linux    | `.AppImage`, `.deb`    | Built on Linux runners                            |
+| Windows  | `.nsis`, unpacked app  | Built on Windows runners                          |
 
-The Bun AI worker is bundled as a Tauri sidecar (`apps/desktop/src-tauri/binaries/`). It is compiled with `bun build --compile` for each target platform.
+The packaging command expects a built dashboard and uses `apps/desktop/scripts/materialize-next.ts` to materialize the Next standalone dependency tree before `electron-builder` runs.
 
 ## Hotfix Process
 

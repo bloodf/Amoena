@@ -17,7 +17,9 @@
 
 ### TODO-002: Autopilot phase timeout watchdog
 
-- **Status:** OPEN
+- **Status:** CLOSED, landed in `f0458d0 fix(autopilot): preserve phase timeout context`
+
+- **Resolution:** The autopilot pipeline now preserves phase-specific timeout context, stores `phaseTimeouts` across phase transitions, and verifies the behavior in the autopilot test suite. See `.sisyphus/evidence/task-8-autopilot-tests.txt` and `.sisyphus/evidence/task-8-autopilot-grep.txt`.
 
 - **What:** Add configurable timeout per autopilot phase with automatic rollback on timeout
 - **Why:** If an agent hangs during implementation (infinite loop, network stall, etc.), the autopilot run stalls forever with no user feedback. Users have to manually kill the process.
@@ -29,7 +31,9 @@
 
 ### TODO-003: Remote relay graceful disconnection handling
 
-- **Status:** OPEN
+- **Status:** CLOSED, landed across `71aac37 feat(remote-access): close relay disconnect backlog`
+
+- **Resolution:** Relay rooms now track disconnect reasons, heartbeat timeouts surface explicit disconnect state, desktop consumers can subscribe to disconnect events, and the mobile relay client preserves reconnect behavior with reason-aware status changes. See `.sisyphus/evidence/task-9-relay-tests.txt` and `.sisyphus/evidence/task-9-disconnect-state.txt`.
 
 - **What:** Add heartbeat detection, orphaned room cleanup, user notification, and reconnection for WebSocket relay disconnections
 - **Why:** When a mobile device loses WiFi mid-relay session, the WebSocket dies silently. Desktop shows stale "connected" state. Orphaned relay rooms leak memory.
@@ -41,7 +45,9 @@
 
 ### TODO-004: Full app i18n string extraction
 
-- **Status:** OPEN
+- **Status:** CLOSED for the active Electron and Bun product surfaces, landed in `b59b315 feat(electron): finish i18n string extraction`
+
+- **Resolution:** Active desktop, mobile, dashboard, and shared UI surfaces now ship with the Task 12 i18n audit and locale parity gate. This closes the executable repo backlog item for the current Electron and Bun product, while historical migration-plan wording about broader fork-era cleanup remains roadmap context, not an active release blocker. See `.sisyphus/evidence/task-12-i18n-audit.txt` and `.sisyphus/evidence/task-12-i18n-tests.txt`.
 
 - **What:** Wrap all hardcoded English strings across Superset-derived screens in `t()` calls and extract to translation files
 - **Why:** User chose full app i18n (not just Amoena screens). Superset has zero i18n — ~500+ strings across 90+ components need extraction.
@@ -55,7 +61,9 @@
 
 ### TODO-005: Session Replay storage cleanup policy
 
-- **Status:** OPEN
+- **Status:** CLOSED, landed in `9143d7b feat(replay): wire retention into settings and diagnostics`
+
+- **Resolution:** Replay retention is now configurable through settings, diagnostics report effective retention and reclaimable storage, and cleanup uses the configured value instead of a fixed default. See `.sisyphus/evidence/task-10-replay-cleanup-tests.txt` and `.sisyphus/evidence/task-10-diagnostics-tests.txt`.
 
 - **What:** Auto-delete old session recordings to prevent disk bloat
 - **Why:** Each recording can be 15MB (compressed). 100 sessions = 1.5GB. Users will forget to clean up.
@@ -69,7 +77,9 @@
 
 ### TODO-006: CLI output parser versioning
 
-- **Status:** OPEN
+- **Status:** CLOSED, landed in `f42baaa fix(cli-adapters): defer parser version detection`
+
+- **Resolution:** Parser selection now defers version detection until startup output is available, falls back cleanly for unknown versions, and keeps adapter constructors intact after the lazy-parser follow-up fix. See `.sisyphus/evidence/task-11-parser-tests.txt` and `.sisyphus/evidence/task-11-parser-fallback.txt`.
 
 - **What:** Version-detect CLI agents (Claude Code, Codex, Gemini) and select the correct output parser
 - **Why:** Agent CLI tools change their output format between versions. A parser built for Claude Code v1.2 may break on v1.3.

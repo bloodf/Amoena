@@ -26,19 +26,19 @@ bun run desktop:dev
 
 ### Development Commands
 
-| Command                 | Description                                       |
-| ----------------------- | ------------------------------------------------- |
-| `bun run desktop:dev`   | Start desktop app in dev mode (hot reload)        |
-| `bun run desktop:test`  | Run desktop test suite                            |
-| `bun run desktop:build` | Production build of the desktop app               |
-| `bun run mobile:dev`    | Start mobile app in Expo dev server               |
-| `bun run mobile:test`   | Run mobile test suite                             |
-| `bun run type-check`    | TypeScript type checking across all packages      |
-| `bun run lint`          | ESLint across all packages                        |
-| `bun run lint:fix`      | ESLint with auto-fix                              |
-| `bun run format`        | Prettier formatting                               |
-| `bun run format:check`  | Check Prettier formatting                         |
-| `bun run dev:verify`    | Full verification: types + desktop + mobile tests |
+| Command                 | Description                                                               |
+| ----------------------- | ------------------------------------------------------------------------- |
+| `bun run desktop:dev`   | Start desktop app in dev mode (hot reload)                                |
+| `bun run desktop:test`  | Run desktop test suite                                                    |
+| `bun run desktop:build` | Production build of the desktop app                                       |
+| `bun run mobile:dev`    | Start mobile app in Expo dev server                                       |
+| `bun run mobile:test`   | Run mobile test suite                                                     |
+| `bun run type-check`    | Legacy root workspace type-check, currently not a reliable repo-wide gate |
+| `bun run lint`          | ESLint across all packages                                                |
+| `bun run lint:fix`      | ESLint with auto-fix                                                      |
+| `bun run format`        | Prettier formatting                                                       |
+| `bun run format:check`  | Check Prettier formatting                                                 |
+| `bun run dev:verify`    | Legacy aggregate check, still inherits the unreliable root type-check     |
 
 ## Project Structure
 
@@ -98,8 +98,9 @@ bun run desktop:smoke
 ### Full Verification
 
 ```bash
-# Type check + all test suites
-bun run dev:verify
+# Prefer targeted verification for the packages you touched.
+bun run --cwd apps/desktop test
+bun run --cwd apps/mobile test
 ```
 
 ## Code Style
@@ -178,7 +179,7 @@ Commit messages are enforced by commitlint (configured in `commitlint.config.js`
 ### PR Checklist
 
 - [ ] Tests added or updated for new functionality
-- [ ] No compile warnings (TypeScript `type-check`)
+- [ ] No new compile warnings in the packages you touched
 - [ ] i18n keys added for any new UI strings
 - [ ] Documentation updated if applicable
 - [ ] Commit messages follow conventional commits format

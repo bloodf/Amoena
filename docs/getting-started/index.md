@@ -6,38 +6,38 @@ Amoena is a desktop-first AI development environment built for software engineer
 
 Amoena is a native desktop application (macOS, Windows, Linux) that combines:
 
-- **A local AI runtime** — Axum-based server exposing 110+ REST and SSE endpoints, running entirely on your machine.
-- **A React 19 frontend** — high-performance webview shell with a full component library, Storybook, and i18n support for 5 languages.
-- **Dual execution modes** — Native mode (Amoena's own agentic loop via Vercel AI SDK) and Wrapper mode (GUI shell around Claude Code, Codex CLI, Gemini CLI, or OpenCode).
-- **Deep memory** — L0/L1/L2 observation hierarchy backed by SQLite and LanceDB vector search.
-- **Multi-agent orchestration** — subagent spawning, team formation, mailbox-based communication, and Autopilot for autonomous task execution.
-- **Full extensibility** — single `.luna` binary extensions with manifest-driven contributions and rich lifecycle hooks.
+- **A local AI runtime**, exposed to the Electron app over a local HTTP API and SSE streams.
+- **A React 19 frontend**, running inside the Electron shell with shared UI components and i18n support.
+- **Dual execution modes**, native agent workflows and wrapper sessions around Claude Code, Codex CLI, Gemini CLI, or OpenCode.
+- **Deep memory**, with SQLite-backed storage and vector-assisted retrieval.
+- **Multi-agent orchestration**, including subagents, teams, mailbox flows, and Autopilot.
+- **Full extensibility**, through the `.luna` extension format.
 
 ## Core Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Desktop shell | [Tauri 2](https://v2.tauri.app) (Rust) |
-| Backend runtime | Axum (Rust), SQLite, LanceDB |
-| AI worker | Bun subprocess + Vercel AI SDK |
-| Frontend | React 19, TypeScript, Zustand, Tailwind v4 |
-| Package manager | Bun 1.1+ |
-| Testing | Rust `cargo test`, Vitest, Playwright |
-| i18n | 5 languages (en, pt, es, fr, de) |
+| Layer           | Technology                                 |
+| --------------- | ------------------------------------------ |
+| Desktop shell   | Electron, electron-vite                    |
+| Backend runtime | Bun services, Hono endpoints, SQLite       |
+| AI worker       | Bun subprocess + Vercel AI SDK             |
+| Frontend        | React 19, TypeScript, Zustand, Tailwind v4 |
+| Package manager | Bun 1.1+                                   |
+| Testing         | Vitest, Playwright                         |
+| i18n            | 5 languages (en, pt, es, fr, de)           |
 
 ## How It Works
 
 Amoena runs as a **multi-process system**:
 
-1. **Tauri Main Process (Rust)** — the state authority. Hosts all core managers: Provider Manager, Memory Manager, Agent Orchestrator, Workspace Manager, Tool Executor, Hook Engine, Session Manager, Autopilot Engine. Manages the SQLite database and communicates with the webview via zero-copy `invoke()` calls.
+1. **Electron main process** hosts the desktop shell, preload bridge, and service startup.
 
-2. **Webview (React 19)** — the UI. Uses Tauri `invoke()` for all local operations and subscribes to Tauri events for real-time updates (streaming session output, agent progress, permission requests).
+2. **Renderer UI (React 19)** talks to the local runtime through the launch-context bootstrap flow and subscribes to SSE streams for live updates.
 
-3. **Bun AI Worker** — a persistent daemon that handles Vercel AI SDK interactions: provider streaming, embeddings, and model factory calls. The Tauri process remains state authority; Bun is a computation worker.
+3. **Bun-backed services** handle orchestration, memory, terminal hosting, and other runtime work.
 
-4. **Remote Access Server (Axum)** — activated only when remote access is enabled. Proxies requests from paired mobile/remote clients to the same core managers.
+4. **Remote access services** activate when pairing is enabled and proxy approved requests from mobile clients.
 
-5. **Child Processes (Wrapper Mode)** — per-session child processes for Claude Code, OpenCode, Codex CLI, or Gemini CLI, managed by the Session Manager.
+5. **Child processes** run wrapper-mode agents such as Claude Code, OpenCode, Codex CLI, or Gemini CLI.
 
 ## What You Can Do
 

@@ -6,17 +6,18 @@ Amoena's configuration is stored in SQLite via a `SettingsRepository` module. Se
 
 Settings are organised into three scopes:
 
-| Scope | Description |
-|-------|-------------|
-| **Global** | Apply across all sessions and workspaces |
-| **Workspace** | Apply to a specific git workspace |
-| **Session** | Apply only to a single session |
+| Scope         | Description                              |
+| ------------- | ---------------------------------------- |
+| **Global**    | Apply across all sessions and workspaces |
+| **Workspace** | Apply to a specific git workspace        |
+| **Session**   | Apply only to a single session           |
 
 When the same key exists at multiple scopes, the narrowest scope wins: Session > Workspace > Global.
 
 ## Settings UI
 
 Access settings via:
+
 - **Menu bar** → Settings
 - Keyboard shortcut: `⌘,` (macOS) / `Ctrl+,` (Windows/Linux)
 - Command palette: `> Open Settings`
@@ -45,12 +46,12 @@ The key is stored immediately in the keyring. Amoena reads it from the keyring a
 
 Amoena also reads API keys from environment variables as a fallback:
 
-| Provider | Environment Variable |
-|----------|---------------------|
-| Claude (Anthropic) | `ANTHROPIC_API_KEY` |
-| OpenAI / Codex | `OPENAI_API_KEY` |
-| Google Gemini | `GOOGLE_GENERATIVE_AI_API_KEY` |
-| OpenCode | `OPENCODE_API_KEY` |
+| Provider           | Environment Variable           |
+| ------------------ | ------------------------------ |
+| Claude (Anthropic) | `ANTHROPIC_API_KEY`            |
+| OpenAI / Codex     | `OPENAI_API_KEY`               |
+| Google Gemini      | `GOOGLE_GENERATIVE_AI_API_KEY` |
+| OpenCode           | `OPENCODE_API_KEY`             |
 
 Environment variables are read at startup. Keyring values take precedence over environment variables.
 
@@ -62,12 +63,12 @@ The routing service (`/features/routing`) can automatically select a provider an
 
 ## Memory Settings
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `memory.enabled` | `true` | Enable automatic observation capture |
-| `memory.auto_inject` | `true` | Inject relevant memories into new sessions |
-| `memory.l0_retention_days` | `30` | Days to retain raw L0 observations |
-| `memory.embedding_model` | `text-embedding-3-small` | Model used for embedding generation |
+| Setting                    | Default                  | Description                                |
+| -------------------------- | ------------------------ | ------------------------------------------ |
+| `memory.enabled`           | `true`                   | Enable automatic observation capture       |
+| `memory.auto_inject`       | `true`                   | Inject relevant memories into new sessions |
+| `memory.l0_retention_days` | `30`                     | Days to retain raw L0 observations         |
+| `memory.embedding_model`   | `text-embedding-3-small` | Model used for embedding generation        |
 
 ## Remote Access Settings
 
@@ -77,17 +78,17 @@ Remote access is disabled by default. To enable:
 2. Toggle **Enable Remote Server**
 3. Configure port (default: randomised per launch) and authentication mode
 
-When enabled, Amoena starts an Axum HTTP server on localhost. Pair a mobile device via the **Remote Access** panel (QR code or 6-digit PIN).
+When enabled, Amoena starts the local remote-access HTTP flow on localhost. Pair a mobile device via the **Remote Access** panel with a QR code or PIN.
 
 See [Features: Remote Access](/features/remote-access) for full documentation.
 
 ## Developer Settings
 
-| Setting | Description |
-|---------|-------------|
-| `dev.log_level` | Rust log level (`info`, `debug`, `trace`) |
-| `dev.show_tool_details` | Show full tool input/output in the UI |
-| `dev.enable_api_playground` | Enable the API playground panel |
+| Setting                     | Description                                  |
+| --------------------------- | -------------------------------------------- |
+| `dev.log_level`             | Service log level (`info`, `debug`, `trace`) |
+| `dev.show_tool_details`     | Show full tool input/output in the UI        |
+| `dev.enable_api_playground` | Enable the API playground panel              |
 
 Logs are written to `~/.amoena/logs/amoena.log`.
 

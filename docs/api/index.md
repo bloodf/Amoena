@@ -1,6 +1,6 @@
 # Amoena Runtime API
 
-The Amoena desktop app exposes a local HTTP server built with [Axum](https://github.com/tokio-rs/axum). All API calls go to `http://127.0.0.1:{PORT}`, where `PORT` is assigned dynamically at startup. The exact base URL is provided to the UI via the `LaunchContext` handed off by the Tauri layer.
+The Amoena desktop app exposes a local HTTP API for the Electron renderer and companion clients. All API calls go to `http://127.0.0.1:{PORT}`, where `PORT` is assigned dynamically at startup. The exact base URL is provided to the UI through the Electron launch-context bridge.
 
 ## Base URL
 
@@ -37,7 +37,7 @@ Response:
 }
 ```
 
-The `LaunchContext` (injected by Tauri into the frontend) contains `bootstrapToken` and `bootstrapPath` so you never need to hard-code them.
+The launch context exposed to the renderer contains `bootstrapToken` and `bootstrapPath` so you never need to hard-code them.
 
 ### Step 2 — Bearer token
 
@@ -51,10 +51,10 @@ A few endpoints (`/api/v1/remote/pairing/intents`, `/api/v1/remote/pair/complete
 
 ## Content Types
 
-| Direction | Content-Type |
-|-----------|--------------|
-| Request bodies | `application/json` |
-| SSE streams | `text/event-stream` |
+| Direction         | Content-Type          |
+| ----------------- | --------------------- |
+| Request bodies    | `application/json`    |
+| SSE streams       | `text/event-stream`   |
 | Extension install | `multipart/form-data` |
 
 ## Error Format
@@ -69,23 +69,23 @@ All errors return a JSON body:
 
 Common status codes:
 
-| Code | Meaning |
-|------|---------|
-| `200` | OK |
-| `204` | No content (DELETE, flush) |
+| Code  | Meaning                        |
+| ----- | ------------------------------ |
+| `200` | OK                             |
+| `204` | No content (DELETE, flush)     |
 | `400` | Bad request / validation error |
-| `401` | Missing or invalid auth token |
-| `404` | Resource not found |
-| `500` | Internal server error |
+| `401` | Missing or invalid auth token  |
+| `404` | Resource not found             |
+| `500` | Internal server error          |
 
 ## SSE Streams
 
 Two SSE channels are available:
 
-| Channel | URL |
-|---------|-----|
+| Channel        | URL                                                  |
+| -------------- | ---------------------------------------------------- |
 | Session-scoped | `GET /api/v1/sessions/{id}/stream?authToken=<token>` |
-| Global | `GET /api/v1/events?authToken=<token>` |
+| Global         | `GET /api/v1/events?authToken=<token>`               |
 
 The auth token is passed as a query parameter (not a header) because `EventSource` in browsers does not support custom headers.
 
@@ -114,7 +114,7 @@ npm install @lunaria/runtime-client
 ```
 
 ```typescript
-import { createRuntimeClient } from "@lunaria/runtime-client";
+import { createRuntimeClient } from '@lunaria/runtime-client';
 
 const client = createRuntimeClient({
   baseUrl: launchContext.apiBaseUrl,
@@ -128,19 +128,19 @@ The client handles `Authorization` headers, JSON serialization, and status-code 
 
 ## Endpoint Index
 
-| Category | Reference |
-|----------|-----------|
-| Sessions | [sessions.md](./sessions.md) |
-| Messages | [messages.md](./messages.md) |
-| Agents | [agents.md](./agents.md) |
-| Memory | [memory.md](./memory.md) |
-| Hooks | [hooks.md](./hooks.md) |
-| Workspaces | [workspaces.md](./workspaces.md) |
-| Queue | [queue.md](./queue.md) |
-| Tasks | [tasks.md](./tasks.md) |
-| Extensions | [extensions.md](./extensions.md) |
-| Plugins | [plugins.md](./plugins.md) |
-| Remote Access | [remote.md](./remote.md) |
-| Terminal | [terminal.md](./terminal.md) |
-| Settings & Providers | [settings.md](./settings.md) |
-| SSE Events | [sse-events.md](./sse-events.md) |
+| Category             | Reference                        |
+| -------------------- | -------------------------------- |
+| Sessions             | [sessions.md](./sessions.md)     |
+| Messages             | [messages.md](./messages.md)     |
+| Agents               | [agents.md](./agents.md)         |
+| Memory               | [memory.md](./memory.md)         |
+| Hooks                | [hooks.md](./hooks.md)           |
+| Workspaces           | [workspaces.md](./workspaces.md) |
+| Queue                | [queue.md](./queue.md)           |
+| Tasks                | [tasks.md](./tasks.md)           |
+| Extensions           | [extensions.md](./extensions.md) |
+| Plugins              | [plugins.md](./plugins.md)       |
+| Remote Access        | [remote.md](./remote.md)         |
+| Terminal             | [terminal.md](./terminal.md)     |
+| Settings & Providers | [settings.md](./settings.md)     |
+| SSE Events           | [sse-events.md](./sse-events.md) |

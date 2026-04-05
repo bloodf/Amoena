@@ -11,7 +11,7 @@
   "keywords": [
     "ai",
     "development-environment",
-    "tauri",
+    "electron",
     "desktop",
     "multi-agent",
     "extensions"
@@ -37,7 +37,7 @@
     "desktop:dev": "bun run --cwd apps/desktop dev",
     "desktop:test": "bun run --cwd apps/desktop test",
     "desktop:build": "bun run --cwd apps/desktop build",
-    "desktop:smoke": "echo 'desktop:smoke is a no-op (Tauri removed)'",
+    "desktop:smoke": "echo 'desktop:smoke is a no-op in the Electron workspace'",
     "mobile:dev": "bun run --cwd apps/mobile start",
     "mobile:test": "bun run --cwd apps/mobile test",
     "format": "prettier --write .",

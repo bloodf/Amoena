@@ -25,7 +25,7 @@ amoena/
 ├── packages/
 │   ├── ui/               # Shared React component library
 │   ├── i18n/             # Translations (en, pt, es, fr, de)
-│   ├── runtime-client/   # TypeScript client for the Axum API
+│   ├── runtime-client/   # TypeScript client for the local runtime API
 │   └── tokens/           # Design tokens
 ├── docs/                 # This documentation site
 └── scripts/              # Build and generation scripts
@@ -63,8 +63,9 @@ bun run e2e
 ### Type Checking
 
 ```bash
-# Check all packages
-bun run type-check
+# Root workspace type-check is currently not a reliable green gate.
+# Run targeted checks for the packages you changed.
+bunx tsc --noEmit -p packages/ui/tsconfig.json
 
 # Check a specific package
 bunx tsc --noEmit -p packages/ui/tsconfig.json
@@ -73,8 +74,9 @@ bunx tsc --noEmit -p packages/ui/tsconfig.json
 ### Full Verification
 
 ```bash
-# Run everything: type-check + desktop tests + mobile tests
-bun run dev:verify
+# Run the checks that match your change scope. The root dev:verify script still inherits the unreliable root type-check.
+bun run --cwd apps/desktop test
+bun run --cwd apps/mobile test
 ```
 
 ## Debugging

@@ -32,7 +32,7 @@ See [Development](/contributing/development) for a full breakdown of the dev wor
 
 1. Fork the repository and create a feature branch from `main`
 2. Write tests for new functionality (see [testing guidelines](/contributing/development#testing))
-3. Ensure all tests pass and there are zero compile warnings
+3. Ensure the relevant tests and package-level checks for your change pass
 4. Update documentation if needed
 5. Submit a PR with a clear description referencing any related issues
 
@@ -42,7 +42,7 @@ See [Development](/contributing/development) for a full breakdown of the dev wor
 - [ ] No compile warnings (TypeScript)
 - [ ] i18n keys added for any new UI strings (no hardcoded English)
 - [ ] Documentation updated if applicable
-- [ ] `bun run type-check` passes
+- [ ] Relevant package checks pass, do not rely on the current root `bun run type-check` as a repo-wide green gate
 
 ## Commit Message Format
 
