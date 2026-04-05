@@ -6,12 +6,33 @@
  * It is designed to be called once on service startup.
  */
 
-import * as fs from "node:fs";
-import * as path from "node:path";
-import * as os from "node:os";
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as os from 'node:os';
+
+import type { SettingsStore } from '../settings/settings-store.js';
+
+/** Settings key for replay retention in milliseconds. */
+export const SESSION_REPLAY_RETENTION_MS_KEY = 'sessionReplay.retentionMs';
 
 /** Default retention period in milliseconds (30 days). */
 export const DEFAULT_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
+
+/** Storage info returned by {@link getReplayStorageInfo}. */
+export interface ReplayStorageInfo {
+  /** Total number of recording files. */
+  totalFiles: number;
+  /** Total size in bytes of all recording files. */
+  totalSizeBytes: number;
+  /** Number of files older than the retention period. */
+  filesNeedingCleanup: number;
+  /** Size in bytes of files that would be cleaned up. */
+  reclaimableBytes: number;
+  /** Retention period in milliseconds currently in effect. */
+  retentionMs: number;
+  /** Path to the recordings directory. */
+  recordingsDir: string;
+}
 
 /** Result returned by {@link runReplayCleanup}. */
 export interface CleanupResult {
@@ -50,7 +71,7 @@ export interface CleanupOptions {
  * Returns the default recordings directory: `~/.amoena/recordings/`.
  */
 export function defaultRecordingsDir(): string {
-  return path.join(os.homedir(), ".amoena", "recordings");
+  return path.join(os.homedir(), '.amoena', 'recordings');
 }
 
 /**
@@ -69,9 +90,7 @@ export function defaultRecordingsDir(): string {
  * console.log(`Cleaned up ${result.deleted} old recordings.`);
  * ```
  */
-export async function runReplayCleanup(
-  options: CleanupOptions = {},
-): Promise<CleanupResult> {
+export async function runReplayCleanup(options: CleanupOptions = {}): Promise<CleanupResult> {
   const {
     recordingsDir = defaultRecordingsDir(),
     retentionMs = DEFAULT_RETENTION_MS,
@@ -103,7 +122,7 @@ export async function runReplayCleanup(
   }
 
   for (const entry of entries) {
-    if (!entry.isFile() || !entry.name.endsWith(".gz")) {
+    if (!entry.isFile() || !entry.name.endsWith('.gz')) {
       continue;
     }
 
@@ -140,4 +159,76 @@ export async function runReplayCleanup(
   }
 
   return result;
+}
+
+/**
+ * Returns the effective retention period in milliseconds.
+ * Reads from settings store if provided, otherwise returns the default.
+ */
+export function getReplayRetentionMs(store?: SettingsStore | null): number {
+  if (store) {
+    const configured = store.get<number>(SESSION_REPLAY_RETENTION_MS_KEY, 'global');
+    if (configured !== undefined && configured > 0) {
+      return configured;
+    }
+  }
+  return DEFAULT_RETENTION_MS;
+}
+
+/**
+ * Returns storage information about recordings for diagnostics.
+ * Does not delete any files — use {@link runReplayCleanup} to actually clean up.
+ */
+export async function getReplayStorageInfo(
+  store?: SettingsStore | null,
+  recordingsDir?: string,
+): Promise<ReplayStorageInfo> {
+  const dir = recordingsDir ?? defaultRecordingsDir();
+  const retentionMs = getReplayRetentionMs(store);
+
+  const info: ReplayStorageInfo = {
+    totalFiles: 0,
+    totalSizeBytes: 0,
+    filesNeedingCleanup: 0,
+    reclaimableBytes: 0,
+    retentionMs,
+    recordingsDir: dir,
+  };
+
+  if (!fs.existsSync(dir)) {
+    return info;
+  }
+
+  const cutoff = Date.now() - retentionMs;
+
+  let entries: fs.Dirent[];
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return info;
+  }
+
+  for (const entry of entries) {
+    if (!entry.isFile() || !entry.name.endsWith('.gz')) {
+      continue;
+    }
+
+    const filePath = path.join(dir, entry.name);
+    let stat: fs.Stats;
+    try {
+      stat = fs.statSync(filePath);
+    } catch {
+      continue;
+    }
+
+    info.totalFiles += 1;
+    info.totalSizeBytes += stat.size;
+
+    if (stat.mtimeMs < cutoff) {
+      info.filesNeedingCleanup += 1;
+      info.reclaimableBytes += stat.size;
+    }
+  }
+
+  return info;
 }

@@ -1,212 +1,213 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { requireRole } from "@/lib/auth";
-import { config } from "@/lib/config";
-import { getDatabase, logAuditEvent } from "@/lib/db";
-import { mutationLimiter } from "@/lib/rate-limit";
-import { updateSettingsSchema, validateBody } from "@/lib/validation";
+import { type NextRequest, NextResponse } from 'next/server';
+import { requireRole } from '@/lib/auth';
+import { config } from '@/lib/config';
+import { getDatabase, logAuditEvent } from '@/lib/db';
+import { mutationLimiter } from '@/lib/rate-limit';
+import { updateSettingsSchema, validateBody } from '@/lib/validation';
 
 interface SettingRow {
-	key: string;
-	value: string;
-	description: string | null;
-	category: string;
-	updated_by: string | null;
-	updated_at: number;
+  key: string;
+  value: string;
+  description: string | null;
+  category: string;
+  updated_by: string | null;
+  updated_at: number;
 }
 
 // Default settings definitions (category, description, default value)
 const settingDefinitions: Record<
-	string,
-	{ category: string; description: string; default: string }
+  string,
+  { category: string; description: string; default: string }
 > = {
-	// Retention
-	"retention.activities_days": {
-		category: "retention",
-		description: "Days to keep activity records",
-		default: String(config.retention.activities),
-	},
-	"retention.audit_log_days": {
-		category: "retention",
-		description: "Days to keep audit log entries",
-		default: String(config.retention.auditLog),
-	},
-	"retention.logs_days": {
-		category: "retention",
-		description: "Days to keep log files",
-		default: String(config.retention.logs),
-	},
-	"retention.notifications_days": {
-		category: "retention",
-		description: "Days to keep notifications",
-		default: String(config.retention.notifications),
-	},
-	"retention.pipeline_runs_days": {
-		category: "retention",
-		description: "Days to keep pipeline run history",
-		default: String(config.retention.pipelineRuns),
-	},
-	"retention.token_usage_days": {
-		category: "retention",
-		description: "Days to keep token usage data",
-		default: String(config.retention.tokenUsage),
-	},
-	"retention.gateway_sessions_days": {
-		category: "retention",
-		description: "Days to keep inactive gateway session metadata",
-		default: String(config.retention.gatewaySessions),
-	},
+  // Retention
+  'retention.activities_days': {
+    category: 'retention',
+    description: 'Days to keep activity records',
+    default: String(config.retention.activities),
+  },
+  'retention.audit_log_days': {
+    category: 'retention',
+    description: 'Days to keep audit log entries',
+    default: String(config.retention.auditLog),
+  },
+  'retention.logs_days': {
+    category: 'retention',
+    description: 'Days to keep log files',
+    default: String(config.retention.logs),
+  },
+  'retention.notifications_days': {
+    category: 'retention',
+    description: 'Days to keep notifications',
+    default: String(config.retention.notifications),
+  },
+  'retention.pipeline_runs_days': {
+    category: 'retention',
+    description: 'Days to keep pipeline run history',
+    default: String(config.retention.pipelineRuns),
+  },
+  'retention.token_usage_days': {
+    category: 'retention',
+    description: 'Days to keep token usage data',
+    default: String(config.retention.tokenUsage),
+  },
+  'retention.gateway_sessions_days': {
+    category: 'retention',
+    description: 'Days to keep inactive gateway session metadata',
+    default: String(config.retention.gatewaySessions),
+  },
+  'sessionReplay.retentionMs': {
+    category: 'retention',
+    description: 'Milliseconds to keep session replay recordings',
+    default: String(30 * 24 * 60 * 60 * 1000),
+  },
 
-	// Gateway
-	"gateway.host": {
-		category: "gateway",
-		description: "Gateway hostname",
-		default: config.gatewayHost,
-	},
-	"gateway.port": {
-		category: "gateway",
-		description: "Gateway port number",
-		default: String(config.gatewayPort),
-	},
+  // Gateway
+  'gateway.host': {
+    category: 'gateway',
+    description: 'Gateway hostname',
+    default: config.gatewayHost,
+  },
+  'gateway.port': {
+    category: 'gateway',
+    description: 'Gateway port number',
+    default: String(config.gatewayPort),
+  },
 
-	// Chat
-	"chat.coordinator_target_agent": {
-		category: "chat",
-		description:
-			"Optional coordinator routing target (agent name or amoenaId). When set, coordinator inbox messages are forwarded to this agent before default/main-session fallback.",
-		default: "",
-	},
+  // Chat
+  'chat.coordinator_target_agent': {
+    category: 'chat',
+    description:
+      'Optional coordinator routing target (agent name or amoenaId). When set, coordinator inbox messages are forwarded to this agent before default/main-session fallback.',
+    default: '',
+  },
 
-	// General
-	"general.site_name": {
-		category: "general",
-		description: "Amoena display name",
-		default: "Amoena",
-	},
-	"general.auto_cleanup": {
-		category: "general",
-		description: "Enable automatic data cleanup",
-		default: "false",
-	},
-	"general.auto_backup": {
-		category: "general",
-		description: "Enable automatic daily backups",
-		default: "false",
-	},
-	"general.backup_retention_count": {
-		category: "general",
-		description: "Number of backup files to keep",
-		default: "10",
-	},
+  // General
+  'general.site_name': {
+    category: 'general',
+    description: 'Amoena display name',
+    default: 'Amoena',
+  },
+  'general.auto_cleanup': {
+    category: 'general',
+    description: 'Enable automatic data cleanup',
+    default: 'false',
+  },
+  'general.auto_backup': {
+    category: 'general',
+    description: 'Enable automatic daily backups',
+    default: 'false',
+  },
+  'general.backup_retention_count': {
+    category: 'general',
+    description: 'Number of backup files to keep',
+    default: '10',
+  },
 
-	// Subscription overrides
-	"subscription.plan_override": {
-		category: "general",
-		description:
-			"Override auto-detected subscription plan (e.g. max, max_5x, pro)",
-		default: "",
-	},
-	"subscription.codex_plan": {
-		category: "general",
-		description: "Codex/OpenAI subscription plan (e.g. chatgpt, plus, pro)",
-		default: "",
-	},
+  // Subscription overrides
+  'subscription.plan_override': {
+    category: 'general',
+    description: 'Override auto-detected subscription plan (e.g. max, max_5x, pro)',
+    default: '',
+  },
+  'subscription.codex_plan': {
+    category: 'general',
+    description: 'Codex/OpenAI subscription plan (e.g. chatgpt, plus, pro)',
+    default: '',
+  },
 
-	// Interface
-	"general.interface_mode": {
-		category: "general",
-		description: "Interface complexity (essential or full)",
-		default: "essential",
-	},
+  // Interface
+  'general.interface_mode': {
+    category: 'general',
+    description: 'Interface complexity (essential or full)',
+    default: 'essential',
+  },
 
-	// Onboarding
-	"onboarding.completed": {
-		category: "onboarding",
-		description: "Whether onboarding has been completed",
-		default: "false",
-	},
-	"onboarding.completed_at": {
-		category: "onboarding",
-		description: "Timestamp when onboarding was completed",
-		default: "",
-	},
-	"onboarding.skipped": {
-		category: "onboarding",
-		description: "Whether onboarding was skipped",
-		default: "false",
-	},
-	"onboarding.completed_steps": {
-		category: "onboarding",
-		description: "JSON array of completed step IDs",
-		default: "[]",
-	},
-	"onboarding.checklist_dismissed": {
-		category: "onboarding",
-		description: "Whether the onboarding checklist has been dismissed",
-		default: "false",
-	},
+  // Onboarding
+  'onboarding.completed': {
+    category: 'onboarding',
+    description: 'Whether onboarding has been completed',
+    default: 'false',
+  },
+  'onboarding.completed_at': {
+    category: 'onboarding',
+    description: 'Timestamp when onboarding was completed',
+    default: '',
+  },
+  'onboarding.skipped': {
+    category: 'onboarding',
+    description: 'Whether onboarding was skipped',
+    default: 'false',
+  },
+  'onboarding.completed_steps': {
+    category: 'onboarding',
+    description: 'JSON array of completed step IDs',
+    default: '[]',
+  },
+  'onboarding.checklist_dismissed': {
+    category: 'onboarding',
+    description: 'Whether the onboarding checklist has been dismissed',
+    default: 'false',
+  },
 };
 
 /**
  * GET /api/settings - List all settings (grouped by category)
  */
 export async function GET(request: NextRequest) {
-	const auth = requireRole(request, "admin");
-	if ("error" in auth)
-		return NextResponse.json({ error: auth.error }, { status: auth.status });
+  const auth = requireRole(request, 'admin');
+  if ('error' in auth) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
-	const db = getDatabase();
-	const rows = db
-		.prepare("SELECT * FROM settings ORDER BY category, key")
-		.all() as SettingRow[];
-	const stored = new Map(rows.map((r) => [r.key, r]));
+  const db = getDatabase();
+  const rows = db.prepare('SELECT * FROM settings ORDER BY category, key').all() as SettingRow[];
+  const stored = new Map(rows.map((r) => [r.key, r]));
 
-	// Merge defaults with stored values
-	const settings: Array<{
-		key: string;
-		value: string;
-		description: string;
-		category: string;
-		updated_by: string | null;
-		updated_at: number | null;
-		is_default: boolean;
-	}> = [];
+  // Merge defaults with stored values
+  const settings: Array<{
+    key: string;
+    value: string;
+    description: string;
+    category: string;
+    updated_by: string | null;
+    updated_at: number | null;
+    is_default: boolean;
+  }> = [];
 
-	for (const [key, def] of Object.entries(settingDefinitions)) {
-		const row = stored.get(key);
-		settings.push({
-			key,
-			value: row?.value ?? def.default,
-			description: row?.description ?? def.description,
-			category: row?.category ?? def.category,
-			updated_by: row?.updated_by ?? null,
-			updated_at: row?.updated_at ?? null,
-			is_default: !row,
-		});
-	}
+  for (const [key, def] of Object.entries(settingDefinitions)) {
+    const row = stored.get(key);
+    settings.push({
+      key,
+      value: row?.value ?? def.default,
+      description: row?.description ?? def.description,
+      category: row?.category ?? def.category,
+      updated_by: row?.updated_by ?? null,
+      updated_at: row?.updated_at ?? null,
+      is_default: !row,
+    });
+  }
 
-	// Also include any custom settings not in definitions
-	for (const row of rows) {
-		if (!settingDefinitions[row.key]) {
-			settings.push({
-				key: row.key,
-				value: row.value,
-				description: row.description ?? "",
-				category: row.category,
-				updated_by: row.updated_by,
-				updated_at: row.updated_at,
-				is_default: false,
-			});
-		}
-	}
+  // Also include any custom settings not in definitions
+  for (const row of rows) {
+    if (!settingDefinitions[row.key]) {
+      settings.push({
+        key: row.key,
+        value: row.value,
+        description: row.description ?? '',
+        category: row.category,
+        updated_by: row.updated_by,
+        updated_at: row.updated_at,
+        is_default: false,
+      });
+    }
+  }
 
-	// Group by category
-	const grouped: Record<string, typeof settings> = {};
-	for (const s of settings) {
-		if (!grouped[s.category]) grouped[s.category] = [];
-		grouped[s.category].push(s);
-	}
+  // Group by category
+  const grouped: Record<string, typeof settings> = {};
+  for (const s of settings) {
+    if (!grouped[s.category]) grouped[s.category] = [];
+    grouped[s.category].push(s);
+  }
 
-	return NextResponse.json({ settings, grouped });
+  return NextResponse.json({ settings, grouped });
 }
 
 /**
@@ -214,19 +215,18 @@ export async function GET(request: NextRequest) {
  * Body: { settings: { key: value, ... } }
  */
 export async function PUT(request: NextRequest) {
-	const auth = requireRole(request, "admin");
-	if ("error" in auth)
-		return NextResponse.json({ error: auth.error }, { status: auth.status });
+  const auth = requireRole(request, 'admin');
+  if ('error' in auth) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
-	const rateCheck = mutationLimiter(request);
-	if (rateCheck) return rateCheck;
+  const rateCheck = mutationLimiter(request);
+  if (rateCheck) return rateCheck;
 
-	const result = await validateBody(request, updateSettingsSchema);
-	if ("error" in result) return result.error;
-	const body = result.data;
+  const result = await validateBody(request, updateSettingsSchema);
+  if ('error' in result) return result.error;
+  const body = result.data;
 
-	const db = getDatabase();
-	const upsert = db.prepare(`
+  const db = getDatabase();
+  const upsert = db.prepare(`
     INSERT INTO settings (key, value, description, category, updated_by, updated_at)
     VALUES (?, ?, ?, ?, ?, unixepoch())
     ON CONFLICT(key) DO UPDATE SET
@@ -235,102 +235,88 @@ export async function PUT(request: NextRequest) {
       updated_at = unixepoch()
   `);
 
-	const updated: string[] = [];
-	const changes: Record<string, { old: string | null; new: string }> = {};
+  const updated: string[] = [];
+  const changes: Record<string, { old: string | null; new: string }> = {};
 
-	const txn = db.transaction(() => {
-		for (const [key, value] of Object.entries(body.settings)) {
-			const strValue = String(value);
-			const def = settingDefinitions[key];
-			const category = def?.category ?? "custom";
-			const description = def?.description ?? null;
+  const txn = db.transaction(() => {
+    for (const [key, value] of Object.entries(body.settings)) {
+      const strValue = String(value);
+      const def = settingDefinitions[key];
+      const category = def?.category ?? 'custom';
+      const description = def?.description ?? null;
 
-			// Get old value for audit
-			const existing = db
-				.prepare("SELECT value FROM settings WHERE key = ?")
-				.get(key) as { value: string } | undefined;
-			changes[key] = { old: existing?.value ?? null, new: strValue };
+      // Get old value for audit
+      const existing = db.prepare('SELECT value FROM settings WHERE key = ?').get(key) as
+        | { value: string }
+        | undefined;
+      changes[key] = { old: existing?.value ?? null, new: strValue };
 
-			upsert.run(key, strValue, description, category, auth.user.username);
-			updated.push(key);
-		}
-	});
+      upsert.run(key, strValue, description, category, auth.user.username);
+      updated.push(key);
+    }
+  });
 
-	txn();
+  txn();
 
-	// Audit log
-	const ipAddress =
-		request.headers.get("x-forwarded-for") ||
-		request.headers.get("x-real-ip") ||
-		"unknown";
-	logAuditEvent({
-		action: "settings_update",
-		actor: auth.user.username,
-		actor_id: auth.user.id,
-		detail: { updated_keys: updated, changes },
-		ip_address: ipAddress,
-	});
+  // Audit log
+  const ipAddress =
+    request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+  logAuditEvent({
+    action: 'settings_update',
+    actor: auth.user.username,
+    actor_id: auth.user.id,
+    detail: { updated_keys: updated, changes },
+    ip_address: ipAddress,
+  });
 
-	return NextResponse.json({ updated, count: updated.length });
+  return NextResponse.json({ updated, count: updated.length });
 }
 
 /**
  * DELETE /api/settings?key=... - Reset a setting to default
  */
 export async function DELETE(request: NextRequest) {
-	const auth = requireRole(request, "admin");
-	if ("error" in auth)
-		return NextResponse.json({ error: auth.error }, { status: auth.status });
+  const auth = requireRole(request, 'admin');
+  if ('error' in auth) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
-	const rateCheck = mutationLimiter(request);
-	if (rateCheck) return rateCheck;
+  const rateCheck = mutationLimiter(request);
+  if (rateCheck) return rateCheck;
 
-	let body: any;
-	try {
-		body = await request.json();
-	} catch {
-		return NextResponse.json(
-			{ error: "Request body required" },
-			{ status: 400 },
-		);
-	}
-	const key = body.key;
+  let body: { key?: string };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: 'Request body required' }, { status: 400 });
+  }
+  const { key } = body;
 
-	if (!key) {
-		return NextResponse.json(
-			{ error: "key parameter required" },
-			{ status: 400 },
-		);
-	}
+  if (!key) {
+    return NextResponse.json({ error: 'key parameter required' }, { status: 400 });
+  }
 
-	const db = getDatabase();
-	const existing = db
-		.prepare("SELECT value FROM settings WHERE key = ?")
-		.get(key) as { value: string } | undefined;
+  const db = getDatabase();
+  const existing = db.prepare('SELECT value FROM settings WHERE key = ?').get(key) as
+    | { value: string }
+    | undefined;
 
-	if (!existing) {
-		return NextResponse.json(
-			{ error: "Setting not found or already at default" },
-			{ status: 404 },
-		);
-	}
+  if (!existing) {
+    return NextResponse.json({ error: 'Setting not found or already at default' }, { status: 404 });
+  }
 
-	db.prepare("DELETE FROM settings WHERE key = ?").run(key);
+  db.prepare('DELETE FROM settings WHERE key = ?').run(key);
 
-	const ipAddress =
-		request.headers.get("x-forwarded-for") ||
-		request.headers.get("x-real-ip") ||
-		"unknown";
-	logAuditEvent({
-		action: "settings_reset",
-		actor: auth.user.username,
-		actor_id: auth.user.id,
-		detail: { key, old_value: existing.value },
-		ip_address: ipAddress,
-	});
+  const ipAddress =
+    request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+  logAuditEvent({
+    action: 'settings_reset',
+    actor: auth.user.username,
+    actor_id: auth.user.id,
+    detail: { key, old_value: existing.value },
+    ip_address: ipAddress,
+  });
 
-	return NextResponse.json({
-		reset: key,
-		default_value: settingDefinitions[key]?.default ?? null,
-	});
+  return NextResponse.json({
+    reset: key,
+    default_value: settingDefinitions[key]?.default ?? null,
+  });
 }
