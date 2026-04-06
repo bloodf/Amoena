@@ -1,33 +1,32 @@
-import { render } from "@testing-library/react";
-import { describe, expect, test, mock, vi } from "vitest";
+import { render } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
 // Mock next-themes since it requires a provider
-vi.mock("next-themes", () => ({
-  useTheme: () => ({ theme: "light" }),
+vi.mock('next-themes', () => ({
+  useTheme: () => ({ theme: 'light' }),
 }));
 
-import { Toaster } from "./sonner";
+import { Toaster } from './sonner';
 
-describe("Toaster", () => {
-  test("renders without crashing", () => {
+describe('Toaster', () => {
+  test('renders without crashing', () => {
     const { container } = render(<Toaster />);
     expect(container).toBeDefined();
   });
 
-  test("renders with toaster group class", () => {
+  test('renders with toaster group class', () => {
     const { container } = render(<Toaster />);
-    const toaster = container.querySelector("[data-sonner-toaster]") ?? container.querySelector(".toaster");
     // Sonner renders a toaster element; verify the container is not empty
     expect(container.innerHTML.length).toBeGreaterThan(0);
   });
 
-  test("renders with section element or list role for toasts", () => {
+  test('renders with section element or list role for toasts', () => {
     const { container } = render(<Toaster />);
     // The toaster should have rendered something to the DOM
     expect(container.childElementCount).toBeGreaterThan(0);
   });
 
-  test("accepts className on Toaster wrapper", () => {
+  test('accepts className on Toaster wrapper', () => {
     const { container } = render(<Toaster className="custom-toaster" />);
     expect(container.innerHTML.length).toBeGreaterThan(0);
   });

@@ -1,8 +1,8 @@
-import { act, renderHook } from "@testing-library/react";
-import { describe, expect, mock, test, vi } from "vitest";
+import { act, renderHook } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
-import type { CommandPaletteItem } from "./data";
-import { useCommandPaletteState } from "./useCommandPaletteState";
+import type { CommandPaletteItem } from './data';
+import { useCommandPaletteState } from './useCommandPaletteState';
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -10,57 +10,57 @@ import { useCommandPaletteState } from "./useCommandPaletteState";
 
 function makeItem(overrides: Partial<CommandPaletteItem> = {}): CommandPaletteItem {
   return {
-    type: "command",
+    type: 'command',
     icon: (() => null) as any,
-    label: "New Session",
-    description: "Start a new session",
+    label: 'New Session',
+    description: 'Start a new session',
     action: vi.fn(() => {}),
     ...overrides,
   };
 }
 
 const items: CommandPaletteItem[] = [
-  makeItem({ label: "New Session", description: "Start a new session", type: "command" }),
-  makeItem({ label: "Toggle Terminal", description: "Show or hide terminal", type: "command" }),
-  makeItem({ label: "Agent Management", description: "Manage agents", type: "navigation" }),
-  makeItem({ label: "src/main.rs", description: "Entry point", type: "file", action: undefined }),
+  makeItem({ label: 'New Session', description: 'Start a new session', type: 'command' }),
+  makeItem({ label: 'Toggle Terminal', description: 'Show or hide terminal', type: 'command' }),
+  makeItem({ label: 'Agent Management', description: 'Manage agents', type: 'navigation' }),
+  makeItem({ label: 'src/main.rs', description: 'Entry point', type: 'file', action: undefined }),
 ];
 
 // ---------------------------------------------------------------------------
 // Initial state
 // ---------------------------------------------------------------------------
 
-describe("useCommandPaletteState initial state", () => {
-  test("query starts empty", () => {
+describe('useCommandPaletteState initial state', () => {
+  test('query starts empty', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
-    expect(result.current.query).toBe("");
+    expect(result.current.query).toBe('');
   });
 
-  test("selectedIndex starts at 0", () => {
+  test('selectedIndex starts at 0', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
     expect(result.current.selectedIndex).toBe(0);
   });
 
-  test("isClosing starts false", () => {
+  test('isClosing starts false', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
     expect(result.current.isClosing).toBe(false);
   });
 
-  test("filtered contains all items when query is empty", () => {
+  test('filtered contains all items when query is empty', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
     expect(result.current.filtered.length).toBe(items.length);
   });
 
-  test("groups are keyed by type", () => {
+  test('groups are keyed by type', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
-    expect(Object.keys(result.current.groups)).toContain("command");
-    expect(Object.keys(result.current.groups)).toContain("navigation");
-    expect(Object.keys(result.current.groups)).toContain("file");
+    expect(Object.keys(result.current.groups)).toContain('command');
+    expect(Object.keys(result.current.groups)).toContain('navigation');
+    expect(Object.keys(result.current.groups)).toContain('file');
   });
 });
 
@@ -68,54 +68,64 @@ describe("useCommandPaletteState initial state", () => {
 // Filtering
 // ---------------------------------------------------------------------------
 
-describe("useCommandPaletteState filtering", () => {
-  test("filters by label (case-insensitive)", () => {
+describe('useCommandPaletteState filtering', () => {
+  test('filters by label (case-insensitive)', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.setQuery("session"); });
+    act(() => {
+      result.current.setQuery('session');
+    });
 
     expect(result.current.filtered.length).toBe(1);
-    expect(result.current.filtered[0].label).toBe("New Session");
+    expect(result.current.filtered[0].label).toBe('New Session');
   });
 
-  test("filters by description", () => {
+  test('filters by description', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.setQuery("entry point"); });
+    act(() => {
+      result.current.setQuery('entry point');
+    });
 
     expect(result.current.filtered.length).toBe(1);
-    expect(result.current.filtered[0].label).toBe("src/main.rs");
+    expect(result.current.filtered[0].label).toBe('src/main.rs');
   });
 
-  test("returns empty array when no match", () => {
+  test('returns empty array when no match', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.setQuery("zzznomatch"); });
+    act(() => {
+      result.current.setQuery('zzznomatch');
+    });
 
     expect(result.current.filtered.length).toBe(0);
   });
 
-  test("filter is case-insensitive for query", () => {
+  test('filter is case-insensitive for query', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.setQuery("TERMINAL"); });
+    act(() => {
+      result.current.setQuery('TERMINAL');
+    });
 
     expect(result.current.filtered.length).toBe(1);
-    expect(result.current.filtered[0].label).toBe("Toggle Terminal");
+    expect(result.current.filtered[0].label).toBe('Toggle Terminal');
   });
 
-  test("groups update to reflect filtered results", () => {
+  test('groups update to reflect filtered results', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.setQuery("Manage agents"); });
+    act(() => {
+      result.current.setQuery('Manage agents');
+    });
 
-    expect(Object.keys(result.current.groups)).toEqual(["navigation"]);
-    expect(result.current.groups["command"]).toBeUndefined();
+    expect(Object.keys(result.current.groups)).toEqual(['navigation']);
+    expect(result.current.groups['command']).toBeUndefined();
   });
 });
 
@@ -123,27 +133,33 @@ describe("useCommandPaletteState filtering", () => {
 // handleClose / isClosing
 // ---------------------------------------------------------------------------
 
-describe("useCommandPaletteState handleClose", () => {
-  test("sets isClosing to true immediately on handleClose", () => {
+describe('useCommandPaletteState handleClose', () => {
+  test('sets isClosing to true immediately on handleClose', () => {
     vi.useFakeTimers();
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.handleClose(); });
+    act(() => {
+      result.current.handleClose();
+    });
 
     expect(result.current.isClosing).toBe(true);
     vi.useRealTimers();
   });
 
-  test("calls onClose after 150ms and resets isClosing", () => {
+  test('calls onClose after 150ms and resets isClosing', () => {
     vi.useFakeTimers();
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.handleClose(); });
+    act(() => {
+      result.current.handleClose();
+    });
     expect(onClose).not.toHaveBeenCalled();
 
-    act(() => { vi.advanceTimersByTime(150); });
+    act(() => {
+      vi.advanceTimersByTime(150);
+    });
 
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(result.current.isClosing).toBe(false);
@@ -155,36 +171,42 @@ describe("useCommandPaletteState handleClose", () => {
 // runAction
 // ---------------------------------------------------------------------------
 
-describe("useCommandPaletteState runAction", () => {
-  test("calls the provided action", () => {
+describe('useCommandPaletteState runAction', () => {
+  test('calls the provided action', () => {
     vi.useFakeTimers();
     const onClose = vi.fn(() => {});
     const action = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.runAction(action); });
+    act(() => {
+      result.current.runAction(action);
+    });
 
     expect(action).toHaveBeenCalledTimes(1);
     vi.useRealTimers();
   });
 
-  test("works when no action is provided (undefined)", () => {
+  test('works when no action is provided (undefined)', () => {
     vi.useFakeTimers();
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     expect(() => {
-      act(() => { result.current.runAction(undefined); });
+      act(() => {
+        result.current.runAction(undefined);
+      });
     }).not.toThrow();
     vi.useRealTimers();
   });
 
-  test("also triggers handleClose (sets isClosing)", () => {
+  test('also triggers handleClose (sets isClosing)', () => {
     vi.useFakeTimers();
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.runAction(vi.fn(() => {})); });
+    act(() => {
+      result.current.runAction(vi.fn(() => {}));
+    });
 
     expect(result.current.isClosing).toBe(true);
     vi.useRealTimers();
@@ -195,119 +217,137 @@ describe("useCommandPaletteState runAction", () => {
 // handleKeyDown
 // ---------------------------------------------------------------------------
 
-describe("useCommandPaletteState handleKeyDown", () => {
+describe('useCommandPaletteState handleKeyDown', () => {
   function makeKeyEvent(key: string): React.KeyboardEvent {
     return { key, preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent;
   }
 
-  test("Escape calls handleClose (isClosing becomes true)", () => {
+  test('Escape calls handleClose (isClosing becomes true)', () => {
     vi.useFakeTimers();
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.handleKeyDown(makeKeyEvent("Escape")); });
+    act(() => {
+      result.current.handleKeyDown(makeKeyEvent('Escape'));
+    });
 
     expect(result.current.isClosing).toBe(true);
     vi.useRealTimers();
   });
 
-  test("ArrowDown increments selectedIndex", () => {
+  test('ArrowDown increments selectedIndex', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.handleKeyDown(makeKeyEvent("ArrowDown")); });
+    act(() => {
+      result.current.handleKeyDown(makeKeyEvent('ArrowDown'));
+    });
 
     expect(result.current.selectedIndex).toBe(1);
   });
 
-  test("ArrowDown clamps at last item", () => {
+  test('ArrowDown clamps at last item', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => {
       for (let i = 0; i < 20; i++) {
-        result.current.handleKeyDown(makeKeyEvent("ArrowDown"));
+        result.current.handleKeyDown(makeKeyEvent('ArrowDown'));
       }
     });
 
     expect(result.current.selectedIndex).toBe(items.length - 1);
   });
 
-  test("ArrowUp decrements selectedIndex", () => {
+  test('ArrowUp decrements selectedIndex', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
     act(() => {
-      result.current.handleKeyDown(makeKeyEvent("ArrowDown"));
-      result.current.handleKeyDown(makeKeyEvent("ArrowDown"));
-      result.current.handleKeyDown(makeKeyEvent("ArrowUp"));
+      result.current.handleKeyDown(makeKeyEvent('ArrowDown'));
+      result.current.handleKeyDown(makeKeyEvent('ArrowDown'));
+      result.current.handleKeyDown(makeKeyEvent('ArrowUp'));
     });
 
     expect(result.current.selectedIndex).toBe(1);
   });
 
-  test("ArrowUp clamps at 0", () => {
+  test('ArrowUp clamps at 0', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.handleKeyDown(makeKeyEvent("ArrowUp")); });
+    act(() => {
+      result.current.handleKeyDown(makeKeyEvent('ArrowUp'));
+    });
 
     expect(result.current.selectedIndex).toBe(0);
   });
 
-  test("Enter runs action of currently selected item", () => {
+  test('Enter runs action of currently selected item', () => {
     vi.useFakeTimers();
     const onClose = vi.fn(() => {});
     const action = vi.fn(() => {});
-    const testItems = [makeItem({ label: "Item A", action })];
+    const testItems = [makeItem({ label: 'Item A', action })];
     const { result } = renderHook(() => useCommandPaletteState(testItems, onClose));
 
-    act(() => { result.current.handleKeyDown(makeKeyEvent("Enter")); });
+    act(() => {
+      result.current.handleKeyDown(makeKeyEvent('Enter'));
+    });
 
     expect(action).toHaveBeenCalledTimes(1);
     vi.useRealTimers();
   });
 
-  test("Enter does nothing when selected item has no action", () => {
+  test('Enter does nothing when selected item has no action', () => {
     vi.useFakeTimers();
     const onClose = vi.fn(() => {});
-    const testItems = [makeItem({ label: "No Action", action: undefined })];
+    const testItems = [makeItem({ label: 'No Action', action: undefined })];
     const { result } = renderHook(() => useCommandPaletteState(testItems, onClose));
 
     expect(() => {
-      act(() => { result.current.handleKeyDown(makeKeyEvent("Enter")); });
+      act(() => {
+        result.current.handleKeyDown(makeKeyEvent('Enter'));
+      });
     }).not.toThrow();
     vi.useRealTimers();
   });
 
-  test("Enter does nothing when filtered list is empty", () => {
+  test('Enter does nothing when filtered list is empty', () => {
     vi.useFakeTimers();
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.setQuery("zzznomatch"); });
+    act(() => {
+      result.current.setQuery('zzznomatch');
+    });
     expect(() => {
-      act(() => { result.current.handleKeyDown(makeKeyEvent("Enter")); });
+      act(() => {
+        result.current.handleKeyDown(makeKeyEvent('Enter'));
+      });
     }).not.toThrow();
     vi.useRealTimers();
   });
 
-  test("unrecognized key does nothing", () => {
+  test('unrecognized key does nothing', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
     const before = result.current.selectedIndex;
 
-    act(() => { result.current.handleKeyDown(makeKeyEvent("Tab")); });
+    act(() => {
+      result.current.handleKeyDown(makeKeyEvent('Tab'));
+    });
 
     expect(result.current.selectedIndex).toBe(before);
     expect(result.current.isClosing).toBe(false);
   });
 
-  test("setSelectedIndex updates selectedIndex directly", () => {
+  test('setSelectedIndex updates selectedIndex directly', () => {
     const onClose = vi.fn(() => {});
     const { result } = renderHook(() => useCommandPaletteState(items, onClose));
 
-    act(() => { result.current.setSelectedIndex(2); });
+    act(() => {
+      result.current.setSelectedIndex(2);
+    });
 
     expect(result.current.selectedIndex).toBe(2);
   });

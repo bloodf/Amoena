@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, mock, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { MessageQueue } from './MessageQueue';
 import { SessionSidePanel } from './SessionSidePanel';

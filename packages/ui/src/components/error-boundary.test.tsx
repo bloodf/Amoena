@@ -1,23 +1,23 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, mock, test, vi } from "vitest";
-import { ErrorBoundary } from "./ErrorBoundary";
+import { render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { ErrorBoundary } from './ErrorBoundary';
 
 function ThrowingComponent({ shouldThrow }: { shouldThrow: boolean }) {
-  if (shouldThrow) throw new Error("Test render error");
+  if (shouldThrow) throw new Error('Test render error');
   return <div>Normal content</div>;
 }
 
-describe("ErrorBoundary", () => {
-  test("renders children when no error", () => {
+describe('ErrorBoundary', () => {
+  test('renders children when no error', () => {
     render(
       <ErrorBoundary>
         <div>child content</div>
       </ErrorBoundary>,
     );
-    expect(screen.getByText("child content")).toBeTruthy();
+    expect(screen.getByText('child content')).toBeTruthy();
   });
 
-  test("renders error message when child throws", () => {
+  test('renders error message when child throws', () => {
     // Suppress console.error for expected error
     const spy = vi.fn(() => {});
     const orig = console.error;
@@ -28,13 +28,13 @@ describe("ErrorBoundary", () => {
         <ThrowingComponent shouldThrow={true} />
       </ErrorBoundary>,
     );
-    expect(screen.getByText("Something went wrong")).toBeTruthy();
-    expect(screen.getByText("Test render error")).toBeTruthy();
+    expect(screen.getByText('Something went wrong')).toBeTruthy();
+    expect(screen.getByText('Test render error')).toBeTruthy();
 
     console.error = orig;
   });
 
-  test("renders custom fallback when provided", () => {
+  test('renders custom fallback when provided', () => {
     const spy = vi.fn(() => {});
     const orig = console.error;
     console.error = spy;
@@ -44,12 +44,12 @@ describe("ErrorBoundary", () => {
         <ThrowingComponent shouldThrow={true} />
       </ErrorBoundary>,
     );
-    expect(screen.getByText("Custom fallback")).toBeTruthy();
+    expect(screen.getByText('Custom fallback')).toBeTruthy();
 
     console.error = orig;
   });
 
-  test("renders Try Again button", () => {
+  test('renders Try Again button', () => {
     const spy = vi.fn(() => {});
     const orig = console.error;
     console.error = spy;
@@ -59,7 +59,7 @@ describe("ErrorBoundary", () => {
         <ThrowingComponent shouldThrow={true} />
       </ErrorBoundary>,
     );
-    expect(screen.getByText("Try Again")).toBeTruthy();
+    expect(screen.getByText('Try Again')).toBeTruthy();
 
     console.error = orig;
   });

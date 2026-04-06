@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from 'vitest';
 
 import {
   buildComposerPaletteGroups,
@@ -6,6 +6,7 @@ import {
   getNextComposerAgentId,
 } from './palette';
 import type { PaletteItem } from './types';
+import { ArrowRight } from 'lucide-react';
 
 const mockAgents = [
   { id: 'agent-1', name: 'Claude', role: 'Primary Engineer' },
@@ -145,14 +146,14 @@ describe('buildComposerPaletteGroups', () => {
         id: 'cmd-edit',
         name: '/edit',
         desc: 'Edit',
-        Icon: () => null,
+        Icon: ArrowRight,
       },
       {
         category: 'agents',
         id: 'agent-1',
         name: 'Claude',
         desc: 'Agent',
-        Icon: () => null,
+        Icon: ArrowRight,
       },
     ];
     const groups = buildComposerPaletteGroups(items);
@@ -166,7 +167,7 @@ describe('buildComposerPaletteGroups', () => {
         id: 'cmd-edit',
         name: '/edit',
         desc: 'Edit',
-        Icon: () => null,
+        Icon: ArrowRight,
       },
     ];
     const groups = buildComposerPaletteGroups(items);
@@ -186,28 +187,28 @@ describe('buildComposerPaletteGroups', () => {
         id: 'cmd-1',
         name: '/test',
         desc: 'd',
-        Icon: () => null,
+        Icon: ArrowRight,
       },
       {
         category: 'skills',
         id: 'skill-1',
         name: '/sk',
         desc: 'd',
-        Icon: () => null,
+        Icon: ArrowRight,
       },
       {
         category: 'agents',
         id: 'agent-1',
         name: 'A',
         desc: 'd',
-        Icon: () => null,
+        Icon: ArrowRight,
       },
       {
         category: 'files',
         id: 'file-1',
         name: 'f',
         desc: 'd',
-        Icon: () => null,
+        Icon: ArrowRight,
       },
     ];
     const groups = buildComposerPaletteGroups(items);
@@ -225,28 +226,28 @@ describe('buildComposerPaletteGroups', () => {
         id: 'file-1',
         name: 'f',
         desc: 'd',
-        Icon: () => null,
+        Icon: ArrowRight,
       },
       {
         category: 'commands',
         id: 'cmd-1',
         name: '/c',
         desc: 'd',
-        Icon: () => null,
+        Icon: ArrowRight,
       },
       {
         category: 'agents',
         id: 'agent-1',
         name: 'a',
         desc: 'd',
-        Icon: () => null,
+        Icon: ArrowRight,
       },
       {
         category: 'skills',
         id: 'skill-1',
         name: '/s',
         desc: 'd',
-        Icon: () => null,
+        Icon: ArrowRight,
       },
     ];
     const groups = buildComposerPaletteGroups(items);

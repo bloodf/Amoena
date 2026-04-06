@@ -1,25 +1,25 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test, vi } from "vitest";
-import { MarketplaceItemCard } from "./MarketplaceItemCard";
-import type { MarketplaceItem } from "./types";
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { MarketplaceItemCard } from './MarketplaceItemCard';
+import type { MarketplaceItem } from './types';
 
 const item: MarketplaceItem = {
-  id: "item-1",
-  name: "Git Tools",
-  author: "anthropic",
-  installs: "12k",
+  id: 'item-1',
+  name: 'Git Tools',
+  author: 'anthropic',
+  installs: '12k',
   installCount: 12000,
-  desc: "Git integration for Amoena",
-  category: "Extensions",
+  desc: 'Git integration for Amoena',
+  category: 'Extensions',
   installed: false,
   trusted: true,
-  version: "1.0.0",
-  permissions: ["read:fs"],
+  version: '1.0.0',
+  permissions: ['read:fs'],
   signed: true,
-  compatibility: ">=1.0.0",
-  lastUpdated: "2024-01-01",
+  compatibility: '>=1.0.0',
+  lastUpdated: '2024-01-01',
   rating: 4.5,
-  tags: ["git", "vcs", "integration", "tools"],
+  tags: ['git', 'vcs', 'integration', 'tools'],
 };
 
 function makeProps(overrides: Partial<Parameters<typeof MarketplaceItemCard>[0]> = {}) {
@@ -33,60 +33,60 @@ function makeProps(overrides: Partial<Parameters<typeof MarketplaceItemCard>[0]>
   };
 }
 
-describe("MarketplaceItemCard", () => {
-  test("renders item name", () => {
+describe('MarketplaceItemCard', () => {
+  test('renders item name', () => {
     render(<MarketplaceItemCard {...makeProps()} />);
-    expect(screen.getByText("Git Tools")).toBeTruthy();
+    expect(screen.getByText('Git Tools')).toBeTruthy();
   });
 
-  test("renders author", () => {
+  test('renders author', () => {
     render(<MarketplaceItemCard {...makeProps()} />);
-    expect(screen.getByText("anthropic")).toBeTruthy();
+    expect(screen.getByText('anthropic')).toBeTruthy();
   });
 
-  test("renders install count", () => {
+  test('renders install count', () => {
     render(<MarketplaceItemCard {...makeProps()} />);
-    expect(screen.getByText("12k")).toBeTruthy();
+    expect(screen.getByText('12k')).toBeTruthy();
   });
 
-  test("renders description", () => {
+  test('renders description', () => {
     render(<MarketplaceItemCard {...makeProps()} />);
-    expect(screen.getByText("Git integration for Amoena")).toBeTruthy();
+    expect(screen.getByText('Git integration for Amoena')).toBeTruthy();
   });
 
-  test("renders rating", () => {
+  test('renders rating', () => {
     render(<MarketplaceItemCard {...makeProps()} />);
-    expect(screen.getByText("4.5")).toBeTruthy();
+    expect(screen.getByText('4.5')).toBeTruthy();
   });
 
-  test("renders Install button for uninstalled items", () => {
+  test('renders Install button for uninstalled items', () => {
     render(<MarketplaceItemCard {...makeProps()} />);
-    expect(screen.getByText("Install")).toBeTruthy();
+    expect(screen.getByText('Install')).toBeTruthy();
   });
 
-  test("renders Uninstall button for installed items", () => {
+  test('renders Uninstall button for installed items', () => {
     render(<MarketplaceItemCard {...makeProps({ item: { ...item, installed: true } })} />);
-    expect(screen.getByText("Uninstall")).toBeTruthy();
+    expect(screen.getByText('Uninstall')).toBeTruthy();
   });
 
-  test("calls onSelect when card clicked", () => {
+  test('calls onSelect when card clicked', () => {
     const onSelect = vi.fn(() => {});
     render(<MarketplaceItemCard {...makeProps({ onSelect })} />);
-    fireEvent.click(screen.getByText("Git Tools"));
+    fireEvent.click(screen.getByText('Git Tools'));
     expect(onSelect).toHaveBeenCalled();
   });
 
-  test("renders first 3 tags and +N indicator", () => {
+  test('renders first 3 tags and +N indicator', () => {
     render(<MarketplaceItemCard {...makeProps()} />);
-    expect(screen.getByText("git")).toBeTruthy();
-    expect(screen.getByText("vcs")).toBeTruthy();
-    expect(screen.getByText("integration")).toBeTruthy();
-    expect(screen.getByText("+1")).toBeTruthy();
+    expect(screen.getByText('git')).toBeTruthy();
+    expect(screen.getByText('vcs')).toBeTruthy();
+    expect(screen.getByText('integration')).toBeTruthy();
+    expect(screen.getByText('+1')).toBeTruthy();
   });
 
-  test("applies selected styling when isSelected", () => {
+  test('applies selected styling when isSelected', () => {
     const { container } = render(<MarketplaceItemCard {...makeProps({ isSelected: true })} />);
     const card = container.firstChild as HTMLElement;
-    expect(card.className).toContain("border-primary");
+    expect(card.className).toContain('border-primary');
   });
 });

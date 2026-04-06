@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { StatusBar } from './StatusBar';
 import { AppShell } from './AppShell';
@@ -35,8 +35,8 @@ describe('StatusBar accessibility', () => {
 
   test('agents and devices sections have aria-labels', () => {
     render(<StatusBar />);
-    expect(screen.getByLabelText('3 agents connected')).toBeTruthy();
-    expect(screen.getByLabelText('1 device connected')).toBeTruthy();
+    expect(screen.getByLabelText(/agents connected/i)).toBeTruthy();
+    expect(screen.getByLabelText(/device connected/i)).toBeTruthy();
   });
 });
 

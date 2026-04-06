@@ -1,8 +1,8 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test, vi } from "vitest";
-import { createRef } from "react";
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { createRef } from 'react';
 
-import { ComposerInputArea } from "./ComposerInputArea";
+import { ComposerInputArea } from './ComposerInputArea';
 
 function renderInput(overrides: Partial<Parameters<typeof ComposerInputArea>[0]> = {}) {
   const handlers = {
@@ -14,9 +14,9 @@ function renderInput(overrides: Partial<Parameters<typeof ComposerInputArea>[0]>
   };
   const props = {
     isRecording: false,
-    recordingTime: "0:00",
+    recordingTime: '0:00',
     isShellMode: false,
-    message: "",
+    message: '',
     textareaRef: createRef<HTMLTextAreaElement>(),
     canvasRef: createRef<HTMLCanvasElement>(),
     ...handlers,
@@ -26,74 +26,80 @@ function renderInput(overrides: Partial<Parameters<typeof ComposerInputArea>[0]>
   return { ...result, ...handlers };
 }
 
-describe("ComposerInputArea", () => {
-  test("renders the textarea with placeholder", () => {
+describe('ComposerInputArea', () => {
+  test('renders the textarea with placeholder', () => {
     renderInput();
-    expect(screen.getByPlaceholderText("Ask anything... @ files, $ skills, / commands")).toBeTruthy();
+    expect(
+      screen.getByPlaceholderText('Ask anything... @ files, $ skills, / commands'),
+    ).toBeTruthy();
   });
 
-  test("renders the send button", () => {
+  test('renders the send button', () => {
     renderInput();
-    expect(screen.getByLabelText("Send message")).toBeTruthy();
+    expect(screen.getByLabelText('Send message')).toBeTruthy();
   });
 
-  test("renders the recording toggle button", () => {
+  test('renders the recording toggle button', () => {
     renderInput();
-    expect(screen.getByLabelText("Start recording")).toBeTruthy();
+    expect(screen.getByLabelText('Start recording')).toBeTruthy();
   });
 
-  test("shows the textarea value", () => {
-    renderInput({ message: "Hello world" });
-    const textarea = screen.getByPlaceholderText("Ask anything... @ files, $ skills, / commands") as HTMLTextAreaElement;
-    expect(textarea.value).toBe("Hello world");
+  test('shows the textarea value', () => {
+    renderInput({ message: 'Hello world' });
+    const textarea = screen.getByPlaceholderText(
+      'Ask anything... @ files, $ skills, / commands',
+    ) as HTMLTextAreaElement;
+    expect(textarea.value).toBe('Hello world');
   });
 
-  test("calls onMessageChange when textarea value changes", () => {
+  test('calls onMessageChange when textarea value changes', () => {
     const { onMessageChange } = renderInput();
-    const textarea = screen.getByPlaceholderText("Ask anything... @ files, $ skills, / commands");
-    fireEvent.change(textarea, { target: { value: "test" } });
-    expect(onMessageChange).toHaveBeenCalledWith("test");
+    const textarea = screen.getByPlaceholderText('Ask anything... @ files, $ skills, / commands');
+    fireEvent.change(textarea, { target: { value: 'test' } });
+    expect(onMessageChange).toHaveBeenCalledWith('test');
   });
 
-  test("calls onSubmit when send button is clicked", () => {
-    const { onSubmit } = renderInput({ message: "hello" });
-    fireEvent.click(screen.getByLabelText("Send message"));
+  test('calls onSubmit when send button is clicked', () => {
+    const { onSubmit } = renderInput({ message: 'hello' });
+    fireEvent.click(screen.getByLabelText('Send message'));
     expect(onSubmit).toHaveBeenCalled();
   });
 
-  test("calls onRecordingToggle when mic button is clicked", () => {
+  test('calls onRecordingToggle when mic button is clicked', () => {
     const { onRecordingToggle } = renderInput();
-    fireEvent.click(screen.getByLabelText("Start recording"));
+    fireEvent.click(screen.getByLabelText('Start recording'));
     expect(onRecordingToggle).toHaveBeenCalled();
   });
 
-  test("shows recording UI when isRecording is true", () => {
-    renderInput({ isRecording: true, recordingTime: "1:23" });
-    expect(screen.getByText("1:23")).toBeTruthy();
-    expect(screen.getByLabelText("Stop recording")).toBeTruthy();
+  test('shows recording UI when isRecording is true', () => {
+    renderInput({ isRecording: true, recordingTime: '1:23' });
+    expect(screen.getByText('1:23')).toBeTruthy();
+    expect(screen.getByLabelText('Stop recording')).toBeTruthy();
   });
 
-  test("hides textarea when recording", () => {
+  test('hides textarea when recording', () => {
     renderInput({ isRecording: true });
-    expect(screen.queryByPlaceholderText("Ask anything... @ files, $ skills, / commands")).toBeNull();
+    expect(
+      screen.queryByPlaceholderText('Ask anything... @ files, $ skills, / commands'),
+    ).toBeNull();
   });
 
-  test("disables send button when canSubmit is false", () => {
+  test('disables send button when canSubmit is false', () => {
     renderInput({ canSubmit: false });
-    const sendBtn = screen.getByLabelText("Send message") as HTMLButtonElement;
+    const sendBtn = screen.getByLabelText('Send message') as HTMLButtonElement;
     expect(sendBtn.disabled).toBe(true);
   });
 
-  test("applies monospace font in shell mode", () => {
+  test('applies monospace font in shell mode', () => {
     renderInput({ isShellMode: true });
-    const textarea = screen.getByPlaceholderText("Ask anything... @ files, $ skills, / commands");
-    expect(textarea.className).toContain("mono");
+    const textarea = screen.getByPlaceholderText('Ask anything... @ files, $ skills, / commands');
+    expect(textarea.className).toContain('mono');
   });
 
-  test("calls onKeyDown on keydown events", () => {
+  test('calls onKeyDown on keydown events', () => {
     const { onKeyDown } = renderInput();
-    const textarea = screen.getByPlaceholderText("Ask anything... @ files, $ skills, / commands");
-    fireEvent.keyDown(textarea, { key: "Enter" });
+    const textarea = screen.getByPlaceholderText('Ask anything... @ files, $ skills, / commands');
+    fireEvent.keyDown(textarea, { key: 'Enter' });
     expect(onKeyDown).toHaveBeenCalled();
   });
 });

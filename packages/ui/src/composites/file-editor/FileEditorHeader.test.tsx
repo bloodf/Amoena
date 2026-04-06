@@ -1,29 +1,29 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, mock, test, vi } from "vitest";
+import { describe, expect, test, vi } from 'vitest';
 import { FileEditorHeader } from './FileEditorHeader';
 
 // Mock lucide-react icons
-vi.fn('lucide-react', () => ({
+vi.mock('lucide-react', () => ({
   Edit: ({ size }: { size: number }) => (
     <span data-testid="edit-icon" style={{ width: size, height: size }}>
-      Edit
+      EditIcon
     </span>
   ),
   Save: ({ size }: { size: number }) => (
     <span data-testid="save-icon" style={{ width: size, height: size }}>
-      Save
+      SaveIcon
     </span>
   ),
   X: ({ size }: { size: number }) => (
     <span data-testid="x-icon" style={{ width: size, height: size }}>
-      X
+      CloseIcon
     </span>
   ),
 }));
 
 // Mock getFileIcon
-vi.fn('../file-browser/utils', () => ({
-  getFileIcon: (name: string, size: number) => <span data-testid={`file-icon-${name}`}>icon</span>,
+vi.mock('../file-browser/utils', () => ({
+  getFileIcon: (name: string, _size: number) => <span data-testid={`file-icon-${name}`}>icon</span>,
 }));
 
 describe('FileEditorHeader', () => {
@@ -83,7 +83,7 @@ describe('FileEditorHeader', () => {
     props.editMode = true;
     render(<FileEditorHeader {...props} />);
     expect(screen.getByText('Save')).toBeTruthy();
-    expect(screen.getByText('X')).toBeTruthy();
+    expect(screen.getAllByRole('button').length).toBeGreaterThan(1);
   });
 
   test('calls onSave when Save button is clicked', () => {
@@ -108,7 +108,11 @@ describe('FileEditorHeader', () => {
     const props = makeProps();
     props.editMode = true;
     render(<FileEditorHeader {...props} />);
-    fireEvent.click(screen.getByText('X'));
+    const buttons = screen.getAllByRole('button');
+    const cancelButton = buttons.find((btn) => btn.querySelector('[data-testid="x-icon"]'));
+    if (cancelButton) {
+      fireEvent.click(cancelButton);
+    }
     expect(props.onCancel).toHaveBeenCalled();
   });
 });

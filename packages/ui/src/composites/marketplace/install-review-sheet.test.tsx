@@ -1,54 +1,46 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test, vi } from "vitest";
-import { InstallReviewSheet } from "./InstallReviewSheet";
-import type { MarketplaceItem } from "./types";
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { InstallReviewSheet } from './InstallReviewSheet';
+import type { MarketplaceItem } from './types';
 
 const baseItem: MarketplaceItem = {
-  id: "item-1",
-  name: "Git Tools",
-  author: "anthropic",
-  installs: "12k",
+  id: 'item-1',
+  name: 'Git Tools',
+  author: 'anthropic',
+  installs: '12k',
   installCount: 12000,
-  desc: "Handy git integration tools",
-  category: "Extensions",
+  desc: 'Handy git integration tools',
+  category: 'Extensions',
   installed: false,
   featured: false,
   trusted: true,
-  version: "1.2.0",
-  permissions: ["read:fs", "exec:git"],
+  version: '1.2.0',
+  permissions: ['read:fs', 'exec:git'],
   signed: true,
-  compatibility: ">=1.0.0",
-  lastUpdated: "2024-01-01",
+  compatibility: '>=1.0.0',
+  lastUpdated: '2024-01-01',
   rating: 4.8,
-  tags: ["git", "vcs"],
+  tags: ['git', 'vcs'],
 };
 
-describe("InstallReviewSheet", () => {
-  test("renders item name, author, and version", () => {
+describe('InstallReviewSheet', () => {
+  test('renders item name, author, and version', () => {
     render(
-      <InstallReviewSheet
-        item={baseItem}
-        onClose={vi.fn(() => {})}
-        onConfirm={vi.fn(() => {})}
-      />,
+      <InstallReviewSheet item={baseItem} onClose={vi.fn(() => {})} onConfirm={vi.fn(() => {})} />,
     );
-    expect(screen.getByText("Git Tools")).toBeTruthy();
+    expect(screen.getByText('Git Tools')).toBeTruthy();
     expect(screen.getByText(/anthropic/)).toBeTruthy();
     expect(screen.getByText(/1\.2\.0/)).toBeTruthy();
   });
 
-  test("shows Trusted status and CheckCircle icon when item.trusted is true", () => {
+  test('shows Trusted status and CheckCircle icon when item.trusted is true', () => {
     render(
-      <InstallReviewSheet
-        item={baseItem}
-        onClose={vi.fn(() => {})}
-        onConfirm={vi.fn(() => {})}
-      />,
+      <InstallReviewSheet item={baseItem} onClose={vi.fn(() => {})} onConfirm={vi.fn(() => {})} />,
     );
-    expect(screen.getByText("Trusted")).toBeTruthy();
+    expect(screen.getByText('Trusted')).toBeTruthy();
   });
 
-  test("shows Unverified status when item.trusted is false — branch line 27-28", () => {
+  test('shows Unverified status when item.trusted is false — branch line 27-28', () => {
     const untrustedItem: MarketplaceItem = { ...baseItem, trusted: false };
     render(
       <InstallReviewSheet
@@ -57,21 +49,17 @@ describe("InstallReviewSheet", () => {
         onConfirm={vi.fn(() => {})}
       />,
     );
-    expect(screen.getByText("Unverified")).toBeTruthy();
+    expect(screen.getByText('Unverified')).toBeTruthy();
   });
 
-  test("shows Signed when item.signed is true — branch line 33", () => {
+  test('shows Signed when item.signed is true — branch line 33', () => {
     render(
-      <InstallReviewSheet
-        item={baseItem}
-        onClose={vi.fn(() => {})}
-        onConfirm={vi.fn(() => {})}
-      />,
+      <InstallReviewSheet item={baseItem} onClose={vi.fn(() => {})} onConfirm={vi.fn(() => {})} />,
     );
-    expect(screen.getByText("Signed")).toBeTruthy();
+    expect(screen.getByText('Signed')).toBeTruthy();
   });
 
-  test("shows Unsigned and warning banner when item.signed is false — branch lines 33 & 51", () => {
+  test('shows Unsigned and warning banner when item.signed is false — branch lines 33 & 51', () => {
     const unsignedItem: MarketplaceItem = { ...baseItem, signed: false };
     render(
       <InstallReviewSheet
@@ -80,12 +68,12 @@ describe("InstallReviewSheet", () => {
         onConfirm={vi.fn(() => {})}
       />,
     );
-    expect(screen.getByText("Unsigned")).toBeTruthy();
+    expect(screen.getByText('Unsigned')).toBeTruthy();
     // The warning banner text about unsigned package
     expect(screen.getByText(/This package is unsigned/i)).toBeTruthy();
   });
 
-  test("calls onClose when backdrop is clicked", () => {
+  test('calls onClose when backdrop is clicked', () => {
     const onClose = vi.fn(() => {});
     const { container } = render(
       <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={vi.fn(() => {})} />,
@@ -95,52 +83,40 @@ describe("InstallReviewSheet", () => {
     expect(onClose).toHaveBeenCalled();
   });
 
-  test("does not call onClose when inner dialog is clicked (stopPropagation)", () => {
+  test('does not call onClose when inner dialog is clicked (stopPropagation)', () => {
     const onClose = vi.fn(() => {});
-    render(
-      <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={vi.fn(() => {})} />,
-    );
-    fireEvent.click(screen.getByText("Review Installation").closest("div")!.parentElement!);
+    render(<InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={vi.fn(() => {})} />);
+    fireEvent.click(screen.getByText('Review Installation').closest('div')!.parentElement!);
     // Click on the dialog content itself should not close
     expect(onClose).toHaveBeenCalledTimes(0);
   });
 
-  test("calls onClose when Close button is clicked", () => {
+  test('calls onClose when Close button is clicked', () => {
     const onClose = vi.fn(() => {});
-    render(
-      <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={vi.fn(() => {})} />,
-    );
-    fireEvent.click(screen.getByLabelText("Close"));
+    render(<InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={vi.fn(() => {})} />);
+    fireEvent.click(screen.getByLabelText('Close'));
     expect(onClose).toHaveBeenCalled();
   });
 
-  test("calls onClose when Cancel button is clicked", () => {
+  test('calls onClose when Cancel button is clicked', () => {
     const onClose = vi.fn(() => {});
-    render(
-      <InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={vi.fn(() => {})} />,
-    );
-    fireEvent.click(screen.getByText("Cancel"));
+    render(<InstallReviewSheet item={baseItem} onClose={onClose} onConfirm={vi.fn(() => {})} />);
+    fireEvent.click(screen.getByText('Cancel'));
     expect(onClose).toHaveBeenCalled();
   });
 
-  test("calls onConfirm when Install button is clicked", () => {
+  test('calls onConfirm when Install button is clicked', () => {
     const onConfirm = vi.fn(() => {});
-    render(
-      <InstallReviewSheet item={baseItem} onClose={vi.fn(() => {})} onConfirm={onConfirm} />,
-    );
-    fireEvent.click(screen.getByText("Install"));
+    render(<InstallReviewSheet item={baseItem} onClose={vi.fn(() => {})} onConfirm={onConfirm} />);
+    fireEvent.click(screen.getByText('Install'));
     expect(onConfirm).toHaveBeenCalled();
   });
 
-  test("renders all permissions", () => {
+  test('renders all permissions', () => {
     render(
-      <InstallReviewSheet
-        item={baseItem}
-        onClose={vi.fn(() => {})}
-        onConfirm={vi.fn(() => {})}
-      />,
+      <InstallReviewSheet item={baseItem} onClose={vi.fn(() => {})} onConfirm={vi.fn(() => {})} />,
     );
-    expect(screen.getByText("read:fs")).toBeTruthy();
-    expect(screen.getByText("exec:git")).toBeTruthy();
+    expect(screen.getByText('read:fs')).toBeTruthy();
+    expect(screen.getByText('exec:git')).toBeTruthy();
   });
 });

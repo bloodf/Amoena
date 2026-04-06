@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, mock, test, vi } from "vitest";
+import { describe, expect, test, vi } from 'vitest';
 import { HomeSystemHealthPanel } from './HomeSystemHealthPanel';
 import type { HomeProviderHealth } from './types';
 

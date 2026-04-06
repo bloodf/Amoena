@@ -1,33 +1,40 @@
-import { act, renderHook } from "@testing-library/react";
-import { describe, expect, mock, test, vi } from "vitest";
-import { useComposerInteractions } from "./useComposerInteractions";
-import type { ComposerAttachment } from "./types";
-import type { ComposerAgentVariant } from "./config";
-import { createRef } from "react";
+import { act, renderHook } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { useComposerInteractions } from './useComposerInteractions';
+import type { ComposerAttachment } from './types';
+import type { ComposerAgentVariant } from './config';
+import type { LucideIcon } from 'lucide-react';
+import { createRef } from 'react';
 
 const agents: ComposerAgentVariant[] = [
-  { id: "sisyphus", name: "Sisyphus", role: "Ultraworker", color: "text-primary" },
-  { id: "hephaestus", name: "Hephaestus", role: "Deep Agent", color: "text-primary" },
+  { id: 'sisyphus', name: 'Sisyphus', role: 'Ultraworker', color: 'text-primary' },
+  { id: 'hephaestus', name: 'Hephaestus', role: 'Deep Agent', color: 'text-primary' },
 ];
 
-function makeHook(overrides: {
-  message?: string;
-  attachments?: ComposerAttachment[];
-} = {}) {
-  const setMessage = vi.fn((v: string) => {});
-  const setAttachments = vi.fn((fn: unknown) => {});
+function makeHook(
+  overrides: {
+    message?: string;
+    attachments?: ComposerAttachment[];
+  } = {},
+) {
+  const setMessage = vi.fn((_v: string) => {});
+  const setAttachments = vi.fn((_fn: unknown) => {});
   const onCycleAgent = vi.fn(() => {});
-  const onSelectAgent = vi.fn((id: string) => {});
+  const onSelectAgent = vi.fn((_id: string) => {});
   const onAutocompleteOpen = vi.fn(() => {});
-  const textareaRef = createRef<HTMLTextAreaElement | null>() as React.RefObject<HTMLTextAreaElement | null>;
+  const textareaRef =
+    createRef<HTMLTextAreaElement | null>() as React.RefObject<HTMLTextAreaElement | null>;
 
-  let message = overrides.message ?? "";
-  let attachments = overrides.attachments ?? [];
+  let message = overrides.message ?? '';
+  const attachments = overrides.attachments ?? [];
 
   const { result } = renderHook(() =>
     useComposerInteractions({
       message,
-      setMessage: (v) => { message = v; setMessage(v); },
+      setMessage: (v) => {
+        message = v;
+        setMessage(v);
+      },
       attachments,
       setAttachments: setAttachments as React.Dispatch<React.SetStateAction<ComposerAttachment[]>>,
       textareaRef,
@@ -35,14 +42,14 @@ function makeHook(overrides: {
       onCycleAgent,
       onSelectAgent,
       onAutocompleteOpen,
-    })
+    }),
   );
 
   return { result, setMessage, setAttachments, onCycleAgent, onSelectAgent, onAutocompleteOpen };
 }
 
-describe("useComposerInteractions", () => {
-  test("initializes with closed autocomplete states", () => {
+describe('useComposerInteractions', () => {
+  test('initializes with closed autocomplete states', () => {
     const { result } = makeHook();
     expect(result.current.showFilePicker).toBe(false);
     expect(result.current.showUnifiedPalette).toBe(false);
@@ -51,180 +58,247 @@ describe("useComposerInteractions", () => {
     expect(result.current.selectedIndex).toBe(0);
   });
 
-  test("handleInput with @ opens file picker", () => {
+  test('handleInput with @ opens file picker', () => {
     const { result, onAutocompleteOpen } = makeHook();
-    act(() => { result.current.handleInput("@tok"); });
+    act(() => {
+      result.current.handleInput('@tok');
+    });
     expect(result.current.showFilePicker).toBe(true);
     expect(result.current.showUnifiedPalette).toBe(false);
     expect(result.current.showSkills).toBe(false);
     expect(onAutocompleteOpen).toHaveBeenCalled();
   });
 
-  test("handleInput with $ opens skills picker", () => {
+  test('handleInput with $ opens skills picker', () => {
     const { result, onAutocompleteOpen } = makeHook();
-    act(() => { result.current.handleInput("$brain"); });
+    act(() => {
+      result.current.handleInput('$brain');
+    });
     expect(result.current.showSkills).toBe(true);
     expect(result.current.showFilePicker).toBe(false);
     expect(result.current.showUnifiedPalette).toBe(false);
     expect(onAutocompleteOpen).toHaveBeenCalled();
   });
 
-  test("handleInput with /command opens unified palette", () => {
+  test('handleInput with /command opens unified palette', () => {
     const { result, onAutocompleteOpen } = makeHook();
-    act(() => { result.current.handleInput("/model"); });
+    act(() => {
+      result.current.handleInput('/model');
+    });
     expect(result.current.showUnifiedPalette).toBe(true);
     expect(result.current.showFilePicker).toBe(false);
     expect(result.current.showSkills).toBe(false);
     expect(onAutocompleteOpen).toHaveBeenCalled();
   });
 
-  test("handleInput with plain text closes autocomplete", () => {
+  test('handleInput with plain text closes autocomplete', () => {
     const { result } = makeHook();
-    act(() => { result.current.handleInput("@tok"); });
-    act(() => { result.current.handleInput("hello world"); });
+    act(() => {
+      result.current.handleInput('@tok');
+    });
+    act(() => {
+      result.current.handleInput('hello world');
+    });
     expect(result.current.showFilePicker).toBe(false);
     expect(result.current.showUnifiedPalette).toBe(false);
     expect(result.current.showSkills).toBe(false);
   });
 
-  test("/ in middle of string does not open palette (must be at start)", () => {
+  test('/ in middle of string does not open palette (must be at start)', () => {
     const { result } = makeHook();
-    act(() => { result.current.handleInput("hello /model"); });
+    act(() => {
+      result.current.handleInput('hello /model');
+    });
     expect(result.current.showUnifiedPalette).toBe(false);
   });
 
-  test("closeAutocomplete closes all pickers", () => {
+  test('closeAutocomplete closes all pickers', () => {
     const { result } = makeHook();
-    act(() => { result.current.handleInput("@tok"); });
+    act(() => {
+      result.current.handleInput('@tok');
+    });
     expect(result.current.showFilePicker).toBe(true);
-    act(() => { result.current.closeAutocomplete(); });
+    act(() => {
+      result.current.closeAutocomplete();
+    });
     expect(result.current.showFilePicker).toBe(false);
     expect(result.current.showSkills).toBe(false);
     expect(result.current.showUnifiedPalette).toBe(false);
   });
 
-  test("filteredFiles filters by filter text", () => {
+  test('filteredFiles filters by filter text', () => {
     const { result } = makeHook();
-    act(() => { result.current.handleInput("@tok"); });
-    expect(result.current.filteredFiles.some((f) => f.name.includes("tokens"))).toBe(true);
+    act(() => {
+      result.current.handleInput('@tok');
+    });
+    expect(result.current.filteredFiles.some((f) => f.name.includes('tokens'))).toBe(true);
   });
 
-  test("filteredSkills filters by skill name", () => {
+  test('filteredSkills filters by skill name', () => {
     const { result } = makeHook();
-    act(() => { result.current.handleInput("$brain"); });
+    act(() => {
+      result.current.handleInput('$brain');
+    });
     expect(result.current.filteredSkills.length).toBeGreaterThan(0);
-    expect(result.current.filteredSkills.some((s) => s.name.toLowerCase().includes("brain"))).toBe(true);
+    expect(result.current.filteredSkills.some((s) => s.name.toLowerCase().includes('brain'))).toBe(
+      true,
+    );
   });
 
-  test("handleKeyDown ArrowDown increments selectedIndex", () => {
+  test('handleKeyDown ArrowDown increments selectedIndex', () => {
     const { result } = makeHook();
-    act(() => { result.current.handleInput("@t"); });
+    act(() => {
+      result.current.handleInput('@t');
+    });
     expect(result.current.selectedIndex).toBe(0);
     act(() => {
-      result.current.handleKeyDown({ key: "ArrowDown", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleKeyDown({
+        key: 'ArrowDown',
+        preventDefault: vi.fn(() => {}),
+      } as unknown as React.KeyboardEvent);
     });
     expect(result.current.selectedIndex).toBe(1);
   });
 
-  test("handleKeyDown ArrowUp decrements selectedIndex but not below 0", () => {
+  test('handleKeyDown ArrowUp decrements selectedIndex but not below 0', () => {
     const { result } = makeHook();
-    act(() => { result.current.handleInput("@t"); });
     act(() => {
-      result.current.handleKeyDown({ key: "ArrowUp", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleInput('@t');
+    });
+    act(() => {
+      result.current.handleKeyDown({
+        key: 'ArrowUp',
+        preventDefault: vi.fn(() => {}),
+      } as unknown as React.KeyboardEvent);
     });
     expect(result.current.selectedIndex).toBe(0);
   });
 
-  test("handleKeyDown ArrowDown does not exceed list length", () => {
+  test('handleKeyDown ArrowDown does not exceed list length', () => {
     const { result } = makeHook();
-    act(() => { result.current.handleInput("@tokens.rs"); });
+    act(() => {
+      result.current.handleInput('@tokens.rs');
+    });
     // filteredFiles will be small, set index to max via many ArrowDowns
     for (let i = 0; i < 20; i++) {
       act(() => {
-        result.current.handleKeyDown({ key: "ArrowDown", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
+        result.current.handleKeyDown({
+          key: 'ArrowDown',
+          preventDefault: vi.fn(() => {}),
+        } as unknown as React.KeyboardEvent);
       });
     }
-    expect(result.current.selectedIndex).toBeLessThanOrEqual(result.current.filteredFiles.length - 1);
+    expect(result.current.selectedIndex).toBeLessThanOrEqual(
+      result.current.filteredFiles.length - 1,
+    );
   });
 
-  test("handleKeyDown Escape closes autocomplete", () => {
+  test('handleKeyDown Escape closes autocomplete', () => {
     const { result } = makeHook();
-    act(() => { result.current.handleInput("@tok"); });
     act(() => {
-      result.current.handleKeyDown({ key: "Escape", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleInput('@tok');
+    });
+    act(() => {
+      result.current.handleKeyDown({
+        key: 'Escape',
+        preventDefault: vi.fn(() => {}),
+      } as unknown as React.KeyboardEvent);
     });
     expect(result.current.showFilePicker).toBe(false);
   });
 
-  test("handleKeyDown Enter selects file from file picker", () => {
-    const { result, setMessage } = makeHook();
-    act(() => { result.current.handleInput("@tok"); });
-    act(() => {
-      result.current.handleKeyDown({ key: "Enter", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
-    });
-    expect(result.current.showFilePicker).toBe(false);
-  });
-
-  test("handleKeyDown Tab selects file from file picker", () => {
+  test('handleKeyDown Enter selects file from file picker', () => {
     const { result } = makeHook();
-    act(() => { result.current.handleInput("@tok"); });
     act(() => {
-      result.current.handleKeyDown({ key: "Tab", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleInput('@tok');
+    });
+    act(() => {
+      result.current.handleKeyDown({
+        key: 'Enter',
+        preventDefault: vi.fn(() => {}),
+      } as unknown as React.KeyboardEvent);
     });
     expect(result.current.showFilePicker).toBe(false);
   });
 
-  test("handleKeyDown Tab with empty message and no picker calls onCycleAgent", () => {
-    const { result, onCycleAgent } = makeHook({ message: "" });
+  test('handleKeyDown Tab selects file from file picker', () => {
+    const { result } = makeHook();
     act(() => {
-      result.current.handleKeyDown({ key: "Tab", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleInput('@tok');
+    });
+    act(() => {
+      result.current.handleKeyDown({
+        key: 'Tab',
+        preventDefault: vi.fn(() => {}),
+      } as unknown as React.KeyboardEvent);
+    });
+    expect(result.current.showFilePicker).toBe(false);
+  });
+
+  test('handleKeyDown Tab with empty message and no picker calls onCycleAgent', () => {
+    const { result, onCycleAgent } = makeHook({ message: '' });
+    act(() => {
+      result.current.handleKeyDown({
+        key: 'Tab',
+        preventDefault: vi.fn(() => {}),
+      } as unknown as React.KeyboardEvent);
     });
     expect(onCycleAgent).toHaveBeenCalled();
   });
 
-  test("handleKeyDown Enter with no pickers and no shift prevents default", () => {
-    const { result } = makeHook({ message: "hello" });
+  test('handleKeyDown Enter with no pickers and no shift prevents default', () => {
+    const { result } = makeHook({ message: 'hello' });
     const preventDefault = vi.fn(() => {});
     act(() => {
-      result.current.handleKeyDown({ key: "Enter", shiftKey: false, preventDefault } as unknown as React.KeyboardEvent);
+      result.current.handleKeyDown({
+        key: 'Enter',
+        shiftKey: false,
+        preventDefault,
+      } as unknown as React.KeyboardEvent);
     });
     expect(preventDefault).toHaveBeenCalled();
   });
 
-  test("handleKeyDown Enter with shift does not prevent default", () => {
-    const { result } = makeHook({ message: "hello" });
+  test('handleKeyDown Enter with shift does not prevent default', () => {
+    const { result } = makeHook({ message: 'hello' });
     const preventDefault = vi.fn(() => {});
     act(() => {
-      result.current.handleKeyDown({ key: "Enter", shiftKey: true, preventDefault } as unknown as React.KeyboardEvent);
+      result.current.handleKeyDown({
+        key: 'Enter',
+        shiftKey: true,
+        preventDefault,
+      } as unknown as React.KeyboardEvent);
     });
     expect(preventDefault).not.toHaveBeenCalled();
   });
 
-  test("removeAttachment calls setAttachments", () => {
+  test('removeAttachment calls setAttachments', () => {
     const { result, setAttachments } = makeHook({
-      attachments: [{ type: "file", name: "foo.ts", path: "src/foo.ts" }],
+      attachments: [{ type: 'file', name: 'foo.ts', path: 'src/foo.ts' }],
     });
-    act(() => { result.current.removeAttachment("src/foo.ts"); });
+    act(() => {
+      result.current.removeAttachment('src/foo.ts');
+    });
     expect(setAttachments).toHaveBeenCalled();
   });
 
-  test("handleDragOver sets isDragOver to true", () => {
+  test('handleDragOver sets isDragOver to true', () => {
     const { result } = makeHook();
     act(() => {
       result.current.handleDragOver({
         preventDefault: vi.fn(() => {}),
-        dataTransfer: { dropEffect: "" },
+        dataTransfer: { dropEffect: '' },
       } as unknown as React.DragEvent);
     });
     expect(result.current.isDragOver).toBe(true);
   });
 
-  test("handleDragLeave sets isDragOver to false when leaving container", () => {
+  test('handleDragLeave sets isDragOver to false when leaving container', () => {
     const { result } = makeHook();
     act(() => {
       result.current.handleDragOver({
         preventDefault: vi.fn(() => {}),
-        dataTransfer: { dropEffect: "" },
+        dataTransfer: { dropEffect: '' },
       } as unknown as React.DragEvent);
     });
     act(() => {
@@ -236,12 +310,12 @@ describe("useComposerInteractions", () => {
     expect(result.current.isDragOver).toBe(false);
   });
 
-  test("handleDragLeave does not clear when still inside container", () => {
+  test('handleDragLeave does not clear when still inside container', () => {
     const { result } = makeHook();
     act(() => {
       result.current.handleDragOver({
         preventDefault: vi.fn(() => {}),
-        dataTransfer: { dropEffect: "" },
+        dataTransfer: { dropEffect: '' },
       } as unknown as React.DragEvent);
     });
     act(() => {
@@ -253,16 +327,16 @@ describe("useComposerInteractions", () => {
     expect(result.current.isDragOver).toBe(true);
   });
 
-  test("handleDrop with amoena/file JSON adds folder attachment", () => {
+  test('handleDrop with amoena/file JSON adds folder attachment', () => {
     const { result, setAttachments } = makeHook();
     act(() => {
       result.current.handleDrop({
         preventDefault: vi.fn(() => {}),
         dataTransfer: {
           getData: (type: string) =>
-            type === "amoena/file"
-              ? JSON.stringify({ type: "folder", name: "src/auth", path: "src/auth", itemCount: 7 })
-              : "",
+            type === 'amoena/file'
+              ? JSON.stringify({ type: 'folder', name: 'src/auth', path: 'src/auth', itemCount: 7 })
+              : '',
           files: [],
         },
       } as unknown as React.DragEvent);
@@ -270,14 +344,14 @@ describe("useComposerInteractions", () => {
     expect(setAttachments).toHaveBeenCalled();
   });
 
-  test("handleDrop with invalid JSON does not throw", () => {
+  test('handleDrop with invalid JSON does not throw', () => {
     const { result } = makeHook();
     expect(() => {
       act(() => {
         result.current.handleDrop({
           preventDefault: vi.fn(() => {}),
           dataTransfer: {
-            getData: () => "not-valid-json",
+            getData: () => 'not-valid-json',
             files: [],
           },
         } as unknown as React.DragEvent);
@@ -285,14 +359,14 @@ describe("useComposerInteractions", () => {
     }).not.toThrow();
   });
 
-  test("handleDrop with native files adds file attachments", () => {
+  test('handleDrop with native files adds file attachments', () => {
     const { result, setAttachments } = makeHook();
-    const file = new File(["content"], "readme.md");
+    const file = new File(['content'], 'readme.md');
     act(() => {
       result.current.handleDrop({
         preventDefault: vi.fn(() => {}),
         dataTransfer: {
-          getData: () => "",
+          getData: () => '',
           files: [file],
         },
       } as unknown as React.DragEvent);
@@ -300,122 +374,147 @@ describe("useComposerInteractions", () => {
     expect(setAttachments).toHaveBeenCalled();
   });
 
-  test("handlePaste with file item adds attachment", () => {
+  test('handlePaste with file item adds attachment', () => {
     const { result, setAttachments } = makeHook();
-    const file = new File(["content"], "image.png");
+    const file = new File(['content'], 'image.png');
     act(() => {
       result.current.handlePaste({
         preventDefault: vi.fn(() => {}),
         clipboardData: {
-          items: [{ kind: "file", getAsFile: () => file }],
+          items: [{ kind: 'file', getAsFile: () => file }],
         },
       } as unknown as React.ClipboardEvent);
     });
     expect(setAttachments).toHaveBeenCalled();
   });
 
-  test("handlePaste with non-file item does not add attachment", () => {
+  test('handlePaste with non-file item does not add attachment', () => {
     const { result, setAttachments } = makeHook();
     act(() => {
       result.current.handlePaste({
         preventDefault: vi.fn(() => {}),
         clipboardData: {
-          items: [{ kind: "string", getAsFile: () => null }],
+          items: [{ kind: 'string', getAsFile: () => null }],
         },
       } as unknown as React.ClipboardEvent);
     });
     expect(setAttachments).not.toHaveBeenCalled();
   });
 
-  test("openUnifiedPalette toggles palette and resets filter", () => {
+  test('openUnifiedPalette toggles palette and resets filter', () => {
     const { result, onAutocompleteOpen } = makeHook();
-    act(() => { result.current.openUnifiedPalette(); });
+    act(() => {
+      result.current.openUnifiedPalette();
+    });
     expect(result.current.showUnifiedPalette).toBe(true);
     expect(onAutocompleteOpen).toHaveBeenCalled();
     // Toggle off
-    act(() => { result.current.openUnifiedPalette(); });
+    act(() => {
+      result.current.openUnifiedPalette();
+    });
     expect(result.current.showUnifiedPalette).toBe(false);
   });
 
-  test("handlePaletteSelect with commands category sets message", () => {
+  test('handlePaletteSelect with commands category sets message', () => {
     const { result, setMessage } = makeHook();
-    act(() => { result.current.handleInput("/mod"); });
+    act(() => {
+      result.current.handleInput('/mod');
+    });
     act(() => {
       result.current.handlePaletteSelect({
-        category: "commands",
-        id: "cmd-model",
-        name: "/model",
-        desc: "Switch model",
-        Icon: {} as unknown as import("lucide-react").LucideIcon,
+        category: 'commands',
+        id: 'cmd-model',
+        name: '/model',
+        desc: 'Switch model',
+        Icon: {} as LucideIcon,
       });
     });
-    expect(setMessage).toHaveBeenCalledWith("/model ");
+    expect(setMessage).toHaveBeenCalledWith('/model ');
   });
 
-  test("handlePaletteSelect with agents category calls onSelectAgent", () => {
+  test('handlePaletteSelect with agents category calls onSelectAgent', () => {
     const { result, onSelectAgent } = makeHook();
     act(() => {
       result.current.handlePaletteSelect({
-        category: "agents",
-        id: "agent-sisyphus",
-        name: "Sisyphus",
-        desc: "Ultraworker",
-        Icon: {} as unknown as import("lucide-react").LucideIcon,
+        category: 'agents',
+        id: 'agent-sisyphus',
+        name: 'Sisyphus',
+        desc: 'Ultraworker',
+        Icon: {} as LucideIcon,
       });
     });
-    expect(onSelectAgent).toHaveBeenCalledWith("sisyphus");
+    expect(onSelectAgent).toHaveBeenCalledWith('sisyphus');
   });
 
-  test("handlePaletteSelect with unknown agent id does not crash", () => {
+  test('handlePaletteSelect with unknown agent id does not crash', () => {
     const { result } = makeHook();
     expect(() => {
       act(() => {
         result.current.handlePaletteSelect({
-          category: "agents",
-          id: "agent-unknown-xyz",
-          name: "Unknown",
-          desc: "",
-          Icon: {} as unknown as import("lucide-react").LucideIcon,
+          category: 'agents',
+          id: 'agent-unknown-xyz',
+          name: 'Unknown',
+          desc: '',
+          Icon: {} as LucideIcon,
         });
       });
     }).not.toThrow();
   });
 
-  test("insertSkill removes $ trigger and closes skills picker", () => {
-    const { result, setMessage } = makeHook({ message: "$brain" });
-    act(() => { result.current.handleInput("$brain"); });
+  test('insertSkill removes $ trigger and closes skills picker', () => {
+    const { result } = makeHook({ message: '$brain' });
     act(() => {
-      result.current.insertSkill({ name: "Brainstorming", desc: "Creative work", Icon: {} as unknown as import("lucide-react").LucideIcon, source: "project" });
+      result.current.handleInput('$brain');
+    });
+    act(() => {
+      result.current.insertSkill({
+        name: 'Brainstorming',
+        desc: 'Creative work',
+        Icon: {} as LucideIcon,
+        source: 'project',
+      });
     });
     expect(result.current.showSkills).toBe(false);
   });
 
-  test("addAttachment does not add duplicate path", () => {
-    const existingAttachment: ComposerAttachment = { type: "file", name: "tokens.rs", path: "src/auth/tokens.rs" };
+  test('addAttachment does not add duplicate path', () => {
+    const existingAttachment: ComposerAttachment = {
+      type: 'file',
+      name: 'tokens.rs',
+      path: 'src/auth/tokens.rs',
+    };
     const setAttachments = vi.fn(() => {});
     const setMessage = vi.fn(() => {});
     const onCycleAgent = vi.fn(() => {});
     const onSelectAgent = vi.fn(() => {});
     const onAutocompleteOpen = vi.fn(() => {});
-    const textareaRef = createRef<HTMLTextAreaElement | null>() as React.RefObject<HTMLTextAreaElement | null>;
+    const textareaRef =
+      createRef<HTMLTextAreaElement | null>() as React.RefObject<HTMLTextAreaElement | null>;
 
     const { result } = renderHook(() =>
       useComposerInteractions({
-        message: "@tok",
+        message: '@tok',
         setMessage,
         attachments: [existingAttachment],
-        setAttachments: setAttachments as React.Dispatch<React.SetStateAction<ComposerAttachment[]>>,
+        setAttachments: setAttachments as React.Dispatch<
+          React.SetStateAction<ComposerAttachment[]>
+        >,
         textareaRef,
         agents,
         onCycleAgent,
         onSelectAgent,
         onAutocompleteOpen,
-      })
+      }),
     );
 
-    act(() => { result.current.handleInput("@tok"); });
     act(() => {
-      result.current.handleKeyDown({ key: "Enter", preventDefault: vi.fn(() => {}) } as unknown as React.KeyboardEvent);
+      result.current.handleInput('@tok');
+    });
+    act(() => {
+      result.current.handleKeyDown({
+        key: 'Enter',
+        preventDefault: vi.fn(() => {}),
+      } as unknown as React.KeyboardEvent);
     });
     // setAttachments should not have been called because the path already exists
     expect(setAttachments).not.toHaveBeenCalled();

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, mock, test, vi } from "vitest";
+import { describe, expect, test, vi } from 'vitest';
 import { HighlightedCode } from './HighlightedCode';
 
 // Mock useTheme hook
@@ -31,11 +31,6 @@ vi.fn('prismjs', () => ({
 }));
 
 describe('HighlightedCode', () => {
-  const makeProps = () => ({
-    content: 'const x = 1;',
-    fileName: 'test.ts',
-  });
-
   test('renders line numbers for each line of content', () => {
     const content = 'line one\nline two\nline three';
     render(<HighlightedCode content={content} fileName="test.ts" />);

@@ -1,34 +1,58 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test, vi } from "vitest";
-import { MarketplaceSidebar } from "./MarketplaceSidebar";
-import type { MarketplaceCategory, MarketplaceItem } from "./types";
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { MarketplaceSidebar } from './MarketplaceSidebar';
+import type { MarketplaceCategory, MarketplaceItem } from './types';
 
 const items: MarketplaceItem[] = [
   {
-    id: "1", name: "Git Tools", author: "anthropic", installs: "12k", installCount: 12000,
-    desc: "Git integration", category: "Extensions", installed: true, trusted: true,
-    version: "1.0.0", permissions: [], signed: true, compatibility: ">=1.0.0",
-    lastUpdated: "2024-01-01", rating: 4.5, tags: ["git"],
+    id: '1',
+    name: 'Git Tools',
+    author: 'anthropic',
+    installs: '12k',
+    installCount: 12000,
+    desc: 'Git integration',
+    category: 'Extensions',
+    installed: true,
+    trusted: true,
+    version: '1.0.0',
+    permissions: [],
+    signed: true,
+    compatibility: '>=1.0.0',
+    lastUpdated: '2024-01-01',
+    rating: 4.5,
+    tags: ['git'],
   },
   {
-    id: "2", name: "Theme Pack", author: "community", installs: "5k", installCount: 5000,
-    desc: "Extra themes", category: "Themes", installed: false, trusted: false,
-    version: "0.1.0", permissions: [], signed: false, compatibility: ">=1.0.0",
-    lastUpdated: "2024-02-01", rating: 3.0, tags: ["theme"],
+    id: '2',
+    name: 'Theme Pack',
+    author: 'community',
+    installs: '5k',
+    installCount: 5000,
+    desc: 'Extra themes',
+    category: 'Themes',
+    installed: false,
+    trusted: false,
+    version: '0.1.0',
+    permissions: [],
+    signed: false,
+    compatibility: '>=1.0.0',
+    lastUpdated: '2024-02-01',
+    rating: 3.0,
+    tags: ['theme'],
   },
 ];
 
-const categories: MarketplaceCategory[] = ["All", "Extensions", "Themes"];
+const categories: MarketplaceCategory[] = ['All', 'Extensions', 'Themes'];
 
 function makeProps(overrides: Partial<Parameters<typeof MarketplaceSidebar>[0]> = {}) {
   return {
     categories,
     items,
-    activeCategory: "All" as MarketplaceCategory,
+    activeCategory: 'All' as MarketplaceCategory,
     showInstalled: false,
-    authorFilter: "all" as const,
-    trustFilter: "all" as const,
-    sortBy: "popular" as const,
+    authorFilter: 'all' as const,
+    trustFilter: 'all' as const,
+    sortBy: 'popular' as const,
     onCategoryChange: vi.fn((_c: MarketplaceCategory) => {}),
     onInstalledSelect: vi.fn(() => {}),
     onAuthorFilterToggle: vi.fn(() => {}),
@@ -38,44 +62,44 @@ function makeProps(overrides: Partial<Parameters<typeof MarketplaceSidebar>[0]> 
   };
 }
 
-describe("MarketplaceSidebar", () => {
-  test("renders category buttons", () => {
+describe('MarketplaceSidebar', () => {
+  test('renders category buttons', () => {
     render(<MarketplaceSidebar {...makeProps()} />);
-    expect(screen.getByText("All")).toBeTruthy();
-    expect(screen.getByText("Extensions")).toBeTruthy();
-    expect(screen.getByText("Themes")).toBeTruthy();
+    expect(screen.getByText('All')).toBeTruthy();
+    expect(screen.getByText('Extensions')).toBeTruthy();
+    expect(screen.getByText('Themes')).toBeTruthy();
   });
 
-  test("renders Installed button", () => {
+  test('renders Installed button', () => {
     render(<MarketplaceSidebar {...makeProps()} />);
-    expect(screen.getByText("Installed")).toBeTruthy();
+    expect(screen.getByText('Installed')).toBeTruthy();
   });
 
-  test("renders quick filter buttons", () => {
+  test('renders quick filter buttons', () => {
     render(<MarketplaceSidebar {...makeProps()} />);
-    expect(screen.getByText("Official Only")).toBeTruthy();
-    expect(screen.getByText("Trusted Only")).toBeTruthy();
-    expect(screen.getByText("Top Rated")).toBeTruthy();
+    expect(screen.getByText('Official Only')).toBeTruthy();
+    expect(screen.getByText('Trusted Only')).toBeTruthy();
+    expect(screen.getByText('Top Rated')).toBeTruthy();
   });
 
-  test("calls onCategoryChange when category clicked", () => {
+  test('calls onCategoryChange when category clicked', () => {
     const onCategoryChange = vi.fn((_c: MarketplaceCategory) => {});
     render(<MarketplaceSidebar {...makeProps({ onCategoryChange })} />);
-    fireEvent.click(screen.getByText("Extensions"));
-    expect(onCategoryChange).toHaveBeenCalledWith("Extensions");
+    fireEvent.click(screen.getByText('Extensions'));
+    expect(onCategoryChange).toHaveBeenCalledWith('Extensions');
   });
 
-  test("calls onInstalledSelect when Installed clicked", () => {
+  test('calls onInstalledSelect when Installed clicked', () => {
     const onInstalledSelect = vi.fn(() => {});
     render(<MarketplaceSidebar {...makeProps({ onInstalledSelect })} />);
-    fireEvent.click(screen.getByText("Installed"));
+    fireEvent.click(screen.getByText('Installed'));
     expect(onInstalledSelect).toHaveBeenCalled();
   });
 
-  test("calls onAuthorFilterToggle when Official Only clicked", () => {
+  test('calls onAuthorFilterToggle when Official Only clicked', () => {
     const onAuthorFilterToggle = vi.fn(() => {});
     render(<MarketplaceSidebar {...makeProps({ onAuthorFilterToggle })} />);
-    fireEvent.click(screen.getByText("Official Only"));
+    fireEvent.click(screen.getByText('Official Only'));
     expect(onAuthorFilterToggle).toHaveBeenCalled();
   });
 });

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, mock, test, vi } from "vitest";
+import { describe, expect, test, vi } from 'vitest';
 import { HomeWorkspacesPanel } from './HomeWorkspacesPanel';
 
 vi.mock('lucide-react', () => ({

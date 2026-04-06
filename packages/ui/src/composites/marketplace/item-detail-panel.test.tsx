@@ -1,29 +1,29 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test, vi } from "vitest";
-import { ItemDetailPanel } from "./ItemDetailPanel";
-import type { MarketplaceItem } from "./types";
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { ItemDetailPanel } from './ItemDetailPanel';
+import type { MarketplaceItem } from './types';
 
 const baseItem: MarketplaceItem = {
-  id: "item-2",
-  name: "Lint Pack",
-  author: "community",
-  installs: "5k",
+  id: 'item-2',
+  name: 'Lint Pack',
+  author: 'community',
+  installs: '5k',
   installCount: 5000,
-  desc: "Linting tools for multiple languages",
-  category: "Tool Packs",
+  desc: 'Linting tools for multiple languages',
+  category: 'Tool Packs',
   installed: false,
   trusted: true,
-  version: "2.0.1",
-  permissions: ["read:fs"],
+  version: '2.0.1',
+  permissions: ['read:fs'],
   signed: true,
-  compatibility: ">=1.0.0",
-  lastUpdated: "2024-02-01",
+  compatibility: '>=1.0.0',
+  lastUpdated: '2024-02-01',
   rating: 4.2,
-  tags: ["lint", "quality"],
+  tags: ['lint', 'quality'],
 };
 
-describe("ItemDetailPanel", () => {
-  test("renders item name and description", () => {
+describe('ItemDetailPanel', () => {
+  test('renders item name and description', () => {
     render(
       <ItemDetailPanel
         item={baseItem}
@@ -32,11 +32,11 @@ describe("ItemDetailPanel", () => {
         onClose={vi.fn(() => {})}
       />,
     );
-    expect(screen.getByText("Lint Pack")).toBeTruthy();
-    expect(screen.getByText("Linting tools for multiple languages")).toBeTruthy();
+    expect(screen.getByText('Lint Pack')).toBeTruthy();
+    expect(screen.getByText('Linting tools for multiple languages')).toBeTruthy();
   });
 
-  test("shows Install button when item is not installed — branch line 27-35", () => {
+  test('shows Install button when item is not installed — branch line 27-35', () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, installed: false }}
@@ -45,10 +45,10 @@ describe("ItemDetailPanel", () => {
         onClose={vi.fn(() => {})}
       />,
     );
-    expect(screen.getByText("Install")).toBeTruthy();
+    expect(screen.getByText('Install')).toBeTruthy();
   });
 
-  test("shows Uninstall button when item is installed — branch line 27-35", () => {
+  test('shows Uninstall button when item is installed — branch line 27-35', () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, installed: true }}
@@ -57,10 +57,10 @@ describe("ItemDetailPanel", () => {
         onClose={vi.fn(() => {})}
       />,
     );
-    expect(screen.getByText("Uninstall")).toBeTruthy();
+    expect(screen.getByText('Uninstall')).toBeTruthy();
   });
 
-  test("calls onInstall when Install button clicked", () => {
+  test('calls onInstall when Install button clicked', () => {
     const onInstall = vi.fn(() => {});
     render(
       <ItemDetailPanel
@@ -70,11 +70,11 @@ describe("ItemDetailPanel", () => {
         onClose={vi.fn(() => {})}
       />,
     );
-    fireEvent.click(screen.getByText("Install"));
+    fireEvent.click(screen.getByText('Install'));
     expect(onInstall).toHaveBeenCalled();
   });
 
-  test("calls onUninstall when Uninstall button clicked", () => {
+  test('calls onUninstall when Uninstall button clicked', () => {
     const onUninstall = vi.fn(() => {});
     render(
       <ItemDetailPanel
@@ -84,11 +84,11 @@ describe("ItemDetailPanel", () => {
         onClose={vi.fn(() => {})}
       />,
     );
-    fireEvent.click(screen.getByText("Uninstall"));
+    fireEvent.click(screen.getByText('Uninstall'));
     expect(onUninstall).toHaveBeenCalled();
   });
 
-  test("shows Trusted label when item.trusted is true — branch line 63-65", () => {
+  test('shows Trusted label when item.trusted is true — branch line 63-65', () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, trusted: true }}
@@ -97,10 +97,10 @@ describe("ItemDetailPanel", () => {
         onClose={vi.fn(() => {})}
       />,
     );
-    expect(screen.getByText("Trusted")).toBeTruthy();
+    expect(screen.getByText('Trusted')).toBeTruthy();
   });
 
-  test("shows Unverified label when item.trusted is false — branch line 63-65", () => {
+  test('shows Unverified label when item.trusted is false — branch line 63-65', () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, trusted: false }}
@@ -109,10 +109,10 @@ describe("ItemDetailPanel", () => {
         onClose={vi.fn(() => {})}
       />,
     );
-    expect(screen.getByText("Unverified")).toBeTruthy();
+    expect(screen.getByText('Unverified')).toBeTruthy();
   });
 
-  test("shows Yes for signed when item.signed is true — branch line 70", () => {
+  test('shows Yes for signed when item.signed is true — branch line 70', () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, signed: true }}
@@ -121,10 +121,10 @@ describe("ItemDetailPanel", () => {
         onClose={vi.fn(() => {})}
       />,
     );
-    expect(screen.getByText("Yes")).toBeTruthy();
+    expect(screen.getByText('Yes')).toBeTruthy();
   });
 
-  test("shows No for signed when item.signed is false — branch line 70", () => {
+  test('shows No for signed when item.signed is false — branch line 70', () => {
     render(
       <ItemDetailPanel
         item={{ ...baseItem, signed: false }}
@@ -133,6 +133,6 @@ describe("ItemDetailPanel", () => {
         onClose={vi.fn(() => {})}
       />,
     );
-    expect(screen.getByText("No")).toBeTruthy();
+    expect(screen.getByText('No')).toBeTruthy();
   });
 });

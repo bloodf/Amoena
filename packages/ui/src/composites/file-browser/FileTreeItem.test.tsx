@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, mock, test, vi } from "vitest";
+import { describe, expect, test, vi } from 'vitest';
 import { FileTreeItem } from './FileTreeItem';
 import type { FileNode } from './types';
 
 // Mock lucide-react icons
-vi.fn('lucide-react', () => ({
+vi.mock('lucide-react', () => ({
   ChevronDown: ({ size }: { size: number }) => (
     <span data-testid="chevron-down" style={{ width: size, height: size }}>
       ChevronDown
@@ -28,15 +28,13 @@ vi.fn('lucide-react', () => ({
 }));
 
 // Mock cn utility
-vi.fn('@/lib/utils', () => ({
+vi.mock('@/lib/utils', () => ({
   cn: (...classes: (string | boolean | undefined)[]) => classes.filter(Boolean).join(' '),
 }));
 
 // Mock getFileIcon
-vi.fn('./utils', () => ({
-  getFileIcon: (name: string, size: number) => (
-    <span data-testid={`file-icon-${name}`}>{name}</span>
-  ),
+vi.mock('./utils', () => ({
+  getFileIcon: (name: string, _size: number) => <span data-testid={`file-icon-${name}`}>ICON</span>,
   countItems: (node: FileNode) => node.children?.length ?? 1,
 }));
 
@@ -67,11 +65,11 @@ describe('FileTreeItem', () => {
 
   test('renders folder with children collapsed by default at depth >= 2', () => {
     const props = makeProps();
-    props.item = {
+    (props.item as FileNode) = {
       name: 'src',
-      type: 'folder',
-      children: [{ name: 'nested.ts', type: 'file' }],
-    };
+      type: 'folder' as const,
+      children: [{ name: 'nested.ts', type: 'file' as const }],
+    } satisfies FileNode;
     props.depth = 2;
     render(<FileTreeItem {...props} />);
     expect(screen.getByText('src')).toBeTruthy();
@@ -80,11 +78,11 @@ describe('FileTreeItem', () => {
 
   test('toggles folder open on click when depth < 2', () => {
     const props = makeProps();
-    props.item = {
+    (props.item as FileNode) = {
       name: 'src',
-      type: 'folder',
-      children: [{ name: 'nested.ts', type: 'file' }],
-    };
+      type: 'folder' as const,
+      children: [{ name: 'nested.ts', type: 'file' as const }],
+    } satisfies FileNode;
     props.depth = 0;
     render(<FileTreeItem {...props} />);
     expect(screen.queryByText('nested.ts')).toBeTruthy();

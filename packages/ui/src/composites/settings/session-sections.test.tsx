@@ -33,11 +33,17 @@ vi.mock('@/components/settings-controls', () => ({
   SettingsSectionTitle: ({ title }: { title: string }) => (
     <div data-testid="section-title">{title}</div>
   ),
-  SettingsSelect: ({ options, defaultValue }: { options: string[]; defaultValue?: string }) => (
+  SettingsSelect: ({
+    options,
+    defaultValue,
+  }: {
+    options: Array<{ value: string; label: string }>;
+    defaultValue?: string;
+  }) => (
     <select data-testid="select" defaultValue={defaultValue}>
       {options.map((opt) => (
-        <option key={opt} value={opt}>
-          {opt}
+        <option key={opt.value} value={opt.value}>
+          {opt.label}
         </option>
       ))}
     </select>
@@ -60,7 +66,7 @@ describe('SessionSettingsSection', () => {
   test('renders default model row', () => {
     render(<SessionSettingsSection />);
     expect(screen.getByText('Default model')).toBeTruthy();
-    expect(screen.getByText('Default reasoning mode')).toBeTruthy();
+    expect(screen.getAllByText('Default reasoning mode')).toHaveLength(2);
   });
 
   test('renders settings rows with selects', () => {

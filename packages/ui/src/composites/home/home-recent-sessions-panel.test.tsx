@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, mock, test, vi } from "vitest";
+import { describe, expect, test, vi } from 'vitest';
 import { HomeRecentSessionsPanel } from './HomeRecentSessionsPanel';
 
 vi.mock('lucide-react', () => ({
   ArrowRight: ({ size }: { size: number }) => (
     <span data-testid="arrow-right" style={{ width: size, height: size }} />
   ),
-  Circle: ({ size }: { size: number }) => (
-    <span data-testid="circle" style={{ width: size, height: size }} />
+  Circle: ({ size, className }: { size: number; className?: string }) => (
+    <span data-testid="circle" style={{ width: size, height: size }} className={className} />
   ),
   Search: ({ size }: { size: number }) => (
     <span data-testid="search" style={{ width: size, height: size }} />

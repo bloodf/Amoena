@@ -1,19 +1,19 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, mock, test, vi } from "vitest";
-import { AgentRow } from "./AgentRow";
-import type { ManagedAgent } from "./types";
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { AgentRow } from './AgentRow';
+import type { ManagedAgent } from './types';
 
 const agent: ManagedAgent = {
-  name: "Claude 4 Sonnet",
-  type: "Main",
-  source: "built-in",
-  provider: "Anthropic",
-  model: "claude-4-sonnet",
-  status: "active",
-  lastActive: "Just now",
-  role: "Primary Engineer",
-  tools: ["file_edit", "terminal"],
-  permission: "Full access",
+  name: 'Claude 4 Sonnet',
+  type: 'Main',
+  source: 'built-in',
+  provider: 'Anthropic',
+  model: 'claude-4-sonnet',
+  status: 'active',
+  lastActive: 'Just now',
+  role: 'Primary Engineer',
+  tools: ['file_edit', 'terminal'],
+  permission: 'Full access',
   mailbox: { count: 0 },
 };
 
@@ -28,48 +28,48 @@ function makeProps(overrides: Partial<Parameters<typeof AgentRow>[0]> = {}) {
   };
 }
 
-describe("AgentRow", () => {
-  test("renders agent name", () => {
+describe('AgentRow', () => {
+  test('renders agent name', () => {
     render(<AgentRow {...makeProps()} />);
-    expect(screen.getByText("Claude 4 Sonnet")).toBeTruthy();
+    expect(screen.getByText('Claude 4 Sonnet')).toBeTruthy();
   });
 
-  test("renders agent role", () => {
+  test('renders agent role', () => {
     render(<AgentRow {...makeProps()} />);
-    expect(screen.getByText("Primary Engineer")).toBeTruthy();
+    expect(screen.getByText('Primary Engineer')).toBeTruthy();
   });
 
-  test("renders source badge", () => {
+  test('renders source badge', () => {
     render(<AgentRow {...makeProps()} />);
-    expect(screen.getByText("built-in")).toBeTruthy();
+    expect(screen.getByText('built-in')).toBeTruthy();
   });
 
-  test("renders tool count", () => {
+  test('renders tool count', () => {
     render(<AgentRow {...makeProps()} />);
-    expect(screen.getByText("2")).toBeTruthy();
+    expect(screen.getByText('2')).toBeTruthy();
   });
 
-  test("renders permission label", () => {
+  test('renders permission label', () => {
     render(<AgentRow {...makeProps()} />);
-    expect(screen.getByText("Full access")).toBeTruthy();
+    expect(screen.getByText('Full access')).toBeTruthy();
   });
 
-  test("calls onToggle when row clicked", () => {
+  test('calls onToggle when row clicked', () => {
     const onToggle = vi.fn(() => {});
     render(<AgentRow {...makeProps({ onToggle })} />);
-    fireEvent.click(screen.getByText("Claude 4 Sonnet"));
+    fireEvent.click(screen.getByText('Claude 4 Sonnet'));
     expect(onToggle).toHaveBeenCalled();
   });
 
-  test("calls onOpenSettings when settings button clicked", () => {
+  test('calls onOpenSettings when settings button clicked', () => {
     const onOpenSettings = vi.fn((_a: ManagedAgent) => {});
     render(<AgentRow {...makeProps({ onOpenSettings })} />);
-    fireEvent.click(screen.getByTitle("Agent Settings"));
+    fireEvent.click(screen.getByTitle('Agent Settings'));
     expect(onOpenSettings).toHaveBeenCalledWith(agent);
   });
 
-  test("shows mailbox count when messages exist", () => {
+  test('shows mailbox count when messages exist', () => {
     render(<AgentRow {...makeProps({ agent: { ...agent, mailbox: { count: 5 } } })} />);
-    expect(screen.getByText("5")).toBeTruthy();
+    expect(screen.getByText('5')).toBeTruthy();
   });
 });

@@ -70,7 +70,7 @@ describe('SettingsContentPane', () => {
 
   test('shows fallback with section label', () => {
     render(<SettingsContentPane activeSection="providers" />);
-    expect(screen.getByText('Providers')).toBeTruthy();
+    expect(screen.getByText('Provider Setup')).toBeTruthy();
   });
 });
 

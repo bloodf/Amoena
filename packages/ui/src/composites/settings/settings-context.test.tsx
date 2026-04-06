@@ -1,5 +1,5 @@
 import { act, render, renderHook } from '@testing-library/react';
-import { describe, expect, mock, test, vi } from "vitest";
+import { describe, expect, test, vi } from 'vitest';
 import * as React from 'react';
 
 import { SettingsProvider, useSettings, useSettingValue } from './settings-context';

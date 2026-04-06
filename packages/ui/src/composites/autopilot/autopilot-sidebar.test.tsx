@@ -1,11 +1,11 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, mock, test, vi } from "vitest";
-import { AutopilotSidebar } from "./AutopilotSidebar";
+import { render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { AutopilotSidebar } from './AutopilotSidebar';
 
 function makeProps(overrides: Partial<Parameters<typeof AutopilotSidebar>[0]> = {}) {
   return {
     enabled: true,
-    state: "idle" as const,
+    state: 'idle' as const,
     onToggleEnabled: vi.fn(() => {}),
     onStart: vi.fn(() => {}),
     onPause: vi.fn(() => {}),
@@ -15,19 +15,19 @@ function makeProps(overrides: Partial<Parameters<typeof AutopilotSidebar>[0]> = 
     onDeny: vi.fn(() => {}),
     onNewRun: vi.fn(() => {}),
     onUnblock: vi.fn(() => {}),
-    goalText: "Build authentication",
+    goalText: 'Build authentication',
     editingGoal: false,
     onToggleEditingGoal: vi.fn(() => {}),
     onChangeGoal: vi.fn((_v: string) => {}),
     storySteps: [
-      { label: "Step 1", status: "done" as const, tokens: "1k" },
-      { label: "Step 2", status: "pending" as const, tokens: "—" },
+      { label: 'Step 1', status: 'done' as const, tokens: '1k' },
+      { label: 'Step 2', status: 'pending' as const, tokens: '—' },
     ],
     allowedActions: { file_edits: true, terminal: true, git: false },
     onToggleAction: vi.fn(() => {}),
-    maxTokens: "10000",
+    maxTokens: '10000',
     onMaxTokensChange: vi.fn((_v: string) => {}),
-    timeLimit: "15 minutes",
+    timeLimit: '15 minutes',
     onTimeLimitChange: vi.fn((_v: string) => {}),
     showHistory: false,
     onToggleHistory: vi.fn(() => {}),
@@ -37,32 +37,32 @@ function makeProps(overrides: Partial<Parameters<typeof AutopilotSidebar>[0]> = 
   };
 }
 
-describe("AutopilotSidebar", () => {
-  test("renders AutopilotStatusPanel with heading", () => {
+describe('AutopilotSidebar', () => {
+  test('renders AutopilotStatusPanel with heading', () => {
     render(<AutopilotSidebar {...makeProps()} />);
-    expect(screen.getByText("Autopilot")).toBeTruthy();
+    expect(screen.getByText('Autopilot')).toBeTruthy();
   });
 
-  test("renders goal section", () => {
+  test('renders goal section', () => {
     render(<AutopilotSidebar {...makeProps()} />);
-    expect(screen.getByText("Current Goal")).toBeTruthy();
-    expect(screen.getByText("Build authentication")).toBeTruthy();
+    expect(screen.getByText('Current Goal')).toBeTruthy();
+    expect(screen.getByText('Build authentication')).toBeTruthy();
   });
 
-  test("renders story steps", () => {
+  test('renders story steps', () => {
     render(<AutopilotSidebar {...makeProps()} />);
-    expect(screen.getByText("Story Breakdown")).toBeTruthy();
-    expect(screen.getByText("Step 1")).toBeTruthy();
-    expect(screen.getByText("Step 2")).toBeTruthy();
+    expect(screen.getByText('Story Breakdown')).toBeTruthy();
+    expect(screen.getByText('Step 1')).toBeTruthy();
+    expect(screen.getByText('Step 2')).toBeTruthy();
   });
 
-  test("renders constraints section", () => {
+  test('renders constraints section', () => {
     render(<AutopilotSidebar {...makeProps()} />);
-    expect(screen.getByText("Constraints & Limits")).toBeTruthy();
+    expect(screen.getByText('Constraints & Limits')).toBeTruthy();
   });
 
-  test("renders history section", () => {
+  test('renders history section', () => {
     render(<AutopilotSidebar {...makeProps()} />);
-    expect(screen.getByText("Run History")).toBeTruthy();
+    expect(screen.getByText('Run History')).toBeTruthy();
   });
 });

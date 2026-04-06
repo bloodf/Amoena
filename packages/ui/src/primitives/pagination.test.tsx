@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
+import { render, screen } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
 import {
   Pagination,
   PaginationContent,
@@ -8,10 +8,10 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "./pagination";
+} from './pagination';
 
-describe("Pagination", () => {
-  test("renders pagination navigation", () => {
+describe('Pagination', () => {
+  test('renders pagination navigation', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -21,10 +21,10 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    expect(screen.getByRole("navigation", { name: "pagination" })).not.toBeNull();
+    expect(screen.getByRole('navigation', { name: 'pagination' })).not.toBeNull();
   });
 
-  test("renders previous and next links", () => {
+  test('renders previous and next links', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -37,11 +37,11 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    expect(screen.getByLabelText("Go to previous page")).not.toBeNull();
-    expect(screen.getByLabelText("Go to next page")).not.toBeNull();
+    expect(screen.getByLabelText('Go to previous page')).not.toBeNull();
+    expect(screen.getByLabelText('Go to next page')).not.toBeNull();
   });
 
-  test("marks active page with aria-current", () => {
+  test('marks active page with aria-current', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -53,11 +53,11 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    const activeLink = screen.getByText("2");
-    expect(activeLink.getAttribute("aria-current")).toBe("page");
+    const activeLink = screen.getByText('2');
+    expect(activeLink.getAttribute('aria-current')).toBe('page');
   });
 
-  test("renders ellipsis with sr-only text", () => {
+  test('renders ellipsis with sr-only text', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -67,10 +67,10 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    expect(screen.getByText("More pages")).not.toBeNull();
+    expect(screen.getByText('More pages')).not.toBeNull();
   });
 
-  test("inactive page does not have aria-current", () => {
+  test('inactive page does not have aria-current', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -80,10 +80,10 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    expect(screen.getByText("1").getAttribute("aria-current")).toBeNull();
+    expect(screen.getByText('1').getAttribute('aria-current')).toBeNull();
   });
 
-  test("active page applies outline variant", () => {
+  test('active page applies outline variant', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -95,10 +95,10 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    expect(screen.getByText("3").className).toContain("border");
+    expect(screen.getByText('3').className).toContain('border');
   });
 
-  test("inactive page applies ghost variant", () => {
+  test('inactive page applies ghost variant', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -108,10 +108,10 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    expect(screen.getByText("4").className).not.toContain("border");
+    expect(screen.getByText('4').className).not.toContain('border');
   });
 
-  test("PaginationPrevious contains Previous text", () => {
+  test('PaginationPrevious contains Go to previous page text', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -121,10 +121,10 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    expect(screen.getByText("Previous")).toBeDefined();
+    expect(screen.getByText('Go to previous page')).toBeDefined();
   });
 
-  test("PaginationNext contains Next text", () => {
+  test('PaginationNext contains Go to next page text', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -134,10 +134,10 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    expect(screen.getByText("Next")).toBeDefined();
+    expect(screen.getByText('Go to next page')).toBeDefined();
   });
 
-  test("PaginationLink renders as anchor element", () => {
+  test('PaginationLink renders as anchor element', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -147,12 +147,12 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    const link = screen.getByText("2");
-    expect(link.tagName).toBe("A");
-    expect(link.getAttribute("href")).toBe("/page/2");
+    const link = screen.getByText('2');
+    expect(link.tagName).toBe('A');
+    expect(link.getAttribute('href')).toBe('/page/2');
   });
 
-  test("PaginationEllipsis is hidden from accessibility tree", () => {
+  test('PaginationEllipsis is hidden from accessibility tree', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -162,11 +162,11 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    const ellipsis = screen.getByText("More pages").parentElement;
-    expect(ellipsis?.getAttribute("aria-hidden")).not.toBeNull();
+    const ellipsis = screen.getByText('More pages').parentElement;
+    expect(ellipsis?.getAttribute('aria-hidden')).not.toBeNull();
   });
 
-  test("applies custom className to navigation", () => {
+  test('applies custom className to navigation', () => {
     render(
       <Pagination className="custom-pagination">
         <PaginationContent>
@@ -176,10 +176,12 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    expect(screen.getByRole("navigation", { name: "pagination" }).className).toContain("custom-pagination");
+    expect(screen.getByRole('navigation', { name: 'pagination' }).className).toContain(
+      'custom-pagination',
+    );
   });
 
-  test("renders multiple page links", () => {
+  test('renders multiple page links', () => {
     render(
       <Pagination>
         <PaginationContent>
@@ -203,10 +205,10 @@ describe("Pagination", () => {
         </PaginationContent>
       </Pagination>,
     );
-    expect(screen.getByText("1")).toBeDefined();
-    expect(screen.getByText("2")).toBeDefined();
-    expect(screen.getByText("3")).toBeDefined();
-    expect(screen.getByText("Previous")).toBeDefined();
-    expect(screen.getByText("Next")).toBeDefined();
+    expect(screen.getByText('1')).toBeDefined();
+    expect(screen.getByText('2')).toBeDefined();
+    expect(screen.getByText('3')).toBeDefined();
+    expect(screen.getByText('Go to previous page')).toBeDefined();
+    expect(screen.getByText('Go to next page')).toBeDefined();
   });
 });

@@ -26,7 +26,7 @@
     "./styles": "./dist/globals.css"
   },
   "scripts": {
-    "test": "bunx vitest run",
+    "test": "bunx vitest run --project=unit",
     "build": "bun run src/build.ts",
     "storybook": "bunx storybook dev -p 6006",
     "build-storybook": "bunx storybook build",
@@ -105,13 +105,14 @@
     "@types/prismjs": "^1.26.6",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
-    "@vitest/browser-playwright": "^4.1.0",
+    "@vitest/browser-playwright": "^4.1.2",
     "@vitest/coverage-v8": "^4.1.0",
     "happy-dom": "^20.8.3",
     "playwright": "^1.58.2",
     "remark-gfm": "^4.0.1",
     "storybook": "^10.2.17",
     "storybook-addon-pseudo-states": "^10.2.17",
+    "@storybook/test": "8.6.18",
     "vite": "^7.3.1",
     "vitest": "^4.1.0"
   }
