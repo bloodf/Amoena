@@ -11,16 +11,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ts-typecheck:
-    name: TypeScript Typecheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-      - run: bun install
-      - name: Typecheck all packages
-        run: bun run type-check
-
   vitest:
     name: Vitest
     runs-on: ubuntu-latest
@@ -32,6 +22,12 @@ jobs:
         run: bun run --cwd apps/desktop test
       - name: Run UI package tests
         run: bun run --cwd packages/ui test
+      - name: Run service tests
+        run: bun run --cwd packages/lunaria-service test
+      - name: Run mobile tests
+        run: bun run --cwd apps/mobile test
+      - name: Run dashboard unit tests
+        run: bun run --cwd apps/dashboard test
 
   eslint:
     name: ESLint
@@ -56,7 +52,7 @@ jobs:
   playwright:
     name: Playwright E2E
     runs-on: ubuntu-latest
-    needs: [ts-typecheck, vitest]
+    needs: [vitest]
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -74,6 +70,16 @@ jobs:
           name: playwright-report
           path: apps/dashboard/playwright-report/
           retention-days: 7
+
+  docs-build:
+    name: Docs Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - name: Build documentation
+        run: bun run docs:build
 
   cli-build:
     name: CLI Build

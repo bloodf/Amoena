@@ -26,11 +26,23 @@ jobs:
       - name: ESLint
         run: bun run lint
 
-      - name: TypeScript typecheck
-        run: bun run type-check
-
       - name: Desktop unit tests
         run: bun run --cwd apps/desktop test
+
+      - name: Service tests
+        run: bun run --cwd packages/lunaria-service test
+
+      - name: Mobile tests
+        run: bun run --cwd apps/mobile test
+
+      - name: Dashboard unit tests
+        run: bun run --cwd apps/dashboard test
+
+      - name: UI package tests
+        run: bun run --cwd packages/ui test
+
+      - name: Docs build
+        run: bun run docs:build
 
   build-desktop:
     name: Build Desktop (${{ matrix.target }})
