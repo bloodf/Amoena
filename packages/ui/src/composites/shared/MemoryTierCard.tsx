@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils.ts';
 import { ChevronDown, ChevronRight, AlertTriangle, Merge, X } from 'lucide-react';
 
 export type MemoryCategory =

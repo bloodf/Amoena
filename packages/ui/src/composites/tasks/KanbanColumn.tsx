@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '../../lib/utils.ts';
 import type { KanbanColumnData } from "./types";
 import { KanbanTaskCard } from "./KanbanTaskCard";
 

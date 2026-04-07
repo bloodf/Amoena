@@ -5,7 +5,7 @@ import {
   SettingsSelect,
   SettingsToggle,
   SettingsWarningBanner,
-} from '@/components/settings-controls';
+} from '../../components/settings-controls.tsx';
 import { Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 

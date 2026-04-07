@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
-import { Button } from "@/primitives/button";
-import { Input } from "@/primitives/input";
+import { Button } from '../../primitives/button.tsx';
+import { Input } from '../../primitives/input.tsx';
 
 export function OpinionAddForm({
   title,

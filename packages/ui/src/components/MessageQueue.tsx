@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { GripVertical, X, Clock, Play, Pause, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../lib/utils.ts';
 
 export interface QueueItem {
   id: string;

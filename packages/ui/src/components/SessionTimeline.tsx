@@ -5,10 +5,10 @@ import {
   sessionTimelineChangedFiles,
   sessionTimelineCheckpoints,
   sessionTimelineDiffLines,
-} from '@/composites/session-timeline/data';
-import { CheckpointTree } from '@/composites/session-timeline/CheckpointTree';
-import { ChangedFilesPanel } from '@/composites/session-timeline/ChangedFilesPanel';
-import { DiffPreview } from '@/composites/session-timeline/DiffPreview';
+} from '../composites/session-timeline/data.ts';
+import { CheckpointTree } from '../composites/session-timeline/CheckpointTree.tsx';
+import { ChangedFilesPanel } from '../composites/session-timeline/ChangedFilesPanel.tsx';
+import { DiffPreview } from '../composites/session-timeline/DiffPreview.tsx';
 
 export function SessionTimeline() {
   const { t } = useTranslation();

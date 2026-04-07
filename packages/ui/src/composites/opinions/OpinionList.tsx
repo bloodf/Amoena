@@ -1,7 +1,7 @@
 import { Check, Pencil, Plus, Trash2, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/primitives/button";
-import { Input } from "@/primitives/input";
+import { cn } from '../../lib/utils.ts';
+import { Button } from '../../primitives/button.tsx';
+import { Input } from '../../primitives/input.tsx';
 import type { Opinion } from "./data";
 import { OpinionAddForm } from "./OpinionAddForm";
 

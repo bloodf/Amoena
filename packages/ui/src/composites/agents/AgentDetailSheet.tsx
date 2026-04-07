@@ -1,6 +1,6 @@
 import { X, Trash2, Play, Pause, Square, StopCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils.ts';
 import type { AgentStatus, ManagedAgent } from './types';
 import { divisionColors, divisionLabels, managedStatusConfig, sourceColors } from './config';
 

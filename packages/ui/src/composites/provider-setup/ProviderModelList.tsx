@@ -1,5 +1,5 @@
 import { Circle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from '../../lib/utils.ts';
 import { ProviderLogo } from "../shared/ProviderLogo";
 import { ProviderApiKeyRow } from "./ProviderApiKeyRow";
 import { ProviderModelRow } from "./ProviderModelRow";

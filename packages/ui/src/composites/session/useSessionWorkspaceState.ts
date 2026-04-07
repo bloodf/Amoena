@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { SessionConfig } from "@/screens/NewSessionScreen";
+import type { SessionConfig } from '../../screens/NewSessionScreen.tsx';
 import { initialSessionRecords } from "./data";
 import type { SessionRecord, WorkspaceTabItem } from "./types";
 
@@ -40,7 +40,7 @@ export function useSessionWorkspaceState(locationState: unknown) {
       window.history.replaceState({}, document.title);
     }
     // intentional: only respond to initial routed state
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [locationState]);
 
   const activeTab = tabs.find((tab) => tab.id === activeTabId);

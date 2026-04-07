@@ -1,6 +1,6 @@
 import { Circle, Plus, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils.ts';
 import { getFileIcon } from '../file-browser/utils';
 import type { SessionRecord, WorkspaceTabItem } from './types';
 

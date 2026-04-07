@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { AlertTriangle, ChevronRight, Mail, Shield, Wrench } from "lucide-react";
 
-import { cn } from "@/lib/utils";
-import { SubAgentSwarmGrid } from "@/composites/agents/SubAgentSwarmGrid";
-import type { ManagedAgent } from "@/composites/agents/types";
-import { managedStatusConfig } from "@/composites/agents/config";
+import { cn } from '../../lib/utils.ts';
+import { SubAgentSwarmGrid } from '../agents/SubAgentSwarmGrid.tsx';
+import type { ManagedAgent } from '../agents/types.ts';
+import { managedStatusConfig } from '../agents/config.ts';
 
 const mockAgents: ManagedAgent[] = [
   {

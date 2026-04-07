@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowDown, ChevronDown, Circle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { cn } from '@/lib/utils';
+import { cn } from '../lib/utils.ts';
 
 export interface TimelineMessage {
   id: string;

@@ -10,7 +10,7 @@ import "prismjs/components/prism-markdown";
 import "prismjs/components/prism-bash";
 import "prismjs/components/prism-yaml";
 import "prismjs/components/prism-toml";
-import { useTheme } from "@/hooks/use-theme";
+import { useTheme } from '../../hooks/use-theme.ts';
 import { getEditorLanguage } from "./utils";
 
 export function HighlightedCode({ content, fileName }: { content: string; fileName: string }) {

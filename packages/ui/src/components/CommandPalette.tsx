@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { buildCommandPaletteItems, type CommandPaletteItem } from "@/composites/command-palette/data";
-import { CommandPaletteFooter } from "@/composites/command-palette/CommandPaletteFooter";
-import { CommandPaletteFrame } from "@/composites/command-palette/CommandPaletteFrame";
-import { CommandPaletteResults } from "@/composites/command-palette/CommandPaletteResults";
-import { CommandPaletteSearch } from "@/composites/command-palette/CommandPaletteSearch";
-import { useCommandPaletteState } from "@/composites/command-palette/useCommandPaletteState";
+import { buildCommandPaletteItems, type CommandPaletteItem } from '../composites/command-palette/data.ts';
+import { CommandPaletteFooter } from '../composites/command-palette/CommandPaletteFooter.tsx';
+import { CommandPaletteFrame } from '../composites/command-palette/CommandPaletteFrame.tsx';
+import { CommandPaletteResults } from '../composites/command-palette/CommandPaletteResults.tsx';
+import { CommandPaletteSearch } from '../composites/command-palette/CommandPaletteSearch.tsx';
+import { useCommandPaletteState } from '../composites/command-palette/useCommandPaletteState.ts';
 
 export function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
   const inputRef = { current: null as HTMLInputElement | null };

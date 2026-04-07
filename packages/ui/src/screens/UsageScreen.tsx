@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '../lib/utils.ts';
 import {
   ScreenActions,
   ScreenContainer,
@@ -9,12 +9,12 @@ import {
   ScreenStack,
   ScreenSubtitle,
   ScreenTitle,
-} from '@/components/screen';
-import { UsageApiLogPanel } from '@/composites/usage/UsageApiLogPanel';
-import { UsageOverviewPanel } from '@/composites/usage/UsageOverviewPanel';
-import { UsagePlatformsPanel } from '@/composites/usage/UsagePlatformsPanel';
-import { UsageSessionsPanel } from '@/composites/usage/UsageSessionsPanel';
-import { UsageTabs } from '@/composites/usage/UsageTabs';
+} from '../components/screen.tsx';
+import { UsageApiLogPanel } from '../composites/usage/UsageApiLogPanel.tsx';
+import { UsageOverviewPanel } from '../composites/usage/UsageOverviewPanel.tsx';
+import { UsagePlatformsPanel } from '../composites/usage/UsagePlatformsPanel.tsx';
+import { UsageSessionsPanel } from '../composites/usage/UsageSessionsPanel.tsx';
+import { UsageTabs } from '../composites/usage/UsageTabs.tsx';
 import {
   usageApiRequestLog,
   usageDailyCost,
@@ -24,8 +24,8 @@ import {
   usageSessionBreakdown,
   usageTabs,
   usageTimeRanges,
-} from '@/composites/usage/data';
-import { UsageCostTooltip, UsageStackedTooltip } from '@/composites/usage/tooltips';
+} from '../composites/usage/data.ts';
+import { UsageCostTooltip, UsageStackedTooltip } from '../composites/usage/tooltips.tsx';
 
 type TabId = 'overview' | 'sessions' | 'api-log' | 'platforms';
 type TimeRange = 'today' | '7d' | '30d' | 'all';

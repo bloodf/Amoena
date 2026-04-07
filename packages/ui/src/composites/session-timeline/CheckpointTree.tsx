@@ -1,6 +1,6 @@
 import { Circle, Diff, FileCode, GitBranch, Info, RotateCcw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils.ts';
 import type { CheckpointRecord } from './types';
 
 export function CheckpointTree({

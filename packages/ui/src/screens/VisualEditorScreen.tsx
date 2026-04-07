@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { ScreenRoot } from "@/components/screen";
-import { visualEditorComponentTree as componentTree, visualEditorProperties as properties, visualEditorTools as tools, visualEditorViewports as viewports } from "@/composites/visual-editor/data";
-import { ComponentTreePane } from "@/composites/visual-editor/ComponentTreePane";
-import { EditorToolbar } from "@/composites/visual-editor/EditorToolbar";
-import { EditorCanvas } from "@/composites/visual-editor/EditorCanvas";
-import { PropertiesPanel } from "@/composites/visual-editor/PropertiesPanel";
+import { ScreenRoot } from '../components/screen.tsx';
+import { visualEditorComponentTree as componentTree, visualEditorProperties as properties, visualEditorTools as tools, visualEditorViewports as viewports } from '../composites/visual-editor/data.ts';
+import { ComponentTreePane } from '../composites/visual-editor/ComponentTreePane.tsx';
+import { EditorToolbar } from '../composites/visual-editor/EditorToolbar.tsx';
+import { EditorCanvas } from '../composites/visual-editor/EditorCanvas.tsx';
+import { PropertiesPanel } from '../composites/visual-editor/PropertiesPanel.tsx';
 
 export function VisualEditorScreen() {
   const [selectedComponent, setSelectedComponent] = useState("SessionView");

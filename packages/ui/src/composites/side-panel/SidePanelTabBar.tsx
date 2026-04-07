@@ -1,12 +1,12 @@
 import { MoreHorizontal } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils.ts';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/primitives/dropdown-menu';
+} from '../../primitives/dropdown-menu.tsx';
 import type { SidePanelTabDef, SidePanelTabId } from './data';
 
 export function SidePanelTabBar({

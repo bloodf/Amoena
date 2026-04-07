@@ -1,5 +1,5 @@
 import { Zap } from "lucide-react";
-import { Button } from "@/primitives/button";
+import { Button } from '../../primitives/button.tsx';
 
 export function NewSessionModalFooter({
   onClose,

@@ -1,7 +1,7 @@
-import { Package } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { MarketplaceItemCard } from "./MarketplaceItemCard";
-import type { MarketplaceCategory, MarketplaceItem } from "./types";
+import { Package } from 'lucide-react';
+import { cn } from '../../lib/utils.ts';
+import { MarketplaceItemCard } from './MarketplaceItemCard';
+import type { MarketplaceCategory, MarketplaceItem } from './types';
 
 interface MarketplaceResultsProps {
   filtered: MarketplaceItem[];
@@ -10,7 +10,7 @@ interface MarketplaceResultsProps {
   searchQuery: string;
   showInstalled: boolean;
   hasActiveFilters: boolean;
-  viewMode: "grid" | "list";
+  viewMode: 'grid' | 'list';
   onSelect: (item: MarketplaceItem) => void;
   onInstallRequest: (item: MarketplaceItem) => void;
   onUninstall: (item: MarketplaceItem) => void;
@@ -36,10 +36,17 @@ export function MarketplaceResults({
         <Package size={36} className="text-muted-foreground mb-3" />
         <div className="text-[14px] text-foreground font-medium mb-1">No packages found</div>
         <div className="text-[12px] text-muted-foreground">
-          {searchQuery ? `No results for "${searchQuery}"` : showInstalled ? "No installed packages" : `No ${activeCategory.toLowerCase()} match your filters`}
+          {(() => {
+            if (searchQuery) return `No results for "${searchQuery}"`;
+            if (showInstalled) return 'No installed packages';
+            return `No ${activeCategory.toLowerCase()} match your filters`;
+          })()}
         </div>
         {hasActiveFilters && (
-          <button onClick={onClearFilters} className="mt-3 text-[12px] text-primary cursor-pointer hover:text-primary/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors">
+          <button
+            onClick={onClearFilters}
+            className="mt-3 text-[12px] text-primary cursor-pointer hover:text-primary/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors"
+          >
             Clear filters
           </button>
         )}
@@ -48,7 +55,7 @@ export function MarketplaceResults({
   }
 
   return (
-    <div className={cn(viewMode === "grid" ? "grid grid-cols-2 gap-3" : "space-y-2")}>
+    <div className={cn(viewMode === 'grid' ? 'grid grid-cols-2 gap-3' : 'space-y-2')}>
       {filtered.map((item) => (
         <MarketplaceItemCard
           key={item.id}

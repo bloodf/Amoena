@@ -4,14 +4,14 @@ import { type VariantProps, cva } from 'class-variance-authority';
 import { PanelLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
-import { Button } from '@/primitives/button';
-import { Input } from '@/primitives/input';
-import { Separator } from '@/primitives/separator';
-import { Sheet, SheetContent } from '@/primitives/sheet';
-import { Skeleton } from '@/primitives/skeleton';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/primitives/tooltip';
+import { useIsMobile } from '../hooks/use-mobile.tsx';
+import { cn } from '../lib/utils.ts';
+import { Button } from './button.tsx';
+import { Input } from './input.tsx';
+import { Separator } from './separator.tsx';
+import { Sheet, SheetContent } from './sheet.tsx';
+import { Skeleton } from './skeleton.tsx';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip.tsx';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

@@ -1,5 +1,5 @@
 import { Circle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from '../../lib/utils.ts';
 import type { HomeWorkspaceItem } from "./types";
 
 export function HomeWorkspacesPanel({
@@ -24,7 +24,7 @@ export function HomeWorkspacesPanel({
           <span>Name</span>
           <span>Branch</span>
           <span>Disk</span>
-          <span></span>
+          <span />
         </div>
         {workspaces.map((workspace, index) => (
           <button

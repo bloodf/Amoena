@@ -1,5 +1,5 @@
 import { setupWizardBackends, setupWizardModes } from "./data";
-import { Button } from "@/primitives/button";
+import { Button } from '../../primitives/button.tsx';
 
 export function SetupWizardBackendStep({
   mode,

@@ -1,16 +1,16 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { SessionSidePanel } from '@/components/SessionSidePanel';
-import { TerminalPanel } from '@/components/TerminalPanel';
-import { MessageTimeline } from '@/components/MessageTimeline';
-import { SessionComposer } from '@/components/SessionComposer';
-import { EmptySessionState } from '@/components/EmptySessionState';
-import { MessageQueue } from '@/components/MessageQueue';
-import { FileEditorTab } from '@/components/FileEditorTab';
+import { SessionSidePanel } from '../components/SessionSidePanel.tsx';
+import { TerminalPanel } from '../components/TerminalPanel.tsx';
+import { MessageTimeline } from '../components/MessageTimeline.tsx';
+import { SessionComposer } from '../components/SessionComposer.tsx';
+import { EmptySessionState } from '../components/EmptySessionState.tsx';
+import { MessageQueue } from '../components/MessageQueue.tsx';
+import { FileEditorTab } from '../components/FileEditorTab.tsx';
 import { PanelRightOpen, PanelRightClose } from 'lucide-react';
-import { WorkspaceResizeHandle } from '@/composites/session/WorkspaceResizeHandle';
-import { WorkspaceTabs } from '@/composites/session/WorkspaceTabs';
-import { useSessionWorkspaceState } from '@/composites/session/useSessionWorkspaceState';
+import { WorkspaceResizeHandle } from '../composites/session/WorkspaceResizeHandle.tsx';
+import { WorkspaceTabs } from '../composites/session/WorkspaceTabs.tsx';
+import { useSessionWorkspaceState } from '../composites/session/useSessionWorkspaceState.ts';
 
 export function SessionWorkspace() {
   const navigate = useNavigate();

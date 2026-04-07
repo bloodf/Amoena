@@ -1,4 +1,4 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/primitives/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../primitives/select.tsx';
 import { setupWizardKeybindingPresets, setupWizardReasoningModes, setupWizardThemes } from "./data";
 
 export function SetupWizardProfileStep({

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { memoryGraphNodes, memoryGraphSourceColors } from "./data";
-import type { MemoryGraphNode } from "./types";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { memoryGraphNodes, memoryGraphSourceColors } from './data';
+import type { MemoryGraphNode } from './types';
 
 export function useMemoryGraphSimulation(onSelectNode?: (key: string) => void) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -64,7 +64,7 @@ export function useMemoryGraphSimulation(onSelectNode?: (key: string) => void) {
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const context = canvas.getContext("2d");
+    const context = canvas.getContext('2d');
     if (!context) return;
 
     const dpr = window.devicePixelRatio || 1;
@@ -80,11 +80,16 @@ export function useMemoryGraphSimulation(onSelectNode?: (key: string) => void) {
         const connection = nodes.find((entry) => entry.id === connectionId);
         if (!connection || connection.id < node.id) continue;
         const isHighlighted =
-          hoveredNode === node.id || hoveredNode === connection.id || selectedNode === node.id || selectedNode === connection.id;
+          hoveredNode === node.id ||
+          hoveredNode === connection.id ||
+          selectedNode === node.id ||
+          selectedNode === connection.id;
         context.beginPath();
         context.moveTo(node.x, node.y);
         context.lineTo(connection.x, connection.y);
-        context.strokeStyle = isHighlighted ? "hsla(300, 100%, 36%, 0.5)" : "hsla(260, 5%, 30%, 0.25)";
+        context.strokeStyle = isHighlighted
+          ? 'hsla(300, 100%, 36%, 0.5)'
+          : 'hsla(260, 5%, 30%, 0.25)';
         context.lineWidth = isHighlighted ? 2 : 1;
         context.stroke();
       }
@@ -93,26 +98,34 @@ export function useMemoryGraphSimulation(onSelectNode?: (key: string) => void) {
     for (const node of nodes) {
       const isHovered = hoveredNode === node.id;
       const isSelected = selectedNode === node.id;
-      const isConnected = hoveredNode ? nodes.find((entry) => entry.id === hoveredNode)?.connections.includes(node.id) : false;
-      const radius = isHovered || isSelected ? 8 : isConnected ? 7 : 5;
+      const isConnected = hoveredNode
+        ? nodes.find((entry) => entry.id === hoveredNode)?.connections.includes(node.id)
+        : false;
+      const getRadius = () => {
+        if (isHovered || isSelected) return 8;
+        if (isConnected) return 7;
+        return 5;
+      };
+      const radius = getRadius();
       const color = memoryGraphSourceColors[node.source];
 
       if (isHovered || isSelected) {
         context.beginPath();
         context.arc(node.x, node.y, radius + 8, 0, Math.PI * 2);
-        context.fillStyle = `${color.replace(")", ", 0.15)")}`;
+        context.fillStyle = `${color.replace(')', ', 0.15)')}`;
         context.fill();
       }
 
       context.beginPath();
       context.arc(node.x, node.y, radius, 0, Math.PI * 2);
-      context.fillStyle = isHovered || isSelected || isConnected ? color : `${color.replace(")", ", 0.6)")}`;
+      context.fillStyle =
+        isHovered || isSelected || isConnected ? color : `${color.replace(')', ', 0.6)')}`;
       context.fill();
 
       if (isHovered || isSelected) {
         context.font = "500 11px 'JetBrains Mono'";
-        context.fillStyle = "hsl(var(--foreground))";
-        context.textAlign = "center";
+        context.fillStyle = 'hsl(var(--foreground))';
+        context.textAlign = 'center';
         context.fillText(node.key, node.x, node.y - radius - 8);
       }
     }
@@ -131,7 +144,9 @@ export function useMemoryGraphSimulation(onSelectNode?: (key: string) => void) {
     if (!rect) return;
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    const found = nodesRef.current.find((node) => Math.sqrt((node.x - x) ** 2 + (node.y - y) ** 2) < 15);
+    const found = nodesRef.current.find(
+      (node) => Math.sqrt((node.x - x) ** 2 + (node.y - y) ** 2) < 15,
+    );
     setHoveredNode(found?.id || null);
   };
 
@@ -140,7 +155,9 @@ export function useMemoryGraphSimulation(onSelectNode?: (key: string) => void) {
     if (!rect) return;
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    const found = nodesRef.current.find((node) => Math.sqrt((node.x - x) ** 2 + (node.y - y) ** 2) < 15);
+    const found = nodesRef.current.find(
+      (node) => Math.sqrt((node.x - x) ** 2 + (node.y - y) ** 2) < 15,
+    );
     if (found) {
       setSelectedNode(found.id);
       onSelectNode?.(found.key);

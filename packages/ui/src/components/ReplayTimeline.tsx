@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from '../lib/utils.ts';
 
 export type ReplayMarkerType = "event" | "error" | "milestone";
 
@@ -118,7 +118,7 @@ export function ReplayTimeline({
 				onMouseDown={handleMouseDown}
 				onKeyDown={(e) => {
 					if (e.key === "ArrowRight")
-						onSeek(Math.min(safeDuration, currentTime + 5));
+						{onSeek(Math.min(safeDuration, currentTime + 5));}
 					if (e.key === "ArrowLeft") onSeek(Math.max(0, currentTime - 5));
 				}}
 			>

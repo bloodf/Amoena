@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pause, Play } from 'lucide-react';
-import { TeamCommunicationFlow } from '@/composites/agents/TeamCommunicationFlow';
-import { TeamConsensusMeter } from '@/composites/agents/TeamConsensusMeter';
-import { TeamListPane } from '@/composites/agents/TeamListPane';
-import { TeamStatsGrid } from '@/composites/agents/TeamStatsGrid';
-import { TeamStatusTable } from '@/composites/agents/TeamStatusTable';
-import type { AgentTeam } from '@/composites/agents/types';
+import { TeamCommunicationFlow } from '../composites/agents/TeamCommunicationFlow.tsx';
+import { TeamConsensusMeter } from '../composites/agents/TeamConsensusMeter.tsx';
+import { TeamListPane } from '../composites/agents/TeamListPane.tsx';
+import { TeamStatsGrid } from '../composites/agents/TeamStatsGrid.tsx';
+import { TeamStatusTable } from '../composites/agents/TeamStatusTable.tsx';
+import type { AgentTeam } from '../composites/agents/types.ts';
 
 const defaultTeams: AgentTeam[] = [
   {

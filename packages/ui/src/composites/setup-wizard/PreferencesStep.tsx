@@ -1,5 +1,5 @@
-import { Button } from "@/primitives/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/primitives/select";
+import { Button } from '../../primitives/button.tsx';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../primitives/select.tsx';
 import { setupWizardKeybindingPresets, setupWizardModels, setupWizardReasoningModes, setupWizardThemes } from "./data";
 
 export function SetupWizardPreferencesStep({

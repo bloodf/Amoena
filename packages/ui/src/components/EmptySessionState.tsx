@@ -1,5 +1,5 @@
 import { Zap, Terminal, Bot, Sparkles, Cpu, Brain, FileText, GitBranch, Lightbulb } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from '../lib/utils.ts';
 
 const providerInfo: Record<string, { label: string; icon: React.ElementType; color: string; bg: string }> = {
   amoena: { label: "Amoena AI", icon: Brain, color: "text-primary", bg: "bg-primary/10" },

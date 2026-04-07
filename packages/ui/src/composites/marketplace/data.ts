@@ -1,4 +1,4 @@
-import { MarketplaceCategory, MarketplaceItem } from "./types";
+import type { MarketplaceCategory, MarketplaceItem } from "./types";
 
 export const marketplaceCategories: MarketplaceCategory[] = ["All", "Extensions", "Agent Templates", "Tool Packs", "Memory Packs", "Themes"];
 

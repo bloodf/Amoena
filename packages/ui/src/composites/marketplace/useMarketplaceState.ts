@@ -45,7 +45,7 @@ export function useMarketplaceState(initialItems: MarketplaceItem[]) {
     if (trustFilter === 'unverified') result = result.filter((item) => !item.trusted);
 
     if (authorFilter === 'official')
-      result = result.filter((item) => item.author === 'amoena-team');
+      {result = result.filter((item) => item.author === 'amoena-team');}
     if (authorFilter === 'community') result = result.filter((item) => item.author === 'community');
 
     return [...result].sort((left, right) => {

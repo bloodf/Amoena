@@ -50,7 +50,7 @@ export function Breadcrumb() {
       </Link>
       {!isHome &&
         segments.map((segment, i) => {
-          const path = "/" + segments.slice(0, i + 1).join("/");
+          const path = `/${  segments.slice(0, i + 1).join("/")}`;
           const label = routeLabels[segment] || segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
           const isLast = i === segments.length - 1;
 

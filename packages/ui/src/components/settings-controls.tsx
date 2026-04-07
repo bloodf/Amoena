@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AlertTriangle, Info } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '../lib/utils.ts';
 
 export function SettingsRow({
   label,

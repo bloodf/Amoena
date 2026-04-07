@@ -25,7 +25,6 @@ function ensureDir(dir) {
 
 function rewriteImports(content, filePath) {
   const dir = dirname(filePath);
-  const srcExt = filePath.endsWith('.tsx') ? '.tsx' : filePath.endsWith('.ts') ? '.ts' : '';
 
   return content
     .replace(/from\s+['"]@\/([^'"]+)['"]/g, (match, importPath) => {
@@ -33,15 +32,15 @@ function rewriteImports(content, filePath) {
       let relPath = relative(dir, importFile);
 
       if (!relPath.startsWith('.')) {
-        relPath = './' + relPath;
+        relPath = `./${relPath}`;
       }
 
       if (!relPath.endsWith('.js') && !relPath.endsWith('.tsx') && !relPath.endsWith('.ts')) {
-        if (existsSync(importFile + '.tsx')) {
+        if (existsSync(`${importFile}.tsx`)) {
           relPath += '.tsx';
-        } else if (existsSync(importFile + '.ts')) {
+        } else if (existsSync(`${importFile}.ts`)) {
           relPath += '.ts';
-        } else if (existsSync(importFile + '.js')) {
+        } else if (existsSync(`${importFile}.js`)) {
           relPath += '.js';
         }
       }
@@ -53,15 +52,15 @@ function rewriteImports(content, filePath) {
       let relPath = relative(dir, importFile);
 
       if (!relPath.startsWith('.')) {
-        relPath = './' + relPath;
+        relPath = `./${relPath}`;
       }
 
       if (!relPath.endsWith('.js') && !relPath.endsWith('.tsx') && !relPath.endsWith('.ts')) {
-        if (existsSync(importFile + '.tsx')) {
+        if (existsSync(`${importFile}.tsx`)) {
           relPath += '.tsx';
-        } else if (existsSync(importFile + '.ts')) {
+        } else if (existsSync(`${importFile}.ts`)) {
           relPath += '.ts';
-        } else if (existsSync(importFile + '.js')) {
+        } else if (existsSync(`${importFile}.js`)) {
           relPath += '.js';
         }
       }

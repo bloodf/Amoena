@@ -1,6 +1,6 @@
 import { Layers } from "lucide-react";
-import { ScreenSidebar } from "@/components/screen";
-import { cn } from "@/lib/utils";
+import { ScreenSidebar } from '../../components/screen.tsx';
+import { cn } from '../../lib/utils.ts';
 
 export function ComponentTreePane({
   nodes,

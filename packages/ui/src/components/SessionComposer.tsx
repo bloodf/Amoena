@@ -1,11 +1,13 @@
-import { useState, useRef, useEffect, useCallback } from "react";
-import { ChevronDown, Monitor as MonitorIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { ComposerAttachmentDock } from "@/composites/composer/ComposerAttachmentDock";
-import { ComposerDropdown, ComposerToolbar } from "@/composites/composer/ComposerToolbar";
-import { ComposerInputArea } from "@/composites/composer/ComposerInputArea";
-import type { ComposerAttachment, PaletteGroup, PaletteItem } from "@/composites/composer/types";
-import { ComposerFilePicker, ComposerSkillsPicker, ComposerUnifiedPalette } from "@/composites/composer/ComposerPaletteMenu";
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { cn } from '../lib/utils.ts';
+import { ComposerAttachmentDock } from '../composites/composer/ComposerAttachmentDock.tsx';
+import { ComposerToolbar } from '../composites/composer/ComposerToolbar.tsx';
+import { ComposerInputArea } from '../composites/composer/ComposerInputArea.tsx';
+import {
+  ComposerFilePicker,
+  ComposerSkillsPicker,
+  ComposerUnifiedPalette,
+} from '../composites/composer/ComposerPaletteMenu.tsx';
 import {
   composerBranches,
   composerContinueInOptions,
@@ -13,13 +15,13 @@ import {
   composerProviderAgents,
   composerProviderModels,
   composerReasoningLevels,
-  composerSkills,
+  type composerSkills,
   type ComposerProvider,
-} from "@/composites/composer/config";
-import { getNextComposerAgentId } from "@/composites/composer/palette";
-import { useComposerInteractions } from "@/composites/composer/useComposerInteractions";
-import { useComposerRecording } from "@/composites/composer/useComposerRecording";
-import { useComposerToolbarMenus } from "@/composites/composer/useComposerToolbarMenus";
+} from '../composites/composer/config.ts';
+import { getNextComposerAgentId } from '../composites/composer/palette.ts';
+import { useComposerInteractions } from '../composites/composer/useComposerInteractions.ts';
+import { useComposerRecording } from '../composites/composer/useComposerRecording.ts';
+import { useComposerToolbarMenus } from '../composites/composer/useComposerToolbarMenus.ts';
 
 // --- Main Component ---
 
@@ -28,10 +30,10 @@ interface SessionComposerProps {
   session?: {
     provider: string;
     permission: string;
-    continueIn: "local" | "worktree" | "cloud";
+    continueIn: 'local' | 'worktree' | 'cloud';
     branch: string;
   };
-  onUpdateSession?: (updates: any) => void;
+  onUpdateSession?: (updates: Record<string, unknown>) => void;
   externalMessage?: string;
   onExternalMessageConsumed?: () => void;
   isGenerating?: boolean;
@@ -45,7 +47,7 @@ interface SessionComposerProps {
     planMode: boolean;
     provider: ComposerProvider;
     permission?: string;
-    continueIn?: "local" | "worktree" | "cloud";
+    continueIn?: 'local' | 'worktree' | 'cloud';
     branch?: string;
   }) => void | Promise<void>;
 }
@@ -60,18 +62,19 @@ export function SessionComposer({
   onInterrupt,
   onSubmit,
 }: SessionComposerProps) {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [attachments, setAttachments] = useState<ComposerAttachment[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { canvasRef, isRecording, recordingLabel, startRecording, stopRecording } = useComposerRecording();
+  const { canvasRef, isRecording, recordingLabel, startRecording, stopRecording } =
+    useComposerRecording();
 
-  const activeProvider = (externalProvider || "opencode") as ComposerProvider;
-  const [activeModel, setActiveModel] = useState("gpt-5.4");
-  const [reasoningLevel, setReasoningLevel] = useState("high");
-  const [activeAgent, setActiveAgent] = useState("");
+  const activeProvider = (externalProvider || 'opencode') as ComposerProvider;
+  const [activeModel, setActiveModel] = useState('gpt-5.4');
+  const [reasoningLevel, setReasoningLevel] = useState('high');
+  const [activeAgent, setActiveAgent] = useState('');
   const [planMode, setPlanMode] = useState(false);
 
-  const models = composerProviderModels[activeProvider].models;
+  const { models } = composerProviderModels[activeProvider];
   const agents = composerProviderAgents[activeProvider];
   const canSubmit = Boolean(message.trim() || attachments.length > 0);
 
@@ -86,18 +89,19 @@ export function SessionComposer({
 
   useEffect(() => {
     const provAgents = composerProviderAgents[activeProvider];
-    setActiveAgent(provAgents[0]?.id || "");
+    setActiveAgent(provAgents[0]?.id || '');
     const provModels = composerProviderModels[activeProvider].models;
-    setActiveModel(provModels[0]?.id || "");
+    setActiveModel(provModels[0]?.id || '');
   }, [activeProvider]);
 
-  const activeModelLabel = models.find(m => m.id === activeModel)?.label || models[0]?.label || activeModel;
-  const activeAgentData = agents.find(a => a.id === activeAgent) || agents[0];
+  const activeModelLabel =
+    models.find((m) => m.id === activeModel)?.label || models[0]?.label || activeModel;
+  const activeAgentData = agents.find((a) => a.id === activeAgent) || agents[0];
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 200) + "px";
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
     }
   }, [message]);
 
@@ -130,12 +134,16 @@ export function SessionComposer({
     setAttachments,
     textareaRef,
     agents,
-    onCycleAgent: () => setActiveAgent((previous) => getNextComposerAgentId(previous, composerProviderAgents[activeProvider])),
+    onCycleAgent: () =>
+      setActiveAgent((previous) =>
+        getNextComposerAgentId(previous, composerProviderAgents[activeProvider]),
+      ),
     onSelectAgent: setActiveAgent,
     onAutocompleteOpen: () => closeToolbarMenus(),
   });
 
-  const { menus, closeToolbarMenus, closeAllMenus, toggleMenu, closeMenu, setShowPlusMenu } = useComposerToolbarMenus(closeAutocomplete);
+  const { menus, closeToolbarMenus, closeAllMenus, toggleMenu, closeMenu, setShowPlusMenu } =
+    useComposerToolbarMenus(closeAutocomplete);
 
   const handleSubmit = useCallback(async () => {
     if (!canSubmit || !onSubmit) {
@@ -155,7 +163,7 @@ export function SessionComposer({
       branch: session?.branch,
     });
 
-    setMessage("");
+    setMessage('');
     setAttachments([]);
     closeAllMenus();
     closeAutocomplete();
@@ -180,26 +188,33 @@ export function SessionComposer({
   // Global keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === "t") {
+      if (e.ctrlKey && e.key === 't') {
         e.preventDefault();
-        setActiveAgent((prev) => getNextComposerAgentId(prev, composerProviderAgents[activeProvider]));
+        setActiveAgent((prev) =>
+          getNextComposerAgentId(prev, composerProviderAgents[activeProvider]),
+        );
       }
-      if (e.ctrlKey && e.key === "p") {
+      if (e.ctrlKey && e.key === 'p') {
         e.preventDefault();
         openUnifiedPalette();
       }
     };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
   }, [activeProvider, openUnifiedPalette]);
 
-  const isShellMode = message.startsWith("!");
-  const ContinueIcon = composerContinueInOptions.find(o => o.id === session?.continueIn)?.icon || MonitorIcon;
+  const isShellMode = message.startsWith('!');
+  void isShellMode;
 
   return (
     <div
-      className={cn("relative border-t border-border bg-surface-0", isDragOver && "ring-2 ring-primary/50")}
-      onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
+      className={cn(
+        'relative border-t border-border bg-surface-0',
+        isDragOver && 'ring-2 ring-primary/50',
+      )}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
       {isDragOver && (
         <div className="absolute inset-0 bg-primary/5 border-2 border-dashed border-primary rounded z-10 flex items-center justify-center pointer-events-none">
@@ -213,17 +228,29 @@ export function SessionComposer({
       <div className="relative px-3 pt-2 pb-1">
         {/* File Picker */}
         {showFilePicker && filteredFiles.length > 0 ? (
-          <ComposerFilePicker files={filteredFiles} selectedIndex={selectedIndex} onSelect={insertFileRef} />
+          <ComposerFilePicker
+            files={filteredFiles}
+            selectedIndex={selectedIndex}
+            onSelect={insertFileRef}
+          />
         ) : null}
 
         {/* Unified Palette */}
         {showUnifiedPalette && flatPaletteItems.length > 0 ? (
-          <ComposerUnifiedPalette groups={paletteGroups} selectedIndex={selectedIndex} onSelect={handlePaletteSelect} />
+          <ComposerUnifiedPalette
+            groups={paletteGroups}
+            selectedIndex={selectedIndex}
+            onSelect={handlePaletteSelect}
+          />
         ) : null}
 
         {/* Skills picker */}
         {showSkills && filteredSkills.length > 0 ? (
-          <ComposerSkillsPicker skills={filteredSkills} selectedIndex={selectedIndex} onSelect={(skill) => insertSkill(skill as (typeof composerSkills)[0])} />
+          <ComposerSkillsPicker
+            skills={filteredSkills}
+            selectedIndex={selectedIndex}
+            onSelect={(skill) => insertSkill(skill as (typeof composerSkills)[0])}
+          />
         ) : null}
 
         <ComposerInputArea
@@ -282,27 +309,27 @@ export function SessionComposer({
         }}
         onSelectAgent={(id) => {
           setActiveAgent(id);
-          closeMenu("agent");
+          closeMenu('agent');
         }}
         onSelectModel={(id) => {
           setActiveModel(id);
-          closeMenu("model");
+          closeMenu('model');
         }}
         onSelectReasoning={(id) => {
           setReasoningLevel(id);
-          closeMenu("reasoning");
+          closeMenu('reasoning');
         }}
         onSelectContinueIn={(id) => {
           onUpdateSession?.({ continueIn: id });
-          closeMenu("continueIn");
+          closeMenu('continueIn');
         }}
         onSelectPermission={(id) => {
           onUpdateSession?.({ permission: id });
-          closeMenu("permission");
+          closeMenu('permission');
         }}
         onSelectBranch={(branch) => {
           onUpdateSession?.({ branch });
-          closeMenu("branch");
+          closeMenu('branch');
         }}
       />
     </div>

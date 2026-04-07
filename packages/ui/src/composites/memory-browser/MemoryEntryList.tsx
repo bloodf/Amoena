@@ -1,6 +1,6 @@
-import { Pin, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { memoryTypeConfig, type MemoryEntry } from "./types";
+import { Pin, Search } from 'lucide-react';
+import { cn } from '../../lib/utils.ts';
+import { memoryTypeConfig, type MemoryEntry } from './types';
 
 export function MemoryEntryList({
   entries,
@@ -23,20 +23,47 @@ export function MemoryEntryList({
   return (
     <>
       {entries.map((entry) => (
-        <button key={entry.key} onClick={() => onSelect(entry.key)} className={cn("w-full border-b border-border px-3 py-2.5 text-left transition-colors", selectedKey === entry.key ? "bg-primary/5" : "hover:bg-surface-2")}>
+        <button
+          key={entry.key}
+          onClick={() => onSelect(entry.key)}
+          className={cn(
+            'w-full border-b border-border px-3 py-2.5 text-left transition-colors',
+            selectedKey === entry.key ? 'bg-primary/5' : 'hover:bg-surface-2',
+          )}
+        >
           <div className="mb-0.5 flex items-center justify-between">
             <div className="flex min-w-0 items-center gap-1.5">
               {entry.pinned ? <Pin size={9} className="flex-shrink-0 text-primary" /> : null}
-              <span className="truncate font-mono text-[12px] font-medium text-foreground">{entry.key}</span>
+              <span className="truncate font-mono text-[12px] font-medium text-foreground">
+                {entry.key}
+              </span>
             </div>
-            <span className={cn("flex-shrink-0 rounded px-1.5 py-0.5 font-mono text-[9px]", memoryTypeConfig[entry.type].className)}>{memoryTypeConfig[entry.type].label}</span>
+            <span
+              className={cn(
+                'flex-shrink-0 rounded px-1.5 py-0.5 font-mono text-[9px]',
+                memoryTypeConfig[entry.type].className,
+              )}
+            >
+              {memoryTypeConfig[entry.type].label}
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <span className={cn("rounded px-1 py-0.5 text-[9px]", entry.source === "auto" ? "bg-surface-3 text-muted-foreground" : entry.source === "manual" ? "bg-green/20 text-green" : "bg-primary/20 text-primary")}>
+              <span
+                className={cn(
+                  'rounded px-1 py-0.5 text-[9px]',
+                  (() => {
+                    if (entry.source === 'auto') return 'bg-surface-3 text-muted-foreground';
+                    if (entry.source === 'manual') return 'bg-green/20 text-green';
+                    return 'bg-primary/20 text-primary';
+                  })(),
+                )}
+              >
                 {entry.source}
               </span>
-              <span className="text-[10px] text-muted-foreground">{entry.scope} · {entry.size}</span>
+              <span className="text-[10px] text-muted-foreground">
+                {entry.scope} · {entry.size}
+              </span>
             </div>
             <span className="text-[10px] text-muted-foreground">{entry.timestamp}</span>
           </div>

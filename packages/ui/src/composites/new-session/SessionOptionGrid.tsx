@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '../../lib/utils.ts';
 import type { SessionOptionCard } from "./types";
 
 interface SessionOptionGridProps<T extends string> {

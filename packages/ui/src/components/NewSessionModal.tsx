@@ -1,19 +1,19 @@
 import { useState } from 'react';
-import { ContextDropzone } from '@/composites/new-session/ContextDropzone';
-import { ModelPicker } from '@/composites/new-session/ModelPicker';
-import { NewSessionFieldLabel } from '@/composites/new-session/NewSessionFieldLabel';
-import { NewSessionModalFooter } from '@/composites/new-session/NewSessionModalFooter';
-import { NewSessionModalHeader } from '@/composites/new-session/NewSessionModalHeader';
-import { PermissionPresetPicker } from '@/composites/new-session/PermissionPresetPicker';
-import { ProviderPicker } from '@/composites/new-session/ProviderPicker';
-import { ReasoningControls } from '@/composites/new-session/ReasoningControls';
-import { SessionOptionGrid } from '@/composites/new-session/SessionOptionGrid';
+import { ContextDropzone } from '../composites/new-session/ContextDropzone.tsx';
+import { ModelPicker } from '../composites/new-session/ModelPicker.tsx';
+import { NewSessionFieldLabel } from '../composites/new-session/NewSessionFieldLabel.tsx';
+import { NewSessionModalFooter } from '../composites/new-session/NewSessionModalFooter.tsx';
+import { NewSessionModalHeader } from '../composites/new-session/NewSessionModalHeader.tsx';
+import { PermissionPresetPicker } from '../composites/new-session/PermissionPresetPicker.tsx';
+import { ProviderPicker } from '../composites/new-session/ProviderPicker.tsx';
+import { ReasoningControls } from '../composites/new-session/ReasoningControls.tsx';
+import { SessionOptionGrid } from '../composites/new-session/SessionOptionGrid.tsx';
 import {
   newSessionPermissionPresets,
   newSessionProviders,
   newSessionReasoningDepths,
   newSessionWorkTargets,
-} from '@/composites/new-session/data';
+} from '../composites/new-session/data.ts';
 
 interface NewSessionModalProps {
   open: boolean;
@@ -42,9 +42,10 @@ export function NewSessionModal({ open, onClose, onCreateSession }: NewSessionMo
 
   if (!open) return null;
 
-  const provider = newSessionProviders.find((provider) => provider.id === selectedProvider)!;
+  const provider = newSessionProviders.find((provider) => provider.id === selectedProvider);
 
   const handleCreate = () => {
+    if (!provider) return;
     onCreateSession({
       name: name || 'New Session',
       workTarget,

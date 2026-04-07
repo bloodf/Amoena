@@ -1,9 +1,9 @@
-import { useSidePanelTabs } from "@/composites/side-panel/useSidePanelTabs";
-import { FilesTab } from "@/composites/side-panel/FilesTab";
-import { AgentsTab } from "@/composites/side-panel/AgentsTab";
-import { MemoryTab } from "@/composites/side-panel/MemoryTab";
-import { TimelineTab } from "@/composites/side-panel/TimelineTab";
-import { SidePanelTabBar } from "@/composites/side-panel/SidePanelTabBar";
+import { useSidePanelTabs } from '../composites/side-panel/useSidePanelTabs.ts';
+import { FilesTab } from '../composites/side-panel/FilesTab.tsx';
+import { AgentsTab } from '../composites/side-panel/AgentsTab.tsx';
+import { MemoryTab } from '../composites/side-panel/MemoryTab.tsx';
+import { TimelineTab } from '../composites/side-panel/TimelineTab.tsx';
+import { SidePanelTabBar } from '../composites/side-panel/SidePanelTabBar.tsx';
 
 interface SessionSidePanelProps {
   onOpenFile?: (fileName: string) => void;

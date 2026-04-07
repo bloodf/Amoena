@@ -1,5 +1,5 @@
 import { Zap } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/primitives/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../primitives/select.tsx';
 import type { ProviderModel } from "./types";
 
 export function ProviderModelRow({

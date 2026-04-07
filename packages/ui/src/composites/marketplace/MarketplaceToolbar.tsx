@@ -1,14 +1,14 @@
 import { Grid3X3, List, Search, SlidersHorizontal, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/primitives/button";
-import { Input } from "@/primitives/input";
+import { cn } from '../../lib/utils.ts';
+import { Button } from '../../primitives/button.tsx';
+import { Input } from '../../primitives/input.tsx';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/primitives/select";
+} from '../../primitives/select.tsx';
 import type { AuthorFilter, SortOption, TrustFilter } from "./types";
 
 export const sortLabels: Record<SortOption, string> = {

@@ -1,6 +1,5 @@
-import { createContext, useContext, useCallback } from "react";
-import type { ReactNode } from "react";
-import { settingDefaults } from "./setting-defaults";
+import { createContext, useContext, useCallback, type ReactNode } from 'react';
+import { settingDefaults } from './setting-defaults';
 
 type SettingsContextValue = {
   values: Record<string, unknown>;
@@ -22,9 +21,7 @@ export function SettingsProvider({
   children: ReactNode;
 }) {
   return (
-    <SettingsContext.Provider value={{ values, onChange }}>
-      {children}
-    </SettingsContext.Provider>
+    <SettingsContext.Provider value={{ values, onChange }}>{children}</SettingsContext.Provider>
   );
 }
 

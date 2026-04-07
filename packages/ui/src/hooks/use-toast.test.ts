@@ -114,7 +114,7 @@ describe('use-toast: useToast hook', () => {
 
   test('calling toast() adds a toast to state', () => {
     const { result } = renderHook(() => useToast());
-    const toastTitle = 'Test Toast ' + Date.now();
+    const toastTitle = `Test Toast ${  Date.now()}`;
     act(() => {
       result.current.toast({ title: toastTitle });
     });

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import { ScreenMain, ScreenRoot, ScreenSidebarLayout } from '@/components/screen';
-import { initialWorkspaceRecords } from '@/composites/workspace-manager/data';
-import { WorkspaceDetailPanel } from '@/composites/workspace-manager/WorkspaceDetailPanel';
-import { WorkspaceListPane } from '@/composites/workspace-manager/WorkspaceListPane';
-import type { WorkspaceHealth, WorkspaceRecord } from '@/composites/workspace-manager/types';
+import { ScreenMain, ScreenRoot, ScreenSidebarLayout } from '../components/screen.tsx';
+import { initialWorkspaceRecords } from '../composites/workspace-manager/data.ts';
+import { WorkspaceDetailPanel } from '../composites/workspace-manager/WorkspaceDetailPanel.tsx';
+import { WorkspaceListPane } from '../composites/workspace-manager/WorkspaceListPane.tsx';
+import type { WorkspaceHealth, WorkspaceRecord } from '../composites/workspace-manager/types.ts';
 
 type WorkspaceManagerScreenProps = {
   workspaces?: WorkspaceRecord[];

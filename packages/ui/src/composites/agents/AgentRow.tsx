@@ -1,7 +1,7 @@
 import { AlertTriangle, ChevronDown, ChevronRight, Mail, Settings, Shield, Wrench } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/primitives/button";
-import { StatusPill } from "@/components/patterns";
+import { cn } from '../../lib/utils.ts';
+import { Button } from '../../primitives/button.tsx';
+import { StatusPill } from '../../components/patterns.tsx';
 import type { ManagedAgent } from "./types";
 import {
   divisionColors,

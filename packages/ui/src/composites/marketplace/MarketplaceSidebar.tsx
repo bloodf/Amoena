@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
-import { Button } from "@/primitives/button";
-import { StatusPill } from "@/components/patterns";
-import { ScreenNavButton, ScreenNavSection, ScreenSidebar } from "@/components/screen";
+import { cn } from '../../lib/utils.ts';
+import { Button } from '../../primitives/button.tsx';
+import { StatusPill } from '../../components/patterns.tsx';
+import { ScreenNavButton, ScreenNavSection, ScreenSidebar } from '../../components/screen.tsx';
 import type { AuthorFilter, MarketplaceCategory, MarketplaceItem, SortOption, TrustFilter } from "./types";
 
 interface MarketplaceSidebarProps {

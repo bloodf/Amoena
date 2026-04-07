@@ -1,6 +1,6 @@
 import { Plus, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils.ts';
 import type { AgentTeam } from './types';
 
 function teamStatusClasses(status: AgentTeam['status']): string {

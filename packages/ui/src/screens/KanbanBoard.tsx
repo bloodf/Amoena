@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Circle, Clock, CheckCircle2, AlertCircle } from "lucide-react";
-import { KanbanColumn } from "@/composites/tasks/KanbanColumn";
-import type { KanbanColumnData } from "@/composites/tasks/types";
-import { TaskBoardHeader } from "@/composites/tasks/TaskBoardHeader";
+import { KanbanColumn } from '../composites/tasks/KanbanColumn.tsx';
+import type { KanbanColumnData } from '../composites/tasks/types.ts';
+import { TaskBoardHeader } from '../composites/tasks/TaskBoardHeader.tsx';
 
 const initialColumns: KanbanColumnData[] = [
   {
@@ -95,8 +95,7 @@ export function KanbanBoard() {
       <TaskBoardHeader />
       <div className="flex-1 overflow-x-auto overflow-y-hidden">
         <div className="flex gap-4 p-4 h-full min-w-max">
-          {columns.map((col) => {
-            return (
+          {columns.map((col) => (
               <KanbanColumn
                 key={col.id}
                 column={col}
@@ -107,8 +106,7 @@ export function KanbanBoard() {
                 onDrop={handleDrop}
                 onTaskDragStart={handleDragStart}
               />
-            );
-          })}
+            ))}
         </div>
       </div>
     </div>

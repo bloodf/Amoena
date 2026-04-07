@@ -1,5 +1,5 @@
 import { FileCode } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from '../../lib/utils.ts';
 import type { TimelineChangedFile } from "./types";
 
 export function ChangedFilesPanel({ files }: { files: TimelineChangedFile[] }) {

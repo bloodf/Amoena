@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, GitBranch, Plus, Shield, Zap } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils.ts';
 import { ProviderLogo } from '../shared/ProviderLogo';
 import type { ComposerOption, ComposerPermissionOption, ComposerReasoningLevel } from './types';
 import {

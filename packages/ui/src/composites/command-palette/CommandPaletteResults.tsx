@@ -1,5 +1,5 @@
 import { commandPaletteTypeLabels, type CommandPaletteItem } from "./data";
-import { cn } from "@/lib/utils";
+import { cn } from '../../lib/utils.ts';
 
 export function CommandPaletteResults({
   groups,

@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
 
-import { cn } from "@/lib/utils";
+import { cn } from '../lib/utils.ts';
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const;
@@ -301,21 +301,21 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
 }
 
 // Re-export recharts primitives so composites import through the atomic layer
-const Area = RechartsPrimitive.Area;
-const AreaChart = RechartsPrimitive.AreaChart;
-const Bar = RechartsPrimitive.Bar;
-const BarChart = RechartsPrimitive.BarChart;
-const CartesianGrid = RechartsPrimitive.CartesianGrid;
-const Cell = RechartsPrimitive.Cell;
-const Line = RechartsPrimitive.Line;
-const LineChart = RechartsPrimitive.LineChart;
-const Pie = RechartsPrimitive.Pie;
-const PieChart = RechartsPrimitive.PieChart;
-const RadialBar = RechartsPrimitive.RadialBar;
-const RadialBarChart = RechartsPrimitive.RadialBarChart;
+const {Area} = RechartsPrimitive;
+const {AreaChart} = RechartsPrimitive;
+const {Bar} = RechartsPrimitive;
+const {BarChart} = RechartsPrimitive;
+const {CartesianGrid} = RechartsPrimitive;
+const {Cell} = RechartsPrimitive;
+const {Line} = RechartsPrimitive;
+const {LineChart} = RechartsPrimitive;
+const {Pie} = RechartsPrimitive;
+const {PieChart} = RechartsPrimitive;
+const {RadialBar} = RechartsPrimitive;
+const {RadialBarChart} = RechartsPrimitive;
 const RechartsResponsiveContainer = RechartsPrimitive.ResponsiveContainer;
-const XAxis = RechartsPrimitive.XAxis;
-const YAxis = RechartsPrimitive.YAxis;
+const {XAxis} = RechartsPrimitive;
+const {YAxis} = RechartsPrimitive;
 
 export {
   ChartContainer,

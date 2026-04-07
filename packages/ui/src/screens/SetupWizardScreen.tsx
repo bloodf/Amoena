@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { ScreenRoot } from "@/components/screen";
-import { setupWizardProviders } from "@/composites/setup-wizard/data";
-import { SetupWizardFooter } from "@/composites/setup-wizard/SetupWizardFooter";
-import { SetupWizardProgress } from "@/composites/setup-wizard/SetupWizardProgress";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { ScreenRoot } from '../components/screen.tsx';
+import { SetupWizardFooter } from '../composites/setup-wizard/SetupWizardFooter.tsx';
+import { SetupWizardProgress } from '../composites/setup-wizard/SetupWizardProgress.tsx';
 import {
   SetupWizardBackendStep,
   SetupWizardCompatStep,
@@ -13,37 +12,37 @@ import {
   SetupWizardProfileStep,
   SetupWizardProviderStep,
   SetupWizardWelcomeStep,
-} from "@/composites/setup-wizard/SetupWizardSteps";
+} from '../composites/setup-wizard/SetupWizardSteps.tsx';
 
 export function SetupWizardScreen() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [mode, setMode] = useState("native");
-  const [apiKey, setApiKey] = useState("");
-  const [testStatus, setTestStatus] = useState<"idle" | "testing" | "success" | "error">("idle");
-  const [defaultModel, setDefaultModel] = useState("claude-4-sonnet");
+  const [mode, setMode] = useState('native');
+  const [apiKey, setApiKey] = useState('');
+  const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
+  const [defaultModel, setDefaultModel] = useState('claude-4-sonnet');
   const [memoryEnabled, setMemoryEnabled] = useState(true);
-  const [theme, setTheme] = useState("dark");
-  const [reasoningMode, setReasoningMode] = useState("auto");
-  const [keybindingPreset, setKeybindingPreset] = useState("Default");
+  const [theme, setTheme] = useState('dark');
+  const [reasoningMode, setReasoningMode] = useState('auto');
+  const [keybindingPreset, setKeybindingPreset] = useState('Default');
   const [selectedProvider, setSelectedProvider] = useState(0);
   const navigate = useNavigate();
 
   const handleTest = () => {
-    setTestStatus("testing");
+    setTestStatus('testing');
     setTimeout(() => {
       if (apiKey.length >= 10) {
-        setTestStatus("success");
-        toast.success("Connection verified");
+        setTestStatus('success');
+        toast.success('Connection verified');
       } else {
-        setTestStatus("error");
-        toast.error("Connection failed — check your API key");
+        setTestStatus('error');
+        toast.error('Connection failed — check your API key');
       }
     }, 1200);
   };
 
   const handleLaunch = () => {
-    toast.success("Amoena is ready!");
-    navigate("/");
+    toast.success('Amoena is ready!');
+    navigate('/');
   };
 
   return (
@@ -61,11 +60,11 @@ export function SetupWizardScreen() {
               testStatus={testStatus}
               onSelectProvider={(index) => {
                 setSelectedProvider(index);
-                setTestStatus("idle");
+                setTestStatus('idle');
               }}
               onApiKeyChange={(value) => {
                 setApiKey(value);
-                setTestStatus("idle");
+                setTestStatus('idle');
               }}
               onTest={handleTest}
             />
@@ -78,12 +77,7 @@ export function SetupWizardScreen() {
             />
           ) : null}
 
-          {currentStep === 3 ? (
-            <SetupWizardBackendStep
-              mode={mode}
-              onModeChange={setMode}
-            />
-          ) : null}
+          {currentStep === 3 ? <SetupWizardBackendStep mode={mode} onModeChange={setMode} /> : null}
 
           {currentStep === 4 ? (
             <SetupWizardMemoryStep
@@ -103,12 +97,15 @@ export function SetupWizardScreen() {
             />
           ) : null}
 
-          {currentStep === 6 ? (
-            <SetupWizardCompatStep onLaunch={handleLaunch} />
-          ) : null}
+          {currentStep === 6 ? <SetupWizardCompatStep onLaunch={handleLaunch} /> : null}
         </div>
 
-        <SetupWizardFooter currentStep={currentStep} lastStep={6} onBack={() => setCurrentStep(Math.max(0, currentStep - 1))} onNext={() => setCurrentStep(currentStep + 1)} />
+        <SetupWizardFooter
+          currentStep={currentStep}
+          lastStep={6}
+          onBack={() => setCurrentStep(Math.max(0, currentStep - 1))}
+          onNext={() => setCurrentStep(currentStep + 1)}
+        />
       </div>
     </ScreenRoot>
   );

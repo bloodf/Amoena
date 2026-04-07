@@ -5,7 +5,7 @@ import {
   SettingsSectionTitle,
   SettingsSelect,
   SettingsToggle,
-} from '@/components/settings-controls';
+} from '../../components/settings-controls.tsx';
 import { useTranslation } from 'react-i18next';
 
 export function SessionSettingsSection() {

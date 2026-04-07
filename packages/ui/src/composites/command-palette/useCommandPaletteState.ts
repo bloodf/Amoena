@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
-import type { CommandPaletteItem } from "./data";
+import { useMemo, useState } from 'react';
+import type { CommandPaletteItem } from './data';
 
 export function useCommandPaletteState(commands: CommandPaletteItem[], onClose: () => void) {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isClosing, setIsClosing] = useState(false);
 
@@ -19,9 +19,8 @@ export function useCommandPaletteState(commands: CommandPaletteItem[], onClose: 
   const groups = useMemo(
     () =>
       filtered.reduce<Record<string, CommandPaletteItem[]>>((accumulator, item) => {
-        if (!accumulator[item.type]) accumulator[item.type] = [];
-        accumulator[item.type].push(item);
-        return accumulator;
+        const group = accumulator[item.type] ?? [];
+        return { ...accumulator, [item.type]: [...group, item] };
       }, {}),
     [filtered],
   );
@@ -40,21 +39,21 @@ export function useCommandPaletteState(commands: CommandPaletteItem[], onClose: 
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Escape") {
+    if (event.key === 'Escape') {
       handleClose();
       return;
     }
-    if (event.key === "ArrowDown") {
+    if (event.key === 'ArrowDown') {
       event.preventDefault();
       setSelectedIndex((index) => Math.min(index + 1, filtered.length - 1));
       return;
     }
-    if (event.key === "ArrowUp") {
+    if (event.key === 'ArrowUp') {
       event.preventDefault();
       setSelectedIndex((index) => Math.max(index - 1, 0));
       return;
     }
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
       if (filtered[selectedIndex]?.action) runAction(filtered[selectedIndex].action);
     }

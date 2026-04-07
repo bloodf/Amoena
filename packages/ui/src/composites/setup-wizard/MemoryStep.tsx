@@ -1,4 +1,4 @@
-import { SettingsRow, SettingsToggle } from "@/components/settings-controls";
+import { SettingsRow, SettingsToggle } from '../../components/settings-controls.tsx';
 
 export function SetupWizardMemoryStep({
   memoryEnabled,

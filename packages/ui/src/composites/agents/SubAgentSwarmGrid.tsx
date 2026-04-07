@@ -1,7 +1,7 @@
 import { Clock3 } from "lucide-react";
 
-import { StatusPill } from "@/components/patterns";
-import { cn } from "@/lib/utils";
+import { StatusPill } from '../../components/patterns.tsx';
+import { cn } from '../../lib/utils.ts';
 
 import { divisionColors, divisionLabels, managedStatusConfig, managedStatusTone } from "./config";
 import type { ManagedAgent } from "./types";

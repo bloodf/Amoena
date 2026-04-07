@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '../../lib/utils.ts';
 
 interface WorkspaceResizeHandleProps {
   orientation: "horizontal" | "vertical";

@@ -1,6 +1,6 @@
 import { Package, Download, Shield, X, CheckCircle, AlertTriangle } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { MarketplaceItem } from "./types";
+import { cn } from '../../lib/utils.ts';
+import type { MarketplaceItem } from "./types";
 
 export function InstallReviewSheet({ item, onClose, onConfirm }: { item: MarketplaceItem; onClose: () => void; onConfirm: () => void }) {
   return (

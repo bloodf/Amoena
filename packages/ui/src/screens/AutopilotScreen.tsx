@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { ScreenMain, ScreenRoot, ScreenSidebarLayout } from "@/components/screen";
-import { AutopilotActivityPane } from "@/composites/autopilot/AutopilotActivityPane";
-import { PipelineStepper } from "@/composites/autopilot/PipelineStepper";
-import { AutopilotSidebar } from "@/composites/autopilot/AutopilotSidebar";
-import { initialAutopilotActivityLog, initialAutopilotRunHistory, initialAutopilotStorySteps } from "@/composites/autopilot/data";
-import type { AutopilotState } from "@/composites/autopilot/types";
+import { ScreenMain, ScreenRoot, ScreenSidebarLayout } from '../components/screen.tsx';
+import { AutopilotActivityPane } from '../composites/autopilot/AutopilotActivityPane.tsx';
+import { PipelineStepper } from '../composites/autopilot/PipelineStepper.tsx';
+import { AutopilotSidebar } from '../composites/autopilot/AutopilotSidebar.tsx';
+import { initialAutopilotActivityLog, initialAutopilotRunHistory, initialAutopilotStorySteps } from '../composites/autopilot/data.ts';
+import type { AutopilotState } from '../composites/autopilot/types.ts';
 
 export function AutopilotScreen() {
   const navigate = useNavigate();

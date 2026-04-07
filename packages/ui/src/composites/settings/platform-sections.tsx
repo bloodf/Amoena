@@ -1,13 +1,13 @@
 import { Palette, Plus, Puzzle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils.ts';
 import {
   SettingsNumberInput,
   SettingsRow,
   SettingsSectionTitle,
   SettingsSelect,
   SettingsToggle,
-} from '@/components/settings-controls';
+} from '../../components/settings-controls.tsx';
 import { installedPlugins, installedThemes, keybindings } from './data';
 
 export function PluginsSettingsSection() {

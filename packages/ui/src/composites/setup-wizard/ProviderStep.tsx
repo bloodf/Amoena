@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
-import { Button } from "@/primitives/button";
-import { Input } from "@/primitives/input";
+import { Button } from '../../primitives/button.tsx';
+import { Input } from '../../primitives/input.tsx';
 import { ProviderLogo } from "../shared/ProviderLogo";
 import { setupWizardProviders } from "./data";
 

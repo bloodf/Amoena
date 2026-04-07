@@ -1,8 +1,8 @@
 import { ExternalLink, Plus } from "lucide-react";
 
-import { Button } from "@/primitives/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/primitives/select";
-import { ScreenActions, ScreenHeader, ScreenHeaderText, ScreenSubtitle, ScreenTitle, ScreenToolbar } from "@/components/screen";
+import { Button } from '../../primitives/button.tsx';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../primitives/select.tsx';
+import { ScreenActions, ScreenHeader, ScreenHeaderText, ScreenSubtitle, ScreenTitle, ScreenToolbar } from '../../components/screen.tsx';
 
 import { managedAgentDivisionFilters, managedAgentSourceFilters, managedAgentStatusFilters } from "./data";
 import { divisionColors } from "./config";

@@ -75,8 +75,8 @@ function DualSwatch({ name, darkHsl, lightHsl }: SwatchProps) {
 }
 
 function ColorSection({ title, tokens }: { title: string; tokens: string[] }) {
-  const dark = amoenaThemeTokens.dark;
-  const light = amoenaThemeTokens.light;
+  const {dark} = amoenaThemeTokens;
+  const {light} = amoenaThemeTokens;
 
   return (
     <div className="mb-10">

@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
-import { Input } from "@/primitives/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/primitives/select";
+import { Input } from '../../primitives/input.tsx';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../primitives/select.tsx';
 
 export function MemoryFilters({
   searchQuery,

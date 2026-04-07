@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { mockFileTree } from '@/composites/file-browser/data';
-import { findFile, getFilePath } from '@/composites/file-browser/utils';
-import { FileEditorHeader } from '@/composites/file-editor/FileEditorHeader';
-import { HighlightedCode } from '@/composites/file-editor/HighlightedCode';
+import { mockFileTree } from '../composites/file-browser/data.ts';
+import { findFile, getFilePath } from '../composites/file-browser/utils.tsx';
+import { FileEditorHeader } from '../composites/file-editor/FileEditorHeader.tsx';
+import { HighlightedCode } from '../composites/file-editor/HighlightedCode.tsx';
 
 interface FileEditorTabProps {
   fileName: string;

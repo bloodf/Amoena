@@ -1,12 +1,12 @@
-import { Switch } from "@/primitives/switch";
+import { Switch } from '../../primitives/switch.tsx';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/primitives/select";
-import { SectionHeading, SurfacePanel } from "@/components/patterns";
+} from '../../primitives/select.tsx';
+import { SectionHeading, SurfacePanel } from '../../components/patterns.tsx';
 
 interface RemoteTerminalSettingsPanelProps {
   remoteTerminal: boolean;

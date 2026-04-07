@@ -1,5 +1,5 @@
 import { Circle, Cpu } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from '../../lib/utils.ts';
 import type { HomeProviderHealth } from "./types";
 
 export function HomeSystemHealthPanel({

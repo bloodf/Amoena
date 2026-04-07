@@ -1,9 +1,8 @@
-import { useCallback, useMemo, useState } from "react";
-import type { RefObject } from "react";
+import { useCallback, useMemo, useState } from 'react';
 
-import { composerFiles, composerSkills, type ComposerAgentVariant } from "./config";
-import { buildComposerPaletteGroups, buildComposerPaletteItems } from "./palette";
-import type { ComposerAttachment, PaletteGroup, PaletteItem } from "./types";
+import { composerFiles, composerSkills, type ComposerAgentVariant } from './config';
+import { buildComposerPaletteGroups, buildComposerPaletteItems } from './palette';
+import type { ComposerAttachment, PaletteGroup, PaletteItem } from './types';
 
 export function useComposerInteractions({
   message,
@@ -30,14 +29,15 @@ export function useComposerInteractions({
   const [showFilePicker, setShowFilePicker] = useState(false);
   const [showUnifiedPalette, setShowUnifiedPalette] = useState(false);
   const [showSkills, setShowSkills] = useState(false);
-  const [filterText, setFilterText] = useState("");
+  const [filterText, setFilterText] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const filteredFiles = useMemo(
     () =>
       composerFiles.filter(
         (file) =>
-          file.path.toLowerCase().includes(filterText.toLowerCase()) || file.name.toLowerCase().includes(filterText.toLowerCase()),
+          file.path.toLowerCase().includes(filterText.toLowerCase()) ||
+          file.name.toLowerCase().includes(filterText.toLowerCase()),
       ),
     [filterText],
   );
@@ -45,13 +45,22 @@ export function useComposerInteractions({
   const filteredSkills = useMemo(
     () =>
       composerSkills.filter(
-        (skill) => skill.name.toLowerCase().includes(filterText.toLowerCase()) || skill.desc.toLowerCase().includes(filterText.toLowerCase()),
+        (skill) =>
+          skill.name.toLowerCase().includes(filterText.toLowerCase()) ||
+          skill.desc.toLowerCase().includes(filterText.toLowerCase()),
       ),
     [filterText],
   );
 
   const paletteItems = useMemo(
-    () => (showUnifiedPalette ? buildComposerPaletteItems({ filter: filterText, agents, activeAgentId: agents[0]?.id ?? "" }) : []),
+    () =>
+      showUnifiedPalette
+        ? buildComposerPaletteItems({
+            filter: filterText,
+            agents,
+            activeAgentId: agents[0]?.id ?? '',
+          })
+        : [],
     [agents, filterText, showUnifiedPalette],
   );
 
@@ -60,7 +69,10 @@ export function useComposerInteractions({
     [paletteItems, showUnifiedPalette],
   );
 
-  const flatPaletteItems = useMemo(() => paletteGroups.flatMap((group) => group.items), [paletteGroups]);
+  const flatPaletteItems = useMemo(
+    () => paletteGroups.flatMap((group) => group.items),
+    [paletteGroups],
+  );
 
   const closeAutocomplete = useCallback(() => {
     setShowFilePicker(false);
@@ -83,13 +95,13 @@ export function useComposerInteractions({
 
   const insertFileRef = useCallback(
     (file: (typeof composerFiles)[number]) => {
-      const cleaned = message.replace(/@\S*$/, "").trimEnd();
+      const cleaned = message.replace(/@\S*$/, '').trimEnd();
       setMessage(cleaned);
       addAttachment({
         type: file.type,
         name: file.name,
         path: file.path,
-        itemCount: file.type === "folder" ? Math.floor(Math.random() * 15) + 3 : undefined,
+        itemCount: file.type === 'folder' ? Math.floor(Math.random() * 15) + 3 : undefined,
       });
       setShowFilePicker(false);
       focusComposer();
@@ -100,7 +112,7 @@ export function useComposerInteractions({
   const insertSkill = useCallback(
     (skill: (typeof composerSkills)[number]) => {
       void skill;
-      setMessage(message.replace(/\$\S*$/, "").trimEnd());
+      setMessage(message.replace(/\$\S*$/, '').trimEnd());
       setShowSkills(false);
       focusComposer();
     },
@@ -109,21 +121,21 @@ export function useComposerInteractions({
 
   const handlePaletteSelect = useCallback(
     (item: PaletteItem) => {
-      if (item.category === "commands" || item.category === "skills") {
+      if (item.category === 'commands' || item.category === 'skills') {
         setMessage(`${item.name} `);
-      } else if (item.category === "agents") {
-        const agent = agents.find((entry) => entry.id === item.id.replace("agent-", ""));
+      } else if (item.category === 'agents') {
+        const agent = agents.find((entry) => entry.id === item.id.replace('agent-', ''));
         if (agent) onSelectAgent(agent.id);
-        setMessage("");
-      } else if (item.category === "files") {
+        setMessage('');
+      } else if (item.category === 'files') {
         const file = composerFiles.find((entry) => `file-${entry.path}` === item.id);
         if (file) {
-          setMessage("");
+          setMessage('');
           addAttachment({
             type: file.type,
             name: file.name,
             path: file.path,
-            itemCount: file.type === "folder" ? Math.floor(Math.random() * 15) + 3 : undefined,
+            itemCount: file.type === 'folder' ? Math.floor(Math.random() * 15) + 3 : undefined,
           });
         }
       }
@@ -171,36 +183,46 @@ export function useComposerInteractions({
     [closeAutocomplete, onAutocompleteOpen, setMessage],
   );
 
-  const removeAttachment = useCallback((path: string) => setAttachments((previous) => previous.filter((item) => item.path !== path)), [setAttachments]);
+  const removeAttachment = useCallback(
+    (path: string) => setAttachments((previous) => previous.filter((item) => item.path !== path)),
+    [setAttachments],
+  );
 
   const handleKeyDown = useCallback(
-    (
-      event: React.KeyboardEvent,
-    ) => {
+    (event: React.KeyboardEvent) => {
       if (showFilePicker || showUnifiedPalette || showSkills) {
-        const items = showFilePicker ? filteredFiles : showUnifiedPalette ? flatPaletteItems : filteredSkills;
-        if (event.key === "ArrowDown") {
+        const getItems = () => {
+          if (showFilePicker) return filteredFiles;
+          if (showUnifiedPalette) return flatPaletteItems;
+          return filteredSkills;
+        };
+        const items = getItems();
+        if (event.key === 'ArrowDown') {
           event.preventDefault();
           setSelectedIndex((previous) => Math.min(previous + 1, items.length - 1));
-        } else if (event.key === "ArrowUp") {
+        } else if (event.key === 'ArrowUp') {
           event.preventDefault();
           setSelectedIndex((previous) => Math.max(previous - 1, 0));
-        } else if (event.key === "Enter" || event.key === "Tab") {
+        } else if (event.key === 'Enter' || event.key === 'Tab') {
           event.preventDefault();
-          if (showFilePicker && filteredFiles[selectedIndex]) insertFileRef(filteredFiles[selectedIndex]);
-          else if (showUnifiedPalette && flatPaletteItems[selectedIndex]) handlePaletteSelect(flatPaletteItems[selectedIndex]);
-          else if (showSkills && filteredSkills[selectedIndex]) insertSkill(filteredSkills[selectedIndex]);
-        } else if (event.key === "Escape") {
+          if (showFilePicker && filteredFiles[selectedIndex]) {
+            insertFileRef(filteredFiles[selectedIndex]);
+          } else if (showUnifiedPalette && flatPaletteItems[selectedIndex]) {
+            handlePaletteSelect(flatPaletteItems[selectedIndex]);
+          } else if (showSkills && filteredSkills[selectedIndex]) {
+            insertSkill(filteredSkills[selectedIndex]);
+          }
+        } else if (event.key === 'Escape') {
           closeAutocomplete();
         }
         return;
       }
-      if (event.key === "Tab" && !message.trim()) {
+      if (event.key === 'Tab' && !message.trim()) {
         event.preventDefault();
         onCycleAgent();
         return;
       }
-      if (event.key === "Enter" && !event.shiftKey) event.preventDefault();
+      if (event.key === 'Enter' && !event.shiftKey) event.preventDefault();
     },
     [
       filteredFiles,
@@ -222,11 +244,11 @@ export function useComposerInteractions({
     (event: React.ClipboardEvent) => {
       for (let index = 0; index < event.clipboardData.items.length; index += 1) {
         const item = event.clipboardData.items[index];
-        if (item.kind === "file") {
+        if (item.kind === 'file') {
           const file = item.getAsFile();
           if (file) {
             event.preventDefault();
-            addAttachment({ type: "file", name: file.name, path: file.name });
+            addAttachment({ type: 'file', name: file.name, path: file.name });
           }
         }
       }
@@ -236,12 +258,15 @@ export function useComposerInteractions({
 
   const handleDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
-    event.dataTransfer.dropEffect = "copy";
+    // eslint-disable-next-line no-param-reassign -- Drag event API requires direct property access
+    event.dataTransfer.dropEffect = 'copy';
     setIsDragOver(true);
   }, []);
 
   const handleDragLeave = useCallback((event: React.DragEvent) => {
-    if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node)) setIsDragOver(false);
+    if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node)) {
+      setIsDragOver(false);
+    }
   }, []);
 
   const handleDrop = useCallback(
@@ -249,7 +274,7 @@ export function useComposerInteractions({
       event.preventDefault();
       setIsDragOver(false);
 
-      const fileData = event.dataTransfer.getData("amoena/file");
+      const fileData = event.dataTransfer.getData('amoena/file');
       if (fileData) {
         try {
           const parsed = JSON.parse(fileData);
@@ -257,7 +282,7 @@ export function useComposerInteractions({
             type: parsed.type,
             name: parsed.name,
             path: parsed.path,
-            itemCount: parsed.type === "folder" ? parsed.itemCount : undefined,
+            itemCount: parsed.type === 'folder' ? parsed.itemCount : undefined,
           });
         } catch {
           // Ignore invalid drag payloads.
@@ -266,7 +291,9 @@ export function useComposerInteractions({
       }
 
       if (event.dataTransfer.files.length > 0) {
-        Array.from(event.dataTransfer.files).forEach((file) => addAttachment({ type: "file", name: file.name, path: file.name }));
+        Array.from(event.dataTransfer.files).forEach((file) => {
+          addAttachment({ type: 'file', name: file.name, path: file.name });
+        });
       }
     },
     [addAttachment],
@@ -296,7 +323,7 @@ export function useComposerInteractions({
     openUnifiedPalette: () => {
       onAutocompleteOpen();
       setShowUnifiedPalette((previous) => !previous);
-      setFilterText("");
+      setFilterText('');
       setSelectedIndex(0);
       focusComposer();
     },

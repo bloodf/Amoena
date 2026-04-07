@@ -8,9 +8,9 @@ function getStatusBorderClasses(state: AutopilotState): string {
   if (state === 'blocked' || state === 'failed') return 'border-destructive/40 bg-destructive/5';
   return 'border-border bg-surface-2';
 }
-import { cn } from '@/lib/utils';
-import { Button } from '@/primitives/button';
-import { Switch } from '@/primitives/switch';
+import { cn } from '../../lib/utils.ts';
+import { Button } from '../../primitives/button.tsx';
+import { Switch } from '../../primitives/switch.tsx';
 import { autopilotStateConfig } from './config';
 
 export function AutopilotStatusPanel({

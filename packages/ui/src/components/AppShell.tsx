@@ -2,10 +2,10 @@ import { type ReactNode, useState } from 'react';
 import { SidebarRail } from './SidebarRail';
 import { StatusBar } from './StatusBar';
 import { Breadcrumb } from './Breadcrumb';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '../hooks/use-mobile.tsx';
 import { Menu, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../lib/utils.ts';
 
 export function AppShell({
   children,

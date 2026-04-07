@@ -1,8 +1,8 @@
 import { Plus } from "lucide-react";
-import { Button } from "@/primitives/button";
-import { Input } from "@/primitives/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/primitives/select";
-import { Textarea } from "@/primitives/textarea";
+import { Button } from '../../primitives/button.tsx';
+import { Input } from '../../primitives/input.tsx';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../primitives/select.tsx';
+import { Textarea } from '../../primitives/textarea.tsx';
 import type { MemoryType } from "./types";
 
 export function MemoryAddForm({

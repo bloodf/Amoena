@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { Search, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/primitives/button";
-import { Input } from "@/primitives/input";
+import { cn } from '../lib/utils.ts';
+import { Button } from '../primitives/button.tsx';
+import { Input } from '../primitives/input.tsx';
 
 export function SearchField({
   value,

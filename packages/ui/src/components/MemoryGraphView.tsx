@@ -1,6 +1,6 @@
-import { memoryGraphSourceColors } from "@/composites/memory-graph/data";
-import { MemoryGraphLegend } from "@/composites/memory-graph/MemoryGraphLegend";
-import { useMemoryGraphSimulation } from "@/composites/memory-graph/useMemoryGraphSimulation";
+import { memoryGraphSourceColors } from '../composites/memory-graph/data.ts';
+import { MemoryGraphLegend } from '../composites/memory-graph/MemoryGraphLegend.tsx';
+import { useMemoryGraphSimulation } from '../composites/memory-graph/useMemoryGraphSimulation.ts';
 
 export function MemoryGraphView({ onSelectNode }: { onSelectNode?: (key: string) => void }) {
   const { canvasRef, containerRef, hoveredNode, dimensions, handleMouseMove, handleClick } = useMemoryGraphSimulation(onSelectNode);

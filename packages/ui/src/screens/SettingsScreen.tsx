@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { ScreenMain, ScreenRoot, ScreenSidebarLayout, ScreenTitle } from "@/components/screen";
-import { settingsSections } from "@/composites/settings/data";
-import { SettingsContentPane, isEmbeddedSettingsSection } from "@/composites/settings/SettingsContentPane";
-import { SettingsSidebar } from "@/composites/settings/SettingsSidebar";
+import { ScreenMain, ScreenRoot, ScreenSidebarLayout, ScreenTitle } from '../components/screen.tsx';
+import { settingsSections } from '../composites/settings/data.ts';
+import { SettingsContentPane, isEmbeddedSettingsSection } from '../composites/settings/SettingsContentPane.tsx';
+import { SettingsSidebar } from '../composites/settings/SettingsSidebar.tsx';
 
 export function SettingsScreen() {
   const { section } = useParams();

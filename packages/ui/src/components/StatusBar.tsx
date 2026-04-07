@@ -12,10 +12,10 @@ function getProgressColor(percent: number): string {
   if (percent > 50) return 'bg-warning';
   return 'bg-primary';
 }
-import { cn } from '@/lib/utils';
-import { contextUsage, type RuntimeLocation } from '@/composites/status-bar/data';
-import { RuntimeMenu } from '@/composites/status-bar/RuntimeMenu';
-import { RateLimitsMenu } from '@/composites/status-bar/RateLimitsMenu';
+import { cn } from '../lib/utils.ts';
+import { contextUsage, type RuntimeLocation } from '../composites/status-bar/data.ts';
+import { RuntimeMenu } from '../composites/status-bar/RuntimeMenu.tsx';
+import { RateLimitsMenu } from '../composites/status-bar/RateLimitsMenu.tsx';
 import { useState } from 'react';
 
 export function StatusBar() {

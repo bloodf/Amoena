@@ -1,4 +1,4 @@
-import { ScreenSectionHeader, ScreenSectionMeta, ScreenSectionTitle } from "@/components/screen";
+import { ScreenSectionHeader, ScreenSectionMeta, ScreenSectionTitle } from '../../components/screen.tsx';
 
 export function MarketplaceSectionHeader({
   title,

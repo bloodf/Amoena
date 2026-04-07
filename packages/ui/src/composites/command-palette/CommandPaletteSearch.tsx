@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search } from 'lucide-react';
 
 export function CommandPaletteSearch({
   query,
@@ -14,6 +14,7 @@ export function CommandPaletteSearch({
       <Search size={15} className="flex-shrink-0 text-muted-foreground" />
       <input
         ref={(element) => {
+          // eslint-disable-next-line no-param-reassign -- React ref callback pattern
           inputRef.current = element;
           element?.focus();
         }}
@@ -22,7 +23,9 @@ export function CommandPaletteSearch({
         placeholder="Search commands, files, agents, chat history..."
         className="flex-1 bg-transparent text-[13px] text-foreground outline-none placeholder:text-muted-foreground"
       />
-      <kbd className="flex-shrink-0 rounded border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground/60">ESC</kbd>
+      <kbd className="flex-shrink-0 rounded border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground/60">
+        ESC
+      </kbd>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { Eye, EyeOff, Lock, RefreshCw, Wifi } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/primitives/button";
-import { SurfacePanel } from "@/components/patterns";
+import { cn } from '../../lib/utils.ts';
+import { Button } from '../../primitives/button.tsx';
+import { SurfacePanel } from '../../components/patterns.tsx';
 
 interface RemotePairingPanelProps {
   pin: string;

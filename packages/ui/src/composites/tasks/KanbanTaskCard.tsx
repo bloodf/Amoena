@@ -1,6 +1,6 @@
 import { Circle, GripVertical, MoreHorizontal } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils.ts';
 import type { KanbanTask } from './types';
 
 const priorityColors: Record<KanbanTask['priority'], string> = {

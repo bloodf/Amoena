@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
 import { Info, Plus } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from '../../lib/utils.ts';
 import {
   MemoryTierCard,
   categoryConfig,
   type MemoryCategory,
-} from "@/composites/shared/MemoryTierCard";
+} from '../shared/MemoryTierCard.tsx';
 
 export interface MemoryTabEntry {
   id: string;

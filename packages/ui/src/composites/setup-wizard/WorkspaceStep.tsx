@@ -1,6 +1,6 @@
-import { Button } from "@/primitives/button";
-import { Input } from "@/primitives/input";
-import { SurfacePanel } from "@/components/patterns";
+import { Button } from '../../primitives/button.tsx';
+import { Input } from '../../primitives/input.tsx';
+import { SurfacePanel } from '../../components/patterns.tsx';
 
 export function SetupWizardWorkspaceStep({
   workspacePath,

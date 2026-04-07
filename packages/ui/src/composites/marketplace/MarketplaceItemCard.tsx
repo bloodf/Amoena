@@ -1,6 +1,6 @@
 import { Package, Download, Star, Trash2, CheckCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { MarketplaceItem } from "./types";
+import { cn } from '../../lib/utils.ts';
+import type { MarketplaceItem } from "./types";
 
 export function MarketplaceItemCard({ item, isSelected, onSelect, onInstall, onUninstall }: {
   item: MarketplaceItem;

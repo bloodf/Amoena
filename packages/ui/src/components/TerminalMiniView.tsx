@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { GripHorizontal, X } from 'lucide-react';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../lib/utils.ts';
 
 export type TerminalMiniViewPosition = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
 

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
-import { ProviderSetupScreen } from "@/screens/ProviderSetupScreen";
-import { RemoteAccessScreen } from "@/screens/RemoteAccessScreen";
-import { OpinionsScreen } from "@/screens/OpinionsScreen";
+import { ProviderSetupScreen } from '../../screens/ProviderSetupScreen.tsx';
+import { RemoteAccessScreen } from '../../screens/RemoteAccessScreen.tsx';
+import { OpinionsScreen } from '../../screens/OpinionsScreen.tsx';
 import {
   AdvancedSettingsSection,
   EditorSettingsSection,

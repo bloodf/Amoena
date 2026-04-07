@@ -1,9 +1,9 @@
 import { Search, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { cn } from '@/lib/utils';
+import { cn } from '../lib/utils.ts';
 
-import { Input } from '@/primitives/input';
+import { Input } from './input.tsx';
 
 export function SearchField({
   value,

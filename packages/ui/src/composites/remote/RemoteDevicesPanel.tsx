@@ -1,7 +1,7 @@
 import { AlertTriangle, Check, Circle, Radio, Shield, Smartphone, Wifi, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/primitives/button";
-import { SectionHeading, StatusPill, SurfacePanel } from "@/components/patterns";
+import { cn } from '../../lib/utils.ts';
+import { Button } from '../../primitives/button.tsx';
+import { SectionHeading, StatusPill, SurfacePanel } from '../../components/patterns.tsx';
 import type { RelayStatus, RemoteDevice } from "./types";
 
 const relayConfig: Record<RelayStatus, { label: string; color: string }> = {

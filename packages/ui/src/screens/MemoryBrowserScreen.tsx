@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { MemoryGraphView } from "@/components/MemoryGraphView";
+import { MemoryGraphView } from '../components/MemoryGraphView.tsx';
 import { toast } from "sonner";
-import { MemoryBrowserHeader } from "@/composites/memory-browser/MemoryBrowserHeader";
-import { MemoryAddForm } from "@/composites/memory-browser/MemoryAddForm";
-import { MemoryFilters } from "@/composites/memory-browser/MemoryFilters";
-import { MemoryEntryList } from "@/composites/memory-browser/MemoryEntryList";
-import { MemoryDetailPanel } from "@/composites/memory-browser/MemoryDetailPanel";
-import { initialMemoryEntries } from "@/composites/memory-browser/data";
-import type { MemoryEntry, MemoryType } from "@/composites/memory-browser/types";
+import { MemoryBrowserHeader } from '../composites/memory-browser/MemoryBrowserHeader.tsx';
+import { MemoryAddForm } from '../composites/memory-browser/MemoryAddForm.tsx';
+import { MemoryFilters } from '../composites/memory-browser/MemoryFilters.tsx';
+import { MemoryEntryList } from '../composites/memory-browser/MemoryEntryList.tsx';
+import { MemoryDetailPanel } from '../composites/memory-browser/MemoryDetailPanel.tsx';
+import { initialMemoryEntries } from '../composites/memory-browser/data.ts';
+import type { MemoryEntry, MemoryType } from '../composites/memory-browser/types.ts';
 
 export function MemoryBrowserScreen() {
   const [entries, setEntries] = useState(initialMemoryEntries);

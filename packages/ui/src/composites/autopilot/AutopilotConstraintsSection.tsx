@@ -1,5 +1,5 @@
 import { FileText, GitBranch, Terminal as TermIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from '../../lib/utils.ts';
 
 export function AutopilotConstraintsSection({
   allowedActions,

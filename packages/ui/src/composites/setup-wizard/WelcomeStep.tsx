@@ -1,5 +1,5 @@
 import { Sparkles } from "lucide-react";
-import { SurfacePanel } from "@/components/patterns";
+import { SurfacePanel } from '../../components/patterns.tsx';
 import { setupWizardWelcomeFeatures } from "./data";
 
 export function SetupWizardWelcomeStep() {

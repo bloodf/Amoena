@@ -1,10 +1,10 @@
-import amoenaLogo from "@/assets/logos/amoena-ai.png";
-import claudeLogo from "@/assets/logos/claude-code.png";
-import opencodeLightLogo from "@/assets/logos/opencode-light.svg";
-import opencodeDarkLogo from "@/assets/logos/opencode-dark.svg";
-import codexLogo from "@/assets/logos/codex-cli.png";
-import geminiLogo from "@/assets/logos/gemini-cli.png";
-import ollamaLogo from "@/assets/logos/ollama.png";
+import amoenaLogo from '../../assets/logos/amoena-ai.png';
+import claudeLogo from '../../assets/logos/claude-code.png';
+import opencodeLightLogo from '../../assets/logos/opencode-light.svg';
+import opencodeDarkLogo from '../../assets/logos/opencode-dark.svg';
+import codexLogo from '../../assets/logos/codex-cli.png';
+import geminiLogo from '../../assets/logos/gemini-cli.png';
+import ollamaLogo from '../../assets/logos/ollama.png';
 
 export const providerLogos: Record<string, string> = {
   amoena: amoenaLogo,

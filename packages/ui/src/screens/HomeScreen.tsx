@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/primitives/button";
+import { Button } from '../primitives/button.tsx';
 import {
   ScreenActions,
   ScreenContainer,
@@ -11,13 +11,13 @@ import {
   ScreenStack,
   ScreenSubtitle,
   ScreenTitle,
-} from "@/components/screen";
-import { HomeQuickActions } from "@/composites/home/HomeQuickActions";
-import { homeProviders, homeQuickTips, homeRecentSessions, homeWorkspaces } from "@/composites/home/data";
-import { HomeQuickTipsPanel } from "@/composites/home/HomeQuickTipsPanel";
-import { HomeRecentSessionsPanel } from "@/composites/home/HomeRecentSessionsPanel";
-import { HomeSystemHealthPanel } from "@/composites/home/HomeSystemHealthPanel";
-import { HomeWorkspacesPanel } from "@/composites/home/HomeWorkspacesPanel";
+} from '../components/screen.tsx';
+import { HomeQuickActions } from '../composites/home/HomeQuickActions.tsx';
+import { homeProviders, homeQuickTips, homeRecentSessions, homeWorkspaces } from '../composites/home/data.ts';
+import { HomeQuickTipsPanel } from '../composites/home/HomeQuickTipsPanel.tsx';
+import { HomeRecentSessionsPanel } from '../composites/home/HomeRecentSessionsPanel.tsx';
+import { HomeSystemHealthPanel } from '../composites/home/HomeSystemHealthPanel.tsx';
+import { HomeWorkspacesPanel } from '../composites/home/HomeWorkspacesPanel.tsx';
 
 export function HomeScreen() {
   const navigate = useNavigate();

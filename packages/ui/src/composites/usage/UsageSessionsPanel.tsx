@@ -1,5 +1,5 @@
-import { Bar, BarChart, CartesianGrid, ChartTooltip as Tooltip, RechartsResponsiveContainer as ResponsiveContainer, XAxis, YAxis } from "@/primitives/chart";
-import { SectionHeading, SurfacePanel } from "@/components/patterns";
+import { Bar, BarChart, CartesianGrid, ChartTooltip as Tooltip, RechartsResponsiveContainer as ResponsiveContainer, XAxis, YAxis } from '../../primitives/chart.tsx';
+import { SectionHeading, SurfacePanel } from '../../components/patterns.tsx';
 
 interface SessionBreakdownItem {
   session: string;

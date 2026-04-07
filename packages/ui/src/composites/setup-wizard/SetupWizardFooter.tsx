@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/primitives/button";
+import { cn } from '../../lib/utils.ts';
+import { Button } from '../../primitives/button.tsx';
 
 export function SetupWizardFooter({
   currentStep,

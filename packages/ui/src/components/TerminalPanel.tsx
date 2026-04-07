@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { X, Plus, Circle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
+import { cn } from '../lib/utils.ts';
 
 interface TerminalTab {
   id: string;

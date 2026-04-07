@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
-import { SectionHeading } from "@/components/patterns";
+import { cn } from '../../lib/utils.ts';
+import { SectionHeading } from '../../components/patterns.tsx';
 
 import { settingsSections } from "./data";
 

@@ -1,12 +1,15 @@
-import { Package, Download, Trash2, Star, Shield, CheckCircle, AlertTriangle, ExternalLink } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { MarketplaceItem } from "./types";
+import { Package, Download, Trash2, Star, Shield, CheckCircle, AlertTriangle } from 'lucide-react';
+import { cn } from '../../lib/utils.ts';
+import type { MarketplaceItem } from './types';
 
-export function ItemDetailPanel({ item, onInstall, onUninstall, onClose }: {
+export function ItemDetailPanel({
+  item,
+  onInstall,
+  onUninstall,
+}: {
   item: MarketplaceItem;
   onInstall: () => void;
   onUninstall: () => void;
-  onClose: () => void;
 }) {
   return (
     <div className="w-[320px] border-l border-border flex-shrink-0 overflow-y-auto bg-surface-1">
@@ -25,11 +28,17 @@ export function ItemDetailPanel({ item, onInstall, onUninstall, onClose }: {
 
         <div className="flex items-center gap-4">
           {item.installed ? (
-            <button onClick={onUninstall} className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-[12px] font-medium text-destructive border border-destructive/40 rounded cursor-pointer hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors">
+            <button
+              onClick={onUninstall}
+              className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-[12px] font-medium text-destructive border border-destructive/40 rounded cursor-pointer hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors"
+            >
               <Trash2 size={13} /> Uninstall
             </button>
           ) : (
-            <button onClick={onInstall} className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-[12px] font-medium bg-primary text-primary-foreground rounded cursor-pointer hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors">
+            <button
+              onClick={onInstall}
+              className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-[12px] font-medium bg-primary text-primary-foreground rounded cursor-pointer hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors"
+            >
               <Download size={13} /> Install
             </button>
           )}
@@ -60,14 +69,21 @@ export function ItemDetailPanel({ item, onInstall, onUninstall, onClose }: {
           </div>
           <div className="flex items-center justify-between text-[12px]">
             <span className="text-muted-foreground">Trust</span>
-            <span className={cn("flex items-center gap-1", item.trusted ? "text-green" : "text-warning")}>
+            <span
+              className={cn(
+                'flex items-center gap-1',
+                item.trusted ? 'text-green' : 'text-warning',
+              )}
+            >
               {item.trusted ? <CheckCircle size={11} /> : <AlertTriangle size={11} />}
-              {item.trusted ? "Trusted" : "Unverified"}
+              {item.trusted ? 'Trusted' : 'Unverified'}
             </span>
           </div>
           <div className="flex items-center justify-between text-[12px]">
             <span className="text-muted-foreground">Signed</span>
-            <span className={cn(item.signed ? "text-green" : "text-warning")}>{item.signed ? "Yes" : "No"}</span>
+            <span className={cn(item.signed ? 'text-green' : 'text-warning')}>
+              {item.signed ? 'Yes' : 'No'}
+            </span>
           </div>
           <div className="flex items-center justify-between text-[12px]">
             <span className="text-muted-foreground">Compat</span>
@@ -76,10 +92,15 @@ export function ItemDetailPanel({ item, onInstall, onUninstall, onClose }: {
         </div>
 
         <div className="pt-2 border-t border-border">
-          <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-2">Permissions</h3>
+          <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-2">
+            Permissions
+          </h3>
           <div className="flex flex-wrap gap-1.5">
-            {item.permissions.map(p => (
-              <span key={p} className="flex items-center gap-1 text-[10px] font-mono px-2 py-1 rounded bg-surface-2 border border-border text-muted-foreground">
+            {item.permissions.map((p) => (
+              <span
+                key={p}
+                className="flex items-center gap-1 text-[10px] font-mono px-2 py-1 rounded bg-surface-2 border border-border text-muted-foreground"
+              >
                 <Shield size={9} /> {p}
               </span>
             ))}
@@ -87,10 +108,15 @@ export function ItemDetailPanel({ item, onInstall, onUninstall, onClose }: {
         </div>
 
         <div className="pt-2 border-t border-border">
-          <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-2">Tags</h3>
+          <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-2">
+            Tags
+          </h3>
           <div className="flex flex-wrap gap-1.5">
-            {item.tags.map(t => (
-              <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+            {item.tags.map((t) => (
+              <span
+                key={t}
+                className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20"
+              >
                 {t}
               </span>
             ))}

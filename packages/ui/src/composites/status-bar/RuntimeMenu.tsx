@@ -1,5 +1,5 @@
 import { Check, ChevronDown } from 'lucide-react';
-import { Button } from '@/primitives/button';
+import { Button } from '../../primitives/button.tsx';
 import { runtimeConfig, type RuntimeLocation } from './data';
 import { StatusBarDropdown } from './StatusBarDropdown';
 
