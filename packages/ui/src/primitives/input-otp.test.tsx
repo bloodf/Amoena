@@ -1,9 +1,9 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "./input-otp";
+import { render, screen } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from './input-otp';
 
-describe("InputOTP", () => {
-  test("renders OTP input", () => {
+describe('InputOTP', () => {
+  test('renders OTP input', () => {
     render(
       <InputOTP maxLength={6}>
         <InputOTPGroup>
@@ -19,10 +19,10 @@ describe("InputOTP", () => {
         </InputOTPGroup>
       </InputOTP>,
     );
-    expect(screen.getByRole("textbox")).not.toBeNull();
+    expect(screen.getByRole('textbox')).not.toBeNull();
   });
 
-  test("renders separator", () => {
+  test('renders separator', () => {
     render(
       <InputOTP maxLength={4}>
         <InputOTPGroup>
@@ -36,10 +36,10 @@ describe("InputOTP", () => {
         </InputOTPGroup>
       </InputOTP>,
     );
-    expect(screen.getByRole("separator")).not.toBeNull();
+    expect(screen.getByRole('separator')).not.toBeNull();
   });
 
-  test("textbox has maxLength attribute", () => {
+  test('textbox has maxLength attribute', () => {
     render(
       <InputOTP maxLength={6}>
         <InputOTPGroup>
@@ -52,11 +52,11 @@ describe("InputOTP", () => {
         </InputOTPGroup>
       </InputOTP>,
     );
-    const input = screen.getByRole("textbox");
-    expect(input.getAttribute("maxlength")).toBe("6");
+    const input = screen.getByRole('textbox');
+    expect(input.getAttribute('maxlength')).toBe('6');
   });
 
-  test("renders correct number of slots", () => {
+  test('renders correct number of slots', () => {
     const { container } = render(
       <InputOTP maxLength={4}>
         <InputOTPGroup>
@@ -67,12 +67,12 @@ describe("InputOTP", () => {
         </InputOTPGroup>
       </InputOTP>,
     );
-    const slots = container.querySelectorAll("[data-input-otp-slot]");
+    container.querySelectorAll('[data-input-otp-slot]');
     // Slots may be rendered differently, check via container children
-    expect(screen.getByRole("textbox")).toBeDefined();
+    expect(screen.getByRole('textbox')).toBeDefined();
   });
 
-  test("applies containerClassName", () => {
+  test('applies containerClassName', () => {
     const { container } = render(
       <InputOTP maxLength={4} containerClassName="custom-container">
         <InputOTPGroup>
@@ -83,10 +83,10 @@ describe("InputOTP", () => {
         </InputOTPGroup>
       </InputOTP>,
     );
-    expect(container.innerHTML).toContain("custom-container");
+    expect(container.innerHTML).toContain('custom-container');
   });
 
-  test("has disabled styling when disabled", () => {
+  test('has disabled styling when disabled', () => {
     render(
       <InputOTP maxLength={4} disabled>
         <InputOTPGroup>
@@ -97,11 +97,11 @@ describe("InputOTP", () => {
         </InputOTPGroup>
       </InputOTP>,
     );
-    const input = screen.getByRole("textbox");
-    expect(input.getAttribute("disabled")).not.toBeNull();
+    const input = screen.getByRole('textbox');
+    expect(input.getAttribute('disabled')).not.toBeNull();
   });
 
-  test("input has autocomplete one-time-code", () => {
+  test('input has autocomplete one-time-code', () => {
     render(
       <InputOTP maxLength={6}>
         <InputOTPGroup>
@@ -109,7 +109,7 @@ describe("InputOTP", () => {
         </InputOTPGroup>
       </InputOTP>,
     );
-    const input = screen.getByRole("textbox");
-    expect(input.getAttribute("autocomplete")).toBe("one-time-code");
+    const input = screen.getByRole('textbox');
+    expect(input.getAttribute('autocomplete')).toBe('one-time-code');
   });
 });

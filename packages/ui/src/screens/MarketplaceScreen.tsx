@@ -1,9 +1,3 @@
-import {
-  type MarketplaceCategory,
-  type SortOption,
-  type TrustFilter,
-  type AuthorFilter,
-} from '../composites/marketplace/types.ts';
 import { allItems as initialData, marketplaceCategories } from '../composites/marketplace/data.ts';
 import { InstallReviewSheet } from '../composites/marketplace/InstallReviewSheet.tsx';
 import { ItemDetailPanel } from '../composites/marketplace/ItemDetailPanel.tsx';

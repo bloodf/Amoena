@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
+import { render, screen } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
 import {
   Drawer,
   DrawerClose,
@@ -9,7 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "./drawer";
+} from './drawer';
 
 function renderDrawer(open?: boolean) {
   return render(
@@ -25,30 +25,30 @@ function renderDrawer(open?: boolean) {
   );
 }
 
-describe("Drawer", () => {
-  test("renders trigger", () => {
+describe('Drawer', () => {
+  test('renders trigger', () => {
     renderDrawer();
-    expect(screen.getByRole("button", { name: "Open" })).not.toBeNull();
+    expect(screen.getByRole('button', { name: 'Open' })).not.toBeNull();
   });
 
-  test("shows content when open", () => {
+  test('shows content when open', () => {
     renderDrawer(true);
-    expect(screen.getByText("Title")).not.toBeNull();
-    expect(screen.getByText("Description")).not.toBeNull();
+    expect(screen.getByText('Title')).not.toBeNull();
+    expect(screen.getByText('Description')).not.toBeNull();
   });
 
-  test("has role=dialog when open", () => {
+  test('has role=dialog when open', () => {
     renderDrawer(true);
-    expect(screen.getByRole("dialog")).not.toBeNull();
+    expect(screen.getByRole('dialog')).not.toBeNull();
   });
 
-  test("has aria-modal attribute when open", () => {
+  test('has aria-modal attribute when open', () => {
     renderDrawer(true);
-    const dialog = screen.getByRole("dialog");
+    const dialog = screen.getByRole('dialog');
     expect(dialog).not.toBeNull();
   });
 
-  test("renders close button inside drawer", () => {
+  test('renders close button inside drawer', () => {
     render(
       <Drawer open>
         <DrawerTrigger>Open</DrawerTrigger>
@@ -61,10 +61,10 @@ describe("Drawer", () => {
         </DrawerContent>
       </Drawer>,
     );
-    expect(screen.getByText("Close")).not.toBeNull();
+    expect(screen.getByText('Close')).not.toBeNull();
   });
 
-  test("renders footer content", () => {
+  test('renders footer content', () => {
     render(
       <Drawer open>
         <DrawerTrigger>Open</DrawerTrigger>
@@ -79,6 +79,6 @@ describe("Drawer", () => {
         </DrawerContent>
       </Drawer>,
     );
-    expect(screen.getByRole("button", { name: "Submit" })).not.toBeNull();
+    expect(screen.getByRole('button', { name: 'Submit' })).not.toBeNull();
   });
 });

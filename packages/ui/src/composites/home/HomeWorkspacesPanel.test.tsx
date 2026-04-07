@@ -6,7 +6,7 @@ import type { HomeWorkspaceItem } from './types';
 
 // Mock lucide-react
 vi.mock('lucide-react', () => ({
-  Circle: ({ size, className }: { size: number; className: string }) => (
+  Circle: ({ className }: { size?: number; className: string }) => (
     <svg data-testid="circle-icon" className={className} />
   ),
 }));

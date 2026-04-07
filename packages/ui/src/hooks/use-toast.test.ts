@@ -1,6 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { describe, expect, test } from "vitest";
-import * as React from 'react';
+import { describe, expect, test } from 'vitest';
 
 import { reducer, amoenaToast, useToast } from './use-toast';
 
@@ -114,7 +113,7 @@ describe('use-toast: useToast hook', () => {
 
   test('calling toast() adds a toast to state', () => {
     const { result } = renderHook(() => useToast());
-    const toastTitle = `Test Toast ${  Date.now()}`;
+    const toastTitle = `Test Toast ${Date.now()}`;
     act(() => {
       result.current.toast({ title: toastTitle });
     });

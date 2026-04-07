@@ -1,24 +1,16 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { fn } from "@storybook/test";
-import {
-  Bot,
-  Clock,
-  FileText,
-  MessageSquare,
-  Settings,
-  Terminal,
-  Zap,
-} from "lucide-react";
-import { CommandPaletteFooter } from "./CommandPaletteFooter";
-import { CommandPaletteFrame } from "./CommandPaletteFrame";
-import { CommandPaletteSearch } from "./CommandPaletteSearch";
-import { CommandPaletteResults } from "./CommandPaletteResults";
-import type { CommandPaletteItem } from "./data";
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from '@storybook/test';
+import { Bot, Clock, FileText, MessageSquare, Settings, Terminal, Zap } from 'lucide-react';
+import { CommandPaletteFooter } from './CommandPaletteFooter';
+import { CommandPaletteFrame } from './CommandPaletteFrame';
+import { CommandPaletteSearch } from './CommandPaletteSearch';
+import { CommandPaletteResults } from './CommandPaletteResults';
+import type { CommandPaletteItem } from './data';
 
 /* ─── CommandPaletteFooter ─── */
 
 const footerMeta = {
-  title: "Composites/Shell/CommandPalette/Footer",
+  title: 'Composites/Shell/CommandPalette/Footer',
   component: CommandPaletteFooter,
 } satisfies Meta<typeof CommandPaletteFooter>;
 
@@ -32,12 +24,10 @@ export const Footer: FooterStory = {};
 export const FrameOpen = {
   render: () => (
     <CommandPaletteFrame isClosing={false} onClose={fn()} onKeyDown={fn()}>
-      <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-        Frame content area
-      </div>
+      <div className="px-4 py-8 text-center text-sm text-muted-foreground">Frame content area</div>
     </CommandPaletteFrame>
   ),
-  parameters: { layout: "fullscreen" },
+  parameters: { layout: 'fullscreen' },
 } satisfies StoryObj;
 
 export const FrameClosing = {
@@ -48,7 +38,7 @@ export const FrameClosing = {
       </div>
     </CommandPaletteFrame>
   ),
-  parameters: { layout: "fullscreen" },
+  parameters: { layout: 'fullscreen' },
 } satisfies StoryObj;
 
 export const FrameWithContent = {
@@ -58,11 +48,8 @@ export const FrameWithContent = {
         <span className="text-sm text-foreground">Search bar placeholder</span>
       </div>
       <div className="space-y-2 px-4 py-3">
-        {["Item 1", "Item 2", "Item 3"].map((item) => (
-          <div
-            key={item}
-            className="rounded-md bg-surface-2 px-3 py-2 text-sm text-foreground"
-          >
+        {['Item 1', 'Item 2', 'Item 3'].map((item) => (
+          <div key={item} className="rounded-md bg-surface-2 px-3 py-2 text-sm text-foreground">
             {item}
           </div>
         ))}
@@ -70,7 +57,7 @@ export const FrameWithContent = {
       <CommandPaletteFooter />
     </CommandPaletteFrame>
   ),
-  parameters: { layout: "fullscreen" },
+  parameters: { layout: 'fullscreen' },
 } satisfies StoryObj;
 
 /* ─── CommandPaletteSearch ─── */
@@ -80,11 +67,7 @@ export const SearchEmpty = {
     const ref = { current: null as HTMLInputElement | null };
     return (
       <div className="w-[520px] rounded-lg border border-border bg-surface-1">
-        <CommandPaletteSearch
-          query=""
-          onQueryChange={fn()}
-          inputRef={ref}
-        />
+        <CommandPaletteSearch query="" onQueryChange={fn()} inputRef={ref} />
       </div>
     );
   },
@@ -95,11 +78,7 @@ export const SearchWithQuery = {
     const ref = { current: null as HTMLInputElement | null };
     return (
       <div className="w-[520px] rounded-lg border border-border bg-surface-1">
-        <CommandPaletteSearch
-          query="auth middleware"
-          onQueryChange={fn()}
-          inputRef={ref}
-        />
+        <CommandPaletteSearch query="auth middleware" onQueryChange={fn()} inputRef={ref} />
       </div>
     );
   },
@@ -108,21 +87,27 @@ export const SearchWithQuery = {
 /* ─── CommandPaletteResults ─── */
 
 const sampleItems: CommandPaletteItem[] = [
-  { type: "command", icon: MessageSquare, label: "New Session", shortcut: "⌘N" },
-  { type: "command", icon: Terminal, label: "Toggle Terminal", shortcut: "⌘`" },
-  { type: "command", icon: Zap, label: "Quick Prompt", shortcut: "⌘J" },
-  { type: "navigation", icon: Settings, label: "Settings" },
-  { type: "file", icon: FileText, label: "src/auth/tokens.rs", description: "JWT token handling" },
-  { type: "file", icon: FileText, label: "src/main.rs", description: "Entry point" },
-  { type: "agent", icon: Bot, label: "Claude 4 Sonnet", description: "JWT Auth Refactor session" },
-  { type: "history", icon: Clock, label: "How to implement JWT refresh tokens?", description: "Claude 4 Sonnet · 2 min ago" },
+  { type: 'command', icon: MessageSquare, label: 'New Session', shortcut: '⌘N' },
+  { type: 'command', icon: Terminal, label: 'Toggle Terminal', shortcut: '⌘`' },
+  { type: 'command', icon: Zap, label: 'Quick Prompt', shortcut: '⌘J' },
+  { type: 'navigation', icon: Settings, label: 'Settings' },
+  { type: 'file', icon: FileText, label: 'src/auth/tokens.rs', description: 'JWT token handling' },
+  { type: 'file', icon: FileText, label: 'src/main.rs', description: 'Entry point' },
+  { type: 'agent', icon: Bot, label: 'Claude 4 Sonnet', description: 'JWT Auth Refactor session' },
+  {
+    type: 'history',
+    icon: Clock,
+    label: 'How to implement JWT refresh tokens?',
+    description: 'Claude 4 Sonnet · 2 min ago',
+  },
 ];
 
 function groupItems(items: CommandPaletteItem[]): Record<string, CommandPaletteItem[]> {
   return items.reduce<Record<string, CommandPaletteItem[]>>((acc, item) => {
-    if (!acc[item.type]) acc[item.type] = [];
-    acc[item.type].push(item);
-    return acc;
+    if (!acc[item.type]) {
+      return { ...acc, [item.type]: [item] };
+    }
+    return { ...acc, [item.type]: [...acc[item.type], item] };
   }, {});
 }
 
@@ -163,11 +148,26 @@ export const ResultsEmpty = {
 export const ResultsFilesOnly = {
   render: () => {
     const fileItems: CommandPaletteItem[] = [
-      { type: "file", icon: FileText, label: "src/auth/tokens.rs", description: "JWT token handling" },
-      { type: "file", icon: FileText, label: "src/main.rs", description: "Entry point" },
-      { type: "file", icon: FileText, label: "src/api/routes.rs", description: "API route definitions" },
-      { type: "file", icon: FileText, label: "src/auth/middleware.rs", description: "Auth middleware" },
-      { type: "file", icon: FileText, label: "src/config.rs", description: "Configuration" },
+      {
+        type: 'file',
+        icon: FileText,
+        label: 'src/auth/tokens.rs',
+        description: 'JWT token handling',
+      },
+      { type: 'file', icon: FileText, label: 'src/main.rs', description: 'Entry point' },
+      {
+        type: 'file',
+        icon: FileText,
+        label: 'src/api/routes.rs',
+        description: 'API route definitions',
+      },
+      {
+        type: 'file',
+        icon: FileText,
+        label: 'src/auth/middleware.rs',
+        description: 'Auth middleware',
+      },
+      { type: 'file', icon: FileText, label: 'src/config.rs', description: 'Configuration' },
     ];
     return (
       <div className="w-[520px] rounded-lg border border-border bg-surface-1">

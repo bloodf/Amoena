@@ -7,10 +7,10 @@ import type { HomeSessionItem } from './types';
 // Mock lucide-react
 vi.mock('lucide-react', () => ({
   ArrowRight: () => <svg data-testid="arrow-icon" />,
-  Circle: ({ size, className }: { size: number; className: string }) => (
+  Circle: ({ className }: { size?: number; className: string }) => (
     <svg data-testid="circle-icon" className={className} />
   ),
-  Search: ({ size }: { size: number }) => <svg data-testid="search-icon" />,
+  Search: () => <svg data-testid="search-icon" />,
 }));
 
 const mockSessions: HomeSessionItem[] = [

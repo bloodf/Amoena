@@ -1,29 +1,25 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { fn } from "@storybook/test";
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from '@storybook/test';
 
-import type { LabeledOption } from "./types";
 import {
   newSessionWorkTargets,
   newSessionProviders,
   newSessionReasoningDepths,
   newSessionPermissionPresets,
-} from "./data";
-import { ContextDropzone } from "./ContextDropzone";
-import { ModelPicker } from "./ModelPicker";
-import { NewSessionFieldLabel } from "./NewSessionFieldLabel";
-import { NewSessionModalFooter } from "./NewSessionModalFooter";
-import { NewSessionModalHeader } from "./NewSessionModalHeader";
-import { PermissionPresetPicker } from "./PermissionPresetPicker";
-import { ProviderPicker } from "./ProviderPicker";
-import { ReasoningControls } from "./ReasoningControls";
-import { SessionOptionGrid } from "./SessionOptionGrid";
-import {
-  FeaturedProviderCard,
-  ExternalProviderCard,
-} from "./ProviderCard";
+} from './data';
+import { ContextDropzone } from './ContextDropzone';
+import { ModelPicker } from './ModelPicker';
+import { NewSessionFieldLabel } from './NewSessionFieldLabel';
+import { NewSessionModalFooter } from './NewSessionModalFooter';
+import { NewSessionModalHeader } from './NewSessionModalHeader';
+import { PermissionPresetPicker } from './PermissionPresetPicker';
+import { ProviderPicker } from './ProviderPicker';
+import { ReasoningControls } from './ReasoningControls';
+import { SessionOptionGrid } from './SessionOptionGrid';
+import { FeaturedProviderCard, ExternalProviderCard } from './ProviderCard';
 
 const meta: Meta = {
-  title: "Composites/NewSession",
+  title: 'Composites/NewSession',
 };
 export default meta;
 type Story = StoryObj;
@@ -82,9 +78,7 @@ export const FieldLabelDefault: Story = {
 };
 
 export const FieldLabelLong: Story = {
-  render: () => (
-    <NewSessionFieldLabel>Reasoning Depth Configuration</NewSessionFieldLabel>
-  ),
+  render: () => <NewSessionFieldLabel>Reasoning Depth Configuration</NewSessionFieldLabel>,
 };
 
 /* ------------------------------------------------------------------ */
@@ -119,11 +113,7 @@ export const PermissionsDefault: Story = {
 
 export const PermissionsFullAccess: Story = {
   render: () => (
-    <PermissionPresetPicker
-      presets={newSessionPermissionPresets}
-      selected="full"
-      onSelect={fn()}
-    />
+    <PermissionPresetPicker presets={newSessionPermissionPresets} selected="full" onSelect={fn()} />
   ),
 };
 
@@ -251,9 +241,7 @@ export const OptionGridCustomColumns: Story = {
 /* ------------------------------------------------------------------ */
 
 export const FeaturedCardDefault: Story = {
-  render: () => (
-    <FeaturedProviderCard provider={featuredProvider} onSelect={fn()} />
-  ),
+  render: () => <FeaturedProviderCard provider={featuredProvider} onSelect={fn()} />,
 };
 
 export const FeaturedCardAlternate: Story = {
@@ -268,9 +256,7 @@ export const FeaturedCardAlternate: Story = {
 /* ------------------------------------------------------------------ */
 
 export const ExternalCardDefault: Story = {
-  render: () => (
-    <ExternalProviderCard provider={externalProvider} onSelect={fn()} />
-  ),
+  render: () => <ExternalProviderCard provider={externalProvider} onSelect={fn()} />,
 };
 
 export const ExternalCardAlternate: Story = {

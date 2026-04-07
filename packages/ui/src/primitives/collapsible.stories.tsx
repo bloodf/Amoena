@@ -1,20 +1,20 @@
-import { useState } from "react";
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ChevronsUpDown } from "lucide-react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsible";
-import { Button } from "./button";
+import { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ChevronsUpDown } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './collapsible';
+import { Button } from './button';
 
 const meta = {
-  title: "Primitives/Collapsible",
+  title: 'Primitives/Collapsible',
   component: Collapsible,
-  parameters: { layout: "centered" },
+  parameters: { layout: 'centered' },
 } satisfies Meta<typeof Collapsible>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [open, setOpen] = useState(false);
     return (
       <Collapsible open={open} onOpenChange={setOpen} className="w-[350px] space-y-2">

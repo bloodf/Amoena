@@ -1,10 +1,10 @@
-import { useState } from "react";
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { DateRange } from "react-day-picker";
-import { Calendar } from "./calendar";
+import { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { DateRange } from 'react-day-picker';
+import { Calendar } from './calendar';
 
 const meta = {
-  title: "Primitives/Calendar",
+  title: 'Primitives/Calendar',
   component: Calendar,
 } satisfies Meta<typeof Calendar>;
 
@@ -16,14 +16,14 @@ export const Default: Story = {
 };
 
 export const SelectedDate: Story = {
-  render: () => {
+  render: function Render() {
     const [date, setDate] = useState<Date | undefined>(new Date());
     return <Calendar mode="single" selected={date} onSelect={setDate} />;
   },
 };
 
 export const DateRangeSelection: Story = {
-  render: () => {
+  render: function Render() {
     const [range, setRange] = useState<DateRange | undefined>({
       from: new Date(2025, 0, 10),
       to: new Date(2025, 0, 20),

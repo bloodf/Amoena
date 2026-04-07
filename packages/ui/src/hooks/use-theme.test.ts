@@ -1,64 +1,64 @@
-import { act, renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { useTheme } from "./use-theme";
+import { act, renderHook } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { useTheme } from './use-theme';
 
-describe("useTheme", () => {
+describe('useTheme', () => {
   beforeEach(() => {
     localStorage.clear();
-    document.documentElement.className = "";
+    document.documentElement.className = '';
   });
 
   afterEach(() => {
     localStorage.clear();
-    document.documentElement.className = "";
+    document.documentElement.className = '';
   });
 
-  it("defaults to dark when no stored theme", () => {
+  it('defaults to dark when no stored theme', () => {
     const { result } = renderHook(() => useTheme());
-    expect(result.current.theme).toBe("dark");
+    expect(result.current.theme).toBe('dark');
   });
 
-  it("reads stored theme from localStorage", () => {
-    localStorage.setItem("amoena-theme", "light");
+  it('reads stored theme from localStorage', () => {
+    localStorage.setItem('amoena-theme', 'light');
     const { result } = renderHook(() => useTheme());
-    expect(result.current.theme).toBe("light");
+    expect(result.current.theme).toBe('light');
   });
 
-  it("adds light class to documentElement when theme is light", () => {
-    localStorage.setItem("amoena-theme", "light");
+  it('adds light class to documentElement when theme is light', () => {
+    localStorage.setItem('amoena-theme', 'light');
     renderHook(() => useTheme());
-    expect(document.documentElement.classList.contains("light")).toBe(true);
+    expect(document.documentElement.classList.contains('light')).toBe(true);
   });
 
-  it("removes light class when theme is dark", () => {
-    document.documentElement.classList.add("light");
+  it('removes light class when theme is dark', () => {
+    document.documentElement.classList.add('light');
     renderHook(() => useTheme());
-    expect(document.documentElement.classList.contains("light")).toBe(false);
+    expect(document.documentElement.classList.contains('light')).toBe(false);
   });
 
-  it("toggleTheme switches from dark to light", () => {
+  it('toggleTheme switches from dark to light', () => {
     const { result } = renderHook(() => useTheme());
-    expect(result.current.theme).toBe("dark");
+    expect(result.current.theme).toBe('dark');
     act(() => result.current.toggleTheme());
-    expect(result.current.theme).toBe("light");
+    expect(result.current.theme).toBe('light');
   });
 
-  it("toggleTheme switches from light to dark", () => {
-    localStorage.setItem("amoena-theme", "light");
+  it('toggleTheme switches from light to dark', () => {
+    localStorage.setItem('amoena-theme', 'light');
     const { result } = renderHook(() => useTheme());
     act(() => result.current.toggleTheme());
-    expect(result.current.theme).toBe("dark");
+    expect(result.current.theme).toBe('dark');
   });
 
-  it("setTheme updates theme directly", () => {
+  it('setTheme updates theme directly', () => {
     const { result } = renderHook(() => useTheme());
-    act(() => result.current.setTheme("light"));
-    expect(result.current.theme).toBe("light");
+    act(() => result.current.setTheme('light'));
+    expect(result.current.theme).toBe('light');
   });
 
-  it("persists theme to localStorage on change", () => {
+  it('persists theme to localStorage on change', () => {
     const { result } = renderHook(() => useTheme());
-    act(() => result.current.setTheme("light"));
-    expect(localStorage.getItem("amoena-theme")).toBe("light");
+    act(() => result.current.setTheme('light'));
+    expect(localStorage.getItem('amoena-theme')).toBe('light');
   });
 });

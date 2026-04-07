@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, test, vi } from "vitest";
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 import {
   Sidebar,
   SidebarContent,
@@ -25,11 +25,17 @@ import {
   SidebarSeparator,
   SidebarTrigger,
   useSidebar,
-} from "./sidebar";
-import React from "react";
+} from './sidebar';
+import React from 'react';
 
 // Helper: minimal sidebar tree
-function BasicSidebar({ children, defaultOpen = true }: { children?: React.ReactNode; defaultOpen?: boolean }) {
+function BasicSidebar({
+  children,
+  defaultOpen = true,
+}: {
+  children?: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <Sidebar>
@@ -39,28 +45,28 @@ function BasicSidebar({ children, defaultOpen = true }: { children?: React.React
   );
 }
 
-describe("SidebarProvider", () => {
-  test("renders children", () => {
+describe('SidebarProvider', () => {
+  test('renders children', () => {
     render(
       <SidebarProvider>
         <div>child content</div>
       </SidebarProvider>,
     );
-    expect(screen.getByText("child content")).toBeTruthy();
+    expect(screen.getByText('child content')).toBeTruthy();
   });
 
-  test("applies custom className", () => {
+  test('applies custom className', () => {
     const { container } = render(
       <SidebarProvider className="custom-class">
         <div>child</div>
       </SidebarProvider>,
     );
     // The wrapper div should have the custom class
-    const wrapper = container.querySelector(".custom-class");
+    const wrapper = container.querySelector('.custom-class');
     expect(wrapper).not.toBeNull();
   });
 
-  test("defaultOpen=true sets expanded state", () => {
+  test('defaultOpen=true sets expanded state', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={true}>
         <Sidebar>
@@ -71,7 +77,7 @@ describe("SidebarProvider", () => {
     expect(container.querySelector("[data-state='expanded']")).not.toBeNull();
   });
 
-  test("defaultOpen=false sets collapsed state", () => {
+  test('defaultOpen=false sets collapsed state', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={false}>
         <Sidebar>
@@ -82,7 +88,7 @@ describe("SidebarProvider", () => {
     expect(container.querySelector("[data-state='collapsed']")).not.toBeNull();
   });
 
-  test("controlled open prop sets expanded state", () => {
+  test('controlled open prop sets expanded state', () => {
     const { container } = render(
       <SidebarProvider open={true}>
         <Sidebar>
@@ -93,7 +99,7 @@ describe("SidebarProvider", () => {
     expect(container.querySelector("[data-state='expanded']")).not.toBeNull();
   });
 
-  test("controlled open=false prop sets collapsed state", () => {
+  test('controlled open=false prop sets collapsed state', () => {
     const { container } = render(
       <SidebarProvider open={false}>
         <Sidebar>
@@ -104,7 +110,7 @@ describe("SidebarProvider", () => {
     expect(container.querySelector("[data-state='collapsed']")).not.toBeNull();
   });
 
-  test("calls onOpenChange when controlled", () => {
+  test('calls onOpenChange when controlled', () => {
     const onOpenChange = vi.fn();
     render(
       <SidebarProvider open={true} onOpenChange={onOpenChange}>
@@ -114,12 +120,12 @@ describe("SidebarProvider", () => {
         <SidebarTrigger />
       </SidebarProvider>,
     );
-    const trigger = screen.getByRole("button", { name: /toggle sidebar/i });
+    const trigger = screen.getByRole('button', { name: /toggle sidebar/i });
     fireEvent.click(trigger);
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  test("keyboard shortcut Ctrl+B toggles sidebar", () => {
+  test('keyboard shortcut Ctrl+B toggles sidebar', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={true}>
         <Sidebar>
@@ -128,11 +134,11 @@ describe("SidebarProvider", () => {
       </SidebarProvider>,
     );
     expect(container.querySelector("[data-state='expanded']")).not.toBeNull();
-    fireEvent.keyDown(window, { key: "b", ctrlKey: true });
+    fireEvent.keyDown(window, { key: 'b', ctrlKey: true });
     expect(container.querySelector("[data-state='collapsed']")).not.toBeNull();
   });
 
-  test("keyboard shortcut Meta+B toggles sidebar", () => {
+  test('keyboard shortcut Meta+B toggles sidebar', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={true}>
         <Sidebar>
@@ -140,11 +146,11 @@ describe("SidebarProvider", () => {
         </Sidebar>
       </SidebarProvider>,
     );
-    fireEvent.keyDown(window, { key: "b", metaKey: true });
+    fireEvent.keyDown(window, { key: 'b', metaKey: true });
     expect(container.querySelector("[data-state='collapsed']")).not.toBeNull();
   });
 
-  test("keyboard shortcut without ctrl/meta does not toggle", () => {
+  test('keyboard shortcut without ctrl/meta does not toggle', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={true}>
         <Sidebar>
@@ -152,12 +158,12 @@ describe("SidebarProvider", () => {
         </Sidebar>
       </SidebarProvider>,
     );
-    fireEvent.keyDown(window, { key: "b" });
+    fireEvent.keyDown(window, { key: 'b' });
     // Should remain expanded
     expect(container.querySelector("[data-state='expanded']")).not.toBeNull();
   });
 
-  test("sets cookie when toggled", () => {
+  test('sets cookie when toggled', () => {
     render(
       <SidebarProvider defaultOpen={true}>
         <Sidebar>
@@ -166,22 +172,24 @@ describe("SidebarProvider", () => {
         <SidebarTrigger />
       </SidebarProvider>,
     );
-    const trigger = screen.getByRole("button", { name: /toggle sidebar/i });
+    const trigger = screen.getByRole('button', { name: /toggle sidebar/i });
     fireEvent.click(trigger);
-    expect(document.cookie).toContain("sidebar:state");
+    expect(document.cookie).toContain('sidebar:state');
   });
 });
 
-describe("useSidebar", () => {
-  test("throws when used outside SidebarProvider", () => {
+describe('useSidebar', () => {
+  test('throws when used outside SidebarProvider', () => {
     const ThrowingComponent = () => {
       useSidebar();
       return null;
     };
-    expect(() => render(<ThrowingComponent />)).toThrow("useSidebar must be used within a SidebarProvider.");
+    expect(() => render(<ThrowingComponent />)).toThrow(
+      'useSidebar must be used within a SidebarProvider.',
+    );
   });
 
-  test("exposes state, open, toggleSidebar from context", () => {
+  test('exposes state, open, toggleSidebar from context', () => {
     let ctx: ReturnType<typeof useSidebar> | null = null;
     const Inspector = () => {
       ctx = useSidebar();
@@ -192,12 +200,12 @@ describe("useSidebar", () => {
         <Inspector />
       </SidebarProvider>,
     );
-    expect(ctx!.state).toBe("expanded");
+    expect(ctx!.state).toBe('expanded');
     expect(ctx!.open).toBe(true);
-    expect(typeof ctx!.toggleSidebar).toBe("function");
+    expect(typeof ctx!.toggleSidebar).toBe('function');
   });
 
-  test("toggleSidebar changes open state via SidebarTrigger", () => {
+  test('toggleSidebar changes open state via SidebarTrigger', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={true}>
         <Sidebar>
@@ -207,13 +215,13 @@ describe("useSidebar", () => {
       </SidebarProvider>,
     );
     expect(container.querySelector("[data-state='expanded']")).not.toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: /toggle sidebar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /toggle sidebar/i }));
     expect(container.querySelector("[data-state='collapsed']")).not.toBeNull();
   });
 });
 
-describe("Sidebar component", () => {
-  test("collapsible=none renders simple div without state", () => {
+describe('Sidebar component', () => {
+  test('collapsible=none renders simple div without state', () => {
     const { container } = render(
       <SidebarProvider>
         <Sidebar collapsible="none">
@@ -221,12 +229,12 @@ describe("Sidebar component", () => {
         </Sidebar>
       </SidebarProvider>,
     );
-    expect(screen.getByText("static content")).toBeTruthy();
+    expect(screen.getByText('static content')).toBeTruthy();
     // Should NOT have data-state attribute (collapsible=none branch)
-    expect(container.querySelector("[data-state]")).toBeNull();
+    expect(container.querySelector('[data-state]')).toBeNull();
   });
 
-  test("side=right sets data-side attribute", () => {
+  test('side=right sets data-side attribute', () => {
     const { container } = render(
       <SidebarProvider>
         <Sidebar side="right">
@@ -237,7 +245,7 @@ describe("Sidebar component", () => {
     expect(container.querySelector("[data-side='right']")).not.toBeNull();
   });
 
-  test("side=left is default", () => {
+  test('side=left is default', () => {
     const { container } = render(
       <SidebarProvider>
         <Sidebar>
@@ -248,7 +256,7 @@ describe("Sidebar component", () => {
     expect(container.querySelector("[data-side='left']")).not.toBeNull();
   });
 
-  test("variant=floating sets data-variant", () => {
+  test('variant=floating sets data-variant', () => {
     const { container } = render(
       <SidebarProvider>
         <Sidebar variant="floating">
@@ -259,7 +267,7 @@ describe("Sidebar component", () => {
     expect(container.querySelector("[data-variant='floating']")).not.toBeNull();
   });
 
-  test("variant=inset sets data-variant", () => {
+  test('variant=inset sets data-variant', () => {
     const { container } = render(
       <SidebarProvider>
         <Sidebar variant="inset">
@@ -270,7 +278,7 @@ describe("Sidebar component", () => {
     expect(container.querySelector("[data-variant='inset']")).not.toBeNull();
   });
 
-  test("collapsible=icon sets data-collapsible when collapsed", () => {
+  test('collapsible=icon sets data-collapsible when collapsed', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={false}>
         <Sidebar collapsible="icon">
@@ -282,7 +290,7 @@ describe("Sidebar component", () => {
     expect(el).not.toBeNull();
   });
 
-  test("data-collapsible is empty string when expanded", () => {
+  test('data-collapsible is empty string when expanded', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={true}>
         <Sidebar collapsible="icon">
@@ -295,17 +303,17 @@ describe("Sidebar component", () => {
   });
 });
 
-describe("SidebarTrigger", () => {
-  test("renders toggle button", () => {
+describe('SidebarTrigger', () => {
+  test('renders toggle button', () => {
     render(
       <SidebarProvider>
         <SidebarTrigger />
       </SidebarProvider>,
     );
-    expect(screen.getByRole("button", { name: /toggle sidebar/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /toggle sidebar/i })).toBeTruthy();
   });
 
-  test("calls custom onClick in addition to toggling", () => {
+  test('calls custom onClick in addition to toggling', () => {
     const onClick = vi.fn();
     render(
       <SidebarProvider defaultOpen={true}>
@@ -315,12 +323,12 @@ describe("SidebarTrigger", () => {
         <SidebarTrigger onClick={onClick} />
       </SidebarProvider>,
     );
-    const btn = screen.getByRole("button", { name: /toggle sidebar/i });
+    const btn = screen.getByRole('button', { name: /toggle sidebar/i });
     fireEvent.click(btn);
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  test("toggles sidebar from expanded to collapsed on click", () => {
+  test('toggles sidebar from expanded to collapsed on click', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={true}>
         <Sidebar>
@@ -330,11 +338,11 @@ describe("SidebarTrigger", () => {
       </SidebarProvider>,
     );
     expect(container.querySelector("[data-state='expanded']")).not.toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: /toggle sidebar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /toggle sidebar/i }));
     expect(container.querySelector("[data-state='collapsed']")).not.toBeNull();
   });
 
-  test("toggles sidebar from collapsed to expanded on click", () => {
+  test('toggles sidebar from collapsed to expanded on click', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={false}>
         <Sidebar>
@@ -344,11 +352,11 @@ describe("SidebarTrigger", () => {
       </SidebarProvider>,
     );
     expect(container.querySelector("[data-state='collapsed']")).not.toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: /toggle sidebar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /toggle sidebar/i }));
     expect(container.querySelector("[data-state='expanded']")).not.toBeNull();
   });
 
-  test("has data-sidebar=trigger attribute", () => {
+  test('has data-sidebar=trigger attribute', () => {
     const { container } = render(
       <SidebarProvider>
         <SidebarTrigger />
@@ -358,8 +366,8 @@ describe("SidebarTrigger", () => {
   });
 });
 
-describe("SidebarRail", () => {
-  test("renders rail button with aria-label", () => {
+describe('SidebarRail', () => {
+  test('renders rail button with aria-label', () => {
     render(
       <SidebarProvider>
         <Sidebar>
@@ -367,11 +375,11 @@ describe("SidebarRail", () => {
         </Sidebar>
       </SidebarProvider>,
     );
-    const rail = screen.getByRole("button", { name: /toggle sidebar/i });
+    const rail = screen.getByRole('button', { name: /toggle sidebar/i });
     expect(rail).toBeTruthy();
   });
 
-  test("has data-sidebar=rail attribute", () => {
+  test('has data-sidebar=rail attribute', () => {
     const { container } = render(
       <SidebarProvider>
         <Sidebar>
@@ -382,7 +390,7 @@ describe("SidebarRail", () => {
     expect(container.querySelector("[data-sidebar='rail']")).not.toBeNull();
   });
 
-  test("clicking rail toggles sidebar", () => {
+  test('clicking rail toggles sidebar', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={true}>
         <Sidebar>
@@ -397,21 +405,21 @@ describe("SidebarRail", () => {
   });
 });
 
-describe("SidebarInset", () => {
-  test("renders as main element", () => {
+describe('SidebarInset', () => {
+  test('renders as main element', () => {
     render(
       <SidebarProvider>
         <SidebarInset>main content</SidebarInset>
       </SidebarProvider>,
     );
-    const main = screen.getByRole("main");
+    const main = screen.getByRole('main');
     expect(main).toBeTruthy();
-    expect(main.textContent).toContain("main content");
+    expect(main.textContent).toContain('main content');
   });
 });
 
-describe("SidebarInput", () => {
-  test("renders input with data-sidebar=input", () => {
+describe('SidebarInput', () => {
+  test('renders input with data-sidebar=input', () => {
     const { container } = render(
       <SidebarProvider>
         <SidebarInput placeholder="Search..." />
@@ -420,42 +428,42 @@ describe("SidebarInput", () => {
     expect(container.querySelector("[data-sidebar='input']")).not.toBeNull();
   });
 
-  test("input is interactive", () => {
+  test('input is interactive', () => {
     render(
       <SidebarProvider>
         <SidebarInput placeholder="Search..." />
       </SidebarProvider>,
     );
-    const input = screen.getByPlaceholderText("Search...");
-    fireEvent.change(input, { target: { value: "hello" } });
-    expect((input as HTMLInputElement).value).toBe("hello");
+    const input = screen.getByPlaceholderText('Search...');
+    fireEvent.change(input, { target: { value: 'hello' } });
+    expect((input as HTMLInputElement).value).toBe('hello');
   });
 });
 
-describe("SidebarHeader and SidebarFooter", () => {
-  test("SidebarHeader renders with data-sidebar=header", () => {
+describe('SidebarHeader and SidebarFooter', () => {
+  test('SidebarHeader renders with data-sidebar=header', () => {
     const { container } = render(
       <SidebarProvider>
         <SidebarHeader>Header content</SidebarHeader>
       </SidebarProvider>,
     );
     expect(container.querySelector("[data-sidebar='header']")).not.toBeNull();
-    expect(screen.getByText("Header content")).toBeTruthy();
+    expect(screen.getByText('Header content')).toBeTruthy();
   });
 
-  test("SidebarFooter renders with data-sidebar=footer", () => {
+  test('SidebarFooter renders with data-sidebar=footer', () => {
     const { container } = render(
       <SidebarProvider>
         <SidebarFooter>Footer content</SidebarFooter>
       </SidebarProvider>,
     );
     expect(container.querySelector("[data-sidebar='footer']")).not.toBeNull();
-    expect(screen.getByText("Footer content")).toBeTruthy();
+    expect(screen.getByText('Footer content')).toBeTruthy();
   });
 });
 
-describe("SidebarSeparator", () => {
-  test("renders with data-sidebar=separator", () => {
+describe('SidebarSeparator', () => {
+  test('renders with data-sidebar=separator', () => {
     const { container } = render(
       <SidebarProvider>
         <SidebarSeparator />
@@ -465,8 +473,8 @@ describe("SidebarSeparator", () => {
   });
 });
 
-describe("SidebarContent", () => {
-  test("renders with data-sidebar=content", () => {
+describe('SidebarContent', () => {
+  test('renders with data-sidebar=content', () => {
     const { container } = render(
       <SidebarProvider>
         <Sidebar>
@@ -478,8 +486,8 @@ describe("SidebarContent", () => {
   });
 });
 
-describe("SidebarGroup", () => {
-  test("renders with data-sidebar=group", () => {
+describe('SidebarGroup', () => {
+  test('renders with data-sidebar=group', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarGroup>group</SidebarGroup>
@@ -489,8 +497,8 @@ describe("SidebarGroup", () => {
   });
 });
 
-describe("SidebarGroupLabel", () => {
-  test("renders with data-sidebar=group-label", () => {
+describe('SidebarGroupLabel', () => {
+  test('renders with data-sidebar=group-label', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarGroup>
@@ -499,10 +507,10 @@ describe("SidebarGroupLabel", () => {
       </BasicSidebar>,
     );
     expect(container.querySelector("[data-sidebar='group-label']")).not.toBeNull();
-    expect(screen.getByText("My Group")).toBeTruthy();
+    expect(screen.getByText('My Group')).toBeTruthy();
   });
 
-  test("asChild renders the slot instead of div", () => {
+  test('asChild renders the slot instead of div', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarGroup>
@@ -513,14 +521,14 @@ describe("SidebarGroupLabel", () => {
       </BasicSidebar>,
     );
     // asChild=true uses Slot — content should still render
-    expect(screen.getByText("Slot Label")).toBeTruthy();
+    expect(screen.getByText('Slot Label')).toBeTruthy();
     // The group-label data attr is forwarded via Slot
     expect(container.querySelector("[data-sidebar='group-label']")).not.toBeNull();
   });
 });
 
-describe("SidebarGroupAction", () => {
-  test("renders button with data-sidebar=group-action", () => {
+describe('SidebarGroupAction', () => {
+  test('renders button with data-sidebar=group-action', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarGroup>
@@ -531,7 +539,7 @@ describe("SidebarGroupAction", () => {
     expect(container.querySelector("[data-sidebar='group-action']")).not.toBeNull();
   });
 
-  test("asChild renders slot", () => {
+  test('asChild renders slot', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarGroup>
@@ -544,7 +552,7 @@ describe("SidebarGroupAction", () => {
     expect(container.querySelector("[data-sidebar='group-action']")).not.toBeNull();
   });
 
-  test("handles click events", () => {
+  test('handles click events', () => {
     const onClick = vi.fn();
     render(
       <BasicSidebar>
@@ -553,13 +561,13 @@ describe("SidebarGroupAction", () => {
         </SidebarGroup>
       </BasicSidebar>,
     );
-    fireEvent.click(screen.getByText("Add"));
+    fireEvent.click(screen.getByText('Add'));
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 });
 
-describe("SidebarGroupContent", () => {
-  test("renders with data-sidebar=group-content", () => {
+describe('SidebarGroupContent', () => {
+  test('renders with data-sidebar=group-content', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarGroup>
@@ -571,8 +579,8 @@ describe("SidebarGroupContent", () => {
   });
 });
 
-describe("SidebarMenu and SidebarMenuItem", () => {
-  test("renders list with data-sidebar=menu", () => {
+describe('SidebarMenu and SidebarMenuItem', () => {
+  test('renders list with data-sidebar=menu', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -585,8 +593,8 @@ describe("SidebarMenu and SidebarMenuItem", () => {
   });
 });
 
-describe("SidebarMenuButton", () => {
-  test("renders button with data-sidebar=menu-button", () => {
+describe('SidebarMenuButton', () => {
+  test('renders button with data-sidebar=menu-button', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -599,7 +607,7 @@ describe("SidebarMenuButton", () => {
     expect(container.querySelector("[data-sidebar='menu-button']")).not.toBeNull();
   });
 
-  test("isActive sets data-active=true", () => {
+  test('isActive sets data-active=true', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -612,7 +620,7 @@ describe("SidebarMenuButton", () => {
     expect(container.querySelector("[data-active='true']")).not.toBeNull();
   });
 
-  test("isActive=false sets data-active=false", () => {
+  test('isActive=false sets data-active=false', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -625,7 +633,7 @@ describe("SidebarMenuButton", () => {
     expect(container.querySelector("[data-active='false']")).not.toBeNull();
   });
 
-  test("size=sm sets data-size=sm", () => {
+  test('size=sm sets data-size=sm', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -638,7 +646,7 @@ describe("SidebarMenuButton", () => {
     expect(container.querySelector("[data-size='sm']")).not.toBeNull();
   });
 
-  test("size=lg sets data-size=lg", () => {
+  test('size=lg sets data-size=lg', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -651,7 +659,7 @@ describe("SidebarMenuButton", () => {
     expect(container.querySelector("[data-size='lg']")).not.toBeNull();
   });
 
-  test("variant=outline applies outline class", () => {
+  test('variant=outline applies outline class', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -662,10 +670,10 @@ describe("SidebarMenuButton", () => {
       </BasicSidebar>,
     );
     const btn = container.querySelector("[data-sidebar='menu-button']");
-    expect(btn?.className).toContain("bg-background");
+    expect(btn?.className).toContain('bg-background');
   });
 
-  test("asChild renders slot element", () => {
+  test('asChild renders slot element', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -680,7 +688,7 @@ describe("SidebarMenuButton", () => {
     expect(container.querySelector("[data-sidebar='menu-button']")).not.toBeNull();
   });
 
-  test("tooltip as string renders wrapped in Tooltip", () => {
+  test('tooltip as string renders wrapped in Tooltip', () => {
     const { container } = render(
       <BasicSidebar defaultOpen={false}>
         <SidebarMenu>
@@ -694,12 +702,12 @@ describe("SidebarMenuButton", () => {
     expect(container.querySelector("[data-sidebar='menu-button']")).not.toBeNull();
   });
 
-  test("tooltip as object renders wrapped in Tooltip", () => {
+  test('tooltip as object renders wrapped in Tooltip', () => {
     const { container } = render(
       <BasicSidebar defaultOpen={false}>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip={{ children: "Object tooltip" }}>Item</SidebarMenuButton>
+            <SidebarMenuButton tooltip={{ children: 'Object tooltip' }}>Item</SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </BasicSidebar>,
@@ -707,7 +715,7 @@ describe("SidebarMenuButton", () => {
     expect(container.querySelector("[data-sidebar='menu-button']")).not.toBeNull();
   });
 
-  test("handles click events", () => {
+  test('handles click events', () => {
     const onClick = vi.fn();
     render(
       <BasicSidebar>
@@ -718,13 +726,13 @@ describe("SidebarMenuButton", () => {
         </SidebarMenu>
       </BasicSidebar>,
     );
-    fireEvent.click(screen.getByText("Clickable"));
+    fireEvent.click(screen.getByText('Clickable'));
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 });
 
-describe("SidebarMenuAction", () => {
-  test("renders with data-sidebar=menu-action", () => {
+describe('SidebarMenuAction', () => {
+  test('renders with data-sidebar=menu-action', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -738,7 +746,7 @@ describe("SidebarMenuAction", () => {
     expect(container.querySelector("[data-sidebar='menu-action']")).not.toBeNull();
   });
 
-  test("showOnHover=true adds opacity-0 class", () => {
+  test('showOnHover=true adds opacity-0 class', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -750,10 +758,10 @@ describe("SidebarMenuAction", () => {
       </BasicSidebar>,
     );
     const action = container.querySelector("[data-sidebar='menu-action']");
-    expect(action?.className).toContain("md:opacity-0");
+    expect(action?.className).toContain('md:opacity-0');
   });
 
-  test("showOnHover=false does not add opacity-0", () => {
+  test('showOnHover=false does not add opacity-0', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -765,10 +773,10 @@ describe("SidebarMenuAction", () => {
       </BasicSidebar>,
     );
     const action = container.querySelector("[data-sidebar='menu-action']");
-    expect(action?.className).not.toContain("md:opacity-0");
+    expect(action?.className).not.toContain('md:opacity-0');
   });
 
-  test("asChild renders slot", () => {
+  test('asChild renders slot', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -785,8 +793,8 @@ describe("SidebarMenuAction", () => {
   });
 });
 
-describe("SidebarMenuBadge", () => {
-  test("renders badge with data-sidebar=menu-badge", () => {
+describe('SidebarMenuBadge', () => {
+  test('renders badge with data-sidebar=menu-badge', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -798,12 +806,12 @@ describe("SidebarMenuBadge", () => {
       </BasicSidebar>,
     );
     expect(container.querySelector("[data-sidebar='menu-badge']")).not.toBeNull();
-    expect(screen.getByText("5")).toBeTruthy();
+    expect(screen.getByText('5')).toBeTruthy();
   });
 });
 
-describe("SidebarMenuSkeleton", () => {
-  test("renders skeleton without icon by default", () => {
+describe('SidebarMenuSkeleton', () => {
+  test('renders skeleton without icon by default', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -817,7 +825,7 @@ describe("SidebarMenuSkeleton", () => {
     expect(container.querySelector("[data-sidebar='menu-skeleton-icon']")).toBeNull();
   });
 
-  test("renders skeleton with icon when showIcon=true", () => {
+  test('renders skeleton with icon when showIcon=true', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -830,22 +838,20 @@ describe("SidebarMenuSkeleton", () => {
     expect(container.querySelector("[data-sidebar='menu-skeleton-icon']")).not.toBeNull();
   });
 
-  test("skeleton text has random width style", () => {
+  test('skeleton text has random width style', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenuSkeleton />
       </BasicSidebar>,
     );
     const skeletonText = container.querySelector("[data-sidebar='menu-skeleton-text']");
-    // Should have a --skeleton-width CSS variable style
-    const style = (skeletonText as HTMLElement)?.style?.cssText || "";
     // The style may be inline or computed — just verify the element exists
     expect(skeletonText).not.toBeNull();
   });
 });
 
-describe("SidebarMenuSub and SidebarMenuSubItem", () => {
-  test("renders sub-menu list with data-sidebar=menu-sub", () => {
+describe('SidebarMenuSub and SidebarMenuSubItem', () => {
+  test('renders sub-menu list with data-sidebar=menu-sub', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenu>
@@ -860,12 +866,12 @@ describe("SidebarMenuSub and SidebarMenuSubItem", () => {
       </BasicSidebar>,
     );
     expect(container.querySelector("[data-sidebar='menu-sub']")).not.toBeNull();
-    expect(screen.getByText("Sub item")).toBeTruthy();
+    expect(screen.getByText('Sub item')).toBeTruthy();
   });
 });
 
-describe("SidebarMenuSubButton", () => {
-  test("renders with data-sidebar=menu-sub-button", () => {
+describe('SidebarMenuSubButton', () => {
+  test('renders with data-sidebar=menu-sub-button', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenuSubButton href="#">Sub link</SidebarMenuSubButton>
@@ -874,7 +880,7 @@ describe("SidebarMenuSubButton", () => {
     expect(container.querySelector("[data-sidebar='menu-sub-button']")).not.toBeNull();
   });
 
-  test("size=sm sets data-size=sm", () => {
+  test('size=sm sets data-size=sm', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenuSubButton size="sm">Small sub</SidebarMenuSubButton>
@@ -883,7 +889,7 @@ describe("SidebarMenuSubButton", () => {
     expect(container.querySelector("[data-size='sm']")).not.toBeNull();
   });
 
-  test("size=md is default", () => {
+  test('size=md is default', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenuSubButton>Default sub</SidebarMenuSubButton>
@@ -892,7 +898,7 @@ describe("SidebarMenuSubButton", () => {
     expect(container.querySelector("[data-size='md']")).not.toBeNull();
   });
 
-  test("isActive sets data-active=true", () => {
+  test('isActive sets data-active=true', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenuSubButton isActive>Active sub</SidebarMenuSubButton>
@@ -901,7 +907,7 @@ describe("SidebarMenuSubButton", () => {
     expect(container.querySelector("[data-active='true']")).not.toBeNull();
   });
 
-  test("asChild renders slot", () => {
+  test('asChild renders slot', () => {
     const { container } = render(
       <BasicSidebar>
         <SidebarMenuSubButton asChild>
@@ -913,8 +919,8 @@ describe("SidebarMenuSubButton", () => {
   });
 });
 
-describe("Sidebar full composition", () => {
-  test("renders complete sidebar structure", () => {
+describe('Sidebar full composition', () => {
+  test('renders complete sidebar structure', () => {
     render(
       <SidebarProvider defaultOpen>
         <Sidebar>
@@ -966,14 +972,14 @@ describe("Sidebar full composition", () => {
       </SidebarProvider>,
     );
 
-    expect(screen.getByText("App Logo")).toBeTruthy();
-    expect(screen.getByText("Dashboard")).toBeTruthy();
-    expect(screen.getByText("Settings")).toBeTruthy();
-    expect(screen.getByText("Project A")).toBeTruthy();
-    expect(screen.getByText("User profile")).toBeTruthy();
+    expect(screen.getByText('App Logo')).toBeTruthy();
+    expect(screen.getByText('Dashboard')).toBeTruthy();
+    expect(screen.getByText('Settings')).toBeTruthy();
+    expect(screen.getByText('Project A')).toBeTruthy();
+    expect(screen.getByText('User profile')).toBeTruthy();
   });
 
-  test("toggle cycle works correctly", () => {
+  test('toggle cycle works correctly', () => {
     const { container } = render(
       <SidebarProvider defaultOpen={true}>
         <Sidebar>
@@ -982,7 +988,7 @@ describe("Sidebar full composition", () => {
         <SidebarTrigger />
       </SidebarProvider>,
     );
-    const trigger = screen.getByRole("button", { name: /toggle sidebar/i });
+    const trigger = screen.getByRole('button', { name: /toggle sidebar/i });
 
     // Start expanded
     expect(container.querySelector("[data-state='expanded']")).not.toBeNull();

@@ -1,10 +1,16 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, test, vi } from "vitest";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./carousel";
-import React from "react";
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from './carousel';
+import React from 'react';
 
-describe("Carousel", () => {
-  test("renders slides", () => {
+describe('Carousel', () => {
+  test('renders slides', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -15,12 +21,12 @@ describe("Carousel", () => {
       </Carousel>,
     );
 
-    expect(screen.getByText("Slide A")).toBeTruthy();
-    expect(screen.getByText("Slide B")).toBeTruthy();
-    expect(screen.getByText("Slide C")).toBeTruthy();
+    expect(screen.getByText('Slide A')).toBeTruthy();
+    expect(screen.getByText('Slide B')).toBeTruthy();
+    expect(screen.getByText('Slide C')).toBeTruthy();
   });
 
-  test("has carousel region role", () => {
+  test('has carousel region role', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -29,10 +35,10 @@ describe("Carousel", () => {
       </Carousel>,
     );
 
-    expect(screen.getByRole("region")).toBeTruthy();
+    expect(screen.getByRole('region')).toBeTruthy();
   });
 
-  test("renders slide items with correct role description", () => {
+  test('renders slide items with correct role description', () => {
     const { container } = render(
       <Carousel>
         <CarouselContent>
@@ -45,7 +51,7 @@ describe("Carousel", () => {
     expect(slide).not.toBeNull();
   });
 
-  test("has aria-roledescription=carousel on region", () => {
+  test('has aria-roledescription=carousel on region', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -53,11 +59,11 @@ describe("Carousel", () => {
         </CarouselContent>
       </Carousel>,
     );
-    const region = screen.getByRole("region");
-    expect(region.getAttribute("aria-roledescription")).toBe("carousel");
+    const region = screen.getByRole('region');
+    expect(region.getAttribute('aria-roledescription')).toBe('carousel');
   });
 
-  test("renders previous and next buttons", () => {
+  test('renders previous and next buttons', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -68,11 +74,11 @@ describe("Carousel", () => {
         <CarouselNext />
       </Carousel>,
     );
-    expect(screen.getByRole("button", { name: /previous/i })).toBeTruthy();
-    expect(screen.getByRole("button", { name: /next/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /previous/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /next/i })).toBeTruthy();
   });
 
-  test("navigation buttons have accessible labels", () => {
+  test('navigation buttons have accessible labels', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -83,13 +89,13 @@ describe("Carousel", () => {
         <CarouselNext />
       </Carousel>,
     );
-    const prevBtn = screen.getByRole("button", { name: /previous/i });
-    const nextBtn = screen.getByRole("button", { name: /next/i });
-    expect(prevBtn.getAttribute("aria-label") || prevBtn.textContent).toBeTruthy();
-    expect(nextBtn.getAttribute("aria-label") || nextBtn.textContent).toBeTruthy();
+    const prevBtn = screen.getByRole('button', { name: /previous/i });
+    const nextBtn = screen.getByRole('button', { name: /next/i });
+    expect(prevBtn.getAttribute('aria-label') || prevBtn.textContent).toBeTruthy();
+    expect(nextBtn.getAttribute('aria-label') || nextBtn.textContent).toBeTruthy();
   });
 
-  test("renders many slides without errors", () => {
+  test('renders many slides without errors', () => {
     const slides = Array.from({ length: 20 }, (_, i) => `Slide ${i + 1}`);
     render(
       <Carousel>
@@ -100,13 +106,13 @@ describe("Carousel", () => {
         </CarouselContent>
       </Carousel>,
     );
-    expect(screen.getByText("Slide 1")).toBeTruthy();
-    expect(screen.getByText("Slide 20")).toBeTruthy();
+    expect(screen.getByText('Slide 1')).toBeTruthy();
+    expect(screen.getByText('Slide 20')).toBeTruthy();
   });
 });
 
-describe("Carousel orientation", () => {
-  test("horizontal orientation (default) applies horizontal classes to content", () => {
+describe('Carousel orientation', () => {
+  test('horizontal orientation (default) applies horizontal classes to content', () => {
     const { container } = render(
       <Carousel orientation="horizontal">
         <CarouselContent>
@@ -116,11 +122,11 @@ describe("Carousel orientation", () => {
       </Carousel>,
     );
     // CarouselContent flex container uses -ml-4 for horizontal
-    const flexDiv = container.querySelector(".flex");
-    expect(flexDiv?.className).toContain("-ml-4");
+    const flexDiv = container.querySelector('.flex');
+    expect(flexDiv?.className).toContain('-ml-4');
   });
 
-  test("vertical orientation applies vertical classes to content", () => {
+  test('vertical orientation applies vertical classes to content', () => {
     const { container } = render(
       <Carousel orientation="vertical">
         <CarouselContent>
@@ -130,11 +136,11 @@ describe("Carousel orientation", () => {
       </Carousel>,
     );
     // CarouselContent flex container uses -mt-4 flex-col for vertical
-    const flexDiv = container.querySelector(".flex-col");
+    const flexDiv = container.querySelector('.flex-col');
     expect(flexDiv).not.toBeNull();
   });
 
-  test("horizontal orientation applies horizontal padding to items", () => {
+  test('horizontal orientation applies horizontal padding to items', () => {
     const { container } = render(
       <Carousel orientation="horizontal">
         <CarouselContent>
@@ -143,10 +149,10 @@ describe("Carousel orientation", () => {
       </Carousel>,
     );
     const slide = container.querySelector("[aria-roledescription='slide']");
-    expect(slide?.className).toContain("pl-4");
+    expect(slide?.className).toContain('pl-4');
   });
 
-  test("vertical orientation applies vertical padding to items", () => {
+  test('vertical orientation applies vertical padding to items', () => {
     const { container } = render(
       <Carousel orientation="vertical">
         <CarouselContent>
@@ -155,11 +161,11 @@ describe("Carousel orientation", () => {
       </Carousel>,
     );
     const slide = container.querySelector("[aria-roledescription='slide']");
-    expect(slide?.className).toContain("pt-4");
+    expect(slide?.className).toContain('pt-4');
   });
 
-  test("vertical orientation positions previous button at top", () => {
-    const { container } = render(
+  test('vertical orientation positions previous button at top', () => {
+    render(
       <Carousel orientation="vertical">
         <CarouselContent>
           <CarouselItem>A</CarouselItem>
@@ -167,12 +173,12 @@ describe("Carousel orientation", () => {
         <CarouselPrevious />
       </Carousel>,
     );
-    const prevBtn = screen.getByRole("button", { name: /previous/i });
-    expect(prevBtn.className).toContain("-top-12");
-    expect(prevBtn.className).toContain("rotate-90");
+    const prevBtn = screen.getByRole('button', { name: /previous/i });
+    expect(prevBtn.className).toContain('-top-12');
+    expect(prevBtn.className).toContain('rotate-90');
   });
 
-  test("vertical orientation positions next button at bottom", () => {
+  test('vertical orientation positions next button at bottom', () => {
     render(
       <Carousel orientation="vertical">
         <CarouselContent>
@@ -181,12 +187,12 @@ describe("Carousel orientation", () => {
         <CarouselNext />
       </Carousel>,
     );
-    const nextBtn = screen.getByRole("button", { name: /next/i });
-    expect(nextBtn.className).toContain("-bottom-12");
-    expect(nextBtn.className).toContain("rotate-90");
+    const nextBtn = screen.getByRole('button', { name: /next/i });
+    expect(nextBtn.className).toContain('-bottom-12');
+    expect(nextBtn.className).toContain('rotate-90');
   });
 
-  test("horizontal orientation positions previous button on left", () => {
+  test('horizontal orientation positions previous button on left', () => {
     render(
       <Carousel orientation="horizontal">
         <CarouselContent>
@@ -195,11 +201,11 @@ describe("Carousel orientation", () => {
         <CarouselPrevious />
       </Carousel>,
     );
-    const prevBtn = screen.getByRole("button", { name: /previous/i });
-    expect(prevBtn.className).toContain("-left-12");
+    const prevBtn = screen.getByRole('button', { name: /previous/i });
+    expect(prevBtn.className).toContain('-left-12');
   });
 
-  test("horizontal orientation positions next button on right", () => {
+  test('horizontal orientation positions next button on right', () => {
     render(
       <Carousel orientation="horizontal">
         <CarouselContent>
@@ -208,14 +214,14 @@ describe("Carousel orientation", () => {
         <CarouselNext />
       </Carousel>,
     );
-    const nextBtn = screen.getByRole("button", { name: /next/i });
-    expect(nextBtn.className).toContain("-right-12");
+    const nextBtn = screen.getByRole('button', { name: /next/i });
+    expect(nextBtn.className).toContain('-right-12');
   });
 });
 
-describe("Carousel keyboard navigation (lines 72-77)", () => {
-  test("ArrowLeft key calls scrollPrev", () => {
-    const { container } = render(
+describe('Carousel keyboard navigation (lines 72-77)', () => {
+  test('ArrowLeft key calls scrollPrev', () => {
+    render(
       <Carousel>
         <CarouselContent>
           <CarouselItem>A</CarouselItem>
@@ -225,13 +231,13 @@ describe("Carousel keyboard navigation (lines 72-77)", () => {
         <CarouselNext />
       </Carousel>,
     );
-    const region = screen.getByRole("region");
+    const region = screen.getByRole('region');
     // Should not throw — just exercise the handler
-    fireEvent.keyDown(region, { key: "ArrowLeft" });
+    fireEvent.keyDown(region, { key: 'ArrowLeft' });
     expect(region).toBeTruthy();
   });
 
-  test("ArrowRight key calls scrollNext", () => {
+  test('ArrowRight key calls scrollNext', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -242,12 +248,12 @@ describe("Carousel keyboard navigation (lines 72-77)", () => {
         <CarouselNext />
       </Carousel>,
     );
-    const region = screen.getByRole("region");
-    fireEvent.keyDown(region, { key: "ArrowRight" });
+    const region = screen.getByRole('region');
+    fireEvent.keyDown(region, { key: 'ArrowRight' });
     expect(region).toBeTruthy();
   });
 
-  test("other keys do not cause errors", () => {
+  test('other keys do not cause errors', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -255,17 +261,17 @@ describe("Carousel keyboard navigation (lines 72-77)", () => {
         </CarouselContent>
       </Carousel>,
     );
-    const region = screen.getByRole("region");
+    const region = screen.getByRole('region');
     // Enter, Space, etc should be no-ops
-    fireEvent.keyDown(region, { key: "Enter" });
-    fireEvent.keyDown(region, { key: "Space" });
-    fireEvent.keyDown(region, { key: "Tab" });
+    fireEvent.keyDown(region, { key: 'Enter' });
+    fireEvent.keyDown(region, { key: 'Space' });
+    fireEvent.keyDown(region, { key: 'Tab' });
     expect(region).toBeTruthy();
   });
 });
 
-describe("Carousel previous/next button state (lines 63, 67)", () => {
-  test("previous button is disabled when canScrollPrev=false (initial state)", () => {
+describe('Carousel previous/next button state (lines 63, 67)', () => {
+  test('previous button is disabled when canScrollPrev=false (initial state)', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -275,11 +281,11 @@ describe("Carousel previous/next button state (lines 63, 67)", () => {
       </Carousel>,
     );
     // Without embla mounted, canScrollPrev defaults to false
-    const prevBtn = screen.getByRole("button", { name: /previous/i });
-    expect(prevBtn.hasAttribute("disabled")).toBe(true);
+    const prevBtn = screen.getByRole('button', { name: /previous/i });
+    expect(prevBtn.hasAttribute('disabled')).toBe(true);
   });
 
-  test("next button is disabled when canScrollNext=false (initial state)", () => {
+  test('next button is disabled when canScrollNext=false (initial state)', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -288,11 +294,11 @@ describe("Carousel previous/next button state (lines 63, 67)", () => {
         <CarouselNext />
       </Carousel>,
     );
-    const nextBtn = screen.getByRole("button", { name: /next/i });
-    expect(nextBtn.hasAttribute("disabled")).toBe(true);
+    const nextBtn = screen.getByRole('button', { name: /next/i });
+    expect(nextBtn.hasAttribute('disabled')).toBe(true);
   });
 
-  test("clicking disabled previous button does not throw", () => {
+  test('clicking disabled previous button does not throw', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -301,13 +307,13 @@ describe("Carousel previous/next button state (lines 63, 67)", () => {
         <CarouselPrevious />
       </Carousel>,
     );
-    const prevBtn = screen.getByRole("button", { name: /previous/i });
+    const prevBtn = screen.getByRole('button', { name: /previous/i });
     // Click on disabled button should be a no-op
     fireEvent.click(prevBtn);
     expect(prevBtn).toBeTruthy();
   });
 
-  test("clicking disabled next button does not throw", () => {
+  test('clicking disabled next button does not throw', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -316,14 +322,14 @@ describe("Carousel previous/next button state (lines 63, 67)", () => {
         <CarouselNext />
       </Carousel>,
     );
-    const nextBtn = screen.getByRole("button", { name: /next/i });
+    const nextBtn = screen.getByRole('button', { name: /next/i });
     fireEvent.click(nextBtn);
     expect(nextBtn).toBeTruthy();
   });
 });
 
-describe("Carousel setApi callback (lines 83-88)", () => {
-  test("setApi is called with embla api when provided", () => {
+describe('Carousel setApi callback (lines 83-88)', () => {
+  test('setApi is called with embla api when provided', () => {
     const setApi = vi.fn();
     render(
       <Carousel setApi={setApi}>
@@ -334,10 +340,10 @@ describe("Carousel setApi callback (lines 83-88)", () => {
     );
     // In happy-dom, embla may or may not initialize fully.
     // The important thing is setApi is either called or not without error.
-    expect(screen.getByRole("region")).toBeTruthy();
+    expect(screen.getByRole('region')).toBeTruthy();
   });
 
-  test("no error when setApi is not provided", () => {
+  test('no error when setApi is not provided', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -345,12 +351,12 @@ describe("Carousel setApi callback (lines 83-88)", () => {
         </CarouselContent>
       </Carousel>,
     );
-    expect(screen.getByRole("region")).toBeTruthy();
+    expect(screen.getByRole('region')).toBeTruthy();
   });
 });
 
-describe("Carousel custom props", () => {
-  test("accepts custom className on Carousel wrapper", () => {
+describe('Carousel custom props', () => {
+  test('accepts custom className on Carousel wrapper', () => {
     const { container } = render(
       <Carousel className="my-carousel">
         <CarouselContent>
@@ -358,10 +364,10 @@ describe("Carousel custom props", () => {
         </CarouselContent>
       </Carousel>,
     );
-    expect(container.querySelector(".my-carousel")).not.toBeNull();
+    expect(container.querySelector('.my-carousel')).not.toBeNull();
   });
 
-  test("accepts custom className on CarouselContent", () => {
+  test('accepts custom className on CarouselContent', () => {
     const { container } = render(
       <Carousel>
         <CarouselContent className="my-content">
@@ -369,10 +375,10 @@ describe("Carousel custom props", () => {
         </CarouselContent>
       </Carousel>,
     );
-    expect(container.querySelector(".my-content")).not.toBeNull();
+    expect(container.querySelector('.my-content')).not.toBeNull();
   });
 
-  test("accepts custom className on CarouselItem", () => {
+  test('accepts custom className on CarouselItem', () => {
     const { container } = render(
       <Carousel>
         <CarouselContent>
@@ -380,10 +386,10 @@ describe("Carousel custom props", () => {
         </CarouselContent>
       </Carousel>,
     );
-    expect(container.querySelector(".my-item")).not.toBeNull();
+    expect(container.querySelector('.my-item')).not.toBeNull();
   });
 
-  test("accepts custom className on CarouselPrevious", () => {
+  test('accepts custom className on CarouselPrevious', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -392,11 +398,11 @@ describe("Carousel custom props", () => {
         <CarouselPrevious className="my-prev" />
       </Carousel>,
     );
-    const prevBtn = screen.getByRole("button", { name: /previous/i });
-    expect(prevBtn.className).toContain("my-prev");
+    const prevBtn = screen.getByRole('button', { name: /previous/i });
+    expect(prevBtn.className).toContain('my-prev');
   });
 
-  test("accepts custom className on CarouselNext", () => {
+  test('accepts custom className on CarouselNext', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -405,11 +411,11 @@ describe("Carousel custom props", () => {
         <CarouselNext className="my-next" />
       </Carousel>,
     );
-    const nextBtn = screen.getByRole("button", { name: /next/i });
-    expect(nextBtn.className).toContain("my-next");
+    const nextBtn = screen.getByRole('button', { name: /next/i });
+    expect(nextBtn.className).toContain('my-next');
   });
 
-  test("forwards additional props to region div", () => {
+  test('forwards additional props to region div', () => {
     render(
       <Carousel data-testid="carousel-root">
         <CarouselContent>
@@ -417,68 +423,76 @@ describe("Carousel custom props", () => {
         </CarouselContent>
       </Carousel>,
     );
-    expect(screen.getByTestId("carousel-root")).toBeTruthy();
+    expect(screen.getByTestId('carousel-root')).toBeTruthy();
   });
 });
 
-describe("Carousel opts prop (line 43-48)", () => {
-  test("accepts opts prop without error", () => {
+describe('Carousel opts prop (line 43-48)', () => {
+  test('accepts opts prop without error', () => {
     render(
-      <Carousel opts={{ loop: true, align: "center" }}>
+      <Carousel opts={{ loop: true, align: 'center' }}>
         <CarouselContent>
           <CarouselItem>A</CarouselItem>
           <CarouselItem>B</CarouselItem>
         </CarouselContent>
       </Carousel>,
     );
-    expect(screen.getByRole("region")).toBeTruthy();
+    expect(screen.getByRole('region')).toBeTruthy();
   });
 
-  test("orientation from opts axis=y falls back correctly", () => {
+  test('orientation from opts axis=y falls back correctly', () => {
     // When orientation is not explicitly set but opts.axis is 'y',
     // the context orientation expression handles this:
     // orientation || (opts?.axis === "y" ? "vertical" : "horizontal")
-    const { container } = render(
-      <Carousel opts={{ axis: "y" }}>
+    render(
+      <Carousel opts={{ axis: 'y' }}>
         <CarouselContent>
           <CarouselItem>A</CarouselItem>
         </CarouselContent>
       </Carousel>,
     );
     // The carousel should render without errors
-    expect(screen.getByRole("region")).toBeTruthy();
+    expect(screen.getByRole('region')).toBeTruthy();
   });
 });
 
-describe("useCarousel error boundary", () => {
-  test("throws when CarouselContent used outside Carousel", () => {
+describe('useCarousel error boundary', () => {
+  test('throws when CarouselContent used outside Carousel', () => {
     // Suppress expected error output
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    expect(() => render(<CarouselContent />)).toThrow("useCarousel must be used within a <Carousel />");
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => render(<CarouselContent />)).toThrow(
+      'useCarousel must be used within a <Carousel />',
+    );
     consoleSpy.mockRestore();
   });
 
-  test("throws when CarouselItem used outside Carousel", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    expect(() => render(<CarouselItem />)).toThrow("useCarousel must be used within a <Carousel />");
+  test('throws when CarouselItem used outside Carousel', () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => render(<CarouselItem />)).toThrow(
+      'useCarousel must be used within a <Carousel />',
+    );
     consoleSpy.mockRestore();
   });
 
-  test("throws when CarouselPrevious used outside Carousel", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    expect(() => render(<CarouselPrevious />)).toThrow("useCarousel must be used within a <Carousel />");
+  test('throws when CarouselPrevious used outside Carousel', () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => render(<CarouselPrevious />)).toThrow(
+      'useCarousel must be used within a <Carousel />',
+    );
     consoleSpy.mockRestore();
   });
 
-  test("throws when CarouselNext used outside Carousel", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    expect(() => render(<CarouselNext />)).toThrow("useCarousel must be used within a <Carousel />");
+  test('throws when CarouselNext used outside Carousel', () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => render(<CarouselNext />)).toThrow(
+      'useCarousel must be used within a <Carousel />',
+    );
     consoleSpy.mockRestore();
   });
 });
 
-describe("CarouselPrevious and CarouselNext variants", () => {
-  test("CarouselPrevious accepts variant prop", () => {
+describe('CarouselPrevious and CarouselNext variants', () => {
+  test('CarouselPrevious accepts variant prop', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -487,11 +501,11 @@ describe("CarouselPrevious and CarouselNext variants", () => {
         <CarouselPrevious variant="ghost" />
       </Carousel>,
     );
-    const prevBtn = screen.getByRole("button", { name: /previous/i });
+    const prevBtn = screen.getByRole('button', { name: /previous/i });
     expect(prevBtn).toBeTruthy();
   });
 
-  test("CarouselNext accepts variant prop", () => {
+  test('CarouselNext accepts variant prop', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -500,11 +514,11 @@ describe("CarouselPrevious and CarouselNext variants", () => {
         <CarouselNext variant="ghost" />
       </Carousel>,
     );
-    const nextBtn = screen.getByRole("button", { name: /next/i });
+    const nextBtn = screen.getByRole('button', { name: /next/i });
     expect(nextBtn).toBeTruthy();
   });
 
-  test("CarouselPrevious accepts size prop", () => {
+  test('CarouselPrevious accepts size prop', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -513,10 +527,10 @@ describe("CarouselPrevious and CarouselNext variants", () => {
         <CarouselPrevious size="sm" />
       </Carousel>,
     );
-    expect(screen.getByRole("button", { name: /previous/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /previous/i })).toBeTruthy();
   });
 
-  test("CarouselNext accepts size prop", () => {
+  test('CarouselNext accepts size prop', () => {
     render(
       <Carousel>
         <CarouselContent>
@@ -525,6 +539,6 @@ describe("CarouselPrevious and CarouselNext variants", () => {
         <CarouselNext size="lg" />
       </Carousel>,
     );
-    expect(screen.getByRole("button", { name: /next/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /next/i })).toBeTruthy();
   });
 });
